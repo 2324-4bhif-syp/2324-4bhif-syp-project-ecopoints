@@ -1,5 +1,12 @@
 = EcoPoints
 
+== Team
+* Linus Nestler (Projektleiter)
+* Armin Salkovic
+* Abdullah Al Desoky
+* Oliver Daxinger
+* Laurent Mali
+
 == Description
 
 We want to reward eco-friendly drivers by tracking their driving data
@@ -28,6 +35,20 @@ can compare to each other.
 // FahrverhaltenVergleichsplatform
 //
 // Int
+
+== Diagrams
+
+.Class-Diagramm
+[plantuml,cld,png]
+----
+include::asciidocs/plantuml/cld.puml[]
+----
+
+.Use-Case-Diagramm
+[plantuml,ucd,png]
+----
+include::asciidocs/plantuml/ucd.puml[]
+----
 
 == Sprint-backlog
 

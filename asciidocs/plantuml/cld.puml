@@ -1,0 +1,11 @@
+@startuml
+
+class User {
+    id: int
+    name: string
+    email: string
+    password: string
+    ecoPoints: int
+}
+
+@enduml

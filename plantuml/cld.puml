@@ -1,11 +1,5 @@
 @startuml
-
-class User {
-    id: Integer
-    name: String
-    email: String
-    password: String
-    ecoPoints: Integer
-}
+class User
+class Trip
 
 @enduml

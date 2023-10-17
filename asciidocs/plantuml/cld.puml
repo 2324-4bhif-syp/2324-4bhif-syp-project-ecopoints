@@ -1,5 +1,8 @@
 @startuml
+left to right direction
+
 class User
 class Trip
 
+User "1" -- "*" Trip : > drives
 @enduml

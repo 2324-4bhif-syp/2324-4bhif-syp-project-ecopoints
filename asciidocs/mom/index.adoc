@@ -1,0 +1,5 @@
+= Minutes of Meeting
+:toc: left
+
+== 1. Sprint-Planning 2023-10-17
+link:2023-10-17.adoc[Sprint-Planning 2023-10-17]

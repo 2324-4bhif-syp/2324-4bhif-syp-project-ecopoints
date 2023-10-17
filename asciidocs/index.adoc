@@ -8,6 +8,9 @@
 * Oliver Daxinger
 * Laurent Mali
 
+== Minutes of Meeting
+link:mom/index.adoc[Minutes of Meeting]
+
 == Description
 
 We want to reward eco-friendly drivers by tracking their driving data

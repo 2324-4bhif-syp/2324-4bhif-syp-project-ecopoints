@@ -1,11 +1,11 @@
 @startuml
 
 class User {
-    id: int
-    name: string
-    email: string
-    password: string
-    ecoPoints: int
+    id: Integer
+    name: String
+    email: String
+    password: String
+    ecoPoints: Integer
 }
 
 @enduml

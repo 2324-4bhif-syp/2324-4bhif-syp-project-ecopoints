@@ -9,5 +9,5 @@ rectangle FahrverhaltenVergleichsplatform {
 cd -- compareUsers
 cd -- trackRoutes
 
-trackRoutes --> calculateEcoPoints : <<include>>
+trackRoutes ..> calculateEcoPoints : <<include>>
 @enduml

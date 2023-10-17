@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+actor "Car Driver" as cd
+rectangle FahrverhaltenVergleichsplatform {
+  usecase "Compare with other users" as UC1
+  usecase "Calculate Eco-Points" as UC2
+}
+cd -- UC1
+cd -- UC2
+@enduml

@@ -29,6 +29,20 @@ can compare to each other.
 //
 // Int
 
+== Diagrams
+
+.Class-Diagramm
+[plantuml,cld,png]
+----
+include::asciidocs/plantuml/cld.puml[]
+----
+
+.Use-Case-Diagramm
+[plantuml,ucd,png]
+----
+include::asciidocs/plantuml/ucd.puml[]
+----
+
 == Sprint-backlog
 
 https://vm81.htl-leonding.ac.at/agiles/99-375/current[Sprint-backlog]

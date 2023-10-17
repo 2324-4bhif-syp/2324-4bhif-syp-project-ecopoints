@@ -1,5 +1,12 @@
 = EcoPoints
 
+== Team
+* Linus Nestler (Projektleiter)
+* Armin Salkovic
+* Abdullah Al Desoky
+* Oliver Daxinger
+* Laurent Mali
+
 == Description
 
 We want to reward eco-friendly drivers by tracking their driving data

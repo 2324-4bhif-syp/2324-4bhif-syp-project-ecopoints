@@ -94,7 +94,7 @@ fun SensorReading() {
             Text(
                 text = "X: $sensorX",
                 style = TextStyle(
-                    color = Color.White,
+                    color = MaterialTheme.colorScheme.secondary,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center
                 ),
@@ -103,7 +103,7 @@ fun SensorReading() {
             Text(
                 text = "Y: $sensorY",
                 style = TextStyle(
-                    color = Color.White,
+                    color = MaterialTheme.colorScheme.secondary,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center
                 ),
@@ -112,7 +112,7 @@ fun SensorReading() {
             Text(
                 text = "Z: $sensorZ",
                 style = TextStyle(
-                    color = Color.White,
+                    color = MaterialTheme.colorScheme.secondary,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center
                 ),
@@ -123,7 +123,7 @@ fun SensorReading() {
             Text(
                 text = "XMax: $sensorXMax",
                 style = TextStyle(
-                    color = Color.White,
+                    color = MaterialTheme.colorScheme.secondary,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center
                 ),
@@ -132,7 +132,7 @@ fun SensorReading() {
             Text(
                 text = "YMax: $sensorYMax",
                 style = TextStyle(
-                    color = Color.White,
+                    color = MaterialTheme.colorScheme.secondary,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center
                 ),
@@ -141,7 +141,7 @@ fun SensorReading() {
             Text(
                 text = "ZMax: $sensorZMax",
                 style = TextStyle(
-                    color = Color.White,
+                    color = MaterialTheme.colorScheme.secondary,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center
                 ),

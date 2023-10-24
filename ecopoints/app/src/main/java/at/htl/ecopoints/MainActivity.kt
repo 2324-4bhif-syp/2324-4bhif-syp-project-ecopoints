@@ -47,7 +47,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    SensorReading()
+                    sensorReading()
                 }
             }
         }
@@ -55,7 +55,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun SensorReading() {
+fun sensorReading() {
     val sensorManager =
         LocalContext.current.getSystemService(Context.SENSOR_SERVICE) as SensorManager
     val accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
@@ -68,6 +68,50 @@ fun SensorReading() {
     var sensorYMax by remember { mutableStateOf("") }
     var sensorZMax by remember { mutableStateOf("") }
 
+
+    showAccelerometerReading(sensorX = sensorX, sensorY = sensorY, sensorZ = sensorZ, sensorXMax = sensorXMax, sensorYMax = sensorYMax, sensorZMax = sensorZMax)
+
+    val sensorListener = object : SensorEventListener {
+        override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+
+        }
+
+        override fun onSensorChanged(event: SensorEvent?) {
+            // Check if the sensor type is accelerometer
+            if (event?.sensor?.type == Sensor.TYPE_ACCELEROMETER) {
+                val x = event.values[0].toString()
+                val y = event.values[1].toString()
+                val z = event.values[2].toString()
+
+                if(x > sensorXMax) {
+                    sensorXMax = x
+                }
+                if(y > sensorYMax) {
+                    sensorYMax = y
+                }
+                if(z > sensorZMax) {
+                    sensorZMax = z
+                }
+                sensorX = x
+                sensorY = y
+                sensorZ = z
+            }
+        }
+    }
+
+
+    LaunchedEffect(sensorManager) {
+        sensorManager.registerListener(sensorListener, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL)
+    }
+
+    Text(
+        text = "Sensor Value : ",
+        style = TextStyle(fontSize = 20.sp)
+    )
+}
+
+@Composable
+fun showAccelerometerReading(sensorX: String, sensorY: String, sensorZ: String, sensorXMax : String, sensorYMax : String, sensorZMax : String) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -132,44 +176,5 @@ fun SensorReading() {
             )
         }
     }
-
-
-    val sensorListener = object : SensorEventListener {
-        override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-
-        }
-
-        override fun onSensorChanged(event: SensorEvent?) {
-            // Check if the sensor type is accelerometer
-            if (event?.sensor?.type == Sensor.TYPE_ACCELEROMETER) {
-                val x = event.values[0].toString()
-                val y = event.values[1].toString()
-                val z = event.values[2].toString()
-
-                if(x > sensorXMax) {
-                    sensorXMax = x
-                }
-                if(y > sensorYMax) {
-                    sensorYMax = y
-                }
-                if(z > sensorZMax) {
-                    sensorZMax = z
-                }
-                sensorX = x
-                sensorY = y
-                sensorZ = z
-            }
-        }
-    }
-
-
-    LaunchedEffect(sensorManager) {
-        sensorManager.registerListener(sensorListener, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL)
-    }
-
-    Text(
-        text = "Sensor Value : ",
-        style = TextStyle(fontSize = 20.sp)
-    )
 }
 

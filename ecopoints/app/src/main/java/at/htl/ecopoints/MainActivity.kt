@@ -46,9 +46,13 @@ import androidx.core.content.ContextCompat
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
 
 class MainActivity : ComponentActivity(), LocationListener {
-    lateinit var distanceTextView: TextView
     lateinit var lastLocation: Location;
     var distance = 0.0;
+
+    val travelledDistance: Double
+        get() {
+            return distance;
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,26 +65,27 @@ class MainActivity : ComponentActivity(), LocationListener {
                 ) {
                     sensorReading()
                     locationTest()
+                    travelDistance()
                 }
             }
         }
     }
 
     override fun onLocationChanged(location: Location) {
-
         if(::lastLocation.isInitialized){
             distance += lastLocation.distanceTo(location)
-            distanceTextView.text = "Meters: $distance"
         }
 
         lastLocation = location;
     }
+
+    @Composable
+    fun travelDistance(){
+        Text(text = "Travelled Distance: $travelledDistance m", style = TextStyle(fontSize = 20.sp) , modifier = Modifier.padding(0.dp, 250.dp, 0.dp, 0.dp))
+    }
 }
 
-@Composable
-fun printMetres(distance: Double){
-    Text(text = "Metres: " + distance)
-}
+
 
 @Composable
 fun sensorReading() {

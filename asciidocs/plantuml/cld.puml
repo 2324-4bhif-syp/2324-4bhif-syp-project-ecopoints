@@ -1,8 +1,21 @@
 @startuml
 left to right direction
 
-class User
-class Trip
+class User{
+    id: Long
+    userName: String
+    password: String
+    ecoPoints: double
+}
+
+class Trip {
+    id: Long
+    distance: double
+    avgSpeed: double
+    avgEngineRotation: double
+    date: Date
+    rewardedEcoPoints: double
+}
 
 User "1" -- "*" Trip : > drives
 @enduml

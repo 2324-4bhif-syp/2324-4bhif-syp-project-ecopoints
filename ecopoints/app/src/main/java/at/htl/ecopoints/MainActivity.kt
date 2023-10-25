@@ -5,17 +5,17 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.location.Location
+import android.location.LocationListener
 import android.os.Bundle
+import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -26,18 +26,22 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 
-class MainActivity : ComponentActivity() {
+class MainActivity : ComponentActivity(), LocationListener {
+    lateinit var distanceTextView: TextView
+    lateinit var lastLocation: Location;
+    var distance = 0.0;
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -52,6 +56,21 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+    override fun onLocationChanged(location: Location) {
+
+        if(::lastLocation.isInitialized){
+            distance += lastLocation.distanceTo(location)
+            distanceTextView.text = "Meters: $distance"
+        }
+
+        lastLocation = location;
+    }
+}
+
+@Composable
+fun printMetres(distance: Double){
+    Text(text = "Metres: " + distance)
 }
 
 @Composable
@@ -67,7 +86,6 @@ fun sensorReading() {
     var sensorXMax by remember { mutableStateOf("") }
     var sensorYMax by remember { mutableStateOf("") }
     var sensorZMax by remember { mutableStateOf("") }
-
 
     showAccelerometerReading(sensorX = sensorX, sensorY = sensorY, sensorZ = sensorZ, sensorXMax = sensorXMax, sensorYMax = sensorYMax, sensorZMax = sensorZMax)
 
@@ -99,13 +117,12 @@ fun sensorReading() {
         }
     }
 
-
     LaunchedEffect(sensorManager) {
         sensorManager.registerListener(sensorListener, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL)
     }
 
     Text(
-        text = "Sensor Value : ",
+        text = "Accelerometer-Sensor Value:",
         style = TextStyle(fontSize = 20.sp)
     )
 }

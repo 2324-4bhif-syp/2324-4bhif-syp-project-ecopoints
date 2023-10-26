@@ -54,4 +54,4 @@ include::asciidocs/plantuml/ucd.puml[]
 
 == Sprint-backlog
 
-https://vm81.htl-leonding.ac.at/agiles/99-375/current[Sprint-backlog]
+https://vm81.htl-leonding.ac.at/agiles/99-375/current[Sprint-backlog^]

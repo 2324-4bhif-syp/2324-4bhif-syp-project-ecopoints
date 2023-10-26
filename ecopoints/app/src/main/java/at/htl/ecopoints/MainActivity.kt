@@ -1,8 +1,10 @@
 package at.htl.ecopoints
 
 import android.Manifest
+import android.content.ContentProviderClient
 import android.content.Context
 import android.content.pm.PackageManager
+import android.content.res.Resources.Theme
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -10,6 +12,7 @@ import android.hardware.SensorManager
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
+import android.location.LocationRequest
 import android.os.Bundle
 import android.widget.TextView
 import androidx.activity.ComponentActivity
@@ -23,10 +26,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,18 +49,35 @@ import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
 
-class MainActivity : ComponentActivity(), LocationListener {
-    lateinit var lastLocation: Location;
-    var distance = 0.0;
+class MainActivity : ComponentActivity() {
+    private var lastLocation: Location? = null
+    private var totalDistance: Float = 0.0f
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var locationRequest: com.google.android.gms.location.LocationRequest
 
-    val travelledDistance: Double
-        get() {
-            return distance;
-        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+        locationRequest = com.google.android.gms.location.LocationRequest.create().apply {
+            interval = 5000
+            fastestInterval = 2500
+            priority = com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
+        }
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            startLocationUpdates()
+        } else {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
+        }
+
         setContent {
             EcoPointsTheme {
                 // A surface container using the 'background' color from the theme
@@ -65,27 +87,50 @@ class MainActivity : ComponentActivity(), LocationListener {
                 ) {
                     sensorReading()
                     locationTest()
-                    travelDistance()
+                    travelDistance(distance = remember { mutableStateOf(totalDistance) })
                 }
             }
         }
     }
 
-    override fun onLocationChanged(location: Location) {
-        if(::lastLocation.isInitialized){
-            distance += lastLocation.distanceTo(location)
+    fun onLocationChanged(location: Location) {
+        if (lastLocation != null) {
+            // Calculate the distance between the current and previous locations
+            val distance = lastLocation!!.distanceTo(location)
+            totalDistance += distance
         }
+        lastLocation = location
+    }
 
-        lastLocation = location;
+    private fun startLocationUpdates() {
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null)
+    }
+
+    private val locationCallback = object : LocationCallback() {
+        override fun onLocationResult(locationResult: LocationResult?) {
+            locationResult?.lastLocation?.let { onLocationChanged(it) }
+        }
     }
 
     @Composable
-    fun travelDistance(){
-        Text(text = "Travelled Distance: $travelledDistance m", style = TextStyle(fontSize = 20.sp) , modifier = Modifier.padding(0.dp, 250.dp, 0.dp, 0.dp))
+    fun travelDistance(distance: MutableState<Float>){
+        Text(
+            text = "Travelled Distance: ${distance.value} m",
+            style = TextStyle(fontSize = 20.sp),
+            modifier = Modifier.padding(0.dp, 250.dp, 0.dp, 0.dp)
+        )
     }
 }
-
-
 
 @Composable
 fun sensorReading() {

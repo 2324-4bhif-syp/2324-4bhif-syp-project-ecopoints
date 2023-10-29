@@ -2,10 +2,10 @@
 
 set -e
 
-pushd client
-	mvn clean package
+pushd backend
+	mvn backend package
 popd
 
 mkdir -p dist
 
-cp client/target/*-runner.jar dist/FranklynClient.jar
+cp backend/target/*-runner.jar dist/ecopoints.jar

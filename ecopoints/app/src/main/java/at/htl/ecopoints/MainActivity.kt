@@ -42,6 +42,9 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.delay
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
+import java.util.Locale
 
 class MainActivity : ComponentActivity() {
     private var lastLocation: Location? = null
@@ -68,11 +71,12 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
+            val decimalFormat = DecimalFormat("#,##0.00", DecimalFormatSymbols(Locale.GERMAN))
             val totalText = remember { mutableStateOf("Travelled Distance: 0.00 m") }
 
             LaunchedEffect(totalDistance) {
                 while(true) {
-                    totalText.value = "Travelled Distance: ${"%.2f".format(totalDistance)} m"
+                    totalText.value = "Travelled Distance: ${decimalFormat.format(totalDistance)} m"
                     delay(250)
                 }
             }

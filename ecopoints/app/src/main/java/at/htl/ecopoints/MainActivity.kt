@@ -1,10 +1,8 @@
 package at.htl.ecopoints
 
 import android.Manifest
-import android.content.ContentProviderClient
 import android.content.Context
 import android.content.pm.PackageManager
-import android.content.res.Resources.Theme
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -12,38 +10,28 @@ import android.hardware.SensorManager
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
-import android.location.LocationRequest
 import android.os.Bundle
-import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
@@ -53,6 +41,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
+import kotlinx.coroutines.delay
 
 class MainActivity : ComponentActivity() {
     private var lastLocation: Location? = null
@@ -67,8 +56,8 @@ class MainActivity : ComponentActivity() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         locationRequest = com.google.android.gms.location.LocationRequest.create().apply {
-            interval = 5000
-            fastestInterval = 2500
+            interval = 1000
+            fastestInterval = 500
             priority = com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
         }
 
@@ -79,6 +68,15 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
+            val totalText = remember { mutableStateOf("Travelled Distance: 0.00 m") }
+
+            LaunchedEffect(totalDistance) {
+                while(true) {
+                    totalText.value = "Travelled Distance: ${"%.2f".format(totalDistance)} m"
+                    delay(250)
+                }
+            }
+
             EcoPointsTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
@@ -87,7 +85,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     sensorReading()
                     locationTest()
-                    travelDistance(distance = remember { mutableStateOf(totalDistance) })
+                    travelDistance(totalText.value)
                 }
             }
         }
@@ -97,7 +95,11 @@ class MainActivity : ComponentActivity() {
         if (lastLocation != null) {
             // Calculate the distance between the current and previous locations
             val distance = lastLocation!!.distanceTo(location)
-            totalDistance += distance
+
+            // Only update the totalDistance if the distance traveled is significant
+            if (distance > 1.0) {
+                totalDistance += distance
+            }
         }
         lastLocation = location
     }
@@ -121,15 +123,15 @@ class MainActivity : ComponentActivity() {
             locationResult?.lastLocation?.let { onLocationChanged(it) }
         }
     }
+}
 
-    @Composable
-    fun travelDistance(distance: MutableState<Float>){
-        Text(
-            text = "Travelled Distance: ${distance.value} m",
-            style = TextStyle(fontSize = 20.sp),
-            modifier = Modifier.padding(0.dp, 250.dp, 0.dp, 0.dp)
-        )
-    }
+@Composable
+fun travelDistance(totalText: String){
+    Text(
+        text = totalText,
+        style = TextStyle(fontSize = 20.sp),
+        modifier = Modifier.padding(0.dp, 250.dp, 0.dp, 0.dp)
+    )
 }
 
 @Composable
@@ -194,6 +196,7 @@ var speed : Float = 0.0f
 var isGPSEnabled : Boolean? = false
 var currentSpeed : Long = 0L
 var kmphSpeed:kotlin.Double = 0.0
+
 @Composable
 fun locationTest(){
 

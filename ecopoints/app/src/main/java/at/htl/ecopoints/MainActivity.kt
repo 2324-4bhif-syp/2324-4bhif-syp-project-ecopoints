@@ -71,12 +71,11 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
-            val decimalFormat = DecimalFormat("#,##0.00", DecimalFormatSymbols(Locale.GERMAN))
-            val totalText = remember { mutableStateOf("Travelled Distance: 0.00 m") }
+            val total = remember { mutableStateOf(totalDistance) }
 
             LaunchedEffect(totalDistance) {
                 while(true) {
-                    totalText.value = "Travelled Distance: ${decimalFormat.format(totalDistance)} m"
+                    total.value = totalDistance
                     delay(250)
                 }
             }
@@ -89,7 +88,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     sensorReading()
                     locationTest()
-                    travelDistance(totalText.value)
+                    travelDistance(total.value)
                 }
             }
         }
@@ -130,9 +129,10 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun travelDistance(totalText: String){
+fun travelDistance(totalDistance: Float){
+    val decimalFormat = DecimalFormat("#,##0.00", DecimalFormatSymbols(Locale.GERMAN))
     Text(
-        text = totalText,
+        text = "Travelled Distance: ${decimalFormat.format(totalDistance)} m",
         style = TextStyle(fontSize = 20.sp),
         modifier = Modifier.padding(0.dp, 250.dp, 0.dp, 0.dp)
     )

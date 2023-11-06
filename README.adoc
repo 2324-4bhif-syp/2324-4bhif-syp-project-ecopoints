@@ -41,16 +41,10 @@ can compare to each other.
 == Diagrams
 
 .Class-Diagramm
-[plantuml,cld,png]
-----
-include::asciidocs/plantuml/cld.puml[]
-----
+image::https://www.plantuml.com/plantuml/png/RP2nJaCn34NtV8ML4Qa3QmRKWMu88GeVO68JBANna-FN3eX_9uy2KgkNxPxeNfrasntDvqCDbTyTNC6aV3YG66SNRI7aYht3QsVx332EK887RUKdp0C_ue4JxDta5qwZS5AZ2yXPdrIQzmIayrlbyFMt_M8omSeuoR1hcVyR2yHZsK_CT0rthKZZPtLSj2zk2NritAEVe_49ZPXsQqRBEo7UHjXi8Dx4irk2Eo2J8_UmvKRZkxu1[]
 
 .Use-Case-Diagramm
-[plantuml,ucd,png]
-----
-include::asciidocs/plantuml/ucd.puml[]
-----
+image::https://www.plantuml.com/plantuml/png/RP3DIaCn48NtUOf3zxSF8ELIy6Sjekw7oRG9vYPbCj65-ExU68LRS3dVcMzEoB4QgRKbkIGdWnLeF0U3ZofiiMH7R4MnkoN5dSPtqHseWhth2vJFIV10GTSWK3B9hw8hYnpg9P6TYYxuT42hmbHbFLIM2wdW8rf0iI3QCwtZx0XVEhYIA75BP89xBjDZYTb-XRzWvGDljMSbVeFlpyxGqao6PPq__Spkox77D5rN3xHTSvi1-_tyJpDkS3Z4pAbvcMTtbEpxntu3[]
 
 == Sprint-backlog
 

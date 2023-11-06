@@ -249,7 +249,7 @@ fun resetButton(onResetClick: () -> Unit) {
             onClick = onResetClick,
             modifier = Modifier
                 .align(Alignment.TopEnd)
-                .padding(0.dp, 160.dp, 160.dp, 0.dp)
+                .padding(0.dp, 160.dp, 170.dp, 0.dp)
 
         ) {
             Text(text = "Reset")
@@ -265,7 +265,10 @@ fun showAccelerometerReading(sensorX: String, sensorY: String, sensorZ: String, 
             .fillMaxWidth()
             .padding(16.dp)
     ) {
-        Column {
+        Column(
+            modifier = Modifier
+                .weight(1f)
+        ) {
             Text(
                 text = "X: $sensorX",
                 style = TextStyle(

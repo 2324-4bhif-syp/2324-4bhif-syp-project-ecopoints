@@ -13,11 +13,14 @@ import android.location.LocationManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Box
+import androidx.compose.ui.Alignment
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -91,6 +94,7 @@ class MainActivity : ComponentActivity() {
                     travelDistance(total.value)
                 }
             }
+
         }
     }
 
@@ -152,8 +156,14 @@ fun sensorReading() {
     var sensorYMax by remember { mutableStateOf("") }
     var sensorZMax by remember { mutableStateOf("") }
 
+    val resetSensors: () -> Unit = {
+        sensorXMax = ""
+        sensorYMax = ""
+        sensorZMax = ""
+    }
 
     showAccelerometerReading(sensorX = sensorX, sensorY = sensorY, sensorZ = sensorZ, sensorXMax = sensorXMax, sensorYMax = sensorYMax, sensorZMax = sensorZMax)
+    resetButton (onResetClick = resetSensors)
 
     val sensorListener = object : SensorEventListener {
         override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
@@ -230,6 +240,25 @@ fun locationTest(){
 }
 
 @Composable
+fun resetButton(onResetClick: () -> Unit) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        Button(
+            onClick = onResetClick,
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(0.dp, 160.dp, 160.dp, 0.dp)
+
+        ) {
+            Text(text = "Reset")
+        }
+    }
+}
+
+
+@Composable
 fun showAccelerometerReading(sensorX: String, sensorY: String, sensorZ: String, sensorXMax : String, sensorYMax : String, sensorZMax : String) {
     Row(
         modifier = Modifier
@@ -295,5 +324,6 @@ fun showAccelerometerReading(sensorX: String, sensorY: String, sensorZ: String, 
             )
         }
     }
+
 }
 

@@ -138,7 +138,7 @@ fun travelDistance(totalDistance: Float){
     Text(
         text = "Travelled Distance: ${decimalFormat.format(totalDistance)} m",
         style = TextStyle(fontSize = 20.sp),
-        modifier = Modifier.padding(0.dp, 250.dp, 0.dp, 0.dp)
+        modifier = Modifier.padding(0.dp, 280.dp, 0.dp, 0.dp)
     )
 }
 
@@ -228,7 +228,7 @@ fun locationTest(){
     locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
     isGPSEnabled = locationManager?.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
-    Text(text = "GPS: $isGPSEnabled" , style = TextStyle(fontSize = 20.sp), modifier = Modifier.padding(0.dp, 200.dp, 0.dp, 0.dp))
+    Text(text = "GPS: $isGPSEnabled" , style = TextStyle(fontSize = 20.sp), modifier = Modifier.padding(0.dp, 230.dp, 0.dp, 0.dp))
 
 //    var location : Location = locationManager!!.getLastKnownLocation(LocationManager.GPS_PROVIDER) as Location
 //

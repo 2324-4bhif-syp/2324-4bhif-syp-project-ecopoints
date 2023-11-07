@@ -3,7 +3,7 @@
 set -e
 
 pushd backend
-	mvn backend package
+	mvn clean package
 popd
 
 mkdir -p dist

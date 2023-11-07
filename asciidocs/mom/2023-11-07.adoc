@@ -11,9 +11,6 @@ ifndef::imagesdir[:imagesdir: images]
 |===
 |anwesend | Abwesend
 
-|Vorname Nachname
-|
-
 |Linus Nestler
 |
 
@@ -24,7 +21,7 @@ ifndef::imagesdir[:imagesdir: images]
 |
 
 
-|Abdulla Al-Desoky
+|Abdullah Al-Desoky
 |
 
 |Oliver Daxinger
@@ -39,15 +36,27 @@ ifndef::imagesdir[:imagesdir: images]
 |Htl-Leonding 4bhif
 
 |von-bis
-|Di. 2023-11-97 X. Einheit
+|Di. 2023-11-97 6. Einheit
 |Dauer
-|30 min
+|60 min
 |===
-
-
 
 == Besprochene Themen
 
+* OBD2 Sensor auslesen
+** Engine RPM
+** Vehicle Speed
+** Throttle Position
+* API kotlin
+* Periodisch(möglichst oft) OBD2 Daten in Db speichern
+** Daten erfassen läuft asynchron zu Daten speichern in DB
+** Datenbank
+** Oracle Cloud Ubuntu Server mit Quarkus
+*** InfluxDB /
+* Woran erkennt man, ob man sparsam fährt?
+** Daten sammeln
+** Daten speichern (Über Handy auf den DB)
+** Probefahrten machen (mal aggressiv, mal sparsam)
 
 == Vereinbarungen und Entscheidungen
 
@@ -56,8 +65,17 @@ ifndef::imagesdir[:imagesdir: images]
 |===
 |wer |macht was |bis wann
 
-| Alle
+| Linus, Oliver
 a|
-**** --------------------------------------------
+* OBD2 Sensor Daten auslesen
+** OBD2 API
+*** https://github.com/eltonvs/kotlin-obd-api[]
+* (Optional)GPS Position auslesen
+| 21.07.2023
 
-| Irgendwann
+| Armin, Abdullah, Laurent
+a|
+* Oracle Cloud Server
+* Ubuntu mit Quarkus
+* DB PostgresDb
+| 21.07.2023

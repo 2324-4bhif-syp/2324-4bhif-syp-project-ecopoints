@@ -1,6 +1,6 @@
 = Erstes Sprint-Planning
-firstname lastname
-1.0, yyyy-mm-dd: Some notes
+Linus Nestler
+1.0, 2023-10-17: First Sprint
 ifndef::imagesdir[:imagesdir: images]
 :icons: font
 //:sectnums:    // Nummerierung der Überschriften / section numbering

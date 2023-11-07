@@ -9,7 +9,7 @@ ifndef::imagesdir[:imagesdir: images]
 
 .Teilnehmer
 |===
-|anwesend |Verteiler
+|anwesend |abwesend
 
 |Vorname Nachname
 |
@@ -39,7 +39,7 @@ ifndef::imagesdir[:imagesdir: images]
 |Htl-Leonding 4bhif
 
 |von-bis
-|Di. 2023-10-17 4. Einheit
+|Di. 2023-10-17 5. Einheit
 |Dauer
 |30 min
 |===

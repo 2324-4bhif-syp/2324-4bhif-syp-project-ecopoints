@@ -1,0 +1,63 @@
+= Zweites Sprint-Planning
+Linus Nestler
+1.0, 2023-11-07: Second Sprint
+ifndef::imagesdir[:imagesdir: images]
+:icons: font
+//:sectnums:    // Nummerierung der Überschriften / section numbering
+//:toc: left
+
+
+.Teilnehmer
+|===
+|anwesend | Abwesend
+
+|Vorname Nachname
+|
+
+|Linus Nestler
+|
+
+|
+|Laurent Mali
+
+|Armin Salkovic
+|
+
+
+|Abdulla Al-Desoky
+|
+
+|Oliver Daxinger
+|
+
+|===
+
+.Ort und Zeit
+[cols=2*]
+|===
+|Ort
+|Htl-Leonding 4bhif
+
+|von-bis
+|Di. 2023-11-97 X. Einheit
+|Dauer
+|30 min
+|===
+
+
+
+== Besprochene Themen
+
+
+== Vereinbarungen und Entscheidungen
+
+.Was wurde vereinbart?
+[%autowidth]
+|===
+|wer |macht was |bis wann
+
+| Alle
+a|
+**** --------------------------------------------
+
+| Irgendwann

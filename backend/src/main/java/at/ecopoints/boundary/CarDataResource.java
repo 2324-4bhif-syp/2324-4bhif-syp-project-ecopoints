@@ -49,7 +49,8 @@ public class CarDataResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("{id}")
     @Transactional
-    public void updateCarData(@PathParam("id") Long id, CarData carData) {
+    public Response updateCarData(@PathParam("id") Long id, CarData carData) {
         carDataRepository.update(carData);
+        return Response.status(Response.Status.OK).entity("CarData updated successfully").build();
     }
 }

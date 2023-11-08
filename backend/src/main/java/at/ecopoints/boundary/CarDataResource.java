@@ -6,6 +6,7 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 import java.util.List;
 
@@ -30,16 +31,18 @@ public class CarDataResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
-    public void saveCarData(CarData carData) {
+    public Response saveCarData(CarData carData) {
         carDataRepository.save(carData);
+        return Response.status(Response.Status.CREATED).entity("CarData created successfully").build();
     }
 
     @DELETE
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("{id}")
     @Transactional
-    public void deleteCarData(@PathParam("id") Long id) {
+    public Response deleteCarData(@PathParam("id") Long id) {
         carDataRepository.delete(id);
+        return Response.status(Response.Status.OK).entity("CarData deleted successfully").build();
     }
 
     @PUT

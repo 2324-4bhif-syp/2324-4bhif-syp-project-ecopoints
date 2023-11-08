@@ -31,6 +31,7 @@ public class CarDataRepository {
     public void update(CarData carData){
         CarData cd = findById(carData.getId());
 
+        cd.setTripId(carData.getTripId());
         cd.setLatitude(carData.getLatitude());
         cd.setLongitude(carData.getLongitude());
         cd.setCurrentVelocity(carData.getCurrentVelocity());

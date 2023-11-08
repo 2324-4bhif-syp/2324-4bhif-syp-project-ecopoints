@@ -17,5 +17,18 @@ class Trip {
     rewardedEcoPoints: double
 }
 
+class CarData {
+    id: Long
+    tripId: UUID
+    longitude: double
+    latitude: double
+    currentEngineRPM: double
+    currentVelocity: double
+    throttlePosition: double
+    engineRunTime: String
+    timeStamp: Date
+ }
+
 User "1" -- "*" Trip : > drives
+ CarData "*" -- "1"  Trip : < has
 @enduml

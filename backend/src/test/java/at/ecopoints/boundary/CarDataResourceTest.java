@@ -119,14 +119,80 @@ class CarDataResourceTest {
     }
 
     @Test
-    void saveCarData() {
+    void addAndDeleteCarData() {
+        given()
+                .contentType(ContentType.JSON)
+                .body("""
+                    {
+                      "trip_id": "5d59e169-94a4-4bf7-8a8e-6a52a1d85f0f",
+                      "longitude": 45.123456,
+                      "latitude": 34.567890,
+                      "current_engine_rpm": 3000.0,
+                      "current_velocity": 60.0,
+                      "throttle_position": 75.0,
+                      "engine_run_time": "14:30:15",
+                      "time_stamp": "2023-11-08T13:45:00.000Z"
+                    }
+                    """
+                ).when()
+                .post("/carData")
+                .then()
+                .statusCode(201);
+
+        given()
+                .when()
+                .delete("/carData/{id}", "1");
+
+        assertThat(given()
+                .when()
+                .get("/carData/1")
+                .then()
+                .statusCode(204)
+                .extract()
+                .body()
+                .asString()).isEqualTo("");
     }
 
     @Test
-    void deleteCarData() {
-    }
+    void addAndUpdateCarData() {
+        given()
+                .contentType(ContentType.JSON)
+                .body("""
+                    {
+                      "trip_id": "5d59e169-94a4-4bf7-8a8e-6a52a1d85f0f",
+                      "longitude": 45.123456,
+                      "latitude": 34.567890,
+                      "current_engine_rpm": 3000.0,
+                      "current_velocity": 60.0,
+                      "throttle_position": 75.0,
+                      "engine_run_time": "14:30:15",
+                      "time_stamp": "2023-11-08T13:45:00.000Z"
+                    }
+                    """
+                ).when()
+                .post("/carData")
+                .then()
+                .statusCode(201);
 
-    @Test
-    void updateCarData() {
+        given()
+                .contentType(ContentType.JSON)
+                .body("""
+                {
+                  "id": 1,
+                  "trip_id": "5d59e169-94a4-4bf7-8a8e-6a52a1d85f0f",
+                  "longitude": 46.123456,
+                  "latitude": 35.567890,
+                  "current_engine_rpm": 3100.0,
+                  "current_velocity": 65.0,
+                  "throttle_position": 80.0,
+                  "engine_run_time": "15:30:15",
+                  "time_stamp": "2023-11-08T14:45:00.000Z"
+                }
+                """
+                ).when()
+                .put("/carData/{id}", 1) // Hier die ID der Daten angeben, die du aktualisieren möchtest
+                .then()
+                .statusCode(200);
+
     }
 }

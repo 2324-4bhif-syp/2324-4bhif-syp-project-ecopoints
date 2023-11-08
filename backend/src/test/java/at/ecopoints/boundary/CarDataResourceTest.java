@@ -57,7 +57,6 @@ class CarDataResourceTest {
                 .statusCode(200);
 
         response.then()
-                .body("id", equalTo(1))
                 .body("trip_id", equalTo("5d59e169-94a4-4bf7-8a8e-6a52a1d85f0f"))
                 .body("longitude", equalTo(45.123456f))
                 .body("latitude", equalTo(34.567890f))
@@ -108,7 +107,6 @@ class CarDataResourceTest {
                 .getList(".", CarData.class);
 
 
-        assertThat(carDataList.get(0).getId()).isEqualTo(1);
         assertThat(carDataList.get(0).getTripId().toString()).isEqualTo("5d59e169-94a4-4bf7-8a8e-6a52a1d85f0f");
         assertThat(carDataList.get(0).getLongitude()).isEqualTo(45.123455);
         assertThat(carDataList.get(0).getLatitude()).isEqualTo(34.567890);

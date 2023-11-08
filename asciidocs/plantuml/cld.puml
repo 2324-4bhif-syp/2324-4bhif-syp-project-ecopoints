@@ -26,7 +26,7 @@ class CarData {
     currentVelocity: double
     throttlePosition: double
     engineRunTime: String
-    timeStamp: Date
+    timeStamp: Timestamp
  }
 
 User "1" -- "*" Trip : > drives

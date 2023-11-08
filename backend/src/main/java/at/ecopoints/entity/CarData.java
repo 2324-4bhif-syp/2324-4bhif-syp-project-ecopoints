@@ -1,32 +1,40 @@
 package at.ecopoints.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 import java.sql.Timestamp;
+import java.util.UUID;
 
 @Entity
 public class CarData {
-    //id, TripId(UUID, OID), longitude, latitude,  currentEngineRPM, currentVelocity, ThrottlePosition, EngineRunTime, TimeStamp
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long tripId;
+
+    @JsonProperty("trip_id")
+    private UUID tripId;
     private double longitude;
     private double latitude;
-    private double currentEngineRPM;
-    private double currentVelocity;
-    private double throttlePosition;
-    private String engineRunTime;
-    private Timestamp timeStamp;
 
+    @JsonProperty("current_engine_rpm")
+    private double currentEngineRPM;
+    @JsonProperty("current_velocity")
+    private double currentVelocity;
+    @JsonProperty("throttle_position")
+    private double throttlePosition;
+    @JsonProperty("engine_run_time")
+    private String engineRunTime;
+    @JsonProperty("time_stamp")
+    private Timestamp timeStamp;
 
     //region Constructors
     public CarData(){}
-    public CarData(Long tripId, double longitude, double latitude, double currentEngineRPM, double currentVelocity, double throttlePosition, String engineRunTime, Timestamp timeStamp) {
+    public CarData(UUID tripId, double longitude, double latitude, double currentEngineRPM, double currentVelocity, double throttlePosition, String engineRunTime, Timestamp timeStamp) {
         this.tripId = tripId;
         this.longitude = longitude;
         this.latitude = latitude;
@@ -47,11 +55,11 @@ public class CarData {
         this.id = id;
     }
 
-    public Long getTripId() {
+    public UUID getTripId() {
         return tripId;
     }
 
-    public void setTripId(Long tripId) {
+    public void setTripId(UUID tripId) {
         this.tripId = tripId;
     }
 

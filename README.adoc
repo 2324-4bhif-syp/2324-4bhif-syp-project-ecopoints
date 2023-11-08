@@ -49,3 +49,30 @@ image::http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubuse
 == Sprint-backlog
 
 https://vm81.htl-leonding.ac.at/agiles/99-375/current[Sprint-backlog]
+
+== How to start
+=== backend quarkus application
+
+1. Navigate to the backend folder
+
+ ...cd backend/
+
+2. Start the quarkus application
+
+    ./mvnw clean quarkus:dev
+
+3. To run the tests for the application
+
+    ./mvnw test
+
+=== Oracle ubuntu server
+
+1. Navigate to the folder with the ssh-key-xxxx-xx-xx.key File
+
+2. Connect to the server - (Public IP address: 138.2.138.31)
+
+ sudo ssh -i './ssh-key-xxxx-xx-xx.key' ubuntu@138.2.138.31
+
+3. In windows we don't use the sudo command
+
+ ssh -i '.\ssh-key-xxxx-xx-xx.key' ubuntu@138.2.138.31

@@ -9,7 +9,7 @@
 |Name |Foto
 
 |Abdulla Aldesoky
-| image:img/Abdullah-Aldesoky.jpg[width=100, height=100]
+| image:img/Abdullah-Aldesoky.jpg[width=100, height=150]
 
 |Oliver Daxinger
 |

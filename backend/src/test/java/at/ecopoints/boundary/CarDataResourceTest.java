@@ -58,9 +58,18 @@ class CarDataResourceTest {
                 .then()
                 .statusCode(201);
 
+        Long id = given()
+                .when()
+                .get("/carData")
+                .then()
+                .statusCode(200)
+                .extract()
+                .jsonPath()
+                .getLong("[0].id");
+
         Response response = given()
                 .when()
-                .get("/carData/1");
+                .get("/carData/{id}", id);
 
         response.then()
                 .statusCode(200);
@@ -183,11 +192,20 @@ class CarDataResourceTest {
                 .then()
                 .statusCode(201);
 
+        Long id = given()
+                .when()
+                .get("/carData")
+                .then()
+                .statusCode(200)
+                .extract()
+                .jsonPath()
+                .getLong("[0].id");
+
         given()
                 .contentType(ContentType.JSON)
-                .body("""
+                .body(String.format("""
                 {
-                  "id": 1,
+                  "id": %d,
                   "trip_id": "5d59e169-94a4-4bf7-8a8e-6a52a1d85f0f",
                   "longitude": 46.123456,
                   "latitude": 35.567890,
@@ -198,10 +216,27 @@ class CarDataResourceTest {
                   "time_stamp": "2023-11-08T14:45:00.000Z"
                 }
                 """
-                ).when()
-                .put("/carData/{id}", 1) // Hier die ID der Daten angeben, die du aktualisieren möchtest
+                , id)).when()
+                .put("/carData/{id}", id)
                 .then()
                 .statusCode(200);
+
+        Response response = given()
+                .when()
+                .get("/carData/{id}", id);
+
+        response.then()
+                .statusCode(200);
+
+        response.then()
+                .body("trip_id", equalTo("5d59e169-94a4-4bf7-8a8e-6a52a1d85f0f"))
+                .body("longitude", equalTo(46.123456f))
+                .body("latitude", equalTo(35.567890f))
+                .body("current_engine_rpm", equalTo(3100.0f))
+                .body("current_velocity", equalTo(65.0f))
+                .body("throttle_position", equalTo(80.0f))
+                .body("engine_run_time", equalTo("15:30:15"))
+                .body("time_stamp", equalTo("2023-11-08T14:45:00.000+00:00"));
 
     }
 }

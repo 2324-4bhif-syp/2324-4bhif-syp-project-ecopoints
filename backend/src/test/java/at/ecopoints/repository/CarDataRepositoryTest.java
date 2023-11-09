@@ -45,7 +45,7 @@ class CarDataRepositoryTest {
 
         carDataRepository.save(carData);
 
-        CarData cd = carDataRepository.findById(1L);
+        CarData cd = carDataRepository.findById(carData.getId());
 
         assertThat(cd.getTripId().toString())
                 .isEqualTo("5d59e169-94a4-4bf7-8a8e-6a52a1d85f0f");
@@ -64,7 +64,7 @@ class CarDataRepositoryTest {
         assertThat(cd.getTimeStamp())
                 .isEqualTo(Timestamp.valueOf("2023-11-08 13:45:00"));
 
-        carDataRepository.delete(1L);
+        carDataRepository.delete(carData.getId());
 
         assertThat(carDataRepository.findById(1L))
                 .isNull();
@@ -117,8 +117,8 @@ class CarDataRepositoryTest {
         assertThat(carDataList.get(1).getCurrentEngineRPM())
                 .isEqualTo(2000.0);
 
-        carDataRepository.delete(1L);
-        carDataRepository.delete(2L);
+        carDataRepository.delete(carData.getId());
+        carDataRepository.delete(carData2.getId());
     }
 
     @Test

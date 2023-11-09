@@ -21,7 +21,7 @@
 |
 
 |Armin Salkovic
-| image:img/armin-salkovic.jpg[role=toggle]
+| image:img/armin-salkovic.jpg[width=120, height=150]
 
 |===
 

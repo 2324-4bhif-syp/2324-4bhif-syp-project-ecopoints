@@ -3,11 +3,27 @@
 = EcoPoints
 
 == Team
-* Linus Nestler (Projektleiter)
-* Armin Salkovic
-* Abdullah Al Desoky
-* Oliver Daxinger
-* Laurent Mali
+
+.Team
+|===
+|Name |Foto
+
+|Abdulla Aldesoky
+| image:img/Abdullah-Aldesoky.jpg[width=100, height=100]
+
+|Oliver Daxinger
+|
+
+|Laurent Mali
+|
+
+|Linus Nestler
+|
+
+|Armin Salkovic
+|
+
+|===
 
 == Description
 

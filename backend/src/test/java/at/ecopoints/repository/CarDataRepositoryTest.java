@@ -22,13 +22,13 @@ class CarDataRepositoryTest {
     @Inject
     CarDataRepository carDataRepository;
 
-/*    @AfterEach
-    @TestTransaction
+    @AfterEach
+    @Transactional
     void cleanup() {
-        if (carDataRepository.findById(1L) != null) {
-            carDataRepository.delete(1L);
+        for(CarData cd : carDataRepository.getAll()){
+            carDataRepository.delete(cd.getId());
         }
-    }*/
+    }
 
     @Test
     @Transactional

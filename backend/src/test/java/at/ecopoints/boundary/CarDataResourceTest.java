@@ -21,10 +21,19 @@ import static org.hamcrest.Matchers.equalTo;
 class CarDataResourceTest {
     @AfterEach
     void cleanup() {
-        Response response = given().when().get("/carData/1");
+        Response response = given().when().get("/carData");
 
         if (response.getStatusCode() == 200) {
-            given().when().delete("/carData/{id}", "1");
+            List<CarData> carDataList = response.then()
+                    .statusCode(200)
+                    .extract()
+                    .body()
+                    .jsonPath()
+                    .getList(".", CarData.class);
+
+            for(int i = 0; i < carDataList.size(); i++) {
+                given().when().delete("/carData/{id}", carDataList.get(i).getId());
+            }
         }
     }
 

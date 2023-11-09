@@ -8,7 +8,7 @@
 |===
 |Name |Foto
 
-|Abdulla Aldesoky
+|Abdullah Aldesoky
 | image:img/Abdullah-Aldesoky.jpg[width=120, height=150]
 
 |Oliver Daxinger

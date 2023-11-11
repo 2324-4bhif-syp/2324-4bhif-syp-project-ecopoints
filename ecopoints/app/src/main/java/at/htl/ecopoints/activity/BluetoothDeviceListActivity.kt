@@ -2,13 +2,10 @@ package at.htl.ecopoints.activity
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
-import android.bluetooth.BluetoothSocket
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
@@ -24,17 +21,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import at.htl.ecopoints.service.BluetoothDeviceService
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.util.UUID
 
 class BluetoothDeviceListActivity : ComponentActivity() {
-
-    private val bluetoothAdapter: BluetoothAdapter? by lazy(LazyThreadSafetyMode.NONE) {
-        BluetoothAdapter.getDefaultAdapter()
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,13 +39,14 @@ class BluetoothDeviceListActivity : ComponentActivity() {
                     1
                 )
             } else {
-                bluetoothDeviceList(bluetoothDeviceService.getAllDevices())
+                BluetoothDeviceList(bluetoothDeviceService.getAllDevices())
             }
         }
     }
 
     @SuppressLint("MissingPermission")
     private fun useDevice(device: BluetoothDevice) {
+        val intent = Intent(this@BluetoothDeviceListActivity, Obd2ReadingActivity::class.java)
         intent.putExtra("deviceName", device.name)
         intent.putExtra("deviceUUID", device.uuids.get(0).toString())
         startActivity(intent)
@@ -65,7 +54,7 @@ class BluetoothDeviceListActivity : ComponentActivity() {
 
 
     @Composable
-    fun bluetoothDeviceList(devices: List<BluetoothDevice>) {
+    fun BluetoothDeviceList(devices: List<BluetoothDevice>) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -83,7 +72,7 @@ class BluetoothDeviceListActivity : ComponentActivity() {
 
             LazyColumn {
                 items(devices) { device ->
-                    bluetoothDeviceItem(device = device) {
+                    BluetoothDeviceItem(device = device) {
                         useDevice(device)
                     }
                     Divider(color = Color.Gray, thickness = 1.dp)
@@ -93,7 +82,7 @@ class BluetoothDeviceListActivity : ComponentActivity() {
     }
 
     @Composable
-    fun bluetoothDeviceItem(device: BluetoothDevice, onItemClick: () -> Unit) {
+    fun BluetoothDeviceItem(device: BluetoothDevice, onItemClick: () -> Unit) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()

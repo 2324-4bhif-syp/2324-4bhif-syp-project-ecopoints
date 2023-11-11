@@ -12,9 +12,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import at.htl.ecopoints.service.Obd2Sercvice
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
-import com.github.eltonvs.obd.command.engine.SpeedCommand
-import com.github.eltonvs.obd.command.temperature.EngineCoolantTemperatureCommand
-import com.github.eltonvs.obd.connection.ObdDeviceConnection
 import kotlinx.coroutines.launch
 import java.util.UUID
 
@@ -44,6 +41,8 @@ class Obd2ReadingActivity : ComponentActivity() {
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(text = "Name: $deviceName")
                         Text(text = "Address: $deviceUUID")
+
+                        TestRead()
                     }
                 }
             }
@@ -53,15 +52,19 @@ class Obd2ReadingActivity : ComponentActivity() {
 
 
     @Composable
-    private fun testRead() {
+    private fun TestRead() {
         val service = Obd2Sercvice(UUID.fromString(deviceUUID))
         val coroutineScope = rememberCoroutineScope()
         var rpm = "nix"
 
-        val getLocationOnClick: () -> Unit = {
+        val getRPMOnClick: () -> Unit = {
             coroutineScope.launch {
                 rpm = service.getRpm()
             }
+        }
+
+        Button(onClick = getRPMOnClick) {
+            Text("Get RPM")
         }
 
         Text(text = "CurrentRpm ${rpm}")

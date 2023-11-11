@@ -20,12 +20,14 @@ import java.util.UUID
 
 
 class Obd2ReadingActivity : ComponentActivity() {
+    var deviceName = ""
+    var deviceUUID = ""
 
-    val deviceName = intent.getStringExtra("deviceName") ?: ""
-    val deviceUUID = intent.getStringExtra("deviceUUID") ?: ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+    deviceName = intent.getStringExtra("deviceName") ?: ""
+    deviceUUID = intent.getStringExtra("deviceName") ?: ""
 
         setContent {
             EcoPointsTheme {

@@ -13,6 +13,7 @@ import at.htl.ecopoints.activity.Obd2ReadingActivity
 import com.github.eltonvs.obd.command.engine.SpeedCommand
 import com.github.eltonvs.obd.connection.ObdDeviceConnection
 import com.github.eltonvs.obd.command.ObdResponse
+import com.github.eltonvs.obd.command.engine.RPMCommand
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -77,7 +78,7 @@ class Obd2Sercvice {
             return ""
         }
 
-        val response : ObdResponse =  connection.run(SpeedCommand())
+        val response : ObdResponse =  connection.run(RPMCommand())
         return response.value;
     }
 }

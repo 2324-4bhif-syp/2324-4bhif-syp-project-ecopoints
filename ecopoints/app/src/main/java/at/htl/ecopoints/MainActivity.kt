@@ -329,4 +329,3 @@ fun showAccelerometerReading(sensorX: String, sensorY: String, sensorZ: String, 
     }
 
 }
-

@@ -39,6 +39,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import at.htl.ecopoints.service.AccelerometerSensorService
+import at.htl.ecopoints.service.LocationService
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
@@ -50,11 +52,10 @@ import java.text.DecimalFormatSymbols
 import java.util.Locale
 
 class MainActivity : ComponentActivity() {
-    private var lastLocation: Location? = null
     private var totalDistance: Float = 0.0f
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationRequest: com.google.android.gms.location.LocationRequest
-
+    private var locationService: LocationService = LocationService()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,38 +92,18 @@ class MainActivity : ComponentActivity() {
                 ) {
                     sensorReading()
                     locationTest()
-                    travelDistance(total.value)
+                    printTravelledDistance(total.value)
                 }
             }
-
         }
     }
 
     fun onLocationChanged(location: Location) {
-        if (lastLocation != null) {
-            // Calculate the distance between the current and previous locations
-            val distance = lastLocation!!.distanceTo(location)
-
-            // Only update the totalDistance if the distance traveled is significant
-            if (distance > 1.0) {
-                totalDistance += distance
-            }
-        }
-        lastLocation = location
+        totalDistance += locationService.getDistance(location)
     }
 
     private fun startLocationUpdates() {
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            return
-        }
-        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null)
+        locationService.startLocationUpdates(this, fusedLocationClient, locationRequest, locationCallback)
     }
 
     private val locationCallback = object : LocationCallback() {
@@ -133,7 +114,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun travelDistance(totalDistance: Float){
+fun printTravelledDistance(totalDistance: Float){
     val decimalFormat = DecimalFormat("#,##0.00", DecimalFormatSymbols(Locale.GERMAN))
     Text(
         text = "Travelled Distance: ${decimalFormat.format(totalDistance)} m",

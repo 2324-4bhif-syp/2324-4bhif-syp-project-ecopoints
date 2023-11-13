@@ -1,4 +1,4 @@
-/*package at.ecopoints.boundary;
+package at.ecopoints.boundary;
 
 import at.ecopoints.entity.CarData;
 import io.quarkus.test.junit.QuarkusTest;
@@ -37,7 +37,7 @@ class CarDataResourceTest {
         }
     }
 
-    @Test
+    /*@Test
     void addAndGetCarDataById() {
         given()
                 .contentType(ContentType.JSON)
@@ -238,5 +238,5 @@ class CarDataResourceTest {
                 .body("engine_run_time", equalTo("15:30:15"))
                 .body("time_stamp", equalTo("2023-11-08T14:45:00.000+00:00"));
 
-    }
-}*/
+    }*/
+}

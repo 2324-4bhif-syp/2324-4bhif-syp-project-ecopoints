@@ -6,10 +6,9 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.content.Intent
 import android.os.IBinder
-import java.util.UUID
 
 @Suppress("DEPRECATION")
-class BluetoothDeviceService : Service() {
+class BluetoothDeviceListService : Service() {
     private val bluetoothAdapter: BluetoothAdapter? by lazy(LazyThreadSafetyMode.NONE) {
         BluetoothAdapter.getDefaultAdapter()
     }
@@ -17,11 +16,22 @@ class BluetoothDeviceService : Service() {
     @SuppressLint("MissingPermission")
     fun getAllDevices(): List<BluetoothDevice> {
         return bluetoothAdapter?.bondedDevices?.toList() ?: emptyList()
+        bluetoothAdapter!!.cancelDiscovery()
     }
 
     @SuppressLint("MissingPermission")
-    fun getDeviceByUUID(id: UUID): BluetoothDevice {
-        return getAllDevices().filter { it.uuids.get(0).equals(id) }.get(0)
+    fun getDeviceByAddress(address: String): BluetoothDevice? {
+        val devices = getAllDevices()
+        var device: BluetoothDevice? = null
+        for (it : BluetoothDevice in devices){
+            if(it.address != null){
+                if(it.address.toString() == address.toString()){
+                    device = it
+                }
+            }
+        }
+
+        return device
     }
 
     override fun onBind(intent: Intent?): IBinder? {

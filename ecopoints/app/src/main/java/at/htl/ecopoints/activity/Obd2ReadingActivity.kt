@@ -1,6 +1,7 @@
 package at.htl.ecopoints.activity
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
@@ -10,7 +11,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import at.htl.ecopoints.service.Obd2Sercvice
+import at.htl.ecopoints.service.Obd2Service
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
 import kotlinx.coroutines.launch
 import java.util.UUID
@@ -18,13 +19,13 @@ import java.util.UUID
 
 class Obd2ReadingActivity : ComponentActivity() {
     var deviceName = ""
-    var deviceUUID = ""
+    var deviceAddress = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-    deviceName = intent.getStringExtra("deviceName") ?: ""
-    deviceUUID = intent.getStringExtra("deviceName") ?: ""
+        deviceName = intent.getStringExtra("deviceName") ?: ""
+        deviceAddress = intent.getStringExtra("deviceAddress") ?: ""
 
         setContent {
             EcoPointsTheme {
@@ -40,8 +41,7 @@ class Obd2ReadingActivity : ComponentActivity() {
                         Text(text = "Connected Device Information", fontWeight = FontWeight.Bold)
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(text = "Name: $deviceName")
-                        Text(text = "Address: $deviceUUID")
-
+                        Text(text = "Address: $deviceAddress")
                         TestRead()
                     }
                 }
@@ -50,10 +50,10 @@ class Obd2ReadingActivity : ComponentActivity() {
     }
 
 
-
     @Composable
     private fun TestRead() {
-        val service = Obd2Sercvice(UUID.fromString(deviceUUID))
+        Log.d("Obd2ReadingActivity", "$deviceAddress")
+        val service = Obd2Service(deviceAddress)
         val coroutineScope = rememberCoroutineScope()
         var rpm = "nix"
 

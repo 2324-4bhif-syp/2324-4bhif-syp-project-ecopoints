@@ -20,13 +20,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
-import at.htl.ecopoints.service.BluetoothDeviceService
+import at.htl.ecopoints.service.BluetoothDeviceListService
 
 class BluetoothDeviceListActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val bluetoothDeviceService = BluetoothDeviceService()
+        val bluetoothDeviceService = BluetoothDeviceListService()
         setContent {
             if (ActivityCompat.checkSelfPermission(
                     this,
@@ -48,7 +48,7 @@ class BluetoothDeviceListActivity : ComponentActivity() {
     private fun useDevice(device: BluetoothDevice) {
         val intent = Intent(this@BluetoothDeviceListActivity, Obd2ReadingActivity::class.java)
         intent.putExtra("deviceName", device.name)
-        intent.putExtra("deviceUUID", device.uuids.get(0).toString())
+        intent.putExtra("deviceAddress", device.address)
         startActivity(intent)
     }
 
@@ -116,6 +116,16 @@ class BluetoothDeviceListActivity : ComponentActivity() {
                         text = "Bondstate ${device.bondState}",
                         style = TextStyle(color = MaterialTheme.colorScheme.secondary)
                     )
+                    Text(
+                        text = "Type ${device.type}",
+                        style = TextStyle(color = MaterialTheme.colorScheme.secondary)
+                    )
+                    if(device.uuids != null){
+                        Text(
+                            text = "UUID ${device.uuids[0]}",
+                            style = TextStyle(color = MaterialTheme.colorScheme.secondary)
+                        )
+                    }
                     Button(onClick = onItemClick) {
                         Text(text = "Use Device")
                     }

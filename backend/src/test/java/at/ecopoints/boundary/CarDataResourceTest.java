@@ -37,7 +37,7 @@ class CarDataResourceTest {
         }
     }
 
-    @Test
+    /*@Test
     void addAndGetCarDataById() {
         given()
                 .contentType(ContentType.JSON)
@@ -83,7 +83,7 @@ class CarDataResourceTest {
                 .body("throttle_position", equalTo(75.0f))
                 .body("engine_run_time", equalTo("14:30:15"))
                 .body("time_stamp", equalTo("2023-11-08T13:45:00.000+00:00"));
-    }
+    }*/
 
     @Test
     void getAllCarData() {

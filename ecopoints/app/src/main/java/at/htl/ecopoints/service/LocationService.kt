@@ -21,21 +21,26 @@ import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.util.Locale
 
-class LocationService(private val onLocationChanged: (Location) -> Unit): LocationListener {
+class LocationService {
     private var lastLocation: Location? = null
 
-    override fun onLocationChanged(location: Location) {
-        if (lastLocation != null) {
-            val distance = lastLocation!!.distanceTo(location)
+    fun getDistance(location: Location): Float {
+        var distance: Float = 0.0f
 
-            if (distance > 1.0) {
-                onLocationChanged(location)
+        if (lastLocation != null) {
+            val distanceToLocation = lastLocation!!.distanceTo(location)
+
+            if (distanceToLocation > 1.0) {
+                distance = distanceToLocation
             }
         }
         lastLocation = location
+        return distance
     }
 
-    fun startLocationUpdates(context: Context ,fusedLocationClient: FusedLocationProviderClient, locationRequest: com.google.android.gms.location.LocationRequest) {
+    fun startLocationUpdates(context: Context ,fusedLocationClient: FusedLocationProviderClient,
+                             locationRequest: com.google.android.gms.location.LocationRequest,
+                             locationCallback: LocationCallback) {
 
         if (ActivityCompat.checkSelfPermission(
                 context,
@@ -49,25 +54,5 @@ class LocationService(private val onLocationChanged: (Location) -> Unit): Locati
         }
 
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null)
-    }
-
-    private val locationCallback = object : LocationCallback() {
-        override fun onLocationResult(locationResult: LocationResult?) {
-            locationResult?.lastLocation?.let { onLocationChanged(it) }
-        }
-    }
-
-    fun stopLocationUpdates(fusedLocationClient: FusedLocationProviderClient) {
-        fusedLocationClient.removeLocationUpdates(locationCallback)
-    }
-
-    @Composable
-    fun printTravelDistance(totalDistance: Float){
-        val decimalFormat = DecimalFormat("#,##0.00", DecimalFormatSymbols(Locale.GERMAN))
-        Text(
-            text = "Travelled Distance: ${decimalFormat.format(totalDistance)} m",
-            style = TextStyle(fontSize = 20.sp),
-            modifier = Modifier.padding(0.dp, 280.dp, 0.dp, 0.dp)
-        )
     }
 }

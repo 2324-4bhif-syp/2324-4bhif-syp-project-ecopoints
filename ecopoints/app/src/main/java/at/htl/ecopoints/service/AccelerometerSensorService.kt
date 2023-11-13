@@ -41,48 +41,35 @@ import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.util.*
 
-class AccelerometerSensorService(
-    private val onSensorChanged: (Float, Float, Float) -> Unit,
-    private val onResetSensors: () -> Unit
-) : SensorEventListener {
+class AccelerometerSensorService {
     var sensorXMax: String = ""
     var sensorYMax: String = ""
     var sensorZMax: String = ""
 
-    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+    var sensorX: String = ""
+    var sensorY: String = ""
+    var sensorZ: String = ""
 
-    }
+    fun setSensors(event: SensorEvent){
+        var x = event.values[0].toString()
+        var y = event.values[1].toString()
+        var z = event.values[2].toString()
 
-    override fun onSensorChanged(event: SensorEvent?) {
-        if (event?.sensor?.type == Sensor.TYPE_ACCELEROMETER) {
-            val x = event.values[0]
-            val y = event.values[1]
-            val z = event.values[2]
-
-            if (x > sensorXMax as Float) {
-                sensorXMax = x.toString()
-            }
-            if (y > sensorYMax as Float) {
-                sensorYMax = y.toString()
-            }
-            if (z > sensorZMax as Float) {
-                sensorZMax = z.toString()
-            }
-
-            onSensorChanged(x, y, z)
+        if(x > sensorXMax) {
+            sensorXMax = x
         }
-    }
-
-    fun registerListener(sensorManager: SensorManager, accelerometerSensor: Sensor) {
-        sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL)
-    }
-
-    fun unregisterListener(sensorManager: SensorManager) {
-        sensorManager.unregisterListener(this)
+        if(y > sensorYMax) {
+            sensorYMax = y
+        }
+        if(z > sensorZMax) {
+            sensorZMax = z
+        }
+        sensorX = x
+        sensorY = y
+        sensorZ = z
     }
 
     fun resetSensors() {
-        onResetSensors()
         sensorXMax = ""
         sensorYMax = ""
         sensorZMax = ""

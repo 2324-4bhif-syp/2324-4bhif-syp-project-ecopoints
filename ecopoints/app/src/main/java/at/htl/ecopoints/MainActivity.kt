@@ -125,25 +125,47 @@ fun printTravelledDistance(totalDistance: Float){
 
 @Composable
 fun sensorReading() {
-    val sensorManager =
-        LocalContext.current.getSystemService(Context.SENSOR_SERVICE) as SensorManager
-    val accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
 
     var sensorX by remember { mutableStateOf("x") }
     var sensorY by remember { mutableStateOf("y") }
     var sensorZ by remember { mutableStateOf("z") }
-
     var sensorXMax by remember { mutableStateOf("") }
     var sensorYMax by remember { mutableStateOf("") }
     var sensorZMax by remember { mutableStateOf("") }
 
+    val sensorManager =
+        LocalContext.current.getSystemService(Context.SENSOR_SERVICE) as SensorManager
+    val accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+    val accelerometerSensorService: AccelerometerSensorService = AccelerometerSensorService()
+
     val resetSensors: () -> Unit = {
-        sensorXMax = ""
-        sensorYMax = ""
-        sensorZMax = ""
+        accelerometerSensorService.resetSensors()
+        sensorXMax = accelerometerSensorService.sensorXMax
+        sensorYMax = accelerometerSensorService.sensorYMax
+        sensorZMax = accelerometerSensorService.sensorZMax
     }
 
-    showAccelerometerReading(sensorX = sensorX, sensorY = sensorY, sensorZ = sensorZ, sensorXMax = sensorXMax, sensorYMax = sensorYMax, sensorZMax = sensorZMax)
+    showAccelerometerReading(
+        sensorX,
+        sensorY,
+        sensorZ,
+        sensorXMax,
+        sensorYMax,
+        sensorZMax
+    )
+
+    fun updateSensors() {
+        sensorX = accelerometerSensorService.sensorX
+        sensorY = accelerometerSensorService.sensorY
+        sensorZ = accelerometerSensorService.sensorZ
+    }
+
+    fun updateMaxSensors(){
+        sensorXMax = accelerometerSensorService.sensorXMax
+        sensorYMax = accelerometerSensorService.sensorYMax
+        sensorZMax = accelerometerSensorService.sensorZMax
+    }
+
     resetButton (onResetClick = resetSensors)
 
     val sensorListener = object : SensorEventListener {
@@ -154,28 +176,14 @@ fun sensorReading() {
         override fun onSensorChanged(event: SensorEvent?) {
             // Check if the sensor type is accelerometer
             if (event?.sensor?.type == Sensor.TYPE_ACCELEROMETER) {
-                val x = event.values[0].toString()
-                val y = event.values[1].toString()
-                val z = event.values[2].toString()
-
-                if(x > sensorXMax) {
-                    sensorXMax = x
-                }
-                if(y > sensorYMax) {
-                    sensorYMax = y
-                }
-                if(z > sensorZMax) {
-                    sensorZMax = z
-                }
-                sensorX = x
-                sensorY = y
-                sensorZ = z
+                accelerometerSensorService.setSensors(event)
+                updateSensors()
+                updateMaxSensors()
             }
         }
     }
 
-
-    LaunchedEffect(sensorManager) {
+    LaunchedEffect(accelerometerSensorService) {
         sensorManager.registerListener(sensorListener, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL)
     }
 
@@ -238,9 +246,8 @@ fun resetButton(onResetClick: () -> Unit) {
     }
 }
 
-
 @Composable
-fun showAccelerometerReading(sensorX: String, sensorY: String, sensorZ: String, sensorXMax : String, sensorYMax : String, sensorZMax : String) {
+fun showAccelerometerReading(sensorX: String, sensorY: String, sensorZ: String, sensorXMax: String, sensorYMax: String, sensorZMax: String) {
     Row(
         modifier = Modifier
             .fillMaxWidth()

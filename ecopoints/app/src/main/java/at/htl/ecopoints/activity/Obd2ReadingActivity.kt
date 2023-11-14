@@ -46,7 +46,8 @@ class Obd2ReadingActivity : ComponentActivity() {
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(text = "Name: $deviceName")
                         Text(text = "Address: $deviceAddress")
-                        TestRead()
+                        TestReadEltonLib()
+                        TestReadCustomComm()
                     }
                 }
             }
@@ -54,34 +55,76 @@ class Obd2ReadingActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun TestRead() {
+    private fun TestReadEltonLib() {
         Log.d("Obd2ReadingActivity", deviceAddress)
         val service = Obd2Service(deviceAddress)
         var rpm by remember { mutableStateOf("0") }
+        var speed by remember { mutableStateOf("0") }
+        var coolantTemp by remember { mutableStateOf("0") }
         var buttonClicked by remember { mutableStateOf(false) }
 
         Button(onClick = { buttonClicked = true }) {
-            Text("Get RPM")
+            Text("Read with EltonLib")
         }
 
         LaunchedEffect(buttonClicked) {
             if (buttonClicked) {
                 rpm = getRpm(service)
-                buttonClicked = false // Reset the buttonClicked state
+                speed = service.getEltonApiSpeed()
+                coolantTemp = service.getCoolantTemp()
+                buttonClicked = false
             }
         }
 
-        Text(text = "CurrentRpm $rpm")
+        Text(text = "Current-Speed $speed")
+        Text(text = "Current-Rpm $rpm")
+        Text(text = "Coolat-Temp $coolantTemp")
+    }
+
+    @Composable
+    private fun TestReadCustomComm(){
+        var rpm by remember { mutableStateOf("0") }
+        var speed by remember { mutableStateOf("0") }
+        var coolantTemp by remember { mutableStateOf("0") }
+        var buttonClicked by remember { mutableStateOf(false) }
+
+        var service = Obd2Service(deviceAddress)
+
+        service.initOBD()
+
+        Button(onClick = { buttonClicked = true }) {
+            Text("Read with Custom Comm")
+        }
+
+        LaunchedEffect(buttonClicked) {
+            if (buttonClicked) {
+                rpm = service.getRPM()
+                speed = service.getSpeed()
+                coolantTemp = service.getCoolantTemp()
+                buttonClicked = false
+            }
+        }
+
+        Text(text = "Current-Speed $speed")
+        Text(text = "Current-Rpm $rpm")
+        Text(text = "Coolat-Temp $coolantTemp")
     }
 
     private suspend fun getRpm(service: Obd2Service): String {
-        // Your suspend logic here
-        // For example, you can call a suspend function from your service
         return withContext(Dispatchers.IO) {
-            // Call your suspend function here
-            // For example:
-            // service.getRpm()
             service.getEltonApiRPM()
+        }
+    }
+
+    private suspend fun getSpeed(service: Obd2Service): String {
+        return withContext(Dispatchers.IO) {
+            service.getEltonApiSpeed()
+        }
+    }
+
+    private suspend fun getLoad(service: Obd2Service): String {
+        return withContext(Dispatchers.IO) {
+            service.getEltonApiLoad()
         }
     }
 }

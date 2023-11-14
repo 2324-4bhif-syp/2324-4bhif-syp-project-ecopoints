@@ -14,18 +14,18 @@ import java.io.OutputStream
 
 class Obd2Service(bluetoothDeviceAddress: String) {
 
-    private val deviceAdress: String = bluetoothDeviceAddress
+    private val deviceAddress: String = bluetoothDeviceAddress
     private var connection: ObdDeviceConnection? = null
-    private var obdBluetoothInterface: OBDBluetoothInterface? = null;
-    private val TAG = "Obd2Service"
+    private var obdBluetoothInterface: OBDBluetoothInterface? = null
+    private val TAG: String = "Obd2Service"
 
-    suspend fun establishCommunicationToDevice(): ObdDeviceConnection? {
+    private suspend fun establishCommunicationToDevice(): ObdDeviceConnection? {
         try {
             val bluetoothService = BluetoothService()
             val bluetoothDeviceListService = BluetoothDeviceListService()
             bluetoothService.connectDevice(
                 bluetoothDeviceListService.getDeviceByAddress(
-                    deviceAdress
+                    deviceAddress
                 )!!
             )
             val socket: BluetoothSocket = bluetoothService.getSocket()
@@ -49,18 +49,18 @@ class Obd2Service(bluetoothDeviceAddress: String) {
         } catch (e: IOException) {
             Log.e(
                 TAG,
-                "Error while establishing communication to device with Address $deviceAdress"
+                "Error while establishing communication to device with Address $deviceAddress"
             )
             Log.e(TAG, e.toString())
         }
         return null
     }
 
-    suspend fun connect() {
+    private suspend fun connect() {
         val tries = 3
 
         for (i in 1..tries) {
-            Log.d(TAG, "Trying to connect to device $deviceAdress try $i")
+            Log.d(TAG, "Trying to connect to device $deviceAddress try $i")
             if (connection != null) {
                 break
             }
@@ -87,7 +87,7 @@ class Obd2Service(bluetoothDeviceAddress: String) {
         } catch (e: IOException) {
             Log.e(
                 "Obd2Service",
-                "Error while establishing communication to device with UUID $deviceAdress"
+                "Error while establishing communication to device with UUID $deviceAddress"
             )
             Log.e("Obd2Service", e.toString())
         }
@@ -113,7 +113,7 @@ class Obd2Service(bluetoothDeviceAddress: String) {
         } catch (e: IOException) {
             Log.e(
                 "Obd2Service",
-                "Error while establishing communication to device with UUID $deviceAdress"
+                "Error while establishing communication to device with UUID $deviceAddress"
             )
             Log.e("Obd2Service", e.toString())
         }
@@ -139,7 +139,7 @@ class Obd2Service(bluetoothDeviceAddress: String) {
         } catch (e: IOException) {
             Log.e(
                 "Obd2Service",
-                "Error while establishing communication to device with UUID $deviceAdress"
+                "Error while establishing communication to device with UUID $deviceAddress"
             )
             Log.e("Obd2Service", e.toString())
         }
@@ -154,22 +154,22 @@ class Obd2Service(bluetoothDeviceAddress: String) {
 
     fun getRPM(): String {
         val obdCommandHelper = OBDCommandHelper(obdBluetoothInterface!!)
-        var rpm = obdCommandHelper.getEngineRPM()
+        val rpm = obdCommandHelper.getEngineRPM()
         Log.d(TAG, "RPM: $rpm")
         return rpm
     }
 
     fun getSpeed(): String {
         val obdCommandHelper = OBDCommandHelper(obdBluetoothInterface!!)
-        var speed = obdCommandHelper.getVehicleSpeed()
+        val speed = obdCommandHelper.getVehicleSpeed()
         Log.d(TAG, "Speed: $speed")
         return speed
     }
 
     fun getCoolantTemp(): String {
         val obdCommandHelper = OBDCommandHelper(obdBluetoothInterface!!)
-        var ctemp = obdCommandHelper.getCoolantTemperature()
-        Log.d(TAG, "Colant-temp: $ctemp")
-        return ctemp
+        val coolantTemp = obdCommandHelper.getCoolantTemperature()
+        Log.d(TAG, "Coolant-temp: $coolantTemp")
+        return coolantTemp
     }
 }

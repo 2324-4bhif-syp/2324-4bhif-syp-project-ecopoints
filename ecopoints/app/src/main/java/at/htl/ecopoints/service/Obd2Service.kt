@@ -25,10 +25,7 @@ class Obd2Service(bluetoothDeviceAddress: String) {
             )
             val socket: BluetoothSocket = bluetoothService.getSocket()
 
-            if (socket == null) {
-                Log.e(TAG, "Socket is null")
-                return null
-            } else if (!bluetoothService.connected()) {
+            if (!bluetoothService.connected()) {
                 Log.e(TAG, "Socket is not connected")
                 return null
             }
@@ -50,11 +47,11 @@ class Obd2Service(bluetoothDeviceAddress: String) {
             )
             Log.e(TAG, e.toString())
         }
-        return null;
+        return null
     }
 
     suspend fun connect() {
-        var tries = 3
+        val tries = 3
 
         for (i in 1..tries) {
             Log.d(TAG, "Trying to connect to device $deviceAdress try $i")
@@ -79,7 +76,7 @@ class Obd2Service(bluetoothDeviceAddress: String) {
             Log.d(TAG, "RPM: ${response.value}")
             Log.d(TAG, "RPM: ${response.unit}")
             Log.d(TAG, "RPM: ${response.formattedValue}")
-            return response.value;
+            return response.value
 
         } catch (e: IOException) {
             Log.e(

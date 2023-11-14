@@ -22,8 +22,8 @@ import kotlinx.coroutines.withContext
 
 
 class Obd2ReadingActivity : ComponentActivity() {
-    var deviceName = ""
-    var deviceAddress = ""
+    private var deviceName = ""
+    private var deviceAddress = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,7 +55,7 @@ class Obd2ReadingActivity : ComponentActivity() {
 
     @Composable
     private fun TestRead() {
-        Log.d("Obd2ReadingActivity", "$deviceAddress")
+        Log.d("Obd2ReadingActivity", deviceAddress)
         val service = Obd2Service(deviceAddress)
         var rpm by remember { mutableStateOf("0") }
         var buttonClicked by remember { mutableStateOf(false) }
@@ -71,7 +71,7 @@ class Obd2ReadingActivity : ComponentActivity() {
             }
         }
 
-        Text(text = "CurrentRpm ${rpm}")
+        Text(text = "CurrentRpm $rpm")
     }
 
     private suspend fun getRpm(service: Obd2Service): String {

@@ -5,8 +5,4 @@
 
 == 1. Folie
 
-Inhalt für die 1. Folie
-
-== 2. Folie
-
-Inhalt für die 2. Folie
+Under construction ...

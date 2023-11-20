@@ -7,19 +7,24 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import at.htl.ecopoints.service.Obd2Service
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
-import kotlinx.coroutines.launch
-import java.util.UUID
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 
 
 class Obd2ReadingActivity : ComponentActivity() {
-    var deviceName = ""
-    var deviceAddress = ""
+    private var deviceName = ""
+    private var deviceAddress = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,31 +47,89 @@ class Obd2ReadingActivity : ComponentActivity() {
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(text = "Name: $deviceName")
                         Text(text = "Address: $deviceAddress")
-                        TestRead()
+                        TestReadEltonLib()
+                        TestReadCustomComm()
                     }
                 }
             }
         }
     }
 
-
     @Composable
-    private fun TestRead() {
-        Log.d("Obd2ReadingActivity", "$deviceAddress")
+    private fun TestReadEltonLib() {
+        Log.d("Obd2ReadingActivity", deviceAddress)
         val service = Obd2Service(deviceAddress)
-        val coroutineScope = rememberCoroutineScope()
-        var rpm = "nix"
+        var rpm by remember { mutableStateOf("0") }
+        var speed by remember { mutableStateOf("0") }
+        var coolantTemp by remember { mutableStateOf("0") }
+        var buttonClicked by remember { mutableStateOf(false) }
 
-        val getRPMOnClick: () -> Unit = {
-            coroutineScope.launch {
-                rpm = service.getRpm()
+        Button(onClick = { buttonClicked = true }) {
+            Text("Read with EltonLib")
+        }
+
+        LaunchedEffect(buttonClicked) {
+            if (buttonClicked) {
+                rpm = getRpm(service)
+                speed = service.getEltonApiSpeed()
+                coolantTemp = service.getCoolantTemp()
+                buttonClicked = false
             }
         }
 
-        Button(onClick = getRPMOnClick) {
-            Text("Get RPM")
+        Text(text = "Current-Speed $speed")
+        Text(text = "Current-Rpm $rpm")
+        Text(text = "Coolant-Temp $coolantTemp")
+    }
+
+    @Composable
+    private fun TestReadCustomComm() {
+        var rpm by remember { mutableStateOf("0") }
+        var speed by remember { mutableStateOf("0") }
+        var coolantTemp by remember { mutableStateOf("0") }
+        var buttonClicked by remember { mutableStateOf(false) }
+
+        val service = Obd2Service(deviceAddress)
+
+
+        Button(onClick = { buttonClicked = true }) {
+            Text("Read with Custom Comm")
         }
 
-        Text(text = "CurrentRpm ${rpm}")
+        LaunchedEffect(buttonClicked) {
+            if (buttonClicked) {
+                service.initOBD()
+               for(i in 0..1000){
+
+                    rpm = service.getRPM()
+                    speed = service.getSpeed()
+                    coolantTemp = service.getCoolantTemp()
+                    delay(500)
+                }
+                buttonClicked = false
+            }
+        }
+
+        Text(text = "Current-Speed $speed")
+        Text(text = "Current-Rpm $rpm")
+        Text(text = "Coolant-Temp $coolantTemp")
+    }
+
+    private suspend fun getRpm(service: Obd2Service): String {
+        return withContext(Dispatchers.IO) {
+            service.getEltonApiRPM()
+        }
+    }
+
+    private suspend fun getSpeed(service: Obd2Service): String {
+        return withContext(Dispatchers.IO) {
+            service.getEltonApiSpeed()
+        }
+    }
+
+    private suspend fun getLoad(service: Obd2Service): String {
+        return withContext(Dispatchers.IO) {
+            service.getEltonApiLoad()
+        }
     }
 }

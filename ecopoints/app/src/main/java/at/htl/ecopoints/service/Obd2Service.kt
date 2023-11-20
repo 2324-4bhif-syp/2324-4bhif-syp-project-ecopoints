@@ -1,64 +1,180 @@
 package at.htl.ecopoints.service
 
-import android.annotation.SuppressLint
 import android.bluetooth.BluetoothSocket
 import android.util.Log
+import at.htl.ecopoints.OBDBluetoothInterface
+import at.htl.ecopoints.OBDCommandHelper
+import com.github.eltonvs.obd.command.engine.LoadCommand
 import com.github.eltonvs.obd.connection.ObdDeviceConnection
-import com.github.eltonvs.obd.command.ObdResponse
 import com.github.eltonvs.obd.command.engine.RPMCommand
+import com.github.eltonvs.obd.command.engine.SpeedCommand
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
-import java.util.UUID
 
-class Obd2Service {
+class Obd2Service(bluetoothDeviceAddress: String) {
 
-    val deviceAdress: String;
+    private val deviceAddress: String = bluetoothDeviceAddress
+    private var connection: ObdDeviceConnection? = null
+    private var obdBluetoothInterface: OBDBluetoothInterface? = null
+    private val TAG: String = "Obd2Service"
 
-    constructor(bluetoothDeviceAddress: String) {
-        deviceAdress = bluetoothDeviceAddress
-    }
-
-    suspend fun establishCommunicationToDevice(): ObdDeviceConnection? {
+    private suspend fun establishCommunicationToDevice(): ObdDeviceConnection? {
         try {
             val bluetoothService = BluetoothService()
-            val bluetoothDeviceListService  = BluetoothDeviceListService()
-            bluetoothService.connectDevice(bluetoothDeviceListService.getDeviceByAddress(deviceAdress)!!)
-            val socket: BluetoothSocket? = bluetoothService.getSocket()
+            val bluetoothDeviceListService = BluetoothDeviceListService()
+            bluetoothService.connectDevice(
+                bluetoothDeviceListService.getDeviceByAddress(
+                    deviceAddress
+                )!!
+            )
+            val socket: BluetoothSocket = bluetoothService.getSocket()
 
-            if (socket == null) {
-                Log.e("Obd2Service", "Socket is null")
+            if (!bluetoothService.connected()) {
+                Log.e(TAG, "Socket is not connected")
                 return null
+            } else if (bluetoothService.connected()) {
+                Log.d(TAG, "Socket is connected")
             }
-            else if (!socket.isConnected) {
-                Log.e("Obd2Service", "Socket is not connected")
-                return null
-            }
+
+            obdBluetoothInterface = OBDBluetoothInterface(socket)
 
             val inputStream: InputStream = socket.inputStream
             val outputStream: OutputStream = socket.outputStream
 
             val obdConnection = ObdDeviceConnection(inputStream, outputStream)
-            return obdConnection;
+            Log.d(TAG, "Input and Output Stream created")
+            return obdConnection
 
         } catch (e: IOException) {
             Log.e(
-                "Obd2Service",
-                "Error while establishing communication to device with UUID $deviceAdress"
+                TAG,
+                "Error while establishing communication to device with Address $deviceAddress"
             )
-            Log.e("Obd2Service", e.toString())
+            Log.e(TAG, e.toString())
         }
-        return null;
+        return null
     }
 
-    suspend fun getRpm(): String {
-        val connection = establishCommunicationToDevice()
+    private suspend fun connect() {
+        val tries = 3
 
+        for (i in 1..tries) {
+            Log.d(TAG, "Trying to connect to device $deviceAddress try $i")
+            if (connection != null) {
+                break
+            }
+            connection = establishCommunicationToDevice()
+        }
+    }
+
+    suspend fun getEltonApiRPM(): String {
+        connect()
         if (connection == null) {
             return ""
         }
 
-        val response: ObdResponse = connection.run(RPMCommand())
-        return response.value;
+
+        try {
+            Log.d(TAG, "Trying to get RPM")
+            val response = connection!!.run(RPMCommand(), delayTime = 500L)
+            Log.d(TAG, "RPM RAW: $response.rawResponse")
+            Log.d(TAG, "RPM: ${response.value}")
+            Log.d(TAG, "RPM: ${response.unit}")
+            Log.d(TAG, "RPM: ${response.formattedValue}")
+            return response.value
+
+        } catch (e: IOException) {
+            Log.e(
+                "Obd2Service",
+                "Error while establishing communication to device with UUID $deviceAddress"
+            )
+            Log.e("Obd2Service", e.toString())
+        }
+        return ""
+    }
+
+    suspend fun getEltonApiLoad(): String {
+        connect()
+        if (connection == null) {
+            return ""
+        }
+
+
+        try {
+            Log.d(TAG, "Trying to get RPM")
+            val response = connection!!.run(LoadCommand(), delayTime = 500L)
+            Log.d(TAG, "RPM RAW: $response.rawResponse")
+            Log.d(TAG, "RPM: ${response.value}")
+            Log.d(TAG, "RPM: ${response.unit}")
+            Log.d(TAG, "RPM: ${response.formattedValue}")
+            return response.value
+
+        } catch (e: IOException) {
+            Log.e(
+                "Obd2Service",
+                "Error while establishing communication to device with UUID $deviceAddress"
+            )
+            Log.e("Obd2Service", e.toString())
+        }
+        return ""
+    }
+
+    suspend fun getEltonApiSpeed(): String {
+        connect()
+        if (connection == null) {
+            return ""
+        }
+
+
+        try {
+            Log.d(TAG, "Trying to get RPM")
+            val response = connection!!.run(SpeedCommand(), delayTime = 500L)
+            Log.d(TAG, "RPM RAW: $response.rawResponse")
+            Log.d(TAG, "RPM: ${response.value}")
+            Log.d(TAG, "RPM: ${response.unit}")
+            Log.d(TAG, "RPM: ${response.formattedValue}")
+            return response.value
+
+        } catch (e: IOException) {
+            Log.e(
+                "Obd2Service",
+                "Error while establishing communication to device with UUID $deviceAddress"
+            )
+            Log.e("Obd2Service", e.toString())
+        }
+        return ""
+    }
+
+    suspend  fun initOBD() {
+        connect()
+        val obdCommandHelper = OBDCommandHelper(obdBluetoothInterface!!)
+        obdCommandHelper.resetOBDSys()
+        obdCommandHelper.echoOff()
+        obdCommandHelper.headerOn()
+    }
+
+    suspend fun getRPM(): String {
+        connect()
+        val obdCommandHelper = OBDCommandHelper(obdBluetoothInterface!!)
+        val rpm = obdCommandHelper.getEngineRPM()
+        Log.d(TAG, "RPM: $rpm")
+        return rpm
+    }
+
+    suspend fun getSpeed(): String {
+        connect()
+        val obdCommandHelper = OBDCommandHelper(obdBluetoothInterface!!)
+        val speed = obdCommandHelper.getVehicleSpeed()
+        Log.d(TAG, "Speed: $speed")
+        return speed
+    }
+
+    suspend fun getCoolantTemp(): String {
+        connect()
+        val obdCommandHelper = OBDCommandHelper(obdBluetoothInterface!!)
+        val coolantTemp = obdCommandHelper.getCoolantTemperature()
+        Log.d(TAG, "Coolant-temp: $coolantTemp")
+        return coolantTemp
     }
 }

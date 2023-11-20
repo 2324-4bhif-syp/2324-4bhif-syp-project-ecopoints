@@ -92,6 +92,8 @@ class MainActivity : ComponentActivity() {
                     SensorReading()
                     LocationTest()
                     PrintTravelledDistance(total.value)
+                                        ShowMap()
+
                 }
             }
         }
@@ -308,6 +310,24 @@ fun ShowAccelerometerReading(sensorX: String, sensorY: String, sensorZ: String, 
                 ),
                 modifier = Modifier.padding(16.dp)
             )
+        }
+    }
+    
+    @Composable
+    fun ShowMap(){
+        Box(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Button(
+                onClick = {
+                    startActivity(Intent(this@MainActivity, MapActivity::class.java))
+                },
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .padding(16.dp)
+            ) {
+                Text(text = "Show Map")
+            }
         }
     }
 

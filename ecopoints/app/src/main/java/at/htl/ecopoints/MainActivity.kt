@@ -270,7 +270,8 @@ class MainActivity : ComponentActivity() {
 
 //    var location : Location = locationManager!!.getLastKnownLocation(LocationManager.GPS_PROVIDER) as Location
 //
-//    speed = location.getSpeed();
+//    speed = location.getSpe
+    //    ed();
 //    currentSpeed = round(speed as Double);
 //    kmphSpeed = currentSpeed*3.6
 //

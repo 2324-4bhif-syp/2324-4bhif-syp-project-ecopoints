@@ -14,7 +14,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
-import androidx.compose.ui.Alignment
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,6 +29,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
@@ -39,8 +39,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startActivity
 import at.htl.ecopoints.activity.BluetoothDeviceListActivity
+import at.htl.ecopoints.activity.MapActivity
 import at.htl.ecopoints.service.AccelerometerSensorService
 import at.htl.ecopoints.service.LocationService
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
@@ -58,6 +58,8 @@ class MainActivity : ComponentActivity() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationRequest: com.google.android.gms.location.LocationRequest
     private var locationService: LocationService = LocationService()
+    private var locationManager: LocationManager? = null
+    private var isGPSEnabled: Boolean? = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,17 +72,25 @@ class MainActivity : ComponentActivity() {
             priority = com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
         }
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
             startLocationUpdates()
         } else {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                1
+            )
         }
 
         setContent {
             val total = remember { mutableStateOf(totalDistance) }
 
             LaunchedEffect(totalDistance) {
-                while(true) {
+                while (true) {
                     total.value = totalDistance
                     delay(250)
                 }
@@ -95,8 +105,8 @@ class MainActivity : ComponentActivity() {
                     SensorReading()
                     LocationTest()
                     PrintTravelledDistance(total.value)
-                                        ShowMap()
-
+                    ShowMap()
+                    ShowBluetoothDevicesButton()
                 }
             }
         }
@@ -107,7 +117,12 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun startLocationUpdates() {
-        locationService.startLocationUpdates(this, fusedLocationClient, locationRequest, locationCallback)
+        locationService.startLocationUpdates(
+            this,
+            fusedLocationClient,
+            locationRequest,
+            locationCallback
+        )
     }
 
     private val locationCallback = object : LocationCallback() {
@@ -115,109 +130,117 @@ class MainActivity : ComponentActivity() {
             onLocationChanged(locationResult.lastLocation)
         }
     }
-}
 
-@Composable
-fun PrintTravelledDistance(totalDistance: Float){
-    val decimalFormat = DecimalFormat("#,##0.00", DecimalFormatSymbols(Locale.GERMAN))
-    Text(
-        text = "Travelled Distance: ${decimalFormat.format(totalDistance)} m",
-        style = TextStyle(fontSize = 20.sp),
-        modifier = Modifier.padding(0.dp, 280.dp, 0.dp, 0.dp)
-    )
-}
-
-@Composable
-fun SensorReading() {
-
-    var sensorX by remember { mutableStateOf("x") }
-    var sensorY by remember { mutableStateOf("y") }
-    var sensorZ by remember { mutableStateOf("z") }
-    var sensorXMax by remember { mutableStateOf("") }
-    var sensorYMax by remember { mutableStateOf("") }
-    var sensorZMax by remember { mutableStateOf("") }
-
-    val sensorManager =
-        LocalContext.current.getSystemService(Context.SENSOR_SERVICE) as SensorManager
-    val accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
-    val accelerometerSensorService = AccelerometerSensorService()
-
-    val resetSensors: () -> Unit = {
-        accelerometerSensorService.resetSensors()
-        sensorXMax = accelerometerSensorService.sensorXMax
-        sensorYMax = accelerometerSensorService.sensorYMax
-        sensorZMax = accelerometerSensorService.sensorZMax
-    }
-
-    ShowAccelerometerReading(
-        sensorX,
-        sensorY,
-        sensorZ,
-        sensorXMax,
-        sensorYMax,
-        sensorZMax
-    )
-
-    fun updateSensors() {
-        sensorX = accelerometerSensorService.sensorX
-        sensorY = accelerometerSensorService.sensorY
-        sensorZ = accelerometerSensorService.sensorZ
-    }
-
-    fun updateMaxSensors(){
-        sensorXMax = accelerometerSensorService.sensorXMax
-        sensorYMax = accelerometerSensorService.sensorYMax
-        sensorZMax = accelerometerSensorService.sensorZMax
-    }
-
-    ResetButton (onResetClick = resetSensors)
-
-    val sensorListener = object : SensorEventListener {
-        override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-
-        }
-
-        override fun onSensorChanged(event: SensorEvent?) {
-            // Check if the sensor type is accelerometer
-            if (event?.sensor?.type == Sensor.TYPE_ACCELEROMETER) {
-                accelerometerSensorService.setSensors(event)
-                updateSensors()
-                updateMaxSensors()
-            }
-        }
-    }
-
-    LaunchedEffect(accelerometerSensorService) {
-        sensorManager.registerListener(sensorListener, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL)
-    }
-
-    Text(
-        text = "Accelerometer-Sensor Value:",
-        style = TextStyle(fontSize = 20.sp)
-    )
-}
-
-var locationManager: LocationManager? = null
-var isGPSEnabled : Boolean? = false
-
-@Composable
-fun LocationTest(){
-
-    val context = LocalContext.current
-    val permission = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
-    val permission2 = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)
-
-    if(permission != PackageManager.PERMISSION_GRANTED || permission2 != PackageManager.PERMISSION_GRANTED){
-        ActivityCompat.requestPermissions(
-            context as MainActivity,
-            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
-            1
+    @Composable
+    fun PrintTravelledDistance(totalDistance: Float) {
+        val decimalFormat = DecimalFormat("#,##0.00", DecimalFormatSymbols(Locale.GERMAN))
+        Text(
+            text = "Travelled Distance: ${decimalFormat.format(totalDistance)} m",
+            style = TextStyle(fontSize = 20.sp),
+            modifier = Modifier.padding(0.dp, 280.dp, 0.dp, 0.dp)
         )
     }
-    locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-    isGPSEnabled = locationManager?.isProviderEnabled(LocationManager.GPS_PROVIDER)
 
-    Text(text = "GPS: $isGPSEnabled" , style = TextStyle(fontSize = 20.sp), modifier = Modifier.padding(0.dp, 230.dp, 0.dp, 0.dp))
+    @Composable
+    fun SensorReading() {
+
+        var sensorX by remember { mutableStateOf("x") }
+        var sensorY by remember { mutableStateOf("y") }
+        var sensorZ by remember { mutableStateOf("z") }
+        var sensorXMax by remember { mutableStateOf("") }
+        var sensorYMax by remember { mutableStateOf("") }
+        var sensorZMax by remember { mutableStateOf("") }
+
+        val sensorManager =
+            LocalContext.current.getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        val accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+        val accelerometerSensorService = AccelerometerSensorService()
+
+        val resetSensors: () -> Unit = {
+            accelerometerSensorService.resetSensors()
+            sensorXMax = accelerometerSensorService.sensorXMax
+            sensorYMax = accelerometerSensorService.sensorYMax
+            sensorZMax = accelerometerSensorService.sensorZMax
+        }
+
+        ShowAccelerometerReading(
+            sensorX,
+            sensorY,
+            sensorZ,
+            sensorXMax,
+            sensorYMax,
+            sensorZMax
+        )
+
+        fun updateSensors() {
+            sensorX = accelerometerSensorService.sensorX
+            sensorY = accelerometerSensorService.sensorY
+            sensorZ = accelerometerSensorService.sensorZ
+        }
+
+        fun updateMaxSensors() {
+            sensorXMax = accelerometerSensorService.sensorXMax
+            sensorYMax = accelerometerSensorService.sensorYMax
+            sensorZMax = accelerometerSensorService.sensorZMax
+        }
+
+        ResetButton(onResetClick = resetSensors)
+
+        val sensorListener = object : SensorEventListener {
+            override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+
+            }
+
+            override fun onSensorChanged(event: SensorEvent?) {
+                // Check if the sensor type is accelerometer
+                if (event?.sensor?.type == Sensor.TYPE_ACCELEROMETER) {
+                    accelerometerSensorService.setSensors(event)
+                    updateSensors()
+                    updateMaxSensors()
+                }
+            }
+        }
+
+        LaunchedEffect(accelerometerSensorService) {
+            sensorManager.registerListener(
+                sensorListener,
+                accelerometerSensor,
+                SensorManager.SENSOR_DELAY_NORMAL
+            )
+        }
+
+        Text(
+            text = "Accelerometer-Sensor Value:",
+            style = TextStyle(fontSize = 20.sp)
+        )
+    }
+    @Composable
+    fun LocationTest() {
+
+        val context = LocalContext.current
+        val permission =
+            ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
+        val permission2 =
+            ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)
+
+        if (permission != PackageManager.PERMISSION_GRANTED || permission2 != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                context as MainActivity,
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ),
+                1
+            )
+        }
+        locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        isGPSEnabled = locationManager?.isProviderEnabled(LocationManager.GPS_PROVIDER)
+
+        Text(
+            text = "GPS: $isGPSEnabled",
+            style = TextStyle(fontSize = 20.sp),
+            modifier = Modifier.padding(0.dp, 230.dp, 0.dp, 0.dp)
+        )
 
 //    var location : Location = locationManager!!.getLastKnownLocation(LocationManager.GPS_PROVIDER) as Location
 //
@@ -226,104 +249,117 @@ fun LocationTest(){
 //    kmhSpeed = currentSpeed*3.6
 //
 //    Text(text = "Speed: $kmhSpeed kmh" , style = TextStyle(fontSize = 20.sp), modifier = Modifier.padding(0.dp, 250.dp, 0.dp, 0.dp))
-}
-
-@Composable
-fun ResetButton(onResetClick: () -> Unit) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        Button(
-            onClick = onResetClick,
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(0.dp, 160.dp, 170.dp, 0.dp)
-
-        ) {
-            Text(text = "Reset")
-        }
     }
-}
 
-@Composable
-fun ShowAccelerometerReading(sensorX: String, sensorY: String, sensorZ: String, sensorXMax: String, sensorYMax: String, sensorZMax: String) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-    ) {
-        Column(
+    @Composable
+    fun ResetButton(onResetClick: () -> Unit) {
+        Box(
             modifier = Modifier
-                .weight(1f)
+                .fillMaxSize()
         ) {
-            Text(
-                text = "X: $sensorX",
-                style = TextStyle(
-                    color = MaterialTheme.colorScheme.secondary,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center
-                ),
-                modifier = Modifier.padding(16.dp)
-            )
-            Text(
-                text = "Y: $sensorY",
-                style = TextStyle(
-                    color = MaterialTheme.colorScheme.secondary,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center
-                ),
-                modifier = Modifier.padding(16.dp)
-            )
-            Text(
-                text = "Z: $sensorZ",
-                style = TextStyle(
-                    color = MaterialTheme.colorScheme.secondary,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center
-                ),
-                modifier = Modifier.padding(16.dp)
-            )
-        }
-        Column {
-            Text(
-                text = "XMax: $sensorXMax",
-                style = TextStyle(
-                    color = MaterialTheme.colorScheme.secondary,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center
-                ),
-                modifier = Modifier.padding(16.dp)
-            )
-            Text(
-                text = "YMax: $sensorYMax",
-                style = TextStyle(
-                    color = MaterialTheme.colorScheme.secondary,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center
-                ),
-                modifier = Modifier.padding(16.dp)
-            )
-            Text(
-                text = "ZMax: $sensorZMax",
-                style = TextStyle(
-                    color = MaterialTheme.colorScheme.secondary,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center
-                ),
-                modifier = Modifier.padding(16.dp)
-            )
+            Button(
+                onClick = onResetClick,
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(0.dp, 160.dp, 170.dp, 0.dp)
+
+            ) {
+                Text(text = "Reset")
+            }
         }
     }
 
     @Composable
-    fun showBluetoothDevicesButton() {
+    fun ShowAccelerometerReading(
+        sensorX: String,
+        sensorY: String,
+        sensorZ: String,
+        sensorXMax: String,
+        sensorYMax: String,
+        sensorZMax: String
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+            ) {
+                Text(
+                    text = "X: $sensorX",
+                    style = TextStyle(
+                        color = MaterialTheme.colorScheme.secondary,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center
+                    ),
+                    modifier = Modifier.padding(16.dp)
+                )
+                Text(
+                    text = "Y: $sensorY",
+                    style = TextStyle(
+                        color = MaterialTheme.colorScheme.secondary,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center
+                    ),
+                    modifier = Modifier.padding(16.dp)
+                )
+                Text(
+                    text = "Z: $sensorZ",
+                    style = TextStyle(
+                        color = MaterialTheme.colorScheme.secondary,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center
+                    ),
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
+            Column {
+                Text(
+                    text = "XMax: $sensorXMax",
+                    style = TextStyle(
+                        color = MaterialTheme.colorScheme.secondary,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center
+                    ),
+                    modifier = Modifier.padding(16.dp)
+                )
+                Text(
+                    text = "YMax: $sensorYMax",
+                    style = TextStyle(
+                        color = MaterialTheme.colorScheme.secondary,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center
+                    ),
+                    modifier = Modifier.padding(16.dp)
+                )
+                Text(
+                    text = "ZMax: $sensorZMax",
+                    style = TextStyle(
+                        color = MaterialTheme.colorScheme.secondary,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center
+                    ),
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
+        }
+    }
+
+    @Composable
+    fun ShowBluetoothDevicesButton() {
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
             Button(
                 onClick = {
-                    startActivity(Intent(this@MainActivity, BluetoothDeviceListActivity::class.java))
+                    startActivity(
+                        Intent(
+                            this@MainActivity,
+                            BluetoothDeviceListActivity::class.java
+                        )
+                    )
                 },
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
@@ -335,7 +371,7 @@ fun ShowAccelerometerReading(sensorX: String, sensorY: String, sensorZ: String, 
     }
 
     @Composable
-    fun ShowMap(){
+    fun ShowMap() {
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
@@ -351,5 +387,4 @@ fun ShowAccelerometerReading(sensorX: String, sensorY: String, sensorZ: String, 
             }
         }
     }
-
 }

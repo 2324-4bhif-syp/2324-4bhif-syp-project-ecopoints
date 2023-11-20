@@ -78,7 +78,7 @@ class Obd2ReadingActivity : ComponentActivity() {
 
         Text(text = "Current-Speed $speed")
         Text(text = "Current-Rpm $rpm")
-        Text(text = "Coolat-Temp $coolantTemp")
+        Text(text = "Coolant-Temp $coolantTemp")
     }
 
     @Composable
@@ -107,7 +107,7 @@ class Obd2ReadingActivity : ComponentActivity() {
 
         Text(text = "Current-Speed $speed")
         Text(text = "Current-Rpm $rpm")
-        Text(text = "Coolat-Temp $coolantTemp")
+        Text(text = "Coolant-Temp $coolantTemp")
     }
 
     private suspend fun getRpm(service: Obd2Service): String {

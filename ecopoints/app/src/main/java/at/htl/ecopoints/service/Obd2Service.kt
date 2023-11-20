@@ -146,27 +146,32 @@ class Obd2Service(bluetoothDeviceAddress: String) {
         return ""
     }
 
-    fun initOBD() {
+    suspend  fun initOBD() {
+        connect()
         val obdCommandHelper = OBDCommandHelper(obdBluetoothInterface!!)
         obdCommandHelper.resetOBDSys()
         obdCommandHelper.echoOff()
+        obdCommandHelper.headerOn()
     }
 
-    fun getRPM(): String {
+    suspend fun getRPM(): String {
+        connect()
         val obdCommandHelper = OBDCommandHelper(obdBluetoothInterface!!)
         val rpm = obdCommandHelper.getEngineRPM()
         Log.d(TAG, "RPM: $rpm")
         return rpm
     }
 
-    fun getSpeed(): String {
+    suspend fun getSpeed(): String {
+        connect()
         val obdCommandHelper = OBDCommandHelper(obdBluetoothInterface!!)
         val speed = obdCommandHelper.getVehicleSpeed()
         Log.d(TAG, "Speed: $speed")
         return speed
     }
 
-    fun getCoolantTemp(): String {
+    suspend fun getCoolantTemp(): String {
+        connect()
         val obdCommandHelper = OBDCommandHelper(obdBluetoothInterface!!)
         val coolantTemp = obdCommandHelper.getCoolantTemperature()
         Log.d(TAG, "Coolant-temp: $coolantTemp")

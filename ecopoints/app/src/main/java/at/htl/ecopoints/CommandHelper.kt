@@ -9,10 +9,16 @@ class OBDCommandHelper(private val obdBluetoothInterface: OBDBluetoothInterface)
         return obdBluetoothInterface.sendCommand(command)
     }
 
+    fun headerOn(): String {
+        val command = "ATH"
+        return obdBluetoothInterface.sendCommand(command)
+    }
+
     fun echoOff(): String {
         val command = "ATE0"
         return obdBluetoothInterface.sendCommand(command)
     }
+
     fun getEngineRPM(): String {
         val command = "01 0C"
 

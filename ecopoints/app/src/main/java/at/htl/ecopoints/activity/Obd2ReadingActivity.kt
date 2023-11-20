@@ -82,7 +82,7 @@ class Obd2ReadingActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun TestReadCustomComm(){
+    private fun TestReadCustomComm() {
         var rpm by remember { mutableStateOf("0") }
         var speed by remember { mutableStateOf("0") }
         var coolantTemp by remember { mutableStateOf("0") }
@@ -90,7 +90,6 @@ class Obd2ReadingActivity : ComponentActivity() {
 
         var service = Obd2Service(deviceAddress)
 
-        service.initOBD()
 
         Button(onClick = { buttonClicked = true }) {
             Text("Read with Custom Comm")
@@ -98,9 +97,10 @@ class Obd2ReadingActivity : ComponentActivity() {
 
         LaunchedEffect(buttonClicked) {
             if (buttonClicked) {
+                service.initOBD()
                 rpm = service.getRPM()
-                speed = service.getSpeed()
-                coolantTemp = service.getCoolantTemp()
+                //speed = service.getSpeed()
+                //coolantTemp = service.getCoolantTemp()
                 buttonClicked = false
             }
         }

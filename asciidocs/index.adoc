@@ -57,3 +57,6 @@ include::plantuml/ucd.puml[]
 == Sprint-backlog
 
 https://vm81.htl-leonding.ac.at/agiles/99-375/current[Sprint-backlog]
+
+== Data Analysis
+https://2324-4bhif-syp.github.io/2324-4bhif-syp-project-ecopoints/data-analysis/revealjs/slides.html[Data Analysis]

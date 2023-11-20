@@ -24,22 +24,6 @@ class OBDBluetoothInterface(private val bluetoothSocket: BluetoothSocket) {
 
             Log.d(TAG, "Command: $command, Response: $response")
 
-            try {
-                val test = response.replace("OK", "").replace("SEARCHING...", "").replace("SEARCHING:","")
-                val e = test.split(" ")
-
-                if (e.size >= 4) {
-                    val combinedHex = e[2] + e[3]
-
-                    val combinedDecimal = combinedHex.toInt(16)
-                    val rpm = combinedDecimal / 4
-
-                    return rpm.toString()
-                }
-            } catch (_: Exception) {
-
-            }
-
             return response
         } catch (e: IOException) {
             Log.e(TAG, "Error sending/receiving OBD command: ${e.message}")

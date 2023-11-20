@@ -85,8 +85,8 @@ class Obd2ReadingActivity : ComponentActivity() {
     @Composable
     private fun TestReadCustomComm() {
         var rpm by remember { mutableStateOf("0") }
-        val speed by remember { mutableStateOf("0") }
-        val coolantTemp by remember { mutableStateOf("0") }
+        var speed by remember { mutableStateOf("0") }
+        var coolantTemp by remember { mutableStateOf("0") }
         var buttonClicked by remember { mutableStateOf(false) }
 
         val service = Obd2Service(deviceAddress)
@@ -102,8 +102,8 @@ class Obd2ReadingActivity : ComponentActivity() {
                for(i in 0..1000){
 
                     rpm = service.getRPM()
-                    //speed = service.getSpeed()
-                    //coolantTemp = service.getCoolantTemp()
+                    speed = service.getSpeed()
+                    coolantTemp = service.getCoolantTemp()
                     delay(500)
                 }
                 buttonClicked = false

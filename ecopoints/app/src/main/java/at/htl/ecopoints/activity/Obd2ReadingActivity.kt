@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import at.htl.ecopoints.service.Obd2Service
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 
 
@@ -84,11 +85,11 @@ class Obd2ReadingActivity : ComponentActivity() {
     @Composable
     private fun TestReadCustomComm() {
         var rpm by remember { mutableStateOf("0") }
-        var speed by remember { mutableStateOf("0") }
-        var coolantTemp by remember { mutableStateOf("0") }
+        val speed by remember { mutableStateOf("0") }
+        val coolantTemp by remember { mutableStateOf("0") }
         var buttonClicked by remember { mutableStateOf(false) }
 
-        var service = Obd2Service(deviceAddress)
+        val service = Obd2Service(deviceAddress)
 
 
         Button(onClick = { buttonClicked = true }) {
@@ -98,9 +99,13 @@ class Obd2ReadingActivity : ComponentActivity() {
         LaunchedEffect(buttonClicked) {
             if (buttonClicked) {
                 service.initOBD()
-                rpm = service.getRPM()
-                //speed = service.getSpeed()
-                //coolantTemp = service.getCoolantTemp()
+               for(i in 0..1000){
+
+                    rpm = service.getRPM()
+                    //speed = service.getSpeed()
+                    //coolantTemp = service.getCoolantTemp()
+                    delay(500)
+                }
                 buttonClicked = false
             }
         }

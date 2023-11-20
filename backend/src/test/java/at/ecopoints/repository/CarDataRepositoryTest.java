@@ -30,7 +30,7 @@ class CarDataRepositoryTest {
         }
     }
 
-    /*@Test
+    @Test
     @Transactional
     void saveFindByIdAndDeleteCarData() {
         CarData carData = new CarData();
@@ -152,5 +152,5 @@ class CarDataRepositoryTest {
                 .isEqualTo(40.0);
         assertThat(updatedCarData.getCurrentEngineRPM())
                 .isEqualTo(4000.0);
-    }*/
+    }
 }

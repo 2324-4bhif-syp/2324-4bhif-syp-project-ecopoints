@@ -1,4 +1,4 @@
-POST http://localhost:8080/carData
+POST http://0.0.0.0:8080/carData
 Content-Type: application/json
 
 {
@@ -19,7 +19,7 @@ Accept: application/json
 
 ###
 
-GET http://localhost:8080/carData
+GET http://0.0.0.0:8080/carData
 Accept: application/json
 
 ###

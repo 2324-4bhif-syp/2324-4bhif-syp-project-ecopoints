@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import at.htl.ecopoints.activity.BluetoothDeviceListActivity
+import at.htl.ecopoints.activity.MapActivity
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
@@ -107,6 +108,7 @@ class MainActivity : ComponentActivity() {
                     locationTest()
                     travelDistance(total.value)
                    showBluetoothDevicesButton()
+                    showMap()
                 }
             }
 
@@ -167,6 +169,24 @@ class MainActivity : ComponentActivity() {
                     .padding(16.dp)
             ) {
                 Text(text = "Show Paired Bluetooth Devices")
+            }
+        }
+    }
+
+    @Composable
+    fun showMap(){
+        Box(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Button(
+                onClick = {
+                    startActivity(Intent(this@MainActivity, MapActivity::class.java))
+                },
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .padding(16.dp)
+            ) {
+                Text(text = "Show Map")
             }
         }
     }

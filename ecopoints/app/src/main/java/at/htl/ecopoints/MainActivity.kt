@@ -2,6 +2,7 @@ package at.htl.ecopoints
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.hardware.Sensor
 import android.hardware.SensorEvent
@@ -38,6 +39,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
+import at.htl.ecopoints.activity.BluetoothDeviceListActivity
 import at.htl.ecopoints.service.AccelerometerSensorService
 import at.htl.ecopoints.service.LocationService
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
@@ -312,7 +315,25 @@ fun ShowAccelerometerReading(sensorX: String, sensorY: String, sensorZ: String, 
             )
         }
     }
-    
+
+    @Composable
+    fun showBluetoothDevicesButton() {
+        Box(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Button(
+                onClick = {
+                    startActivity(Intent(this@MainActivity, BluetoothDeviceListActivity::class.java))
+                },
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(16.dp)
+            ) {
+                Text(text = "Show Paired Bluetooth Devices")
+            }
+        }
+    }
+
     @Composable
     fun ShowMap(){
         Box(

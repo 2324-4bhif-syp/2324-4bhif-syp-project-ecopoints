@@ -8,7 +8,6 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.location.Location
-import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -90,9 +89,9 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    sensorReading()
-                    locationTest()
-                    printTravelledDistance(total.value)
+                    SensorReading()
+                    LocationTest()
+                    PrintTravelledDistance(total.value)
                 }
             }
         }
@@ -107,14 +106,14 @@ class MainActivity : ComponentActivity() {
     }
 
     private val locationCallback = object : LocationCallback() {
-        override fun onLocationResult(locationResult: LocationResult?) {
-            locationResult?.lastLocation?.let { onLocationChanged(it) }
+        override fun onLocationResult(locationResult: LocationResult) {
+            onLocationChanged(locationResult.lastLocation)
         }
     }
 }
 
 @Composable
-fun printTravelledDistance(totalDistance: Float){
+fun PrintTravelledDistance(totalDistance: Float){
     val decimalFormat = DecimalFormat("#,##0.00", DecimalFormatSymbols(Locale.GERMAN))
     Text(
         text = "Travelled Distance: ${decimalFormat.format(totalDistance)} m",
@@ -124,7 +123,7 @@ fun printTravelledDistance(totalDistance: Float){
 }
 
 @Composable
-fun sensorReading() {
+fun SensorReading() {
 
     var sensorX by remember { mutableStateOf("x") }
     var sensorY by remember { mutableStateOf("y") }
@@ -136,7 +135,7 @@ fun sensorReading() {
     val sensorManager =
         LocalContext.current.getSystemService(Context.SENSOR_SERVICE) as SensorManager
     val accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
-    val accelerometerSensorService: AccelerometerSensorService = AccelerometerSensorService()
+    val accelerometerSensorService = AccelerometerSensorService()
 
     val resetSensors: () -> Unit = {
         accelerometerSensorService.resetSensors()
@@ -145,7 +144,7 @@ fun sensorReading() {
         sensorZMax = accelerometerSensorService.sensorZMax
     }
 
-    showAccelerometerReading(
+    ShowAccelerometerReading(
         sensorX,
         sensorY,
         sensorZ,
@@ -166,7 +165,7 @@ fun sensorReading() {
         sensorZMax = accelerometerSensorService.sensorZMax
     }
 
-    resetButton (onResetClick = resetSensors)
+    ResetButton (onResetClick = resetSensors)
 
     val sensorListener = object : SensorEventListener {
         override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
@@ -194,14 +193,10 @@ fun sensorReading() {
 }
 
 var locationManager: LocationManager? = null
-var locationListener: LocationListener? = null
-var speed : Float = 0.0f
 var isGPSEnabled : Boolean? = false
-var currentSpeed : Long = 0L
-var kmphSpeed:kotlin.Double = 0.0
 
 @Composable
-fun locationTest(){
+fun LocationTest(){
 
     val context = LocalContext.current
     val permission = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -215,7 +210,7 @@ fun locationTest(){
         )
     }
     locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-    isGPSEnabled = locationManager?.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    isGPSEnabled = locationManager?.isProviderEnabled(LocationManager.GPS_PROVIDER)
 
     Text(text = "GPS: $isGPSEnabled" , style = TextStyle(fontSize = 20.sp), modifier = Modifier.padding(0.dp, 230.dp, 0.dp, 0.dp))
 
@@ -223,13 +218,13 @@ fun locationTest(){
 //
 //    speed = location.getSpeed();
 //    currentSpeed = round(speed as Double);
-//    kmphSpeed = currentSpeed*3.6
+//    kmhSpeed = currentSpeed*3.6
 //
-//    Text(text = "Speed: $kmphSpeed kmh" , style = TextStyle(fontSize = 20.sp), modifier = Modifier.padding(0.dp, 250.dp, 0.dp, 0.dp))
+//    Text(text = "Speed: $kmhSpeed kmh" , style = TextStyle(fontSize = 20.sp), modifier = Modifier.padding(0.dp, 250.dp, 0.dp, 0.dp))
 }
 
 @Composable
-fun resetButton(onResetClick: () -> Unit) {
+fun ResetButton(onResetClick: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -247,7 +242,7 @@ fun resetButton(onResetClick: () -> Unit) {
 }
 
 @Composable
-fun showAccelerometerReading(sensorX: String, sensorY: String, sensorZ: String, sensorXMax: String, sensorYMax: String, sensorZMax: String) {
+fun ShowAccelerometerReading(sensorX: String, sensorY: String, sensorZ: String, sensorXMax: String, sensorYMax: String, sensorZMax: String) {
     Row(
         modifier = Modifier
             .fillMaxWidth()

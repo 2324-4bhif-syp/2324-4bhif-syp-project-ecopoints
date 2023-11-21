@@ -5,7 +5,6 @@ ifndef::imagesdir[:imagesdir: ../images]
 [.font-xx-large]
 == Team
 
-.Team
 |===
 |Name |Foto
 

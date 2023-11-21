@@ -4,8 +4,15 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -17,9 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import at.htl.ecopoints.service.Obd2Service
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.withContext
 
 
 class Obd2ReadingActivity : ComponentActivity() {
@@ -43,7 +48,7 @@ class Obd2ReadingActivity : ComponentActivity() {
                             .fillMaxSize()
                             .padding(16.dp)
                     ) {
-                        Text(text = "Connected Device Information", fontWeight = FontWeight.Bold)
+                        Text(text = "Device Information", fontWeight = FontWeight.Bold)
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(text = "Name: $deviceName")
                         Text(text = "Address: $deviceAddress")
@@ -61,25 +66,28 @@ class Obd2ReadingActivity : ComponentActivity() {
         val service = Obd2Service(deviceAddress)
         var rpm by remember { mutableStateOf("0") }
         var speed by remember { mutableStateOf("0") }
-        var coolantTemp by remember { mutableStateOf("0") }
+        var load by remember { mutableStateOf("0") }
         var buttonClicked by remember { mutableStateOf(false) }
 
         Button(onClick = { buttonClicked = true }) {
-            Text("Read with EltonLib")
+            Text("Read with Custom Comm V2")
         }
 
         LaunchedEffect(buttonClicked) {
             if (buttonClicked) {
-                rpm = getRpm(service)
-                speed = service.getEltonApiSpeed()
-                coolantTemp = service.getCoolantTemp()
+                for (i in 0..1000) {
+                    delay(500)
+                    rpm = service.getApiV2RPM()
+                    speed = service.getApiV2Speed()
+                    load = service.geApiV2Load()
+                }
                 buttonClicked = false
             }
         }
 
         Text(text = "Current-Speed $speed")
         Text(text = "Current-Rpm $rpm")
-        Text(text = "Coolant-Temp $coolantTemp")
+        Text(text = "Coolant-Load $load")
     }
 
     @Composable
@@ -93,7 +101,7 @@ class Obd2ReadingActivity : ComponentActivity() {
 
 
         Button(onClick = { buttonClicked = true }) {
-            Text("Read with Custom Comm")
+            Text("Read with Custom Comm V1")
         }
 
         LaunchedEffect(buttonClicked) {
@@ -122,23 +130,5 @@ class Obd2ReadingActivity : ComponentActivity() {
         Text(text = "Current-Speed $speed")
         Text(text = "Current-Rpm $rpm")
         Text(text = "Coolant-Temp $coolantTemp")
-    }
-
-    private suspend fun getRpm(service: Obd2Service): String {
-        return withContext(Dispatchers.IO) {
-            service.getEltonApiRPM()
-        }
-    }
-
-    private suspend fun getSpeed(service: Obd2Service): String {
-        return withContext(Dispatchers.IO) {
-            service.getEltonApiSpeed()
-        }
-    }
-
-    private suspend fun getLoad(service: Obd2Service): String {
-        return withContext(Dispatchers.IO) {
-            service.getEltonApiLoad()
-        }
     }
 }

@@ -1,0 +1,53 @@
+= EcoPoints
+:revealjs_theme: white
+ifndef::imagesdir[:imagesdir: ../images]
+
+[.font-xx-large]
+== Team
+
+.Team
+|===
+|Name |Foto
+
+|Abdullah Aldesoky
+| image:../../img/Abdullah-Aldesoky.jpg[width=120, height=150]
+
+|Oliver Daxinger
+| image:../../img/Daxinger-Oliver.jpg[width=120, height=150]
+
+|Laurent Mali
+|
+
+|Linus Nestler
+| image:../../img/Linus-Nestler.jpeg[width=120, height=150]
+
+|Armin Salkovic
+| image:../../img/Armin-Salkovic.jpeg[width=120, height=150]
+
+|===
+
+== EcoPoints
+
+* "Fahrverhaltensvergleichsplattform"
+* Vergleicht das Fahrverhalten von Fahrern
+** Fahrer können freiwillig mitmachen
+** Die Daten werden vom auto über dem OBD2 Port ausgelesen
+
+[.font-xx-large]
+== Sprint 1
+
+* Jetpack-compose app
+** Sensordaten auslesen
+
+[.font-xx-large]
+== Sprint 2
+
+* OBD2 Daten auslesen
+** ELM327 über bluetooth
+** Linus, Oliver
+* Oracle Server
+** Quarkus backend
+** Postgres Datenbank
+** Armin, Abdullah, Laurent
+
+

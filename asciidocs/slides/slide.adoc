@@ -38,16 +38,20 @@ ifndef::imagesdir[:imagesdir: ../images]
 
 * Jetpack-compose app
 ** Sensordaten auslesen
+** Wer
+*** Alle
 
 [.font-xx-large]
 == Sprint 2
 
 * OBD2 Daten auslesen
 ** ELM327 über bluetooth
-** Linus, Oliver
+** Wer?
+*** Linus, Oliver
 * Oracle Server
 ** Quarkus backend
 ** Postgres Datenbank
-** Armin, Abdullah, Laurent
+** Wer?
+*** Armin, Abdullah, Laurent
 
 

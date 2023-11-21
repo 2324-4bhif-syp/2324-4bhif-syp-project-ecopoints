@@ -34,3 +34,18 @@ ifndef::imagesdir[:imagesdir: ../images]
 ** Fahrer können freiwillig mitmachen
 ** Die Daten werden vom auto über dem OBD2 Port ausgelesen
 
+[.font-xx-large]
+== Sprint 1
+
+* Jetpack-compose app
+** Sensordaten auslesen
+
+[.font-xx-large]
+== Sprint 2
+
+* OBD2 Daten auslesen
+** ELM327 über bluetooth
+* Oracle Server
+** Quarkus backend
+** Postgres Datenbank
+

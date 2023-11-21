@@ -1,6 +1,12 @@
 = EcoPoints
 :revealjs_theme: white
 ifndef::imagesdir[:imagesdir: ../images]
+ifdef::env-ide[]
+:imagesdir: ../images
+endif::[]
+ifndef::env-ide[]
+:imagesdir: images
+endif::[]
 
 [.font-xx-large]
 == Team
@@ -9,10 +15,10 @@ ifndef::imagesdir[:imagesdir: ../images]
 |Name |Foto
 
 |Abdullah Aldesoky
-| image:../../img/Abdullah-Aldesoky.jpg[width=120, height=150]
+| image:team/Abdullah-Aldesoky.jpg[width=120, height=150]
 
 |Oliver Daxinger
-| image:../../img/Daxinger-Oliver.jpg[width=120, height=150]
+| image:team/Daxinger-Oliver.jpg[width=120, height=150]
 
 
 |===
@@ -26,10 +32,10 @@ ifndef::imagesdir[:imagesdir: ../images]
 |
 
 |Linus Nestler
-| image:../../img/Linus-Nestler.jpeg[width=120, height=150]
+| image:team/Linus-Nestler.jpeg[width=120, height=150]
 
 |Armin Salkovic
-| image:../../img/Armin-Salkovic.jpeg[width=120, height=150]
+| image:team/Armin-Salkovic.jpeg[width=120, height=150]
 
 
 |===
@@ -49,7 +55,8 @@ ifndef::imagesdir[:imagesdir: ../images]
 ** Wer?
 *** Alle
 
-image:images/obd2-reading.jpeg[]
+image:sensor-reading.jpg[]
+image:obd2-reading.jpeg[]
 
 [.font-xx-large]
 == Sprint 2

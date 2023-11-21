@@ -46,8 +46,10 @@ ifndef::imagesdir[:imagesdir: ../images]
 
 * Jetpack-compose app
 ** Sensordaten auslesen
-** Wer
+** Wer?
 *** Alle
+
+image:images/obd2-reading.jpeg[]
 
 [.font-xx-large]
 == Sprint 2

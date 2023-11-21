@@ -34,11 +34,18 @@ endif::[]
 |Linus Nestler
 | image:team/Linus-Nestler.jpeg[width=120, height=150]
 
-|Armin Salkovic
-| image:team/Armin-Salkovic.jpeg[width=120, height=150]
+|===
 
+== Team
 
 |===
+|Name |Foto
+
+|Armin Salkovic
+|image:team/Armin-Salkovic.jpeg[width=120, height=150]
+
+|===
+
 
 == EcoPoints
 

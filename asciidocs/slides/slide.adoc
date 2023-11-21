@@ -62,7 +62,7 @@ endif::[]
 ** Wer?
 *** Alle
 
-== Sensor Daten
+=== Sensor Daten
 
 image:sensor-reading.jpg[500,200]
 
@@ -77,12 +77,12 @@ Oliver
 * Gps Daten auslesen
 * Google Maps API
 
-== OBD2
+=== OBD2
 
 image:bt-devices.jpeg[500,200]
 image:obd2-reading.jpeg[500,200]
 
-== Maps
+=== Maps
 
 image:maps.jpeg[500,200]
 
@@ -95,7 +95,7 @@ Armin, Abdullah, Laurent
 ** Postgres Datenbank
 
 [.font-xx-large]
-== Oracle Cloud Server
+=== Oracle Cloud Server
 * http://132.145.237.245/[]
 
 

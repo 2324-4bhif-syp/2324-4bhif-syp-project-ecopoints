@@ -1,0 +1,24 @@
+= EcoPoints
+
+== Team
+
+.Team
+|===
+|Name |Foto
+
+|Abdullah Aldesoky
+| image:../../img/Abdullah-Aldesoky.jpg[width=120, height=150]
+
+|Oliver Daxinger
+| image:../../img/Daxinger-Oliver.jpg[width=120, height=150]
+
+|Laurent Mali
+|
+
+|Linus Nestler
+| image:../../img/Linus-Nestler.jpeg[width=120, height=150]
+
+|Armin Salkovic
+| image:../../img/Armin-Salkovic.jpeg[width=120, height=150]
+
+|===

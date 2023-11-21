@@ -12,7 +12,7 @@
 | image:img/Abdullah-Aldesoky.jpg[width=120, height=150]
 
 |Oliver Daxinger
-|
+| image:img/Daxinger-Oliver.jpeg[width=120, height=150]
 
 |Laurent Mali
 |

@@ -73,7 +73,12 @@ a|
 
 | Laurent
 a| * SQLite DB aufsetzen
-* Repository für CRUD Operationen
+* Repo in einem eigenen Thread
+* Repository für DB
+** eins einfügen
+** mehrere einfügen
+** alle auslesen
+** alle löschen
 | 05.12.2023
 
 | Armin

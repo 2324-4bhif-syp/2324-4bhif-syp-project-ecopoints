@@ -23,7 +23,7 @@ endif::[]
 
 |===
 
-== Team
+=== Team
 
 |===
 |Name |Foto
@@ -36,7 +36,7 @@ endif::[]
 
 |===
 
-== Team
+=== Team
 
 |===
 |Name |Foto

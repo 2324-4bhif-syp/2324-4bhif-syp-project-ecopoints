@@ -55,6 +55,9 @@ endif::[]
 ** Wer?
 *** Alle
 
+== Sensor Daten
+
+image:sensor-reading.jpg[width=100, height=70]
 
 [.font-xx-large]
 == Sprint 2
@@ -67,6 +70,14 @@ Oliver
 * Gps Daten auslesen
 * Google Maps API
 
+== OBD2
+
+image:bt-devices.jpeg[width=100, height=70]
+image:obd2-reading.jpeg[width=100, height=70]
+
+== Maps
+
+image:maps.jpeg[width=100, height=70]
 
 == Sprint 2
 

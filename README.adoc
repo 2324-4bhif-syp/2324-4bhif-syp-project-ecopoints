@@ -21,7 +21,7 @@
 | image:img/Linus-Nestler.jpeg[width=120, height=150]
 
 |Armin Salkovic
-|
+| image:img/Armin-Salkovic.jpeg[width=120, height=150]
 
 |===
 

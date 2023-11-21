@@ -39,10 +39,9 @@ class LocationService {
         lastLocation = location
         return distance
     }
-
-
-    fun getCurrentLocation(): Location?{
-        return lastLocation
+    
+    fun getCurrentCoordinates(): Pair<Double, Double>{
+        return Pair(lastLocation!!.latitude, lastLocation!!.longitude)
     }
 
     fun startLocationUpdates(context: Context ,fusedLocationClient: FusedLocationProviderClient,

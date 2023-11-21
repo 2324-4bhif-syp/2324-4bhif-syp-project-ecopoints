@@ -15,6 +15,14 @@ ifndef::imagesdir[:imagesdir: ../images]
 |Oliver Daxinger
 | image:../../img/Daxinger-Oliver.jpg[width=120, height=150]
 
+
+|===
+
+== Team
+
+|===
+|Name |Foto
+
 |Laurent Mali
 |
 
@@ -23,6 +31,7 @@ ifndef::imagesdir[:imagesdir: ../images]
 
 |Armin Salkovic
 | image:../../img/Armin-Salkovic.jpeg[width=120, height=150]
+
 
 |===
 

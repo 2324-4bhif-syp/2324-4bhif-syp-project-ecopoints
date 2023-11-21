@@ -2,6 +2,7 @@ package at.htl.ecopoints
 
 import android.bluetooth.BluetoothSocket
 import android.util.Log
+import kotlinx.coroutines.delay
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
@@ -17,7 +18,6 @@ class OBDBluetoothInterface(private val bluetoothSocket: BluetoothSocket) {
         try {
             outputStream.write(command.toByteArray(Charset.defaultCharset()))
             outputStream.write('\r'.code) // Add carriage return
-
             val buffer = ByteArray(8000)
             val bytesRead = inputStream.read(buffer)
             val response = String(buffer, 0, bytesRead, Charset.defaultCharset()).trim()

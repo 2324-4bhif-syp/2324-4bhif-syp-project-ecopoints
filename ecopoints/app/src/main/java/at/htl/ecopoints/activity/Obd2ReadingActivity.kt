@@ -100,21 +100,19 @@ class Obd2ReadingActivity : ComponentActivity() {
             if (buttonClicked) {
                 service.initOBD()
                 for (i in 0..1000) {
-
                     var rpm1 = service.getRPM()
-//                    delay(500)
-                 //var speed2 = service.getSpeed()
-//                    var coolantTemp3 = service.getCoolantTemp()
+                    var speed2 = "0"//service.getSpeed()
+                    var coolantTemp3 = "0"//service.getCoolantTemp()
 
                     if (rpm1 != "0") {
                         rpm = rpm1
                     }
-//                    if (speed2 != "0") {
-//                        speed = speed2
-//                    }
-//                    if (coolantTemp3 != "0") {
-//                        coolantTemp = coolantTemp3
-//                    }
+                    if (speed2 != "0") {
+                        speed = speed2
+                    }
+                    if (coolantTemp3 != "0") {
+                        coolantTemp = coolantTemp3
+                    }
                     delay(500)
                 }
                 buttonClicked = false

@@ -12,11 +12,8 @@ import java.util.List;
 public class UserRepository {
     @Inject
     EntityManager em;
-<<<<<<< HEAD
-=======
 
     @Transactional
->>>>>>> 06114ffd9a2a7375b55b2e273e9d742316d1fc34
     public void save(User user){
         em.persist(user);
     }

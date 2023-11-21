@@ -48,8 +48,8 @@ class OBDCommandHelper(private val obdBluetoothInterface: OBDBluetoothInterface)
             val cleanData = rawData.replace("OK", "").replace("SEARCHING...", "").replace("SEARCHING:","")
             val array = cleanData.split(" ")
 
-            if (array.size >= 3) {
-                val hex = array[2]
+            if (array.size >= 4) {
+                val hex = array[3]
 
                 val temp = hex.toInt(16) - 40
 

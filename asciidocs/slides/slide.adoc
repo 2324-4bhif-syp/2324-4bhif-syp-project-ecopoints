@@ -55,13 +55,9 @@ endif::[]
 ** Wer?
 *** Alle
 
-[.right]
-image:sensor-reading.jpg[width=100, height=70]
 
 [.font-xx-large]
 == Sprint 2
-
-Linus
 
 * OBD2 Daten auslesen
 ** ELM327 über bluetooth
@@ -70,6 +66,7 @@ Oliver
 
 * Gps Daten auslesen
 * Google Maps API
+
 
 == Sprint 2
 

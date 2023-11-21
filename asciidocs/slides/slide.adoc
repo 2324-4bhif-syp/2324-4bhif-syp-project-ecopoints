@@ -55,8 +55,8 @@ endif::[]
 ** Wer?
 *** Alle
 
-image:sensor-reading.jpg[]
-image:obd2-reading.jpeg[]
+[.right]
+image:sensor-reading.jpg[width=100, height=70]
 
 [.font-xx-large]
 == Sprint 2

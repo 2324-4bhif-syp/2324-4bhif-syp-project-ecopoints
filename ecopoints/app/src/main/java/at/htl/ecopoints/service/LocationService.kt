@@ -39,7 +39,7 @@ class LocationService {
         lastLocation = location
         return distance
     }
-    
+
     fun getCurrentCoordinates(): Pair<Double, Double>{
         return Pair(lastLocation!!.latitude, lastLocation!!.longitude)
     }

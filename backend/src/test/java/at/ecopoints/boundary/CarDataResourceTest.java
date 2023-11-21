@@ -136,7 +136,7 @@ class CarDataResourceTest {
 
     }
 
-    /*@Test
+    @Test
     void addAndDeleteCarData() {
         given()
                 .contentType(ContentType.JSON)
@@ -169,7 +169,7 @@ class CarDataResourceTest {
                 .extract()
                 .body()
                 .asString()).isEqualTo("[]");
-    }*/
+    }
 
     @Test
     void addAndUpdateCarData() {

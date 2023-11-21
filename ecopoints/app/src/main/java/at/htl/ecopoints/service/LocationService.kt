@@ -29,6 +29,8 @@ class LocationService {
 
         if (lastLocation != null) {
             val distanceToLocation = lastLocation!!.distanceTo(location)
+            println(location.latitude)
+            println(location.longitude)
 
             if (distanceToLocation > 1.0) {
                 distance = distanceToLocation

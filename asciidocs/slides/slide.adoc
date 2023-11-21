@@ -29,7 +29,7 @@ endif::[]
 |Name |Foto
 
 |Laurent Mali
-|
+| image:team/Laurent-Mali.jpg[width=120, height=150]
 
 |Linus Nestler
 | image:team/Linus-Nestler.jpeg[width=120, height=150]
@@ -43,9 +43,9 @@ endif::[]
 == EcoPoints
 
 * "Fahrverhaltensvergleichsplattform"
-* Vergleicht das Fahrverhalten von Fahrern
+* Vergleicht das Fahrverhalten von Fahrern aufgrund von Sensordaten
 ** Fahrer können freiwillig mitmachen
-** Die Daten werden vom auto über dem OBD2 Port ausgelesen
+** Die Daten werden vom Auto über dem OBD2 Port ausgelesen
 
 [.font-xx-large]
 == Sprint 1

@@ -36,13 +36,20 @@ ifndef::imagesdir[:imagesdir: images]
 |Htl-Leonding 4bhif
 
 |von-bis
-|
+| 7 Einheit
 |Dauer
-|
+| 30 min
 |===
 
 == Besprochene Themen
 
+* Mehrere Daten auf einmal auslesen
+* In einer concurrent-Hashmap speichern
+* Nach einer fahrt diese ein eine SQL-Lite speichern
+** Manuelle Synchronisation zum backend
+* Fahrt aufzeichnen
+** Auf maps den verlauf der Fahrt angezeigt
+*** Je nach Kraftstoffverbrauch die Farbe ändern
 
 == Vereinbarungen und Entscheidungen
 
@@ -51,10 +58,34 @@ ifndef::imagesdir[:imagesdir: images]
 |===
 |wer |macht was |bis wann
 
-|
+| Linus
 a|
+* Obd2 Mehrere Daten auf einmal auslesen
+* Speichern in einer concurrent-Hashmap
+| 05.12.2023
 
-|
+| Oliver
+a|
+* Genaue location aufzeichnen
+* Auf maps den verlauf der Fahrt anzeigen
+* Je nach Kraftstoffverbrauch die Farbe ändern
+| 05.12.2023
 
-|
+| Laurent
+a| * SQLite DB aufsetzen
+* Repository für CRUD Operationen
+| 05.12.2023
+
+| Armin
+a| * Synchronisation mit backend von SQLite (kotlin)
+* Trip erstellen und werte berechnen (kotlin)
+** User ignorieren
+| 05.12.2023
+
+| Abdullah
+a| * Datenmodell
+* Backend
+* Bottom-navigation in Kotlin
+| 05.12.2023
+
 |

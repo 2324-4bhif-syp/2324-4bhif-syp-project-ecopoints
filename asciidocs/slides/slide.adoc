@@ -1,6 +1,5 @@
 = EcoPoints
 :revealjs_theme: white
-:customcss: css/slides.css
 ifndef::imagesdir[:imagesdir: ../images]
 
 [.font-xx-large]
@@ -45,7 +44,10 @@ ifndef::imagesdir[:imagesdir: ../images]
 
 * OBD2 Daten auslesen
 ** ELM327 über bluetooth
+** Linus, Oliver
 * Oracle Server
 ** Quarkus backend
 ** Postgres Datenbank
+** Armin, Abdullah, Laurent
+
 

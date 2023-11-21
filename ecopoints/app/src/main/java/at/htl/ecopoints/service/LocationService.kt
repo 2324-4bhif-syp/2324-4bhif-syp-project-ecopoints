@@ -40,6 +40,11 @@ class LocationService {
         return distance
     }
 
+
+    fun getCurrentLocation(): Location?{
+        return lastLocation
+    }
+
     fun startLocationUpdates(context: Context ,fusedLocationClient: FusedLocationProviderClient,
                              locationRequest: com.google.android.gms.location.LocationRequest,
                              locationCallback: LocationCallback) {

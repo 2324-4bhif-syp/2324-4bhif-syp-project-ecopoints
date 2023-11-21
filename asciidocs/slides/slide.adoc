@@ -29,23 +29,30 @@ endif::[]
 |Name |Foto
 
 |Laurent Mali
-|
+| image:team/Laurent-Mali.jpg[width=120, height=150]
 
 |Linus Nestler
 | image:team/Linus-Nestler.jpeg[width=120, height=150]
 
-|Armin Salkovic
-| image:team/Armin-Salkovic.jpeg[width=120, height=150]
+|===
 
+== Team
 
 |===
+|Name |Foto
+
+|Armin Salkovic
+|image:team/Armin-Salkovic.jpeg[width=120, height=150]
+
+|===
+
 
 == EcoPoints
 
 * "Fahrverhaltensvergleichsplattform"
-* Vergleicht das Fahrverhalten von Fahrern
+* Vergleicht das Fahrverhalten von Fahrern aufgrund von Sensordaten
 ** Fahrer können freiwillig mitmachen
-** Die Daten werden vom auto über dem OBD2 Port ausgelesen
+** Die Daten werden vom Auto über dem OBD2 Port ausgelesen
 
 [.font-xx-large]
 == Sprint 1
@@ -55,7 +62,7 @@ endif::[]
 ** Wer?
 *** Alle
 
-== Sensor Daten
+=== Sensor Daten
 
 image:sensor-reading.jpg[500,200]
 
@@ -70,12 +77,12 @@ Oliver
 * Gps Daten auslesen
 * Google Maps API
 
-== OBD2
+=== OBD2
 
 image:bt-devices.jpeg[500,200]
 image:obd2-reading.jpeg[500,200]
 
-== Maps
+=== Maps
 
 image:maps.jpeg[500,200]
 
@@ -88,7 +95,7 @@ Armin, Abdullah, Laurent
 ** Postgres Datenbank
 
 [.font-xx-large]
-== Oracle Cloud Server
+=== Oracle Cloud Server
 * http://132.145.237.245/[]
 
 

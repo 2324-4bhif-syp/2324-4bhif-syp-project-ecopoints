@@ -6,15 +6,12 @@ ifndef::imagesdir[:imagesdir: images]
 //:sectnums:    // Nummerierung der Überschriften / section numbering
 //:toc: left
 
-
 .Teilnehmer
 |===
 |anwesend |abwesend
 
-|Vorname Nachname
-|
-
-|Linus Nestler
+a|
+Linus Nestler
 |
 
 |Laurent Mali

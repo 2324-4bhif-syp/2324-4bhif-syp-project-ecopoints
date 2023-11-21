@@ -5,6 +5,18 @@ import jakarta.transaction.Transactional;
 
 @Entity
 @Table(name = "ECO_USER")
+@NamedQueries(
+        {
+                @NamedQuery(
+                        name = "User.findAll",
+                        query = "select u from User u"
+                ),
+                @NamedQuery(
+                        name = "User.findByUserName",
+                        query = "select u from User u where u.userName = :userName"
+                )
+        }
+)
 public class User {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -18,7 +18,7 @@
 |
 
 |Linus Nestler
-|
+| image:img/Linus-Nestler.jpeg[width=120, height=150]
 
 |Armin Salkovic
 |

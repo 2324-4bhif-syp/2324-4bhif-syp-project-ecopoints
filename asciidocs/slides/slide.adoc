@@ -53,14 +53,27 @@ ifndef::imagesdir[:imagesdir: ../images]
 [.font-xx-large]
 == Sprint 2
 
+Linus
+
 * OBD2 Daten auslesen
 ** ELM327 über bluetooth
-** Wer?
-*** Linus, Oliver
+
+Oliver
+
+* Gps Daten auslesen
+* Google Maps API
+
+== Sprint 2
+
+Armin, Abdullah, Laurent
+
 * Oracle Server
 ** Quarkus backend
 ** Postgres Datenbank
-** Wer?
-*** Armin, Abdullah, Laurent
+
+[.font-xx-large]
+== Oracle Cloud Server
+* http://132.145.237.245/[]
+
 
 

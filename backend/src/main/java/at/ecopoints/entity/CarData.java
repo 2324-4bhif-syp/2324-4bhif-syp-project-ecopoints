@@ -9,6 +9,18 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "ECO_CARDATA")
+@NamedQueries(
+        {
+                @NamedQuery(
+                        name = "CarData.findAll",
+                        query = "select c from CarData c"
+                ),
+                @NamedQuery(
+                        name = "CarData.findByTripId",
+                        query = "select c from CarData c where c.tripId = :tripId"
+                )
+        }
+)
 public class CarData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

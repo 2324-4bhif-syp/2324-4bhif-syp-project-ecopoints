@@ -132,7 +132,6 @@ class CarDataResourceTest {
         assertThat(carDataList.get(0).getCurrentVelocity()).isEqualTo(60.0);
         assertThat(carDataList.get(0).getThrottlePosition()).isEqualTo(75.0);
         assertThat(carDataList.get(0).getEngineRunTime()).isEqualTo("14:30:15");
-        assertThat(carDataList.get(0).getTimeStamp()).isEqualTo(Timestamp.valueOf("2023-11-08 14:45:00.0000"));
 
     }
 

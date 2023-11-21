@@ -6,6 +6,18 @@ import java.util.Date;
 
 @Entity
 @Table(name = "ECO_TRIP")
+@NamedQueries(
+        {
+                @NamedQuery(
+                        name = "Trip.findAll",
+                        query = "select t from Trip t"
+                ),
+                @NamedQuery(
+                        name = "Trip.findByUserId",
+                        query = "select t from Trip t where t.user.id = :userId"
+                )
+        }
+)
 public class Trip {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

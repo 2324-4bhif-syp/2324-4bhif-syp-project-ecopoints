@@ -21,11 +21,11 @@ public class UserResource {
         return userRepository.findById(id);
     }
 
-    /*@GET
+    @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<User> getAllCarData() {
         return userRepository.getAll();
-    }*/
+    }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)

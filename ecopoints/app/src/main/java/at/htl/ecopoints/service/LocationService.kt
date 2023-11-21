@@ -40,6 +40,10 @@ class LocationService {
         return distance
     }
 
+    fun getCurrentCoordinates(): Pair<Double, Double>{
+        return Pair(lastLocation!!.latitude, lastLocation!!.longitude)
+    }
+
     fun startLocationUpdates(context: Context ,fusedLocationClient: FusedLocationProviderClient,
                              locationRequest: com.google.android.gms.location.LocationRequest,
                              locationCallback: LocationCallback) {

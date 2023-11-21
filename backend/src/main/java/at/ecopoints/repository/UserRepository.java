@@ -10,7 +10,6 @@ import java.util.List;
 public class UserRepository {
     @Inject
     EntityManager em;
-
     public void save(User user){
         em.persist(user);
     }

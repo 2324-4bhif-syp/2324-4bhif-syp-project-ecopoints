@@ -21,7 +21,7 @@ jobs:
           cache: maven
 
       - name: Build
-        run: cd backend && ./mvnw package
+        run: cd backend && ./postgres-start.sh && ./mvnw package
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3

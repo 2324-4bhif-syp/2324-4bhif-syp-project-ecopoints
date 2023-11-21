@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import at.htl.ecopoints.service.BluetoothDeviceListService
+import at.htl.ecopoints.ui.theme.EcoPointsTheme
 
 class BluetoothDeviceListActivity : ComponentActivity() {
 
@@ -39,7 +40,14 @@ class BluetoothDeviceListActivity : ComponentActivity() {
                     1
                 )
             } else {
-                BluetoothDeviceList(bluetoothDeviceService.getAllDevices())
+                EcoPointsTheme {
+                    Surface(
+                        modifier = Modifier.fillMaxSize(),
+                        color = MaterialTheme.colorScheme.background
+                    ) {
+                        BluetoothDeviceList(bluetoothDeviceService.getAllDevices())
+                    }
+                }
             }
         }
     }
@@ -120,7 +128,7 @@ class BluetoothDeviceListActivity : ComponentActivity() {
                         text = "Type ${device.type}",
                         style = TextStyle(color = MaterialTheme.colorScheme.secondary)
                     )
-                    if(device.uuids != null){
+                    if (device.uuids != null) {
                         Text(
                             text = "UUID ${device.uuids[0]}",
                             style = TextStyle(color = MaterialTheme.colorScheme.secondary)

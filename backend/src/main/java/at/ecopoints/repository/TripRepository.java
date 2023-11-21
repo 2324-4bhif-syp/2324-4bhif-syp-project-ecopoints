@@ -21,9 +21,9 @@ public class TripRepository {
     public void delete(Long id){
         em.remove(findById(id));
     }
-    /*public List<Trip> getAll(){
+    public List<Trip> getAll(){
         return em.createQuery("select t from Trip t", Trip.class).getResultList();
-    }*/
+    }
     public void update(Trip trip){
         Trip tr = findById(trip.getId());
 

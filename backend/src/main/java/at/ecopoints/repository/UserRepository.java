@@ -20,9 +20,9 @@ public class UserRepository {
     public void delete(Long id){
         em.remove(findById(id));
     }
-    /*public List<User> getAll(){
-        return em.createQuery("select u from user u", User.class).getResultList();
-    }*/
+    public List<User> getAll(){
+        return em.createQuery("select u from User u", User.class).getResultList();
+    }
     public void update(User user){
         User newUser = findById(user.getId());
 

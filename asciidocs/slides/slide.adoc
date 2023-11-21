@@ -57,7 +57,7 @@ endif::[]
 
 == Sensor Daten
 
-image:sensor-reading.jpg[1000,700]
+image:sensor-reading.jpg[500,200]
 
 [.font-xx-large]
 == Sprint 2
@@ -72,12 +72,12 @@ Oliver
 
 == OBD2
 
-image:bt-devices.jpeg[1000,700]
-image:obd2-reading.jpeg[1000,700]
+image:bt-devices.jpeg[500,200]
+image:obd2-reading.jpeg[500,200]
 
 == Maps
 
-image:maps.jpeg[1000,700]
+image:maps.jpeg[500,200]
 
 == Sprint 2
 

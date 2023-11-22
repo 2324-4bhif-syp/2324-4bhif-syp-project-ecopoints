@@ -16,8 +16,10 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -41,6 +43,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import at.htl.ecopoints.activity.BluetoothDeviceListActivity
 import at.htl.ecopoints.activity.MapActivity
+import at.htl.ecopoints.activity.TripActivity
 import at.htl.ecopoints.service.AccelerometerSensorService
 import at.htl.ecopoints.service.LocationService
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
@@ -106,6 +109,7 @@ class MainActivity : ComponentActivity() {
                     PrintTravelledDistance(total.value)
                     ShowMap()
                     ShowBluetoothDevicesButton()
+                    ShowTrip()
                 }
             }
         }
@@ -376,6 +380,8 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+
+
     @Composable
     fun ShowMap() {
         Box(
@@ -390,6 +396,25 @@ class MainActivity : ComponentActivity() {
                     .padding(16.dp)
             ) {
                 Text(text = "Show Map")
+            }
+        }
+    }
+
+    @Composable
+    fun ShowTrip() {
+        Spacer(modifier = Modifier.height(100.dp))
+        Box(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Button(
+                onClick = {
+                    startActivity(Intent(this@MainActivity, TripActivity::class.java))
+                },
+                modifier = Modifier
+                    .align(Alignment.BottomStart)
+                    .padding(16.dp)
+            ) {
+                Text(text = "Show Trip")
             }
         }
     }

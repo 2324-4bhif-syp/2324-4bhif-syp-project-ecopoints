@@ -2,15 +2,25 @@ package at.ecopoints.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.sql.Timestamp;
 import java.util.UUID;
 
 @Entity
+@Table(name = "ECO_CARDATA")
+@NamedQueries(
+        {
+                @NamedQuery(
+                        name = "CarData.findAll",
+                        query = "select c from CarData c"
+                ),
+                @NamedQuery(
+                        name = "CarData.findByTripId",
+                        query = "select c from CarData c where c.tripId = :tripId"
+                )
+        }
+)
 public class CarData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,9 +42,12 @@ public class CarData {
     @JsonProperty("time_stamp")
     private Timestamp timeStamp;
 
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH, CascadeType.REMOVE})
+    private Trip trip;
+
     //region Constructors
     public CarData(){}
-    public CarData(UUID tripId, double longitude, double latitude, double currentEngineRPM, double currentVelocity, double throttlePosition, String engineRunTime, Timestamp timeStamp) {
+    public CarData(UUID tripId, double longitude, double latitude, double currentEngineRPM, double currentVelocity, double throttlePosition, String engineRunTime, Timestamp timeStamp, Trip trip) {
         this.tripId = tripId;
         this.longitude = longitude;
         this.latitude = latitude;
@@ -43,6 +56,7 @@ public class CarData {
         this.throttlePosition = throttlePosition;
         this.engineRunTime = engineRunTime;
         this.timeStamp = timeStamp;
+        this.trip = trip;
     }
     //endregion
 
@@ -117,6 +131,14 @@ public class CarData {
 
     public void setTimeStamp(Timestamp timeStamp) {
         this.timeStamp = timeStamp;
+    }
+
+    public Trip getTrip() {
+        return trip;
+    }
+
+    public void setTrip(Trip trip) {
+        this.trip = trip;
     }
     //endregion
 }

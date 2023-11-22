@@ -29,6 +29,8 @@ class LocationService {
 
         if (lastLocation != null) {
             val distanceToLocation = lastLocation!!.distanceTo(location)
+            println(location.latitude)
+            println(location.longitude)
 
             if (distanceToLocation > 1.0) {
                 distance = distanceToLocation
@@ -36,6 +38,10 @@ class LocationService {
         }
         lastLocation = location
         return distance
+    }
+
+    fun getCurrentCoordinates(): Pair<Double, Double>{
+        return Pair(lastLocation!!.latitude, lastLocation!!.longitude)
     }
 
     fun startLocationUpdates(context: Context ,fusedLocationClient: FusedLocationProviderClient,

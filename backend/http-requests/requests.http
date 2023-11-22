@@ -1,4 +1,4 @@
-POST http://0.0.0.0:8080/carData
+POST http://localhost:8080/api/carData
 Content-Type: application/json
 
 {
@@ -14,17 +14,17 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:8080/carData/1
+GET http://localhost:8080/api/carData/1
 Accept: application/json
 
 ###
 
-GET http://0.0.0.0:8080/carData
+GET http://localhost:8080/api/carData
 Accept: application/json
 
 ###
 
-PUT http://localhost:8080/carData/1
+PUT http://localhost:8080/api/carData/1
 Content-Type: application/json
 
 {
@@ -41,7 +41,7 @@ Content-Type: application/json
 
 ###
 
-DELETE http://localhost:8080/carData/1
+DELETE http://localhost:8080/api/carData/1
 Accept: application/json
 
 ###

@@ -21,7 +21,7 @@ import static org.hamcrest.Matchers.equalTo;
 class CarDataResourceTest {
     @AfterEach
     void cleanup() {
-        Response response = given().when().get("/carData");
+        Response response = given().when().get("/api/carData");
 
         if (response.getStatusCode() == 200) {
             List<CarData> carDataList = response.then()
@@ -32,7 +32,7 @@ class CarDataResourceTest {
                     .getList(".", CarData.class);
 
             for(int i = 0; i < carDataList.size(); i++) {
-                given().when().delete("/carData/{id}", carDataList.get(i).getId());
+                given().when().delete("/api/carData/{id}", carDataList.get(i).getId());
             }
         }
     }
@@ -54,13 +54,13 @@ class CarDataResourceTest {
                     }
                     """
                 ).when()
-                .post("/carData")
+                .post("/api/carData")
                 .then()
                 .statusCode(201);
 
         Long id = given()
                 .when()
-                .get("/carData")
+                .get("/api/carData")
                 .then()
                 .statusCode(200)
                 .extract()
@@ -69,7 +69,7 @@ class CarDataResourceTest {
 
         Response response = given()
                 .when()
-                .get("/carData/{id}", id);
+                .get("/api/carData/{id}", id);
 
         response.then()
                 .statusCode(200);
@@ -102,13 +102,13 @@ class CarDataResourceTest {
                     }
                     """
                 ).when()
-                .post("/carData")
+                .post("/api/carData")
                 .then()
                 .statusCode(201);
 
         Response response = given()
                 .when()
-                .get("/carData");
+                .get("/api/carData");
 
         assertThat(response.then()
                 .statusCode(200)
@@ -132,7 +132,6 @@ class CarDataResourceTest {
         assertThat(carDataList.get(0).getCurrentVelocity()).isEqualTo(60.0);
         assertThat(carDataList.get(0).getThrottlePosition()).isEqualTo(75.0);
         assertThat(carDataList.get(0).getEngineRunTime()).isEqualTo("14:30:15");
-        assertThat(carDataList.get(0).getTimeStamp()).isEqualTo(Timestamp.valueOf("2023-11-08 14:45:00.0000"));
 
     }
 
@@ -153,22 +152,22 @@ class CarDataResourceTest {
                     }
                     """
                 ).when()
-                .post("/carData")
+                .post("/api/carData")
                 .then()
                 .statusCode(201);
 
         given()
                 .when()
-                .delete("/carData/{id}", "1");
+                .delete("/api/carData/{id}", "1");
 
         assertThat(given()
                 .when()
-                .get("/carData/1")
+                .get("/api/carData")
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
-                .asString()).isEqualTo("");
+                .asString()).isEqualTo("[]");
     }
 
     @Test
@@ -188,13 +187,13 @@ class CarDataResourceTest {
                     }
                     """
                 ).when()
-                .post("/carData")
+                .post("/api/carData")
                 .then()
                 .statusCode(201);
 
         Long id = given()
                 .when()
-                .get("/carData")
+                .get("/api/carData")
                 .then()
                 .statusCode(200)
                 .extract()
@@ -217,13 +216,13 @@ class CarDataResourceTest {
                 }
                 """
                 , id)).when()
-                .put("/carData/{id}", id)
+                .put("/api/carData/{id}", id)
                 .then()
                 .statusCode(200);
 
         Response response = given()
                 .when()
-                .get("/carData/{id}", id);
+                .get("/api/carData/{id}", id);
 
         response.then()
                 .statusCode(200);

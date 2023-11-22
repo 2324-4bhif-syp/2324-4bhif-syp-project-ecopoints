@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyListItemInfo
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material.*
@@ -21,6 +23,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -34,11 +37,14 @@ import at.htl.ecopoints.service.TestLocationService
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.CameraPositionState
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapType
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
+import com.google.maps.android.compose.Polygon
+import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
 
 class MapActivity : ComponentActivity(), OnLocationChangedListener {
@@ -48,13 +54,17 @@ class MapActivity : ComponentActivity(), OnLocationChangedListener {
     }
     private var longitude = 1.35
     private var latitude = 103.87
+    private var mapVisible = mutableStateOf(false)
+
+    private val itemList =
+        mutableStateListOf<LatLng>()
+
 
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         testLocationService.setOnLocationChangedListener(this)
-
 
         setContent {
             val currentLocation = LatLng(latitude, longitude)
@@ -70,31 +80,45 @@ class MapActivity : ComponentActivity(), OnLocationChangedListener {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Scaffold (topBar = {
+                    Scaffold(topBar = {
                         TopAppBar(backgroundColor = Color.White, title = {
-                            Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.End) {
+                            Column(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalAlignment = Alignment.End
+                            ) {
                                 MapTypeControls(onMapTypeClick = {
                                     Log.d("GoogleMap", "Selected map type $it")
                                     mapProperties = mapProperties.copy(mapType = it)
                                 })
                             }
                         })
-                    })  {
+                    }) {
                         GoogleMap(
                             modifier = Modifier.fillMaxSize(),
                             cameraPositionState = cameraPositionState,
                             properties = mapProperties
                         ) {
+
                             Marker(
                                 state = MarkerState(position = currentLocation),
                                 title = "Htl Leonding",
                                 snippet = "Marker in Leonding"
                             )
+                            Map()
                         }
                     }
                 }
             }
         }
+    }
+
+    @Composable
+    fun Map() {
+        if (mapVisible.value)
+            Polyline(points = itemList, color = Color.Red, width = 5f)
+        else
+            Polyline(points = itemList, color = Color.Red, width = 5f)
+        mapVisible.value = false
     }
 
     @Composable
@@ -126,8 +150,18 @@ class MapActivity : ComponentActivity(), OnLocationChangedListener {
             Text(text = text, style = MaterialTheme.typography.bodyMedium)
         }
     }
+
     override fun onLocationChanged(lat: String, lon: String) {
         longitude = lon.toDouble()
         latitude = lat.toDouble()
+
+        Log.d("MapTracking", "Location changed to $latitude, $longitude")
+        addItemToList(LatLng(latitude, longitude))
     }
+
+    private fun addItemToList(newItem: LatLng) {
+        itemList.add(newItem)
+        mapVisible.value = true
+    }
+
 }

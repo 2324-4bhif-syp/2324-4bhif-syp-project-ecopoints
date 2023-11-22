@@ -48,9 +48,9 @@ class MapActivity : ComponentActivity(), OnLocationChangedListener {
     }
     private var longitude = 1.35
     private var latitude = 103.87
-    private var mapVisible = mutableStateOf(false)
+    private var latLngHasChanged = mutableStateOf(false)
 
-    private val itemList =
+    private val latLngList =
         mutableStateListOf<LatLng>()
 
 
@@ -108,11 +108,14 @@ class MapActivity : ComponentActivity(), OnLocationChangedListener {
 
     @Composable
     fun DrawPolyline() {
-        if (mapVisible.value)
-            Polyline(points = itemList, color = Color.Red, width = 5f)
-        else
-            Polyline(points = itemList, color = Color.Red, width = 5f)
-        mapVisible.value = false
+        val list1 = latLngList.subList(0,latLngList.count()/2)
+        val list2 = latLngList.subList(latLngList.count()/2, latLngList.count()-1)
+        if (!latLngHasChanged.value){
+            Polyline(points = list1, color = Color.Green, width = 5f)
+            Polyline(points = list2, color = Color.Blue, width = 5f)
+
+        }
+        latLngHasChanged.value = false
     }
 
     @Composable
@@ -154,8 +157,8 @@ class MapActivity : ComponentActivity(), OnLocationChangedListener {
     }
 
     private fun addItemToList(newItem: LatLng) {
-        itemList.add(newItem)
-        mapVisible.value = true
+        latLngList.add(newItem)
+        latLngHasChanged.value = true
     }
 
 }

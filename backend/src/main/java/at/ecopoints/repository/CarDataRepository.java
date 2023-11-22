@@ -13,7 +13,6 @@ public class CarDataRepository {
     @Inject
     EntityManager em;
 
-    @Transactional
     public void save(CarData carData) {
         em.persist(carData);
     }
@@ -22,7 +21,6 @@ public class CarDataRepository {
         return em.find(CarData.class, id);
     }
 
-    @Transactional
     public void delete(Long id) {
         em.remove(findById(id));
     }
@@ -31,7 +29,6 @@ public class CarDataRepository {
         return em.createQuery("select c from CarData c", CarData.class).getResultList();
     }
 
-    @Transactional
     public void update(CarData carData){
         CarData cd = findById(carData.getId());
 

@@ -1,7 +1,6 @@
 package at.htl.ecopoints.activity
 
 import android.annotation.SuppressLint
-import android.icu.lang.UCharacter.VerticalOrientation
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -14,8 +13,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyListItemInfo
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material.*
@@ -30,20 +27,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import at.htl.ecopoints.interfaces.OnLocationChangedListener
 import at.htl.ecopoints.service.TestLocationService
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
-import com.google.maps.android.compose.CameraPositionState
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapType
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
-import com.google.maps.android.compose.Polygon
 import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
 
@@ -104,7 +98,7 @@ class MapActivity : ComponentActivity(), OnLocationChangedListener {
                                 title = "Htl Leonding",
                                 snippet = "Marker in Leonding"
                             )
-                            Map()
+                            DrawPolyline()
                         }
                     }
                 }
@@ -113,7 +107,7 @@ class MapActivity : ComponentActivity(), OnLocationChangedListener {
     }
 
     @Composable
-    fun Map() {
+    fun DrawPolyline() {
         if (mapVisible.value)
             Polyline(points = itemList, color = Color.Red, width = 5f)
         else

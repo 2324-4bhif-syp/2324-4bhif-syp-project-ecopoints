@@ -34,6 +34,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.android.animation.SegmentType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import at.htl.ecopoints.service.BluetoothDeviceListService
@@ -57,6 +58,8 @@ class TripActivity : ComponentActivity() {
             var showDialog: Boolean by remember { mutableStateOf(false) }
             var deviceNameText by remember { mutableStateOf("Not Selected") }
             var isConnecting by remember { mutableStateOf(false) }
+            var connection by remember { mutableStateOf(false) }
+
 
             EcoPointsTheme {
                 Surface(
@@ -70,8 +73,16 @@ class TripActivity : ComponentActivity() {
                             connecting = isConnecting,
                             selectedDevice,
                             onDismiss = { isConnecting = false },
-                            onConnect = { isConnecting = it })
+                            onConnect = { it ->
+                                isConnecting = it
+                                connection = it})
                     }
+
+                    Text(
+                        text = "Trip",
+                        modifier = Modifier.padding(16.dp),
+                        fontSize = 24.sp
+                    )
 
                     Column(
                         modifier = Modifier.fillMaxSize(),
@@ -81,7 +92,7 @@ class TripActivity : ComponentActivity() {
                         Spacer(modifier = Modifier.height(16.dp)) // Space between text and buttons
 
                         StartStopButton()
-                        ConnectionInfo(deviceNameText)
+                        ConnectionInfo(deviceNameText, connection)
 
                         Row(
                             modifier = Modifier.fillMaxWidth(),

@@ -13,7 +13,6 @@ import android.location.LocationManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,7 +20,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -33,9 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -45,7 +41,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import at.htl.ecopoints.activity.BluetoothDeviceListActivity
 import at.htl.ecopoints.activity.MapActivity
-import at.htl.ecopoints.navigation.BottomNavItem
 import at.htl.ecopoints.service.AccelerometerSensorService
 import at.htl.ecopoints.service.LocationService
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
@@ -53,10 +48,13 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.delay
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.util.Locale
+import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : ComponentActivity() {
     private var totalDistance: Float = 0.0f
@@ -65,9 +63,13 @@ class MainActivity : ComponentActivity() {
     private var locationService: LocationService = LocationService()
     private var locationManager: LocationManager? = null
     private var isGPSEnabled: Boolean? = false
+    lateinit var bottomNav: BottomNavigationView
+    private val appCompatActivity = AppCompatActivity()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
@@ -110,7 +112,40 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+
+        setContentView(R.layout.activity_main)
+        loadFragment(HomeFragment())
+        bottomNav = findViewById(R.id.bottomNav) as BottomNavigationView
+        bottomNav.setOnItemSelectedListener {
+            when(it.itemId){
+                R.id.home -> {
+                    loadFragment(HomeFragment())
+                    true
+                }
+                R.id.trip -> {
+                    loadFragment(TripFragment())
+                    true
+                }
+                R.id.ranking -> {
+                    loadFragment(RankingFragment())
+                    true
+                }
+                R.id.profile -> {
+                    loadFragment(ProfileFragment())
+                    true
+                }
+
+                else -> false
+            }
+        }
     }
+
+    private fun loadFragment(fragment: Fragment) {
+        val transaction = appCompatActivity.supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.container, fragment)
+        transaction.commit()
+    }
+
 
     fun onLocationChanged(location: Location) {
         totalDistance += locationService.getDistance(location)

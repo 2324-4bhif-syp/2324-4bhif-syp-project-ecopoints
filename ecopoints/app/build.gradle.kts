@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "at.htl.ecopoints"
-        minSdk = 29
+        minSdk = 26
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"

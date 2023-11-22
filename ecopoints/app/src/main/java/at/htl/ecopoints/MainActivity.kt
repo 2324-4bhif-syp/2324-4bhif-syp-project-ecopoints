@@ -11,6 +11,7 @@ import android.hardware.SensorManager
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
@@ -70,7 +71,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         locationRequest = com.google.android.gms.location.LocationRequest.create().apply {
@@ -115,7 +115,7 @@ class MainActivity : ComponentActivity() {
 
         setContentView(R.layout.activity_main)
         loadFragment(HomeFragment())
-        bottomNav = findViewById(R.id.bottomNav) as BottomNavigationView
+        bottomNav = findViewById<BottomNavigationView>(R.id.bottomNav)
         bottomNav.setOnItemSelectedListener {
             when(it.itemId){
                 R.id.home -> {

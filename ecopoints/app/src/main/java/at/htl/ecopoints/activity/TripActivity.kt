@@ -5,7 +5,9 @@ import android.bluetooth.BluetoothDevice
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,11 +15,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -33,11 +37,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import at.htl.ecopoints.service.BluetoothDeviceListService
+import at.htl.ecopoints.service.BluetoothService
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class TripActivity : ComponentActivity() {
     private var selectedDevice: BluetoothDevice? = null
     private val bluetoothDeviceService = BluetoothDeviceListService()
+    private val bluetoothService: BluetoothService = BluetoothService()
 
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,12 +56,23 @@ class TripActivity : ComponentActivity() {
         setContent {
             var showDialog: Boolean by remember { mutableStateOf(false) }
             var deviceNameText by remember { mutableStateOf("Not Selected") }
+            var isConnecting by remember { mutableStateOf(false) }
+
             EcoPointsTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 )
                 {
+                    if (isConnecting) {
+
+                        ConnectToDevice(
+                            connecting = isConnecting,
+                            selectedDevice,
+                            onDismiss = { isConnecting = false },
+                            onConnect = { isConnecting = it })
+                    }
+
                     Column(
                         modifier = Modifier.fillMaxSize(),
                         verticalArrangement = Arrangement.Bottom,
@@ -68,7 +88,7 @@ class TripActivity : ComponentActivity() {
                             horizontalArrangement = Arrangement.SpaceEvenly
                         ) {
                             Button(
-                                onClick = { onConnectBtnClick() },
+                                onClick = { isConnecting = true },
                                 modifier = Modifier
                                     .padding(8.dp)
                                     .weight(1f)
@@ -84,6 +104,7 @@ class TripActivity : ComponentActivity() {
                                 Text(text = "Select Device")
                             }
                         }
+
                         BluetoothDeviceSelectionDialog(
                             pairedDevices = bluetoothDeviceService.getAllDevices(),
                             showDialog = showDialog,
@@ -139,10 +160,10 @@ class TripActivity : ComponentActivity() {
     }
 
     @Composable
-    fun ConnectionInfo(deviceName : String, connection : Boolean = false) {
+    fun ConnectionInfo(deviceName: String, connection: Boolean = false) {
         var connectionState = "Not Connected"
-        var connectionStateColor : Color = Color.Red
-        if(connection){
+        var connectionStateColor: Color = Color.Red
+        if (connection) {
             connectionState = "Connected"
             connectionStateColor = Color.Green
         }
@@ -218,5 +239,62 @@ class TripActivity : ComponentActivity() {
                 }
             )
         }
+    }
+
+    @SuppressLint("CoroutineCreationDuringComposition")
+    @Composable
+    fun ConnectToDevice(
+        connecting: Boolean,
+        device: BluetoothDevice?,
+        onDismiss: () -> Unit,
+        onConnect: (Boolean) -> Unit
+    ) {
+        if (device == null) {
+            var showAlert by remember { mutableStateOf(false) }
+
+            if (device == null) {
+                showAlert = true
+            }
+
+            if (showAlert) {
+                NoDeviceSelectedAlert(onDismiss = { showAlert = false })
+                return
+            }
+
+        }
+
+        if (connecting) {
+
+            CoroutineScope(Dispatchers.Main).launch {
+                bluetoothService.connectDevice(device!!)
+                onConnect(bluetoothService.connected())
+            }
+
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color(0x88000000)),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .size(50.dp)
+                )
+            }
+        }
+    }
+
+    @Composable
+    fun NoDeviceSelectedAlert(onDismiss: () -> Unit) {
+        AlertDialog(
+            onDismissRequest = { onDismiss() },
+            title = { Text(text = "No Device Selected") },
+            text = { Text(text = "Please select a device to connect.") },
+            confirmButton = {
+                Button(onClick = { onDismiss() }) {
+                    Text("OK")
+                }
+            }
+        )
     }
 }

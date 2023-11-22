@@ -60,6 +60,8 @@ class Obd2ReadingActivity : ComponentActivity() {
         }
     }
 
+
+
     @Composable
     private fun TestReadEltonLib() {
         Log.d("Obd2ReadingActivity", deviceAddress)

@@ -27,6 +27,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,9 +40,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import at.htl.ecopoints.service.BluetoothDeviceListService
 import at.htl.ecopoints.service.BluetoothService
+import at.htl.ecopoints.service.Obd2Service
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class TripActivity : ComponentActivity() {
@@ -130,6 +133,50 @@ class TripActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    @Composable
+    private fun TestReadCustomComm() {
+        var rpm by remember { mutableStateOf("0") }
+        var speed by remember { mutableStateOf("0") }
+        var coolantTemp by remember { mutableStateOf("0") }
+        var buttonClicked by remember { mutableStateOf(false) }
+
+        val service = Obd2Service(selectedDevice!!.address)
+
+
+        Button(onClick = { buttonClicked = true }) {
+            Text("Read with Custom Comm")
+        }
+
+        LaunchedEffect(buttonClicked) {
+            if (buttonClicked) {
+                service.initOBD()
+                for (i in 0..1000) {
+
+                    var rpm1 = service.getRPM()
+//                    delay(500)
+                    //var speed2 = service.getSpeed()
+//                    var coolantTemp3 = service.getCoolantTemp()
+
+                    if (rpm1 != "0") {
+                        rpm = rpm1
+                    }
+//                    if (speed2 != "0") {
+//                        speed = speed2
+//                    }
+//                    if (coolantTemp3 != "0") {
+//                        coolantTemp = coolantTemp3
+//                    }
+                    delay(500)
+                }
+                buttonClicked = false
+            }
+        }
+
+        Text(text = "Current-Speed $speed")
+        Text(text = "Current-Rpm $rpm")
+        Text(text = "Coolant-Temp $coolantTemp")
     }
 
     private fun onStartBtnClick() {

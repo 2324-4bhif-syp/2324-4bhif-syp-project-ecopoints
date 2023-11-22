@@ -78,7 +78,8 @@ class TripActivity : ComponentActivity() {
                             onDismiss = { isConnecting = false },
                             onConnect = { it ->
                                 isConnecting = it
-                                connection = it})
+                                connection = it
+                            })
                     }
 
                     Text(
@@ -86,12 +87,12 @@ class TripActivity : ComponentActivity() {
                         modifier = Modifier.padding(16.dp),
                         fontSize = 24.sp
                     )
-
                     Column(
                         modifier = Modifier.fillMaxSize(),
                         verticalArrangement = Arrangement.Bottom,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
+                    TestReadCustomComm()
                         Spacer(modifier = Modifier.height(16.dp)) // Space between text and buttons
 
                         StartStopButton()
@@ -137,46 +138,49 @@ class TripActivity : ComponentActivity() {
 
     @Composable
     private fun TestReadCustomComm() {
-        var rpm by remember { mutableStateOf("0") }
-        var speed by remember { mutableStateOf("0") }
-        var coolantTemp by remember { mutableStateOf("0") }
-        var buttonClicked by remember { mutableStateOf(false) }
+        if (selectedDevice != null) {
 
-        val service = Obd2Service(selectedDevice!!.address)
+            var rpm by remember { mutableStateOf("0") }
+            var speed by remember { mutableStateOf("0") }
+            var coolantTemp by remember { mutableStateOf("0") }
+            var buttonClicked by remember { mutableStateOf(false) }
+
+            val service = Obd2Service(selectedDevice!!.address)
 
 
-        Button(onClick = { buttonClicked = true }) {
-            Text("Read with Custom Comm")
-        }
+            Button(onClick = { buttonClicked = true }) {
+                Text("Read with Custom Comm")
+            }
 
-        LaunchedEffect(buttonClicked) {
-            if (buttonClicked) {
-                service.initOBD()
-                for (i in 0..1000) {
+            LaunchedEffect(buttonClicked) {
+                if (buttonClicked) {
+                    service.initOBD()
+                    for (i in 0..1000) {
 
-                    var rpm1 = service.getRPM()
+                        var rpm1 = service.getRPM()
 //                    delay(500)
-                    //var speed2 = service.getSpeed()
+                        //var speed2 = service.getSpeed()
 //                    var coolantTemp3 = service.getCoolantTemp()
 
-                    if (rpm1 != "0") {
-                        rpm = rpm1
-                    }
+                        if (rpm1 != "0") {
+                            rpm = rpm1
+                        }
 //                    if (speed2 != "0") {
 //                        speed = speed2
 //                    }
 //                    if (coolantTemp3 != "0") {
 //                        coolantTemp = coolantTemp3
 //                    }
-                    delay(500)
+                        delay(500)
+                    }
+                    buttonClicked = false
                 }
-                buttonClicked = false
             }
-        }
 
-        Text(text = "Current-Speed $speed")
-        Text(text = "Current-Rpm $rpm")
-        Text(text = "Coolant-Temp $coolantTemp")
+            Text(text = "Current-Speed $speed")
+            Text(text = "Current-Rpm $rpm")
+            Text(text = "Coolant-Temp $coolantTemp")
+        }
     }
 
     private fun onStartBtnClick() {

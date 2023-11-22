@@ -129,10 +129,6 @@ class TripActivity : ComponentActivity() {
 
     }
 
-    private fun onConnectBtnClick() {
-
-    }
-
     @Composable
     fun StartStopButton() {
         Row(
@@ -250,23 +246,11 @@ class TripActivity : ComponentActivity() {
         onConnect: (Boolean) -> Unit
     ) {
         if (device == null) {
-            var showAlert by remember { mutableStateOf(false) }
-
-            if (device == null) {
-                showAlert = true
-            }
-
-            if (showAlert) {
-                NoDeviceSelectedAlert(onDismiss = { showAlert = false })
-                return
-            }
-
-        }
-
-        if (connecting) {
+            NoDeviceSelectedAlert(onDismiss = onDismiss)
+        } else if (connecting) {
 
             CoroutineScope(Dispatchers.Main).launch {
-                bluetoothService.connectDevice(device!!)
+                bluetoothService.connectDevice(device)
                 onConnect(bluetoothService.connected())
             }
 

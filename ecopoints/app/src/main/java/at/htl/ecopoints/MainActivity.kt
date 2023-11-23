@@ -56,6 +56,13 @@ import java.text.DecimalFormatSymbols
 import java.util.Locale
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 
 class MainActivity : ComponentActivity() {
     private var totalDistance: Float = 0.0f
@@ -101,43 +108,88 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    showNavigatonButtons()
                     SensorReading()
                     LocationTest()
                     PrintTravelledDistance(total.value)
                     ShowMap()
                     ShowBluetoothDevicesButton()
 
-                    //Button Navigation bar von home, rank and profile
+                    //Button Navigation bar von home, trip, rank and profile
 
                 }
             }
         }
+    }
 
-        setContentView(R.layout.activity_main)
-        loadFragment(HomeFragment())
-        bottomNav = findViewById<BottomNavigationView>(R.id.bottomNav)
-        bottomNav.setOnItemSelectedListener {
-            when(it.itemId){
-                R.id.home -> {
-                    loadFragment(HomeFragment())
-                    true
-                }
-                R.id.trip -> {
-                    loadFragment(TripFragment())
-                    true
-                }
-                R.id.ranking -> {
-                    loadFragment(RankingFragment())
-                    true
-                }
-                R.id.profile -> {
-                    loadFragment(ProfileFragment())
-                    true
-                }
 
-                else -> false
+    @Composable
+    private fun showNavigatonButtons() {
+
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .padding(bottom = 56.dp))
+        {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                NavigationButton(
+                    text = "Home",
+                    imageRedId = R.drawable.ic_home,
+                    onClick = {
+                        loadFragment(HomeFragment())
+                    }
+                )
+                NavigationButton(
+                    text = "Trip",
+                    imageRedId = R.drawable.ic_trip,
+                    onClick = {
+                        loadFragment(TripFragment())
+                    }
+                )
+                NavigationButton(
+                    text = "Ranking",
+                    imageRedId = R.drawable.ic_ranking,
+                    onClick = {
+                        loadFragment(RankingFragment())
+                    }
+                )
+                NavigationButton(
+                    text = "Profile",
+                    imageRedId = R.drawable.ic_profile,
+                    onClick = {
+                        loadFragment(ProfileFragment())
+                    }
+                )
             }
         }
+    }
+
+    @Composable
+    fun NavigationButton(text: String, imageRedId: Int ,onClick: () -> Unit) {
+            Button(
+                onClick = onClick,
+                modifier = Modifier
+                    .padding(0.dp, 680.dp, 0.dp, 0.dp)
+                    .background(Color.LightGray),
+                colors = ButtonDefaults.textButtonColors(contentColor = Color.Black),
+
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Image(
+                        painter = painterResource(id = imageRedId),
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp)
+                    )
+                    Text(text = text)
+                }
+            }
     }
 
     private fun loadFragment(fragment: Fragment) {
@@ -384,7 +436,8 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun ShowBluetoothDevicesButton() {
         Box(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
         ) {
             Button(
                 onClick = {
@@ -396,7 +449,7 @@ class MainActivity : ComponentActivity() {
                     )
                 },
                 modifier = Modifier
-                    .align(Alignment.BottomCenter)
+                    .align(Alignment.Center)
                     .padding(16.dp)
             ) {
                 Text(text = "Show Paired Bluetooth Devices")

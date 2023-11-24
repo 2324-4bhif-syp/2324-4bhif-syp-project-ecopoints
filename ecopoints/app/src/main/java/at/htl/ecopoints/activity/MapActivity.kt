@@ -42,6 +42,8 @@ import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
 
+//make it a funtion, not a class
+
 class MapActivity : ComponentActivity(), OnLocationChangedListener {
 
     private val testLocationService: TestLocationService by lazy {
@@ -116,7 +118,6 @@ class MapActivity : ComponentActivity(), OnLocationChangedListener {
                 )
             }
         }
-
         latLngHasChanged.value = false
     }
 
@@ -178,6 +179,7 @@ class MapActivity : ComponentActivity(), OnLocationChangedListener {
         Log.d("FuelTracking", "Fuel consumption: $fuelCons")
     }
 
+    //for testing purposes, remove if database is set up
     private fun generateRandomFuelCons(): Double {
         return (3..21).random().toDouble()
     }

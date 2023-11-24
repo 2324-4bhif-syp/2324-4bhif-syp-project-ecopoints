@@ -1,5 +1,6 @@
 package at.htl.ecopoints.activity
 
+import kotlin.math.*
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
@@ -51,8 +52,7 @@ class MapActivity : ComponentActivity(), OnLocationChangedListener {
     private var latLngHasChanged = mutableStateOf(false)
 
     private val latLngList =
-        mutableStateListOf<LatLng>()
-
+        mutableStateListOf<Pair<Color, Pair<LatLng, Double>>>()
 
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,7 +69,6 @@ class MapActivity : ComponentActivity(), OnLocationChangedListener {
                 mutableStateOf(MapProperties(mapType = MapType.NORMAL, isMyLocationEnabled = true))
             }
             EcoPointsTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -108,15 +107,19 @@ class MapActivity : ComponentActivity(), OnLocationChangedListener {
 
     @Composable
     fun DrawPolyline() {
-        val list1 = latLngList.subList(0,latLngList.count()/2)
-        val list2 = latLngList.subList(latLngList.count()/2, latLngList.count()-1)
-        if (!latLngHasChanged.value){
-            Polyline(points = list1, color = Color.Green, width = 5f)
-            Polyline(points = list2, color = Color.Blue, width = 5f)
-
+        if (!latLngHasChanged.value) {
+            for(i in 0 until latLngList.size - 1) {
+                Polyline(
+                    points = listOf(latLngList[i].second.first, latLngList[i + 1].second.first),
+                    color = latLngList[i].first,
+                    width = 10f
+                )
+            }
         }
+
         latLngHasChanged.value = false
     }
+
 
     @Composable
     private fun MapTypeControls(
@@ -149,16 +152,49 @@ class MapActivity : ComponentActivity(), OnLocationChangedListener {
     }
 
     override fun onLocationChanged(lat: String, lon: String) {
-        longitude = lon.toDouble()
-        latitude = lat.toDouble()
+        val newLatitude = lat.toDouble()
+        val newLongitude = lon.toDouble()
 
-        Log.d("MapTracking", "Location changed to $latitude, $longitude")
-        addItemToList(LatLng(latitude, longitude))
+        if (isLocationChanged(newLatitude, newLongitude, latitude, longitude, 1.0)) {
+            latitude = newLatitude
+            longitude = newLongitude
+
+            Log.d("MapTracking", "Location changed to $latitude, $longitude")
+            addItemToList(LatLng(latitude, longitude))
+        }
     }
 
     private fun addItemToList(newItem: LatLng) {
-        latLngList.add(newItem)
+        val fuelCons = generateRandomFuelCons()
+        val color = when {
+            fuelCons <= 6.0 -> Color.Green
+            fuelCons > 6.0 && fuelCons <= 12 -> Color.Yellow
+            fuelCons > 12 && fuelCons <= 20 -> Color.Red
+            else -> Color.Black
+        }
+        latLngList.add(Pair(color, Pair(newItem, fuelCons)))
         latLngHasChanged.value = true
+
+        Log.d("FuelTracking", "Fuel consumption: $fuelCons")
     }
 
+    private fun generateRandomFuelCons(): Double {
+        return (3..21).random().toDouble()
+    }
+
+    private fun haversine(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
+        val R = 6371
+        val dLat = Math.toRadians(lat2 - lat1)
+        val dLon = Math.toRadians(lon2 - lon1)
+        val a = sin(dLat / 2) * sin(dLat / 2) +
+                cos(Math.toRadians(lat1)) * cos(Math.toRadians(lat2)) *
+                sin(dLon / 2) * sin(dLon / 2)
+        val c = 2 * atan2(sqrt(a), sqrt(1 - a))
+        return R * c * 1000
+    }
+
+    private fun isLocationChanged(newLat: Double, newLon: Double, oldLat: Double, oldLon: Double, threshold: Double): Boolean {
+        val distance = haversine(newLat, newLon, oldLat, oldLon)
+        return distance > threshold
+    }
 }

@@ -2,21 +2,22 @@ package at.htl.ecopoints.backendService
 
 import android.util.Log
 import at.htl.ecopoints.model.Trip
+import okhttp3.Response
 
 
 class TripService: Service() {
     private final val endPoint: String = "trip"
 
-    fun createTrip(trip: Trip){
-        super.create(trip, endPoint)
+    fun createTrip(trip: Trip): Response{
+        return super.create(trip, endPoint)
     }
 
-    fun updateTrip(trip: Trip, id: Long){
-        super.update(trip, endPoint, id)
+    fun updateTrip(trip: Trip, id: Long): Response{
+        return super.update(trip, endPoint, id)
     }
 
-    fun deleteTrip(id: Long){
-        super.delete(endPoint, id)
+    fun deleteTrip(id: Long): Response{
+        return super.delete(endPoint, id)
     }
 
     fun getTripById(id: Long): Trip? {

@@ -64,7 +64,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 
-class MainActivity : ComponentActivity() {
+class MainActivity: ComponentActivity() {
     private var totalDistance: Float = 0.0f
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationRequest: com.google.android.gms.location.LocationRequest
@@ -73,6 +73,7 @@ class MainActivity : ComponentActivity() {
     private var isGPSEnabled: Boolean? = false
     lateinit var bottomNav: BottomNavigationView
     private val appCompatActivity = AppCompatActivity()
+    //ComponentActivity()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -115,8 +116,6 @@ class MainActivity : ComponentActivity() {
                     ShowMap()
                     ShowBluetoothDevicesButton()
 
-                    //Button Navigation bar von home, trip, rank and profile
-
                 }
             }
         }
@@ -140,7 +139,7 @@ class MainActivity : ComponentActivity() {
                     text = "Home",
                     imageRedId = R.drawable.ic_home,
                     onClick = {
-                        loadFragment(HomeFragment())
+                        HomeFragment.newInstance()
                     }
                 )
                 NavigationButton(
@@ -171,7 +170,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun NavigationButton(text: String, imageRedId: Int ,onClick: () -> Unit) {
             Button(
-                onClick = { Log.d("Construction", "Under Construction") },
+                onClick = onClick,
                 modifier = Modifier
                     .padding(0.dp, 680.dp, 0.dp, 0.dp)
                     .background(Color.LightGray),

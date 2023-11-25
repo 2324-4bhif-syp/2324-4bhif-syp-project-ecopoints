@@ -1,13 +1,21 @@
 package at.htl.ecopoints.model
 
+import com.google.gson.annotations.SerializedName
 import java.util.Date
 
 data class Trip(
     val id: Long,
     val distance: Double,
+
+    @SerializedName("avg_speed")
     val avgSpeed: Double,
+
+    @SerializedName("avg_engine_rotation")
     val avgEngineRotation: Double,
+
     val date: Date,
+
+    @SerializedName("rewarded_eco_points")
     val rewardedEcoPoints: Double,
     //val user: User
 ) {

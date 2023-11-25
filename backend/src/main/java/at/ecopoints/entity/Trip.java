@@ -1,5 +1,6 @@
 package at.ecopoints.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -23,9 +24,15 @@ public class Trip {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private double distance;
+
+    @JsonProperty("avg_speed")
     private double avgSpeed;
+
+    @JsonProperty("avg_engine_rotation")
     private double avgEngineRotation;
     private Date date;
+
+    @JsonProperty("rewarded_eco_points")
     private double rewardedEcoPoints;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH, CascadeType.REMOVE})
@@ -101,4 +108,11 @@ public class Trip {
         this.user = user;
     }
     // endregion
+
+
+    @Override
+    public String toString() {
+        return String.format("Trip: %s, %s, %s, %s, %s, %s",
+                id, distance, avgSpeed, avgEngineRotation, date, rewardedEcoPoints);
+    }
 }

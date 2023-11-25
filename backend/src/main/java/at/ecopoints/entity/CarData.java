@@ -141,4 +141,14 @@ public class CarData {
         this.trip = trip;
     }
     //endregion
+
+
+    @Override
+    public String toString() {
+        return String.format("CarData{tripId=%s, longitude=%s, latitude=%s," +
+                " currentEngineRPM=%s, currentVelocity=%s, throttlePosition=%s, engineRunTime=%s, " +
+                        "timeStamp=%s, trip=%s}",
+                tripId, longitude, latitude, currentEngineRPM, currentVelocity,
+                throttlePosition, engineRunTime, timeStamp, trip);
+    }
 }

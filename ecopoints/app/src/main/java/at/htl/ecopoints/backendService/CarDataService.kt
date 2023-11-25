@@ -16,4 +16,12 @@ class CarDataService : Service() {
     fun deleteCarData(id: Long) {
         super.delete(endPoint, id)
     }
+
+    fun getCarDataById(id: Long): CarData? {
+        return super.getById<CarData>(endPoint, id)
+    }
+
+    fun getAllCarData(): List<CarData>? {
+        return super.getAll<CarData>(endPoint)
+    }
 }

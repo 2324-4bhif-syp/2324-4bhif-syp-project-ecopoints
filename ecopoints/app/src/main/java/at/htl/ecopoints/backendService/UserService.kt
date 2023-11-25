@@ -16,4 +16,12 @@ class UserService: Service() {
     fun deleteUser(id: Long) {
         super.delete(endPoint, id)
     }
+
+    fun getUserById(id: Long): User? {
+        return super.getById<User>(endPoint, id)
+    }
+
+    fun getAllUsers(): List<User>? {
+        return super.getAll<User>(endPoint)
+    }
 }

@@ -10,4 +10,16 @@ data class Trip(
     val data: Date,
     val rewardedEcoPoints: Double,
     val user: User
-)
+) {
+    override fun toString(): String {
+        return String.format(
+            "Trip[id=%d, distance=%f, avgSpeed=%f, avgEngineRotation=%f, data=%s, rewardedEcoPoints=%f, user=%s]",
+            id,
+            distance,
+            avgSpeed,
+            avgEngineRotation,
+            data,
+            rewardedEcoPoints,
+            user)
+    }
+}

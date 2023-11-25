@@ -1,8 +1,7 @@
 package at.htl.ecopoints.backendService
 
-import android.app.DownloadManager
+import at.htl.ecopoints.model.Trip
 import com.google.gson.Gson
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -44,21 +43,49 @@ abstract class Service {
         return OkHttpClient().newCall(request).execute()
     }
 
-    fun getAll(endPoint: String): Response{
+    inline fun <reified T> getAll(endPoint: String): List<T>? {
         val request = Request.Builder()
-            .url("$path$endPoint")
+            .url("$`access$path`$endPoint")
             .get()
             .build()
 
-        return OkHttpClient().newCall(request).execute()
+        return try {
+            val response: Response = OkHttpClient().newCall(request).execute()
+            if (response.isSuccessful) {
+                val json = response.body?.string()
+                Gson().fromJson(json, Array<T>::class.java).toList()
+            } else {
+                println("Unsuccessful Response: ${response.message}")
+                null
+            }
+        } catch (e: Exception) {
+            println("Error: ${e.message}")
+            null
+        }
     }
 
-    fun getById(endPoint: String, id: Long): Response{
+    inline fun <reified T> getById(endPoint: String, id: Long): T? {
         val request = Request.Builder()
-            .url("$path$endPoint/$id")
+            .url("$`access$path`$endPoint/$id")
             .get()
             .build()
 
-        return OkHttpClient().newCall(request).execute()
+        return try {
+            val response: Response = OkHttpClient().newCall(request).execute()
+            if (response.isSuccessful) {
+                val json = response.body?.string()
+                Gson().fromJson(json, T::class.java)
+            } else {
+                println("Unsuccessful Response: ${response.message}")
+                null
+            }
+        } catch (e: Exception) {
+            println("Error: ${e.message}")
+            null
+        }
     }
+
+    @PublishedApi
+    internal val `access$path`: String
+        get() = path
 }

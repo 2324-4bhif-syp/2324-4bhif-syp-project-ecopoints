@@ -14,4 +14,20 @@ data class CarData(
     val engineRunTime: String,
     val timeStamp: Timestamp,
     val trip: Trip
-)
+) {
+    override fun toString(): String {
+        return String.format(
+            "CarData[id=%d, tripId=%s, longitude=%f, latitude=%f, currentEngineRPM=%f, currentVelocity=%f, " +
+                    "throttlePosition=%f, engineRunTime=%s, timeStamp=%s, trip=%s]",
+            id,
+            tripId,
+            longitude,
+            latitude,
+            currentEngineRPM,
+            currentVelocity,
+            throttlePosition,
+            engineRunTime,
+            timeStamp,
+            trip)
+    }
+}

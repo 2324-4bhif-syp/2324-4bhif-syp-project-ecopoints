@@ -43,7 +43,6 @@ class MapActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
         setContent {
             val htlLeonding = LatLng(48.270270270, 14.2656899796)
             val cameraPositionState = rememberCameraPositionState {

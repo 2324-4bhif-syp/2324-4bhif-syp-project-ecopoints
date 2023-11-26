@@ -10,7 +10,8 @@ import okhttp3.Response
 
 
 abstract class Service {
-    private final val path: String = "http://132.145.237.245/api/"
+    //private final val path: String = "http://132.145.237.245/api/"
+    private final val path: String = "http://0.0.0.0:8080/api/"
 
     fun create(obj: Any, endPoint: String): Response{
         val json = Gson().toJson(obj)

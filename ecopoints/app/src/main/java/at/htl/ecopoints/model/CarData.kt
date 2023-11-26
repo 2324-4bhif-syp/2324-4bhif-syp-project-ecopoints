@@ -5,7 +5,7 @@ import java.sql.Timestamp
 import java.util.UUID
 
 data class CarData(
-    val id: Long,
+    val id: Long?,
 
     @SerializedName("trip_id")
     val tripId: UUID,

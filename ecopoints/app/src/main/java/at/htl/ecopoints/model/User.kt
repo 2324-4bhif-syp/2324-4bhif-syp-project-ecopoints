@@ -3,7 +3,7 @@ package at.htl.ecopoints.model
 import com.google.gson.annotations.SerializedName
 
 data class User(
-    val id: Long,
+    val id: Long?,
 
     @SerializedName("user_name")
     val userName: String,

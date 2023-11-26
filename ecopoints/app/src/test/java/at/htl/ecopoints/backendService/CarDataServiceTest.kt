@@ -6,17 +6,18 @@ import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
 import java.util.UUID
 import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.BeforeAll
+import org.junit.Before
 import java.sql.Timestamp
 import java.util.Date
+import org.junit.Test
+
 
 class CarDataServiceTest {
     private lateinit var carDataService: CarDataService
 
-    @BeforeAll
+    @Before
     fun setup() {
         carDataService = CarDataService()
     }
@@ -83,7 +84,7 @@ class CarDataServiceTest {
 
     private fun createSampleCarData(): CarData {
         return CarData(
-            id = 1,
+            id = null,
             tripId = UUID.randomUUID(),
             longitude = 10.0,
             latitude = 20.0,
@@ -93,12 +94,12 @@ class CarDataServiceTest {
             engineRunTime = "10:00",
             timeStamp = Timestamp(System.currentTimeMillis()),
             trip = Trip(
-                id = 1,
+                id = null,
                 distance = 100.0,
                 avgSpeed = 44.0,
                 avgEngineRotation = 3000.0,
                 rewardedEcoPoints = 10.0,
-                date = Date("2023-11-25")
+                date = Date()
             )
         )
     }

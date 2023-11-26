@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 import java.util.Date
 
 data class Trip(
-    val id: Long,
+    val id: Long?,
     val distance: Double,
 
     @SerializedName("avg_speed")

@@ -12,11 +12,11 @@ import java.util.Date;
                 @NamedQuery(
                         name = "Trip.findAll",
                         query = "select t from Trip t"
-                ),
+                )/*,
                 @NamedQuery(
                         name = "Trip.findByUserId",
                         query = "select t from Trip t where t.user.id = :userId"
-                )
+                )*/
         }
 )
 public class Trip {
@@ -35,19 +35,21 @@ public class Trip {
     @JsonProperty("rewarded_eco_points")
     private double rewardedEcoPoints;
 
+    /*
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH, CascadeType.REMOVE})
     private User user;
+    */
 
     // region Constructors
     public Trip() {}
 
-    public Trip(double distance, double avgSpeed, double avgEngineRotation, Date date, double rewardedEcoPoints, User user) {
+    public Trip(double distance, double avgSpeed, double avgEngineRotation, Date date, double rewardedEcoPoints/*, User user*/) {
         this.distance = distance;
         this.avgSpeed = avgSpeed;
         this.avgEngineRotation = avgEngineRotation;
         this.date = date;
         this.rewardedEcoPoints = rewardedEcoPoints;
-        this.user = user;
+        //this.user = user;
     }
     // endregion
     
@@ -100,6 +102,7 @@ public class Trip {
         this.rewardedEcoPoints = rewardedEcoPoints;
     }
 
+    /*
     public User getUser() {
         return user;
     }
@@ -107,6 +110,7 @@ public class Trip {
     public void setUser(User user) {
         this.user = user;
     }
+    */
     // endregion
 
 

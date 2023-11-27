@@ -11,7 +11,6 @@ import android.hardware.SensorManager
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
@@ -54,7 +53,6 @@ import kotlinx.coroutines.delay
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.util.Locale
-import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -63,6 +61,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import at.htl.ecopoints.navigations.HomeActivity
+import at.htl.ecopoints.navigations.ProfileActivity
+import at.htl.ecopoints.navigations.RankingActivity
+import at.htl.ecopoints.navigations.TripActivity
 
 class MainActivity: ComponentActivity() {
     private var totalDistance: Float = 0.0f
@@ -71,10 +73,6 @@ class MainActivity: ComponentActivity() {
     private var locationService: LocationService = LocationService()
     private var locationManager: LocationManager? = null
     private var isGPSEnabled: Boolean? = false
-    lateinit var bottomNav: BottomNavigationView
-    private val appCompatActivity = AppCompatActivity()
-    //ComponentActivity()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -139,28 +137,28 @@ class MainActivity: ComponentActivity() {
                     text = "Home",
                     imageRedId = R.drawable.ic_home,
                     onClick = {
-                        HomeFragment.newInstance()
+                        startActivity(Intent(this@MainActivity, HomeActivity::class.java))
                     }
                 )
                 NavigationButton(
                     text = "Trip",
                     imageRedId = R.drawable.ic_trip,
                     onClick = {
-                        loadFragment(TripFragment())
+                        startActivity(Intent(this@MainActivity, TripActivity::class.java))
                     }
                 )
                 NavigationButton(
                     text = "Ranking",
                     imageRedId = R.drawable.ic_ranking,
                     onClick = {
-                        loadFragment(RankingFragment())
+                        startActivity(Intent(this@MainActivity, RankingActivity::class.java))
                     }
                 )
                 NavigationButton(
                     text = "Profile",
                     imageRedId = R.drawable.ic_profile,
                     onClick = {
-                        loadFragment(ProfileFragment())
+                        startActivity(Intent(this@MainActivity, ProfileActivity::class.java))
                     }
                 )
             }
@@ -190,13 +188,6 @@ class MainActivity: ComponentActivity() {
                 }
             }
     }
-
-    private fun loadFragment(fragment: Fragment) {
-        val transaction = appCompatActivity.supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.container, fragment)
-        transaction.commit()
-    }
-
 
     fun onLocationChanged(location: Location) {
         totalDistance += locationService.getDistance(location)

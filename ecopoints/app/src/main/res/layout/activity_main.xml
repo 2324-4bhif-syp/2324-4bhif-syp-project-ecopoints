@@ -8,6 +8,13 @@
     android:background="#ffffff"
     tools:context=".MainActivity">
 
+    <Button
+        android:id="@+id/homeSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Zur zweiten Aktivität wechseln"/>
+
+
     <FrameLayout
         android:id="@+id/container"
         android:layout_width="match_parent"

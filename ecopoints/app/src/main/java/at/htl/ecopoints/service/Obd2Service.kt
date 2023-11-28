@@ -3,7 +3,7 @@ package at.htl.ecopoints.service
 import android.bluetooth.BluetoothSocket
 import android.util.Log
 import at.htl.ecopoints.OBDBluetoothInterface
-import at.htl.ecopoints.OBDCommandHelper
+import at.htl.ecopoints.command.OBDCommandHelper
 import com.github.eltonvs.obd.command.engine.LoadCommand
 import com.github.eltonvs.obd.connection.ObdDeviceConnection
 import com.github.eltonvs.obd.command.engine.RPMCommand
@@ -155,7 +155,9 @@ class Obd2Service(bluetoothDeviceAddress: String) {
     }
 
     suspend fun getRPM(): String {
-        connect()
+        if(obdBluetoothInterface == null) {
+            connect()
+        }
         val obdCommandHelper = OBDCommandHelper(obdBluetoothInterface!!)
         val rpm = obdCommandHelper.getEngineRPM()
         Log.d(TAG, "RPM: $rpm")
@@ -163,7 +165,9 @@ class Obd2Service(bluetoothDeviceAddress: String) {
     }
 
     suspend fun getSpeed(): String {
-        connect()
+        if(obdBluetoothInterface == null) {
+            connect()
+        }
         val obdCommandHelper = OBDCommandHelper(obdBluetoothInterface!!)
         val speed = obdCommandHelper.getVehicleSpeed()
         Log.d(TAG, "Speed: $speed")
@@ -171,7 +175,9 @@ class Obd2Service(bluetoothDeviceAddress: String) {
     }
 
     suspend fun getCoolantTemp(): String {
-        connect()
+        if(obdBluetoothInterface == null) {
+            connect()
+        }
         val obdCommandHelper = OBDCommandHelper(obdBluetoothInterface!!)
         val coolantTemp = obdCommandHelper.getCoolantTemperature()
         Log.d(TAG, "Coolant-temp: $coolantTemp")

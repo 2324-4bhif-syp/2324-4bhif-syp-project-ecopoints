@@ -6,6 +6,7 @@ object ObdResponseRegexPatterns {
     val WHITESPACE_PATTERN: Pattern = Pattern.compile("\\s")
     val BUS_INIT_PATTERN: Pattern = Pattern.compile("(BUS INIT)|(BUSINIT)|(\\.)")
     val SEARCHING_PATTERN: Pattern = Pattern.compile("SEARCHING")
+    val OK_PATTERN: Pattern = Pattern.compile("OK")
     val CARRIAGE_PATTERN: Pattern = Pattern.compile("[\r\n]")
     val CARRIAGE_COLON_PATTERN: Pattern = Pattern.compile("[\r\n].:")
     val COLON_PATTERN: Pattern = Pattern.compile(":")

@@ -1,4 +1,6 @@
-package at.htl.ecopoints
+package at.htl.ecopoints.command
+
+import at.htl.ecopoints.OBDBluetoothInterface
 
 class OBDCommandHelper(private val obdBluetoothInterface: OBDBluetoothInterface) {
 
@@ -91,6 +93,7 @@ class OBDCommandHelper(private val obdBluetoothInterface: OBDBluetoothInterface)
             .replace("SEARCHING...", "")
             .replace("SEARCHING:", "")
             .replace(command, "")
+            .replace(command.trim(), "")
             .replace(">", "")
     }
 }

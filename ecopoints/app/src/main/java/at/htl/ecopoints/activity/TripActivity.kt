@@ -56,13 +56,11 @@ class TripActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
         setContent {
             var showDialog: Boolean by remember { mutableStateOf(false) }
             var deviceNameText by remember { mutableStateOf("Not Selected") }
             var isConnecting by remember { mutableStateOf(false) }
             var connection by remember { mutableStateOf(false) }
-
 
             EcoPointsTheme {
                 Surface(
@@ -92,7 +90,7 @@ class TripActivity : ComponentActivity() {
                         verticalArrangement = Arrangement.Bottom,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                    TestReadCustomComm()
+                        TestReadCustomComm()
                         Spacer(modifier = Modifier.height(16.dp)) // Space between text and buttons
 
                         StartStopButton()
@@ -159,18 +157,18 @@ class TripActivity : ComponentActivity() {
 
                         var rpm1 = service.getRPM()
 //                    delay(500)
-                        //var speed2 = service.getSpeed()
-//                    var coolantTemp3 = service.getCoolantTemp()
+                        var speed2 = service.getSpeed()
+                        var coolantTemp3 = service.getCoolantTemp()
 
                         if (rpm1 != "0") {
                             rpm = rpm1
                         }
-//                    if (speed2 != "0") {
-//                        speed = speed2
-//                    }
-//                    if (coolantTemp3 != "0") {
-//                        coolantTemp = coolantTemp3
-//                    }
+                        if (speed2 != "0") {
+                            speed = speed2
+                        }
+                        if (coolantTemp3 != "0") {
+                            coolantTemp = coolantTemp3
+                        }
                         delay(500)
                     }
                     buttonClicked = false

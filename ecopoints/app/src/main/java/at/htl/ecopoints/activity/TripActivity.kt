@@ -247,11 +247,14 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                 if (buttonClicked) {
                     service.initOBD()
                     for (i in 0..1000) {
-
-                        var rpm1 = service.getRPM()
+                        //service.initOBD()
+                        //delay(200)
+                        var rpm1 = ""//service.getRPM()
 //                    delay(500)
-                        var speed2 = service.getSpeed()
-                        var coolantTemp3 = service.getCoolantTemp()
+                        var speed2 = ""//service.getSpeed()
+ delay(500)
+//                        Thread.sleep(500)
+                        var coolantTemp3 = ""//service.getCoolantTemp()
 
                         if (rpm1 != "0") {
                             rpm = rpm1
@@ -262,7 +265,6 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                         if (coolantTemp3 != "0") {
                             coolantTemp = coolantTemp3
                         }
-                        delay(500)
                     }
                     buttonClicked = false
                 }

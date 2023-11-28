@@ -1,5 +1,6 @@
 package at.htl.ecopoints
 
+import android.annotation.SuppressLint
 import android.bluetooth.BluetoothSocket
 import android.util.Log
 import at.htl.ecopoints.command.ObdCommand
@@ -24,6 +25,7 @@ class OBDBluetoothInterface(private val bluetoothSocket: BluetoothSocket) {
     private val outputStream: OutputStream = bluetoothSocket.outputStream
     private val responseCache = mutableMapOf<ObdCommand, ObdRawResponse>()
 
+    @SuppressLint("MissingPermission")
     fun sendCommand(command: String): String {
         try {
             outputStream.write(command.toByteArray(Charset.defaultCharset()))
@@ -37,6 +39,7 @@ class OBDBluetoothInterface(private val bluetoothSocket: BluetoothSocket) {
             return response
         } catch (e: IOException) {
             Log.e(TAG, "Error sending/receiving OBD command: ${e.message}")
+            bluetoothSocket.connect()
             return ""
         }
     }

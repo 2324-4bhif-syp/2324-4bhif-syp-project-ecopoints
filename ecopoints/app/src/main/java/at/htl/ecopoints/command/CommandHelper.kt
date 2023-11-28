@@ -51,7 +51,7 @@ class OBDCommandHelper(private val obdBluetoothInterface: OBDBluetoothInterface)
             val array = cleanData.split(" ")
 
             if (array.size >= 4) {
-                val hex = array[3]
+                val hex = array[2]
 
                 val temp = hex.toInt(16) - 40
 
@@ -76,7 +76,6 @@ class OBDCommandHelper(private val obdBluetoothInterface: OBDBluetoothInterface)
                 val hex = array[2]
 
                 val speed = hex.toInt(16)
-
                 return speed.toString()
             }
         } catch (_: Exception) {

@@ -1,7 +1,10 @@
 package at.htl.ecopoints.activity
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothDevice
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -38,6 +41,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.android.animation.SegmentType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.ActivityCompat
+import at.htl.ecopoints.MainActivity
 import at.htl.ecopoints.service.BluetoothDeviceListService
 import at.htl.ecopoints.service.BluetoothService
 import at.htl.ecopoints.service.Obd2Service
@@ -51,12 +56,11 @@ class TripActivity : ComponentActivity() {
     private var selectedDevice: BluetoothDevice? = null
     private val bluetoothDeviceService = BluetoothDeviceListService()
     private val bluetoothService: BluetoothService = BluetoothService()
-
-    @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
+
             var showDialog: Boolean by remember { mutableStateOf(false) }
             var deviceNameText by remember { mutableStateOf("Not Selected") }
             var isConnecting by remember { mutableStateOf(false) }
@@ -118,20 +122,40 @@ class TripActivity : ComponentActivity() {
                             }
                         }
 
-                        BluetoothDeviceSelectionDialog(
-                            pairedDevices = bluetoothDeviceService.getAllDevices(),
-                            showDialog = showDialog,
-                            onDismiss = { showDialog = false },
-                            onDeviceSelected = { device ->
-                                selectedDevice = device
-                                showDialog = false
-                                deviceNameText = device.name
-                            }
-                        )
+                        if (ActivityCompat.checkSelfPermission(
+                                this@TripActivity,
+                                Manifest.permission.BLUETOOTH_CONNECT
+                            ) != PackageManager.PERMISSION_GRANTED
+                        ) {
+                            ActivityCompat.requestPermissions(
+                                this@TripActivity,
+                                arrayOf(Manifest.permission.BLUETOOTH_CONNECT),
+                                1
+                            )
+                        } else {
+                            BluetoothDeviceSelectionDialog(
+                                pairedDevices = bluetoothDeviceService.getAllDevices(),
+                                showDialog = showDialog,
+                                onDismiss = { showDialog = false },
+                                onDeviceSelected = { device ->
+                                    selectedDevice = device
+                                    showDialog = false
+                                    deviceNameText = device.name
+                                }
+                            )
+                        }
                     }
                 }
             }
         }
+    }
+
+    private fun onStartBtnClick() {
+
+    }
+
+    private fun onStopBtnClick() {
+
     }
 
     @Composable
@@ -179,14 +203,6 @@ class TripActivity : ComponentActivity() {
             Text(text = "Current-Rpm $rpm")
             Text(text = "Coolant-Temp $coolantTemp")
         }
-    }
-
-    private fun onStartBtnClick() {
-
-    }
-
-    private fun onStopBtnClick() {
-
     }
 
     @Composable

@@ -105,7 +105,6 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     SensorReading()
-                    LocationTest()
                     PrintTravelledDistance(total.value)
                     ShowMap()
                     ShowBluetoothDevicesButton()
@@ -215,50 +214,6 @@ class MainActivity : ComponentActivity() {
             text = "Accelerometer-Sensor Value:",
             style = TextStyle(fontSize = 20.sp)
         )
-    }
-    @Composable
-    fun LocationTest() {
-
-        val context = LocalContext.current
-        val permission =
-            ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
-        val permission2 =
-            ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)
-
-        if (permission != PackageManager.PERMISSION_GRANTED || permission2 != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(
-                context as MainActivity,
-                arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                ),
-                1
-            )
-        }
-        locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        isGPSEnabled = locationManager?.isProviderEnabled(LocationManager.GPS_PROVIDER)
-        val location = locationManager?.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-        Text(
-            text = "Location: Long: ${location?.longitude} Lat: ${location?.latitude}",
-            style = TextStyle(fontSize = 20.sp),
-            modifier = Modifier.padding(0.dp, 230.dp, 50.dp, 0.dp)
-        )
-
-
-//        Text(
-//            text = "GPS: $isGPSEnabled",
-//            style = TextStyle(fontSize = 20.sp),
-//            modifier = Modifier.padding(0.dp, 260.dp, 0.dp, 0.dp)
-//        )
-
-
-//    var location : Location = locationManager!!.getLastKnownLocation(LocationManager.GPS_PROVIDER) as Location
-//
-//    speed = location.getSpeed();
-//    currentSpeed = round(speed as Double);
-//    kmhSpeed = currentSpeed*3.6
-//
-//    Text(text = "Speed: $kmhSpeed kmh" , style = TextStyle(fontSize = 20.sp), modifier = Modifier.padding(0.dp, 250.dp, 0.dp, 0.dp))
     }
 
     @Composable

@@ -2,6 +2,7 @@ package at.htl.ecopoints.backendService
 
 import at.htl.ecopoints.model.Trip
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -14,7 +15,9 @@ abstract class Service {
     private final val path: String = "http://0.0.0.0:8080/api/"
 
     fun create(obj: Any, endPoint: String): Response{
-        val json = Gson().toJson(obj)
+        val gsonBuilder = GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
+        val gson = gsonBuilder.create()
+        val json = gson.toJson(obj)
 
         val request = Request.Builder()
             .url("$path$endPoint")

@@ -32,7 +32,6 @@ public class CarDataRepository {
     public void update(CarData carData){
         CarData cd = findById(carData.getId());
 
-        cd.setTripId(carData.getTripId());
         cd.setLatitude(carData.getLatitude());
         cd.setLongitude(carData.getLongitude());
         cd.setCurrentVelocity(carData.getCurrentVelocity());
@@ -40,6 +39,7 @@ public class CarDataRepository {
         cd.setEngineRunTime(carData.getEngineRunTime());
         cd.setTimeStamp(carData.getTimeStamp());
         cd.setThrottlePosition(carData.getThrottlePosition());
+        cd.setTrip(carData.getTrip());
 
         em.merge(cd);
     }

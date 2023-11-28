@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Entity
 @Table(name = "ECO_TRIP")
@@ -21,8 +22,8 @@ import java.util.Date;
 )
 public class Trip {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Id
+    private UUID id;
     private double distance;
 
     @JsonProperty("avg_speed")
@@ -43,7 +44,8 @@ public class Trip {
     // region Constructors
     public Trip() {}
 
-    public Trip(double distance, double avgSpeed, double avgEngineRotation, Date date, double rewardedEcoPoints/*, User user*/) {
+    public Trip(UUID id, double distance, double avgSpeed, double avgEngineRotation, Date date, double rewardedEcoPoints/*, User user*/) {
+        this.id = id;
         this.distance = distance;
         this.avgSpeed = avgSpeed;
         this.avgEngineRotation = avgEngineRotation;
@@ -54,11 +56,11 @@ public class Trip {
     // endregion
     
     // region Getter and Setter
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

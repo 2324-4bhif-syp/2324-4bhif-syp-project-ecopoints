@@ -7,6 +7,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @ApplicationScoped
 public class TripRepository {
@@ -16,11 +17,11 @@ public class TripRepository {
     public void save(Trip trip){
         em.persist(trip);
     }
-    public Trip findById(Long id){
+    public Trip findById(UUID id){
         return em.find(Trip.class, id);
     }
 
-    public void delete(Long id){
+    public void delete(UUID id){
         em.remove(findById(id));
     }
     public List<Trip> getAll(){

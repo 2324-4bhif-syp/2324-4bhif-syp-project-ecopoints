@@ -125,7 +125,7 @@ class CarDataResourceTest {
                 .getList(".", CarData.class);
 
 
-        assertThat(carDataList.get(0).getTripId().toString()).isEqualTo("5d59e169-94a4-4bf7-8a8e-6a52a1d85f0f");
+        assertThat(carDataList.get(0).getTrip().getId().toString()).isEqualTo("5d59e169-94a4-4bf7-8a8e-6a52a1d85f0f");
         assertThat(carDataList.get(0).getLongitude()).isEqualTo(45.123455);
         assertThat(carDataList.get(0).getLatitude()).isEqualTo(34.567890);
         assertThat(carDataList.get(0).getCurrentEngineRPM()).isEqualTo(3000.0);

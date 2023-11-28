@@ -92,15 +92,7 @@ class CarDataServiceTest {
             currentVelocity = 60.0,
             throttlePosition = 50.0,
             engineRunTime = "10:00",
-            timeStamp = Timestamp(System.currentTimeMillis()),
-            trip = Trip(
-                id = null,
-                distance = 100.0,
-                avgSpeed = 44.0,
-                avgEngineRotation = 3000.0,
-                rewardedEcoPoints = 10.0,
-                date = Date()
-            )
+            timeStamp = Timestamp(System.currentTimeMillis())
         )
     }
 }

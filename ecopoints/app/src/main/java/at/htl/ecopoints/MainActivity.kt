@@ -170,7 +170,7 @@ class MainActivity: ComponentActivity() {
             Button(
                 onClick = onClick,
                 modifier = Modifier
-                    .padding(0.dp, 680.dp, 0.dp, 0.dp)
+                    .padding(0.dp, 650.dp, 0.dp, 0.dp)
                     .background(Color.LightGray),
                 colors = ButtonDefaults.textButtonColors(contentColor = Color.Black),
 

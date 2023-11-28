@@ -2,6 +2,7 @@ package at.htl.ecopoints.activity
 
 import kotlin.math.*
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -29,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import at.htl.ecopoints.interfaces.OnLocationChangedListener
 import at.htl.ecopoints.service.TestLocationService
@@ -45,7 +47,6 @@ import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
 
 class MapActivity : ComponentActivity(), OnLocationChangedListener {
-
     private val testLocationService: TestLocationService by lazy {
         TestLocationService(this)
     }
@@ -56,51 +57,58 @@ class MapActivity : ComponentActivity(), OnLocationChangedListener {
     private val latLngList =
         mutableStateListOf<Pair<Color, Pair<LatLng, Double>>>()
 
-    @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         testLocationService.setOnLocationChangedListener(this)
 
         setContent {
-            val currentLocation = LatLng(latitude, longitude)
-            val cameraPositionState = rememberCameraPositionState {
-                position = CameraPosition.fromLatLngZoom(currentLocation, 10f)
-            }
-            var mapProperties by remember {
-                mutableStateOf(MapProperties(mapType = MapType.NORMAL, isMyLocationEnabled = true))
-            }
-            EcoPointsTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Scaffold(topBar = {
-                        TopAppBar(backgroundColor = Color.White, title = {
-                            Column(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalAlignment = Alignment.End
-                            ) {
-                                MapTypeControls(onMapTypeClick = {
-                                    Log.d("GoogleMap", "Selected map type $it")
-                                    mapProperties = mapProperties.copy(mapType = it)
-                                })
-                            }
-                        })
-                    }) {
-                        GoogleMap(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(300.dp),
-                            cameraPositionState = cameraPositionState,
-                            properties = mapProperties
+            EcoPointsTheme()
+        }
+    }
+
+    @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
+    @Composable
+    fun EcoPointsTheme() {
+        val currentLocation = LatLng(latitude, longitude)
+        val cameraPositionState = rememberCameraPositionState {
+            position = CameraPosition.fromLatLngZoom(currentLocation, 10f)
+        }
+        var mapProperties by remember {
+            mutableStateOf(MapProperties(mapType = MapType.NORMAL, isMyLocationEnabled = true))
+        }
+        val activity = LocalContext.current as Activity
+        EcoPointsTheme {
+            activity.requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            Surface(
+                modifier = Modifier.fillMaxSize(),
+                color = MaterialTheme.colorScheme.background
+            ) {
+                Scaffold(topBar = {
+                    TopAppBar(backgroundColor = Color.White, title = {
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalAlignment = Alignment.End
                         ) {
-                            DrawPolyline()
-                            cameraPositionState.position = CameraPosition.fromLatLngZoom(
-                                LatLng(latitude, longitude),
-                                10f
-                            )
+                            MapTypeControls(onMapTypeClick = {
+                                Log.d("GoogleMap", "Selected map type $it")
+                                mapProperties = mapProperties.copy(mapType = it)
+                            })
                         }
+                    })
+                }) {
+                    GoogleMap(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(300.dp),
+                        cameraPositionState = cameraPositionState,
+                        properties = mapProperties
+                    ) {
+                        DrawPolyline()
+                        cameraPositionState.position = CameraPosition.fromLatLngZoom(
+                            LatLng(latitude, longitude),
+                            10f
+                        )
                     }
                 }
             }

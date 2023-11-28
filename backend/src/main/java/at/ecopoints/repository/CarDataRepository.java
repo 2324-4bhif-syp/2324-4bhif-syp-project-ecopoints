@@ -1,6 +1,8 @@
 package at.ecopoints.repository;
 
 import at.ecopoints.entity.CarData;
+import at.ecopoints.entity.DTO.CarDataEntry;
+import at.ecopoints.entity.Trip;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
@@ -13,8 +15,30 @@ public class CarDataRepository {
     @Inject
     EntityManager em;
 
-    public void save(CarData carData) {
+    @Inject
+    TripRepository tripRepository;
+
+    public void save(CarDataEntry carDataEntry) {
+
+        CarData carData = createCarData(carDataEntry);
+
         em.persist(carData);
+    }
+
+    private CarData createCarData(CarDataEntry carDataEntry) {
+        Trip trip = tripRepository
+                .findById(carDataEntry.tripId());
+
+        return new CarData(
+                carDataEntry.longitude(),
+                carDataEntry.latitude(),
+                carDataEntry.currentEngineRPM(),
+                carDataEntry.currentVelocity(),
+                carDataEntry.throttlePosition(),
+                carDataEntry.engineRunTime(),
+                carDataEntry.timeStamp(),
+                trip
+        );
     }
 
     public CarData findById(Long id) {
@@ -29,18 +53,10 @@ public class CarDataRepository {
         return em.createQuery("select c from CarData c", CarData.class).getResultList();
     }
 
-    public void update(CarData carData){
-        CarData cd = findById(carData.getId());
+    public void update(CarDataEntry carDataEntry, Long id){
+        CarData carData = createCarData(carDataEntry);
+        carData.setId(id);
 
-        cd.setLatitude(carData.getLatitude());
-        cd.setLongitude(carData.getLongitude());
-        cd.setCurrentVelocity(carData.getCurrentVelocity());
-        cd.setCurrentEngineRPM(carData.getCurrentEngineRPM());
-        cd.setEngineRunTime(carData.getEngineRunTime());
-        cd.setTimeStamp(carData.getTimeStamp());
-        cd.setThrottlePosition(carData.getThrottlePosition());
-        cd.setTrip(carData.getTrip());
-
-        em.merge(cd);
+        em.merge(carData);
     }
 }

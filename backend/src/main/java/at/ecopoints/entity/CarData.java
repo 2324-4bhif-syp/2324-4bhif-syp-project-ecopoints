@@ -1,6 +1,9 @@
 package at.ecopoints.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import jakarta.persistence.*;
 
@@ -46,7 +49,6 @@ public class CarData {
             CascadeType.DETACH,
             CascadeType.REMOVE
     })
-    @JsonProperty("trip_id")
     private Trip trip;
 
     //region Constructors

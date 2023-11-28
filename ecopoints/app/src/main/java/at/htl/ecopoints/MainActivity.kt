@@ -42,7 +42,6 @@ import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import at.htl.ecopoints.activity.BluetoothDeviceListActivity
-import at.htl.ecopoints.activity.MapActivity
 import at.htl.ecopoints.activity.TripActivity
 import at.htl.ecopoints.service.AccelerometerSensorService
 import at.htl.ecopoints.service.LocationService
@@ -106,7 +105,6 @@ class MainActivity : ComponentActivity() {
                 ) {
                     SensorReading()
                     PrintTravelledDistance(total.value)
-                    ShowMap()
                     ShowBluetoothDevicesButton()
                     ShowTrip()
                 }
@@ -331,26 +329,6 @@ class MainActivity : ComponentActivity() {
                     .padding(16.dp)
             ) {
                 Text(text = "Show Paired Bluetooth Devices")
-            }
-        }
-    }
-
-
-
-    @Composable
-    fun ShowMap() {
-        Box(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            Button(
-                onClick = {
-                    startActivity(Intent(this@MainActivity, MapActivity::class.java))
-                },
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .padding(16.dp)
-            ) {
-                Text(text = "Show Map")
             }
         }
     }

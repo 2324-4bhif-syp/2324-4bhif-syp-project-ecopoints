@@ -1,5 +1,7 @@
 package at.htl.ecopoints.command
 
+import com.github.eltonvs.obd.command.bytesToInt
+
 class SpeedCommand : ObdCommand() {
     override val tag = "SPEED"
     override val name = "Vehicle Speed"
@@ -17,7 +19,7 @@ class RPMCommand : ObdCommand() {
     override val pid = "0C"
 
     override val defaultUnit = "RPM"
-    //override val handler = { it: ObdRawResponse -> (bytesToInt(it.bufferedValue) / 4).toString() }
+    override val handler = { it: ObdRawResponse -> (bytesToInt(it.bufferedValue) / 4).toString() }
 }
 
 class MassAirFlowCommand : ObdCommand() {
@@ -27,7 +29,7 @@ class MassAirFlowCommand : ObdCommand() {
     override val pid = "10"
 
     override val defaultUnit = "g/s"
-    //override val handler = { it: ObdRawResponse -> "%.2f".format(bytesToInt(it.bufferedValue) / 100f) }
+    override val handler = { it: ObdRawResponse -> "%.2f".format(bytesToInt(it.bufferedValue) / 100f) }
 }
 
 class RuntimeCommand : ObdCommand() {

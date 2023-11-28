@@ -60,6 +60,8 @@ class Obd2ReadingActivity : ComponentActivity() {
         }
     }
 
+
+
     @Composable
     private fun TestReadEltonLib() {
         Log.d("Obd2ReadingActivity", deviceAddress)
@@ -77,9 +79,9 @@ class Obd2ReadingActivity : ComponentActivity() {
             if (buttonClicked) {
                 for (i in 0..1000) {
                     delay(500)
-                    rpm = service.getApiV2RPM()
-                    speed = service.getApiV2Speed()
-                    load = service.geApiV2Load()
+                    rpm = service.getRPM()
+                    speed = service.getSpeed()
+                    load = service.getCoolantTemp()
                 }
                 buttonClicked = false
             }

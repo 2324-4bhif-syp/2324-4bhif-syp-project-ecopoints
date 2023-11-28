@@ -4,7 +4,6 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.bluetooth.BluetoothDevice
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
@@ -49,7 +48,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
-import at.htl.ecopoints.MainActivity
 import at.htl.ecopoints.service.BluetoothDeviceListService
 import at.htl.ecopoints.service.BluetoothService
 import at.htl.ecopoints.service.Obd2Service
@@ -88,7 +86,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
         mutableStateListOf<Pair<Color, Pair<LatLng, Double>>>()
 
 
-    @SuppressLint("MissingPermission")
+    @SuppressLint("MissingPermission", "UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -97,17 +95,51 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
             var deviceNameText by remember { mutableStateOf("Not Selected") }
             var isConnecting by remember { mutableStateOf(false) }
             var connection by remember { mutableStateOf(false) }
+            val currentLocation = LatLng(latitude, longitude)
+            val cameraPositionState = rememberCameraPositionState {
+                position = CameraPosition.fromLatLngZoom(currentLocation, 10f)
+            }
+            var mapProperties by remember {
+                mutableStateOf(MapProperties(mapType = MapType.NORMAL, isMyLocationEnabled = true))
+            }
+            val activity = LocalContext.current as Activity
 
             testLocationService.setOnLocationChangedListener(this)
 
-            EcoPointsTheme()
-
             EcoPointsTheme {
+                activity.requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
-                )
-                {
+                ){
+                    Scaffold(topBar = {
+                        TopAppBar(title = {
+                            Column(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalAlignment = Alignment.End
+                            ) {
+                                MapTypeControls(onMapTypeClick = {
+                                    Log.d("GoogleMap", "Selected map type $it")
+                                    mapProperties = mapProperties.copy(mapType = it)
+                                })
+                            }
+                        })
+                    }) {
+                        GoogleMap(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(300.dp),
+                            cameraPositionState = cameraPositionState,
+                            properties = mapProperties
+                        ) {
+                            DrawPolyline()
+                            cameraPositionState.position = CameraPosition.fromLatLngZoom(
+                                LatLng(latitude, longitude),
+                                10f
+                            )
+                        }
+                    }
+
                     if (isConnecting) {
 
                         ConnectToDevice(
@@ -392,54 +424,6 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                 }
             }
         )
-    }
-
-    @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
-    @Composable
-    fun EcoPointsTheme() {
-        val currentLocation = LatLng(latitude, longitude)
-        val cameraPositionState = rememberCameraPositionState {
-            position = CameraPosition.fromLatLngZoom(currentLocation, 10f)
-        }
-        var mapProperties by remember {
-            mutableStateOf(MapProperties(mapType = MapType.NORMAL, isMyLocationEnabled = true))
-        }
-        val activity = LocalContext.current as Activity
-        EcoPointsTheme {
-            activity.requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-            Surface(
-                modifier = Modifier.fillMaxSize(),
-                color = MaterialTheme.colorScheme.background
-            ) {
-                Scaffold(topBar = {
-                    TopAppBar(backgroundColor = Color.White, title = {
-                        Column(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalAlignment = Alignment.End
-                        ) {
-                            MapTypeControls(onMapTypeClick = {
-                                Log.d("GoogleMap", "Selected map type $it")
-                                mapProperties = mapProperties.copy(mapType = it)
-                            })
-                        }
-                    })
-                }) {
-                    GoogleMap(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(300.dp),
-                        cameraPositionState = cameraPositionState,
-                        properties = mapProperties
-                    ) {
-                        DrawPolyline()
-                        cameraPositionState.position = CameraPosition.fromLatLngZoom(
-                            LatLng(latitude, longitude),
-                            10f
-                        )
-                    }
-                }
-            }
-        }
     }
 
     @Composable

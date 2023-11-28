@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import at.htl.ecopoints.MainActivity
+import at.htl.ecopoints.activity.PersonActivity
 import at.htl.ecopoints.activity.TripActivity
 
 @Composable
@@ -26,7 +27,7 @@ fun BottomNavBar(
     onScreenSelected: (String) -> Unit,
     context: Context
 ) {
-    val screens = listOf("Home", "Trip")
+    val screens = listOf("Home", "Trip", "Profile")
     BottomNavigation(
         modifier = Modifier
             .padding(bottom = 16.dp)
@@ -37,6 +38,7 @@ fun BottomNavBar(
                     val icon = when (screen) {
                         "Home" -> Icons.Default.Home
                         "Trip" -> Icons.Default.List
+                        "Profile" -> Icons.Default.Person
                         else -> Icons.Default.Home
                     }
                     Icon(icon, contentDescription = null)
@@ -48,6 +50,7 @@ fun BottomNavBar(
                         val intent = when (screen) {
                             "Home" -> Intent(context, MainActivity::class.java)
                             "Trip" -> Intent(context, TripActivity::class.java)
+                            "Profile" -> Intent(context, PersonActivity::class.java)
                             else -> Intent(context, MainActivity::class.java)
                         }
                         context.startActivity(intent)

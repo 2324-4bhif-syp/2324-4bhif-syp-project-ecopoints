@@ -14,5 +14,5 @@ data class CarData(
     val currentVelocity: Double,
     val throttlePosition: Double,
     val engineRunTime: String,
-    val timestamp: Timestamp
+    val timestamp: Timestamp?
     )

@@ -58,6 +58,11 @@ android {
 }
 
 dependencies {
+
+    val nav_version = "2.7.5"
+
+    implementation("androidx.navigation:navigation-compose:$nav_version")
+
     implementation("com.github.eltonvs:kotlin-obd-api:1.3.0")
     implementation("com.google.android.gms:play-services-location:18.0.0")
     implementation("androidx.core:core-ktx:1.9.0")

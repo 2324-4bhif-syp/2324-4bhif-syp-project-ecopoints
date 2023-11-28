@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import at.htl.ecopoints.MainActivity
+import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.service.BluetoothDeviceListService
 import at.htl.ecopoints.service.BluetoothService
 import at.htl.ecopoints.service.Obd2Service
@@ -60,6 +61,7 @@ class TripActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
+            val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Trip") }
 
             var showDialog: Boolean by remember { mutableStateOf(false) }
             var deviceNameText by remember { mutableStateOf("Not Selected") }
@@ -144,6 +146,15 @@ class TripActivity : ComponentActivity() {
                                 }
                             )
                         }
+                    }
+
+                    Box {
+
+                        BottomNavBar(
+                            currentScreen = currentScreen,
+                            onScreenSelected = { newScreen -> setCurrentScreen(newScreen) },
+                            context = this@TripActivity
+                        )
                     }
                 }
             }

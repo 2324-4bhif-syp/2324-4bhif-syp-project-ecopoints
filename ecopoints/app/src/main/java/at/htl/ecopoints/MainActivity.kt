@@ -13,6 +13,7 @@ import android.location.LocationManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -33,6 +34,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -44,6 +46,7 @@ import androidx.core.content.ContextCompat
 import at.htl.ecopoints.activity.BluetoothDeviceListActivity
 import at.htl.ecopoints.activity.MapActivity
 import at.htl.ecopoints.activity.TripActivity
+import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.service.AccelerometerSensorService
 import at.htl.ecopoints.service.LocationService
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
@@ -76,16 +79,13 @@ class MainActivity : ComponentActivity() {
         }
 
         if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
+                this, Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
             startLocationUpdates()
         } else {
             ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                1
+                this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1
             )
         }
 
@@ -98,17 +98,43 @@ class MainActivity : ComponentActivity() {
                     delay(250)
                 }
             }
+            val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Home") }
+
+//            EcoPointsTheme {
+//                Surface(
+//                    modifier = Modifier.fillMaxSize(),
+//                    color = MaterialTheme.colorScheme.background
+//                ) {
+//                    Column() {
+//                        SensorReading()
+//                        PrintTravelledDistance(total.value)
+//                        ShowMap()
+//                        ShowBluetoothDevicesButton()
+//                        ShowTrip()
+//
+//
+//                    }
+//                }
+//            }
 
             EcoPointsTheme {
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
+
                     SensorReading()
                     PrintTravelledDistance(total.value)
                     ShowMap()
                     ShowBluetoothDevicesButton()
                     ShowTrip()
+                    Box {
+
+                        BottomNavBar(
+                            currentScreen = currentScreen,
+                            onScreenSelected = { newScreen -> setCurrentScreen(newScreen) },
+                            context = this@MainActivity
+                        )
+                    }
                 }
             }
         }
@@ -120,10 +146,7 @@ class MainActivity : ComponentActivity() {
 
     private fun startLocationUpdates() {
         locationService.startLocationUpdates(
-            this,
-            fusedLocationClient,
-            locationRequest,
-            locationCallback
+            this, fusedLocationClient, locationRequest, locationCallback
         )
     }
 
@@ -166,12 +189,7 @@ class MainActivity : ComponentActivity() {
         }
 
         ShowAccelerometerReading(
-            sensorX,
-            sensorY,
-            sensorZ,
-            sensorXMax,
-            sensorYMax,
-            sensorZMax
+            sensorX, sensorY, sensorZ, sensorXMax, sensorYMax, sensorZMax
         )
 
         fun updateSensors() {
@@ -204,23 +222,19 @@ class MainActivity : ComponentActivity() {
 
         LaunchedEffect(sensorManager) {
             sensorManager.registerListener(
-                sensorListener,
-                accelerometerSensor,
-                SensorManager.SENSOR_DELAY_NORMAL
+                sensorListener, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL
             )
         }
 
         Text(
-            text = "Accelerometer-Sensor Value:",
-            style = TextStyle(fontSize = 20.sp)
+            text = "Accelerometer-Sensor Value:", style = TextStyle(fontSize = 20.sp)
         )
     }
 
     @Composable
     fun ResetButton(onResetClick: () -> Unit) {
         Box(
-            modifier = Modifier
-                .fillMaxSize()
+            modifier = Modifier.fillMaxSize()
         ) {
             Button(
                 onClick = onResetClick,
@@ -249,64 +263,51 @@ class MainActivity : ComponentActivity() {
                 .padding(16.dp)
         ) {
             Column(
-                modifier = Modifier
-                    .weight(1f)
+                modifier = Modifier.weight(1f)
             ) {
                 Text(
-                    text = "X: $sensorX",
-                    style = TextStyle(
+                    text = "X: $sensorX", style = TextStyle(
                         color = MaterialTheme.colorScheme.secondary,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center
-                    ),
-                    modifier = Modifier.padding(16.dp)
+                    ), modifier = Modifier.padding(16.dp)
                 )
                 Text(
-                    text = "Y: $sensorY",
-                    style = TextStyle(
+                    text = "Y: $sensorY", style = TextStyle(
                         color = MaterialTheme.colorScheme.secondary,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center
-                    ),
-                    modifier = Modifier.padding(16.dp)
+                    ), modifier = Modifier.padding(16.dp)
                 )
                 Text(
-                    text = "Z: $sensorZ",
-                    style = TextStyle(
+                    text = "Z: $sensorZ", style = TextStyle(
                         color = MaterialTheme.colorScheme.secondary,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center
-                    ),
-                    modifier = Modifier.padding(16.dp)
+                    ), modifier = Modifier.padding(16.dp)
                 )
             }
             Column {
                 Text(
-                    text = "XMax: $sensorXMax",
-                    style = TextStyle(
+                    text = "XMax: $sensorXMax", style = TextStyle(
                         color = MaterialTheme.colorScheme.secondary,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center
-                    ),
-                    modifier = Modifier.padding(16.dp)
+                    ), modifier = Modifier.padding(16.dp)
                 )
                 Text(
-                    text = "YMax: $sensorYMax",
-                    style = TextStyle(
+                    text = "YMax: $sensorYMax", style = TextStyle(
                         color = MaterialTheme.colorScheme.secondary,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center
-                    ),
-                    modifier = Modifier.padding(16.dp)
+                    ), modifier = Modifier.padding(16.dp)
                 )
                 Text(
-                    text = "ZMax: $sensorZMax",
-                    style = TextStyle(
+                    text = "ZMax: $sensorZMax", style = TextStyle(
                         color = MaterialTheme.colorScheme.secondary,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center
-                    ),
-                    modifier = Modifier.padding(16.dp)
+                    ), modifier = Modifier.padding(16.dp)
                 )
             }
         }
@@ -321,12 +322,10 @@ class MainActivity : ComponentActivity() {
                 onClick = {
                     startActivity(
                         Intent(
-                            this@MainActivity,
-                            BluetoothDeviceListActivity::class.java
+                            this@MainActivity, BluetoothDeviceListActivity::class.java
                         )
                     )
-                },
-                modifier = Modifier
+                }, modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .padding(16.dp)
             ) {
@@ -334,7 +333,6 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
 
 
     @Composable
@@ -345,8 +343,7 @@ class MainActivity : ComponentActivity() {
             Button(
                 onClick = {
                     startActivity(Intent(this@MainActivity, MapActivity::class.java))
-                },
-                modifier = Modifier
+                }, modifier = Modifier
                     .align(Alignment.Center)
                     .padding(16.dp)
             ) {
@@ -364,8 +361,7 @@ class MainActivity : ComponentActivity() {
             Button(
                 onClick = {
                     startActivity(Intent(this@MainActivity, TripActivity::class.java))
-                },
-                modifier = Modifier
+                }, modifier = Modifier
                     .align(Alignment.BottomStart)
                     .padding(16.dp)
             ) {

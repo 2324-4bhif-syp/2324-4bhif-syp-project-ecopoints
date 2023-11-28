@@ -107,30 +107,35 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
             testLocationService.setOnLocationChangedListener(this)
 
             EcoPointsTheme {
-                activity.requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                activity.requestedOrientation =
+                    android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
-                ){
-                    Scaffold(topBar = {
-                        TopAppBar(title = {
-                            Column(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalAlignment = Alignment.End
-                            ) {
-                                MapTypeControls(onMapTypeClick = {
-                                    Log.d("GoogleMap", "Selected map type $it")
-                                    mapProperties = mapProperties.copy(mapType = it)
-                                })
-                            }
-                        })
-                    }) {
+                ) {
+                    Scaffold(
+                        backgroundColor = MaterialTheme.colorScheme.background,
+                        topBar = {
+                            TopAppBar(
+                                backgroundColor = MaterialTheme.colorScheme.background,
+                                title = {
+                                Column(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalAlignment = Alignment.End
+                                ) {
+                                    MapTypeControls(onMapTypeClick = {
+                                        Log.d("GoogleMap", "Selected map type $it")
+                                        mapProperties = mapProperties.copy(mapType = it)
+                                    })
+                                }
+                            })
+                        }) {
                         GoogleMap(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(300.dp),
                             cameraPositionState = cameraPositionState,
-                            properties = mapProperties
+                            properties = mapProperties,
                         ) {
                             DrawPolyline()
                         }
@@ -147,11 +152,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                             })
                     }
 
-                    Text(
-                        text = "Trip",
-                        modifier = Modifier.padding(16.dp),
-                        fontSize = 24.sp
-                    )
+
                     Column(
                         modifier = Modifier.fillMaxSize(),
                         verticalArrangement = Arrangement.Bottom,
@@ -429,7 +430,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
     @Composable
     private fun DrawPolyline() {
         if (!latLngHasChanged.value) {
-            for(i in 0 until latLngList.size - 1) {
+            for (i in 0 until latLngList.size - 1) {
                 Polyline(
                     points = listOf(latLngList[i].second.first, latLngList[i + 1].second.first),
                     color = latLngList[i].first,
@@ -500,7 +501,13 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
         return R * c * 1000
     }
 
-    private fun isLocationChanged(newLat: Double, newLon: Double, oldLat: Double, oldLon: Double, threshold: Double): Boolean {
+    private fun isLocationChanged(
+        newLat: Double,
+        newLon: Double,
+        oldLat: Double,
+        oldLon: Double,
+        threshold: Double
+    ): Boolean {
         val distance = haversine(newLat, newLon, oldLat, oldLon)
         return distance > threshold
     }

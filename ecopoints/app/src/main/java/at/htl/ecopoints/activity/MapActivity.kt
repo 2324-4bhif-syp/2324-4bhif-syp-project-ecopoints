@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -34,6 +35,7 @@ import at.htl.ecopoints.service.TestLocationService
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.CameraPositionState
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapType
@@ -42,15 +44,13 @@ import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
 
-//make it a funtion, not a class
-
 class MapActivity : ComponentActivity(), OnLocationChangedListener {
 
     private val testLocationService: TestLocationService by lazy {
         TestLocationService(this)
     }
-    private var longitude = 1.35
-    private var latitude = 103.87
+    private var longitude = 14.285830
+    private var latitude = 48.306940
     private var latLngHasChanged = mutableStateOf(false)
 
     private val latLngList =
@@ -89,17 +89,17 @@ class MapActivity : ComponentActivity(), OnLocationChangedListener {
                         })
                     }) {
                         GoogleMap(
-                            modifier = Modifier.fillMaxSize(),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(300.dp),
                             cameraPositionState = cameraPositionState,
                             properties = mapProperties
                         ) {
-
-                            Marker(
-                                state = MarkerState(position = currentLocation),
-                                title = "Htl Leonding",
-                                snippet = "Marker in Leonding"
-                            )
                             DrawPolyline()
+                            cameraPositionState.position = CameraPosition.fromLatLngZoom(
+                                LatLng(latitude, longitude),
+                                10f
+                            )
                         }
                     }
                 }
@@ -108,7 +108,7 @@ class MapActivity : ComponentActivity(), OnLocationChangedListener {
     }
 
     @Composable
-    fun DrawPolyline() {
+    private fun DrawPolyline() {
         if (!latLngHasChanged.value) {
             for(i in 0 until latLngList.size - 1) {
                 Polyline(
@@ -120,7 +120,6 @@ class MapActivity : ComponentActivity(), OnLocationChangedListener {
         }
         latLngHasChanged.value = false
     }
-
 
     @Composable
     private fun MapTypeControls(

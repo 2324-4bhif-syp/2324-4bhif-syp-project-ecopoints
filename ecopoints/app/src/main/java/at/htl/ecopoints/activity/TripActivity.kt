@@ -74,13 +74,13 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
     private var selectedDevice: BluetoothDevice? = null
     private val bluetoothDeviceService = BluetoothDeviceListService()
     private val bluetoothService: BluetoothService = BluetoothService()
-    private var tripActive: Boolean = false
     private val testLocationService: TestLocationService by lazy {
         TestLocationService(this)
     }
     private var longitude = 14.285830
     private var latitude = 48.306940
     private var latLngHasChanged = mutableStateOf(false)
+    private var tripActive = false
 
     private val latLngList =
         mutableStateListOf<Pair<Color, Pair<LatLng, Double>>>()
@@ -96,7 +96,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
             var isConnecting by remember { mutableStateOf(false) }
             var connection by remember { mutableStateOf(false) }
             val currentLocation = LatLng(latitude, longitude)
-            val cameraPositionState = rememberCameraPositionState {
+            var cameraPositionState = rememberCameraPositionState {
                 position = CameraPosition.fromLatLngZoom(currentLocation, 10f)
             }
             var mapProperties by remember {
@@ -133,10 +133,6 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                             properties = mapProperties
                         ) {
                             DrawPolyline()
-                            cameraPositionState.position = CameraPosition.fromLatLngZoom(
-                                LatLng(latitude, longitude),
-                                10f
-                            )
                         }
                     }
 
@@ -224,6 +220,9 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
 
     private fun onStopBtnClick() {
         tripActive = false
+        // save the trip to the database
+        //TODO: save the trip to the database
+
         Log.d("TripActivity", "Trip stopped")
     }
 

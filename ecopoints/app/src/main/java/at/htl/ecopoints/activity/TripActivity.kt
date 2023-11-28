@@ -74,7 +74,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
     private var selectedDevice: BluetoothDevice? = null
     private val bluetoothDeviceService = BluetoothDeviceListService()
     private val bluetoothService: BluetoothService = BluetoothService()
-
+    private var tripActive: Boolean = false
     private val testLocationService: TestLocationService by lazy {
         TestLocationService(this)
     }
@@ -141,7 +141,6 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                     }
 
                     if (isConnecting) {
-
                         ConnectToDevice(
                             connecting = isConnecting,
                             selectedDevice,
@@ -219,11 +218,13 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
     }
 
     private fun onStartBtnClick() {
-
+        tripActive = true
+        Log.d("TripActivity", "Trip started")
     }
 
     private fun onStopBtnClick() {
-
+        tripActive = false
+        Log.d("TripActivity", "Trip stopped")
     }
 
     @Composable

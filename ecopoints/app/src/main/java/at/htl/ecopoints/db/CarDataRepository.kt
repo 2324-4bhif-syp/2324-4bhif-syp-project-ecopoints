@@ -1,57 +1,17 @@
 package at.htl.ecopoints.db
 
-import com.google.android.gms.common.util.CollectionUtils.listOf
-import java.sql.Connection
-import java.sql.PreparedStatement
-import java.sql.ResultSet
-
-class CarDataRepository(private val connection: Connection){
-
-
-    fun insertCarData(carData: CarData){
-        val query = "Insert into car_data (id, longitude, latitude, current_engine_rpm, current_velocity, throttle_position, engine_run_time, timestamp " +
-                      "values (?,?,?,?,?,?,?,?);"
-
-        val preparedStatement: PreparedStatement = connection.prepareStatement(query);
-        preparedStatement.setLong(1, carData.id)
-        preparedStatement.setDouble(2, carData.longitude)
-        preparedStatement.setDouble(3, carData.latitude)
-        preparedStatement.setDouble(4, carData.currentEngineRPM)
-        preparedStatement.setDouble(5, carData.currentVelocity)
-        preparedStatement.setDouble(6, carData.throttlePosition)
-        preparedStatement.setString(7, carData.engineRunTime)
-        preparedStatement.setTimestamp(8, carData.timestamp)
-
-        preparedStatement.executeUpdate()
+class CarDataRepository(private val carDataDao: CarDataDao){
+    suspend fun insertCarData(carData: CarData){
+        carDataDao.insertCarData(carData)
     }
-    fun insertMultipleCarData(carDataList: List<CarData>){
-        for (carData in carDataList)
-            insertCarData(carData)
-    }
-    fun deleteAllCarData(){
-        val query = "Delete from car_data"
-        val statement = connection.createStatement()
-        statement.executeUpdate(query)
-    }
-    fun getAllCarData(): List<CarData>{
-        val query = "Select * from car_data"
-        val statement = connection.createStatement()
-        val resultSet: ResultSet = statement.executeQuery(query)
 
-        val carDataList = listOf<CarData>()
-        while(resultSet.next()){
-            val carData = CarData(
-                resultSet.getLong("id"),
-                resultSet.getDouble("longitude"),
-                resultSet.getDouble("latitude"),
-                resultSet.getDouble("current_engine_rpm"),
-                resultSet.getDouble("current_velocity"),
-                resultSet.getDouble("throttle_position"),
-                resultSet.getString("engine_run_time"),
-                resultSet.getTimestamp("timestamp")
-            )
-            carDataList.add(carData)
-        }
-        return carDataList
+    suspend fun insertMultipleCarData(carDataList: List<CarData>){
+        carDataDao.insertMultipleCarData(carDataList)
+    }
+    suspend fun getAllCarData(): List<CarData>{
+        return carDataDao.getAllCarData()
+    }
+    suspend fun deleteAllCarData(){
+        carDataDao.deleteAllCarData()
     }
 }

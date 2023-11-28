@@ -39,8 +39,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import at.htl.ecopoints.activity.BluetoothDeviceListActivity
 import at.htl.ecopoints.activity.MapActivity
+import at.htl.ecopoints.db.CarData
+import at.htl.ecopoints.db.CarDataRepository
+import at.htl.ecopoints.db.CarDatabase
 import at.htl.ecopoints.service.AccelerometerSensorService
 import at.htl.ecopoints.service.LocationService
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
@@ -49,6 +53,7 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.util.Locale
@@ -60,10 +65,31 @@ class MainActivity : ComponentActivity() {
     private var locationService: LocationService = LocationService()
     private var locationManager: LocationManager? = null
     private var isGPSEnabled: Boolean? = false
-
+    private lateinit var carDataRepository: CarDataRepository
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val carDatabase = CarDatabase.getDatabase(applicationContext)
+
+        val carDataRepository = CarDataRepository(carDatabase.carDataDao())
+
+        lifecycleScope.launch {
+            val carData = CarData(
+                longitude = 0.0,
+                latitude = 0.0,
+                currentEngineRPM = 0.0,
+                currentVelocity = 0.0,
+                throttlePosition = 0.0,
+                engineRunTime = "",
+                timestamp = null
+            )
+            carDataRepository.insertCarData(carData)
+        }
+        lifecycleScope.launch {
+            val allCarData = carDataRepository.getAllCarData()
+
+            for (carData in allCarData) println(carData)
+        }
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         locationRequest = com.google.android.gms.location.LocationRequest.create().apply {

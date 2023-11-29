@@ -5,6 +5,7 @@ import org.junit.Before
 import org.junit.jupiter.api.Assertions.*
 
 import org.junit.Test
+import org.junit.jupiter.api.Order
 import java.util.Date
 import java.util.UUID
 
@@ -17,6 +18,7 @@ class TripServiceTest {
         tripService = TripService()
     }
 
+    @Order(1)
     @Test
     fun createTrip() {
         // Arrange
@@ -29,6 +31,7 @@ class TripServiceTest {
         assertEquals(201, response.code)
     }
 
+    @Order(2)
     @Test
     fun updateTrip() {
         // Arrange
@@ -46,6 +49,7 @@ class TripServiceTest {
         assertEquals(200, response.code)
     }
 
+    @Order(5)
     @Test
     fun deleteTrip() {
         // Arrange
@@ -61,6 +65,7 @@ class TripServiceTest {
         assertEquals(204, response.code)
     }
 
+    @Order(3)
     @Test
     fun getTripById() {
         // Arrange
@@ -73,6 +78,7 @@ class TripServiceTest {
         assertEquals(1, retrievedTrip?.id)
     }
 
+    @Order(4)
     @Test
     fun getAllTrips() {
         // Arrange

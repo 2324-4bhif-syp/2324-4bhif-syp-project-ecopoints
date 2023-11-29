@@ -43,7 +43,7 @@ public class CarDataResource {
     @Transactional
     public Response deleteCarData(@PathParam("id") Long id) {
         carDataRepository.delete(id);
-        return Response.status(Response.Status.OK).entity("CarData removed successfully").build();
+        return Response.status(Response.Status.NO_CONTENT).entity("CarData removed successfully").build();
     }
 
     @PUT

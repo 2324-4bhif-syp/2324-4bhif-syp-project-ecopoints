@@ -41,7 +41,7 @@ public class UserResource {
     @Transactional
     public Response deleteCarData(@PathParam("id") Long id) {
         userRepository.delete(id);
-        return Response.status(Response.Status.OK).entity("User removed successfully").build();
+        return Response.status(Response.Status.NO_CONTENT).entity("User removed successfully").build();
     }
 
     @PUT

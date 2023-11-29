@@ -43,7 +43,7 @@ public class TripResource {
     @Transactional
     public Response deleteCarData(@PathParam("id") UUID id) {
         tripRepository.delete(id);
-        return Response.status(Response.Status.OK).entity("Trip removed successfully").build();
+        return Response.status(Response.Status.NO_CONTENT).entity("Trip removed successfully").build();
     }
 
     @PUT

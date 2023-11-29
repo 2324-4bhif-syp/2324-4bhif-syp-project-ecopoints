@@ -49,8 +49,12 @@ class TripServiceTest {
     @Test
     fun deleteTrip() {
         // Arrange
+        val trip = createSampleTrip()
+
 
         // Act
+        tripService.createTrip(trip)
+
         val response = tripService.deleteTrip(tripId)
 
         // Assert

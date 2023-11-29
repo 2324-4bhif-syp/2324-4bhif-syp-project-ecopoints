@@ -11,15 +11,15 @@ class CarDataService : Service() {
     }
 
     fun updateCarData(carData: CarData, id: Long): Response {
-        return super.update(carData, endPoint, id)
+        return super.update(carData, endPoint, id.toString())
     }
 
     fun deleteCarData(id: Long): Response {
-        return super.delete(endPoint, id)
+        return super.delete(endPoint, id.toString())
     }
 
     fun getCarDataById(id: Long): CarData? {
-        return super.getById<CarData>(endPoint, id)
+        return super.getById<CarData>(endPoint, id.toString())
     }
 
     fun getAllCarData(): List<CarData>? {

@@ -11,15 +11,15 @@ class UserService: Service() {
     }
 
     fun updateUser(user: User, id: Long): Response {
-        return super.update(user, endPoint, id)
+        return super.update(user, endPoint, id.toString())
     }
 
     fun deleteUser(id: Long): Response {
-        return super.delete(endPoint, id)
+        return super.delete(endPoint, id.toString())
     }
 
     fun getUserById(id: Long): User? {
-        return super.getById<User>(endPoint, id)
+        return super.getById<User>(endPoint, id.toString())
     }
 
     fun getAllUsers(): List<User>? {

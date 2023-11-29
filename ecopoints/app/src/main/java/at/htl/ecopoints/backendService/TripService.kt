@@ -3,6 +3,7 @@ package at.htl.ecopoints.backendService
 import android.util.Log
 import at.htl.ecopoints.model.Trip
 import okhttp3.Response
+import java.util.UUID
 
 
 class TripService: Service() {
@@ -12,16 +13,16 @@ class TripService: Service() {
         return super.create(trip, endPoint)
     }
 
-    fun updateTrip(trip: Trip, id: Long): Response{
-        return super.update(trip, endPoint, id)
+    fun updateTrip(trip: Trip, id: UUID): Response{
+        return super.update(trip, endPoint, id.toString())
     }
 
-    fun deleteTrip(id: Long): Response{
-        return super.delete(endPoint, id)
+    fun deleteTrip(id: UUID): Response{
+        return super.delete(endPoint, id.toString())
     }
 
-    fun getTripById(id: Long): Trip? {
-        val trip = super.getById<Trip>(endPoint, id)
+    fun getTripById(id: UUID): Trip? {
+        val trip = super.getById<Trip>(endPoint, id.toString())
         Log.i("TripService", trip.toString())
         return trip
     }

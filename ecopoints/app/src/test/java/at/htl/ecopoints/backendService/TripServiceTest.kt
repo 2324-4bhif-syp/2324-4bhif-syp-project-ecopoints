@@ -6,9 +6,11 @@ import org.junit.jupiter.api.Assertions.*
 
 import org.junit.Test
 import java.util.Date
+import java.util.UUID
 
 class TripServiceTest {
     private lateinit var tripService: TripService
+    private final val tripId: UUID = UUID.fromString("f7a3d7a0-4f1a-4b1a-9e5a-5a5a5a5a5a5a")
 
     @Before
     fun setup() {
@@ -32,8 +34,13 @@ class TripServiceTest {
         // Arrange
         val trip = createSampleTrip()
 
+
         // Act
-        val response = tripService.updateTrip(trip, 1)
+        tripService.createTrip(trip)
+
+
+
+        val response = tripService.updateTrip(trip, tripId)
 
         // Assert
         assertEquals(200, response.code)
@@ -44,7 +51,7 @@ class TripServiceTest {
         // Arrange
 
         // Act
-        val response = tripService.deleteTrip(1)
+        val response = tripService.deleteTrip(tripId)
 
         // Assert
         assertEquals(204, response.code)
@@ -55,7 +62,7 @@ class TripServiceTest {
         // Arrange
 
         // Act
-        val retrievedTrip = tripService.getTripById(1)
+        val retrievedTrip = tripService.getTripById(tripId)
 
         // Assert
         assertNotNull(retrievedTrip)
@@ -76,7 +83,7 @@ class TripServiceTest {
 
     private fun createSampleTrip(): Trip {
         return Trip(
-            id = null,
+            id = tripId,
             distance = 100.0,
             avgSpeed = 44.0,
             avgEngineRotation = 3000.0,

@@ -2,9 +2,10 @@ package at.htl.ecopoints.model
 
 import com.google.gson.annotations.SerializedName
 import java.util.Date
+import java.util.UUID
 
 data class Trip(
-    val id: Long?,
+    val id: UUID,
     val distance: Double,
 
     @SerializedName("avg_speed")

@@ -8,6 +8,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.Response
+import java.util.UUID
 
 
 abstract class Service {
@@ -27,7 +28,7 @@ abstract class Service {
         return OkHttpClient().newCall(request).execute()
     }
 
-    fun update(obj: Any, endPoint: String, id: Long): Response{
+    fun update(obj: Any, endPoint: String, id: String): Response{
         val json = Gson().toJson(obj)
 
         val request = Request.Builder()
@@ -38,7 +39,7 @@ abstract class Service {
         return OkHttpClient().newCall(request).execute()
     }
 
-    fun delete(endPoint: String, id: Long): Response{
+    fun delete(endPoint: String, id: String): Response{
         val request = Request.Builder()
             .url("$path$endPoint/$id")
             .delete()
@@ -68,7 +69,7 @@ abstract class Service {
         }
     }
 
-    inline fun <reified T> getById(endPoint: String, id: Long): T? {
+    inline fun <reified T> getById(endPoint: String, id: String): T? {
         val request = Request.Builder()
             .url("$`access$path`$endPoint/$id")
             .get()

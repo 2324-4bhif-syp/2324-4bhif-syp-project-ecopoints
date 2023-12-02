@@ -100,22 +100,22 @@ class MainActivity : ComponentActivity() {
             }
             val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Home") }
 
-//            EcoPointsTheme {
-//                Surface(
-//                    modifier = Modifier.fillMaxSize(),
-//                    color = MaterialTheme.colorScheme.background
-//                ) {
-//                    Column() {
-//                        SensorReading()
-//                        PrintTravelledDistance(total.value)
-//                        ShowMap()
-//                        ShowBluetoothDevicesButton()
-//                        ShowTrip()
-//
-//
-//                    }
-//                }
-//            }
+/*            EcoPointsTheme {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    Column() {
+                        SensorReading()
+                        PrintTravelledDistance(total.value)
+                        ShowMap()
+                        ShowBluetoothDevicesButton()
+                        ShowTrip()
+
+
+                    }
+                }
+            }*/
 
             EcoPointsTheme {
                 Surface(
@@ -326,8 +326,7 @@ class MainActivity : ComponentActivity() {
                         )
                     )
                 }, modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(16.dp)
+                    .padding(80.dp, 500.dp, 0.dp, 0.dp) //.padding(0.dp, 160.dp, 170.dp, 0.dp)
             ) {
                 Text(text = "Show Paired Bluetooth Devices")
             }
@@ -362,7 +361,7 @@ class MainActivity : ComponentActivity() {
                 onClick = {
                     startActivity(Intent(this@MainActivity, TripActivity::class.java))
                 }, modifier = Modifier
-                    .align(Alignment.BottomStart)
+                    .align(Alignment.Center)
                     .padding(16.dp)
             ) {
                 Text(text = "Show Trip")

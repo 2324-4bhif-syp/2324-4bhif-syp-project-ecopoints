@@ -2,24 +2,23 @@ package at.htl.ecopoints.navigation
 
 import android.content.Context
 import android.content.Intent
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.List
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import at.htl.ecopoints.MainActivity
-import at.htl.ecopoints.activity.PersonActivity
 import at.htl.ecopoints.activity.TripActivity
+import androidx.compose.ui.Alignment
+import at.htl.ecopoints.activity.ui.theme.ProfileActivity
+import at.htl.ecopoints.activity.ui.theme.RankingActivity
 
 @Composable
 fun BottomNavBar(
@@ -27,10 +26,10 @@ fun BottomNavBar(
     onScreenSelected: (String) -> Unit,
     context: Context
 ) {
-    val screens = listOf("Home", "Trip", "Profile")
+    val screens = listOf("Home", "Trip", "Ranking", "Profile")
     BottomNavigation(
         modifier = Modifier
-            .padding(bottom = 16.dp)
+            .padding(0.dp, 775.dp, 0.dp, 0.dp)
     ) {
         screens.forEach { screen ->
             BottomNavigationItem(
@@ -38,7 +37,8 @@ fun BottomNavBar(
                     val icon = when (screen) {
                         "Home" -> Icons.Default.Home
                         "Trip" -> Icons.Default.List
-                        "Profile" -> Icons.Default.Person
+                        "Ranking" -> Icons.Default.KeyboardArrowUp
+                        "Profile" -> Icons.Default.AccountCircle
                         else -> Icons.Default.Home
                     }
                     Icon(icon, contentDescription = null)
@@ -50,7 +50,8 @@ fun BottomNavBar(
                         val intent = when (screen) {
                             "Home" -> Intent(context, MainActivity::class.java)
                             "Trip" -> Intent(context, TripActivity::class.java)
-                            "Profile" -> Intent(context, PersonActivity::class.java)
+                            "Ranking" -> Intent(context, RankingActivity::class.java)
+                            "Profile" -> Intent(context, ProfileActivity::class.java)
                             else -> Intent(context, MainActivity::class.java)
                         }
                         context.startActivity(intent)

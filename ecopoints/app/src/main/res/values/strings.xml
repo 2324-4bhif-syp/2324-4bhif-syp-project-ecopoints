@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">EcoPoints</string>
     <string name="title_activity_person">PersonActivity</string>
+    <string name="title_activity_ranking">RankingActivity</string>
+    <string name="title_activity_test">TestActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_activity_profile">ProfileActivity</string>
 </resources>

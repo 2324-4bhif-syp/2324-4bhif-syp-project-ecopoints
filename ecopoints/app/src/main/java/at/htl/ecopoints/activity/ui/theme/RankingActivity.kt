@@ -1,4 +1,4 @@
-package at.htl.ecopoints.activity
+package at.htl.ecopoints.activity.ui.theme
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -13,27 +13,27 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import at.htl.ecopoints.activity.ui.theme.EcoPointsTheme
+import at.htl.ecopoints.activity.ui.theme.ui.theme.EcoPointsTheme
 import at.htl.ecopoints.navigation.BottomNavBar
 
-class PersonActivity : ComponentActivity() {
+class RankingActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Person") }
-            EcoPointsTheme {
+            val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Ranking") }
+            at.htl.ecopoints.activity.ui.theme.EcoPointsTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
+                    Greeting2("Ranking")
                     Box {
 
                         BottomNavBar(
                             currentScreen = currentScreen,
                             onScreenSelected = { newScreen -> setCurrentScreen(newScreen) },
-                            context = this@PersonActivity
+                            context = this@RankingActivity
                         )
                     }
                 }
@@ -43,7 +43,7 @@ class PersonActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
+fun Greeting2(name: String, modifier: Modifier = Modifier) {
     Text(
         text = "Hello $name!",
         modifier = modifier
@@ -52,8 +52,8 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun GreetingPreview2() {
     EcoPointsTheme {
-        Greeting("Android")
+        Greeting2("Ranking")
     }
 }

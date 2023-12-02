@@ -5,6 +5,7 @@ import org.junit.Before
 import org.junit.jupiter.api.Assertions.*
 
 import org.junit.Test
+import org.junit.jupiter.api.AfterEach
 
 class UserServiceTest {
     private lateinit var userService: UserService

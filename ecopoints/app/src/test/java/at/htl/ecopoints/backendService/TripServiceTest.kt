@@ -5,6 +5,7 @@ import org.junit.Before
 import org.junit.jupiter.api.Assertions.*
 
 import org.junit.Test
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Order
 import java.util.Date
 import java.util.UUID
@@ -18,15 +19,17 @@ class TripServiceTest {
         tripService = TripService()
     }
 
+
     @Order(1)
     @Test
     fun createTrip() {
         // Arrange
-        val trip = createSampleTrip()
+        val trip = createSampleTrip(44.0)
 
         // Act
         val response = tripService.createTrip(trip)
 
+        tripService.deleteTrip(tripId)
         // Assert
         assertEquals(201, response.code)
     }
@@ -35,15 +38,15 @@ class TripServiceTest {
     @Test
     fun updateTrip() {
         // Arrange
-        val trip = createSampleTrip()
-
+        val trip = createSampleTrip(44.0)
+        val trip2 = createSampleTrip(55.0)
 
         // Act
         tripService.createTrip(trip)
 
+        val response = tripService.updateTrip(trip2, tripId)
 
-
-        val response = tripService.updateTrip(trip, tripId)
+        tripService.deleteTrip(tripId)
 
         // Assert
         assertEquals(200, response.code)
@@ -53,8 +56,7 @@ class TripServiceTest {
     @Test
     fun deleteTrip() {
         // Arrange
-        val trip = createSampleTrip()
-
+        val trip = createSampleTrip(44.0)
 
         // Act
         tripService.createTrip(trip)
@@ -69,33 +71,42 @@ class TripServiceTest {
     @Test
     fun getTripById() {
         // Arrange
+        val trip = createSampleTrip(44.0)
 
         // Act
+        tripService.createTrip(trip)
+
         val retrievedTrip = tripService.getTripById(tripId)
+
+        tripService.deleteTrip(tripId)
 
         // Assert
         assertNotNull(retrievedTrip)
-        assertEquals(1, retrievedTrip?.id)
+        assertEquals(tripId, retrievedTrip?.id)
     }
 
     @Order(4)
     @Test
     fun getAllTrips() {
         // Arrange
+        val trip = createSampleTrip(44.0)
 
         // Act
+        tripService.createTrip(trip)
         val retrievedTripList = tripService.getAllTrips()
+
+        tripService.deleteTrip(tripId)
 
         // Assert
         assertNotNull(retrievedTripList)
-        assertEquals(2, retrievedTripList?.size)
+        assertEquals(1, retrievedTripList?.size)
     }
 
-    private fun createSampleTrip(): Trip {
+    private fun createSampleTrip(avgSpeed: Double): Trip {
         return Trip(
             id = tripId,
             distance = 100.0,
-            avgSpeed = 44.0,
+            avgSpeed = avgSpeed,
             avgEngineRotation = 3000.0,
             rewardedEcoPoints = 10.0,
             date = Date()

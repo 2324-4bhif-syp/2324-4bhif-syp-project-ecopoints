@@ -23,13 +23,11 @@ class TripService: Service() {
 
     fun getTripById(id: UUID): Trip? {
         val trip = super.getById<Trip>(endPoint, id.toString())
-        Log.i("TripService", trip.toString())
         return trip
     }
 
     fun getAllTrips(): List<Trip>? {
         val trips = super.getAll<Trip>(endPoint)
-        Log.i("TripService", trips.toString())
         return trips
     }
 }

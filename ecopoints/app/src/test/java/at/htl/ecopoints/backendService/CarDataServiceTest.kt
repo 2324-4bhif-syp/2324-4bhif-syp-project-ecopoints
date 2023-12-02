@@ -30,6 +30,8 @@ class CarDataServiceTest {
         // Act
         val response = carDataService.createCarData(carData)
 
+        carDataService.deleteCarData(1)
+
         // Assert
         assertEquals(201, response.code)
     }
@@ -42,6 +44,8 @@ class CarDataServiceTest {
         // Act
         val response = carDataService.updateCarData(carData, 1)
 
+        carDataService.deleteCarData(1)
+
         // Assert
         assertEquals(200, response.code)
     }
@@ -49,8 +53,11 @@ class CarDataServiceTest {
     @Test
     fun deleteCarData() {
         // Arrange
+        val carData = createSampleCarData()
 
         // Act
+        carDataService.createCarData(carData)
+
         val response = carDataService.deleteCarData(1)
 
         // Assert
@@ -65,6 +72,8 @@ class CarDataServiceTest {
         // Act
         val retrievedCarData = carDataService.getCarDataById(1)
 
+        carDataService.deleteCarData(1)
+
         // Assert
         assertNotNull(retrievedCarData)
         assertEquals(carData.id, retrievedCarData?.id)
@@ -73,9 +82,12 @@ class CarDataServiceTest {
     @Test
     fun getAllCarData() {
         // Arrange
+        val carData = createSampleCarData()
 
         // Act
         val retrievedCarDataList = carDataService.getAllCarData()
+
+        carDataService.deleteCarData(1)
 
         // Assert
         assertNotNull(retrievedCarDataList)

@@ -65,6 +65,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.concurrent.atomic.AtomicInteger
+import kotlin.concurrent.schedule
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
@@ -81,6 +83,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
     private var latitude = 48.306940
     private var latLngHasChanged = mutableStateOf(false)
     private var tripActive = false
+    private var timer = java.util.Timer()
 
     private val latLngList =
         mutableStateListOf<Pair<Color, Pair<LatLng, Double>>>()
@@ -119,16 +122,16 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                             TopAppBar(
                                 backgroundColor = MaterialTheme.colorScheme.background,
                                 title = {
-                                Column(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    horizontalAlignment = Alignment.End
-                                ) {
-                                    MapTypeControls(onMapTypeClick = {
-                                        Log.d("GoogleMap", "Selected map type $it")
-                                        mapProperties = mapProperties.copy(mapType = it)
-                                    })
-                                }
-                            })
+                                    Column(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalAlignment = Alignment.End
+                                    ) {
+                                        MapTypeControls(onMapTypeClick = {
+                                            Log.d("GoogleMap", "Selected map type $it")
+                                            mapProperties = mapProperties.copy(mapType = it)
+                                        })
+                                    }
+                                })
                         }) {
                         GoogleMap(
                             modifier = Modifier
@@ -243,29 +246,26 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                 Text("Read with Custom Comm")
             }
 
+            var i = AtomicInteger(0)
+
             LaunchedEffect(buttonClicked) {
                 if (buttonClicked) {
                     service.initOBD()
-                    for (i in 0..1000) {
-                        //service.initOBD()
-                        //delay(200)
-                        var rpm1 = ""//service.getRPM()
-//                    delay(500)
-                        var speed2 = ""//service.getSpeed()
- delay(500)
-//                        Thread.sleep(500)
-                        var coolantTemp3 = ""//service.getCoolantTemp()
-
-                        if (rpm1 != "0") {
-                            rpm = rpm1
+                    timer.schedule(object : java.util.TimerTask() {
+                        override fun run() {
+                            if (i.get() == 1) {
+                                rpm = service.getRPM()
+                            }
+                            if (i.get() == 2) {
+                                speed = service.getSpeed()
+                            }
+                            if (i.get() == 3) {
+                                coolantTemp = service.getCoolantTemp()
+                                i.set(0)
+                            }
+                            i.incrementAndGet()
                         }
-                        if (speed2 != "0") {
-                            speed = speed2
-                        }
-                        if (coolantTemp3 != "0") {
-                            coolantTemp = coolantTemp3
-                        }
-                    }
+                    }, 500, 1000)
                     buttonClicked = false
                 }
             }

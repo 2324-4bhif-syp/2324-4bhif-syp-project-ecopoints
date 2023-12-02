@@ -13,7 +13,7 @@ class CarDataDao(private val connection: Connection){
     @Insert
     fun insertCarData(carData: CarData){
         val query = "Insert into car_data (id, longitude, latitude, current_engine_rpm, current_velocity, throttle_position, engine_run_time, timestamp " +
-                      "values (?,?,?,?,?,?,?,?);"
+                      "values (1,10,10,900,0,100,'10 hours','2023-11-29 12:30:00');"
 
         val preparedStatement: PreparedStatement = connection.prepareStatement(query);
         preparedStatement.setLong(1, carData.id)

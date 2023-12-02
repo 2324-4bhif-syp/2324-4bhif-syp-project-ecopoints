@@ -26,9 +26,10 @@
             android:theme="@style/Theme.EcoPoints">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
+                <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         <activity android:name=".activity.BluetoothDeviceListActivity"></activity>
         <activity android:name=".activity.Obd2ReadingActivity"></activity>

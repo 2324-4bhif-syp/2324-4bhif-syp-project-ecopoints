@@ -18,6 +18,7 @@ class Obd2Service(bluetoothDeviceAddress: String) {
     private var connection: ObdDeviceConnection? = null
     private var obdBluetoothInterface: OBDBluetoothInterface? = null
     private val TAG: String = "Obd2Service"
+    var socket: BluetoothSocket? = null
 
     private fun establishCommunicationToDevice(): ObdDeviceConnection? {
         try {
@@ -29,6 +30,7 @@ class Obd2Service(bluetoothDeviceAddress: String) {
                 )!!
             )
             val socket: BluetoothSocket = bluetoothService.getSocket()
+            this.socket = socket
 
             if (!bluetoothService.connected()) {
                 Log.e(TAG, "Socket is not connected")
@@ -54,6 +56,10 @@ class Obd2Service(bluetoothDeviceAddress: String) {
             Log.e(TAG, e.toString())
         }
         return null
+    }
+
+    fun getSocketTest(): BluetoothSocket {
+        return socket!!;
     }
 
     private fun connect() {
@@ -148,14 +154,17 @@ class Obd2Service(bluetoothDeviceAddress: String) {
 
     fun initOBD() {
         connect()
-        val obdCommandHelper = OBDCommandHelper(obdBluetoothInterface!!)
-        obdCommandHelper.resetOBDSys()
-        obdCommandHelper.echoOff()
-        obdCommandHelper.headerOn()
+        if (obdBluetoothInterface != null) {
+
+            val obdCommandHelper = OBDCommandHelper(obdBluetoothInterface!!)
+            obdCommandHelper.resetOBDSys()
+            obdCommandHelper.echoOff()
+            obdCommandHelper.headerOn()
+        }
     }
 
     fun getRPM(): String {
-        if(obdBluetoothInterface == null) {
+        if (obdBluetoothInterface == null) {
             connect()
         }
         val obdCommandHelper = OBDCommandHelper(obdBluetoothInterface!!)
@@ -165,7 +174,7 @@ class Obd2Service(bluetoothDeviceAddress: String) {
     }
 
     fun getSpeed(): String {
-        if(obdBluetoothInterface == null) {
+        if (obdBluetoothInterface == null) {
             connect()
         }
         val obdCommandHelper = OBDCommandHelper(obdBluetoothInterface!!)
@@ -175,7 +184,7 @@ class Obd2Service(bluetoothDeviceAddress: String) {
     }
 
     fun getCoolantTemp(): String {
-        if(obdBluetoothInterface == null) {
+        if (obdBluetoothInterface == null) {
             connect()
         }
         val obdCommandHelper = OBDCommandHelper(obdBluetoothInterface!!)

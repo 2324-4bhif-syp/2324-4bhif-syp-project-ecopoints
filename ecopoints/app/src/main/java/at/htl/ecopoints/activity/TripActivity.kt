@@ -40,6 +40,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,12 +49,21 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
+import at.htl.ecopoints.interfaces.OnLocationChangedListener
 import at.htl.ecopoints.service.BluetoothDeviceListService
 import at.htl.ecopoints.service.BluetoothService
 import at.htl.ecopoints.service.Obd2Service
 import at.htl.ecopoints.service.TestLocationService
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
-import at.htl.ecopoints.interfaces.OnLocationChangedListener
+import com.github.pires.obd.commands.SpeedCommand
+import com.github.pires.obd.commands.temperature.TemperatureCommand
+import com.github.pires.obd.commands.engine.RPMCommand
+import com.github.pires.obd.commands.protocol.EchoOffCommand
+import com.github.pires.obd.commands.protocol.LineFeedOffCommand
+import com.github.pires.obd.commands.protocol.SelectProtocolCommand
+import com.github.pires.obd.commands.protocol.TimeoutCommand
+import com.github.pires.obd.commands.temperature.EngineCoolantTemperatureCommand
+import com.github.pires.obd.enums.ObdProtocols
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
@@ -63,10 +73,9 @@ import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.lang.Error
 import java.util.concurrent.atomic.AtomicInteger
-import kotlin.concurrent.schedule
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
@@ -85,8 +94,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
     private var tripActive = false
     private var timer = java.util.Timer()
 
-    private val latLngList =
-        mutableStateListOf<Pair<Color, Pair<LatLng, Double>>>()
+    private val latLngList = mutableStateListOf<Pair<Color, Pair<LatLng, Double>>>()
 
 
     @SuppressLint("MissingPermission", "UnusedMaterialScaffoldPaddingParameter")
@@ -113,26 +121,21 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                 activity.requestedOrientation =
                     android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
-                    Scaffold(
-                        backgroundColor = MaterialTheme.colorScheme.background,
-                        topBar = {
-                            TopAppBar(
-                                backgroundColor = MaterialTheme.colorScheme.background,
-                                title = {
-                                    Column(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        horizontalAlignment = Alignment.End
-                                    ) {
-                                        MapTypeControls(onMapTypeClick = {
-                                            Log.d("GoogleMap", "Selected map type $it")
-                                            mapProperties = mapProperties.copy(mapType = it)
-                                        })
-                                    }
+                    Scaffold(backgroundColor = MaterialTheme.colorScheme.background, topBar = {
+                        TopAppBar(backgroundColor = MaterialTheme.colorScheme.background, title = {
+                            Column(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalAlignment = Alignment.End
+                            ) {
+                                MapTypeControls(onMapTypeClick = {
+                                    Log.d("GoogleMap", "Selected map type $it")
+                                    mapProperties = mapProperties.copy(mapType = it)
                                 })
-                        }) {
+                            }
+                        })
+                    }) {
                         GoogleMap(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -145,8 +148,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                     }
 
                     if (isConnecting) {
-                        ConnectToDevice(
-                            connecting = isConnecting,
+                        ConnectToDevice(connecting = isConnecting,
                             selectedDevice,
                             onDismiss = { isConnecting = false },
                             onConnect = { it ->
@@ -190,26 +192,21 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                         }
 
                         if (ActivityCompat.checkSelfPermission(
-                                this@TripActivity,
-                                Manifest.permission.BLUETOOTH_CONNECT
+                                this@TripActivity, Manifest.permission.BLUETOOTH_CONNECT
                             ) != PackageManager.PERMISSION_GRANTED
                         ) {
                             ActivityCompat.requestPermissions(
-                                this@TripActivity,
-                                arrayOf(Manifest.permission.BLUETOOTH_CONNECT),
-                                1
+                                this@TripActivity, arrayOf(Manifest.permission.BLUETOOTH_CONNECT), 1
                             )
                         } else {
-                            BluetoothDeviceSelectionDialog(
-                                pairedDevices = bluetoothDeviceService.getAllDevices(),
+                            BluetoothDeviceSelectionDialog(pairedDevices = bluetoothDeviceService.getAllDevices(),
                                 showDialog = showDialog,
                                 onDismiss = { showDialog = false },
                                 onDeviceSelected = { device ->
                                     selectedDevice = device
                                     showDialog = false
                                     deviceNameText = device.name
-                                }
-                            )
+                                })
                         }
                     }
                 }
@@ -240,7 +237,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
             var buttonClicked by remember { mutableStateOf(false) }
 
             val service = Obd2Service(selectedDevice!!.address)
-
+            val coroutineScope = rememberCoroutineScope()
 
             Button(onClick = { buttonClicked = true }) {
                 Text("Read with Custom Comm")
@@ -250,23 +247,69 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
 
             LaunchedEffect(buttonClicked) {
                 if (buttonClicked) {
-                    service.initOBD()
-                    timer.schedule(object : java.util.TimerTask() {
-                        override fun run() {
-                            if (i.get() == 1) {
-                                rpm = service.getRPM()
+                    coroutineScope.launch(Dispatchers.IO) {
+                        service.initOBD()
+                        if (service.socket != null && service.socket?.isConnected!!) {
+                            try {
+
+                                var socket = service.getSocketTest()
+                                EchoOffCommand().run(
+                                    socket.getInputStream(), socket.getOutputStream()
+                                );
+                                LineFeedOffCommand().run(
+                                    socket.getInputStream(), socket.getOutputStream()
+                                );
+                                TimeoutCommand(125).run(
+                                    socket.getInputStream(), socket.getOutputStream()
+                                );
+                                SelectProtocolCommand(ObdProtocols.AUTO).run(
+                                    socket.getInputStream(), socket.getOutputStream()
+                                );
+
+                                timer.schedule(object : java.util.TimerTask() {
+                                    override fun run() {
+//                            if (i.get() == 1) {
+//                                rpm = service.getRPM()
+//                            }
+//                            if (i.get() == 2) {
+//                                speed = service.getSpeed()
+//                            }
+//                            if (i.get() == 3) {
+//                                coolantTemp = service.getCoolantTemp()
+//                                i.set(0v)
+//                            }
+//                            i.incrementAndGet()
+                                        try {
+                                            var socket = service.getSocketTest()
+                                            var spd = SpeedCommand();
+                                            spd.run(socket.inputStream, socket.outputStream);
+
+                                            var r = RPMCommand();
+                                            r.run(socket.inputStream, socket.outputStream);
+                                            var res = r.result;
+                                            Log.d("Test", res)
+                                            res.replace("410C", "").toInt()
+                                            Log.d("Test", res)
+                                            val combinedDecimal = res.toInt(16)
+                                            Log.d("Test", combinedDecimal.toString())
+                                            rpm = (combinedDecimal / 4).toString();
+                                            Log.d("Test", rpm)
+
+
+                                            var t = EngineCoolantTemperatureCommand();
+                                            t.run(socket.inputStream, socket.outputStream);
+                                            coolantTemp = t.result;
+
+                                        } catch (err: Error) {
+                                            Log.e("Obd2Service", err.toString())
+                                        }
+                                    }
+                                }, 500, 1000)
+                                buttonClicked = false
+                            } catch (_: Error) {
                             }
-                            if (i.get() == 2) {
-                                speed = service.getSpeed()
-                            }
-                            if (i.get() == 3) {
-                                coolantTemp = service.getCoolantTemp()
-                                i.set(0)
-                            }
-                            i.incrementAndGet()
                         }
-                    }, 500, 1000)
-                    buttonClicked = false
+                    }
                 }
             }
 
@@ -279,12 +322,10 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
     @Composable
     fun StartStopButton() {
         Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
+            modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center
         ) {
             Button(
-                onClick = { onStartBtnClick() },
-                modifier = Modifier
+                onClick = { onStartBtnClick() }, modifier = Modifier
                     .padding(8.dp)
                     .weight(1f)
             ) {
@@ -292,8 +333,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
             }
 
             Button(
-                onClick = { onStopBtnClick() },
-                modifier = Modifier
+                onClick = { onStopBtnClick() }, modifier = Modifier
                     .padding(8.dp)
                     .weight(1f)
             ) {
@@ -360,8 +400,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
         onDeviceSelected: (BluetoothDevice) -> Unit
     ) {
         if (showDialog) {
-            AlertDialog(
-                onDismissRequest = onDismiss,
+            AlertDialog(onDismissRequest = onDismiss,
                 title = { Text("Select a Bluetooth Device") },
                 text = {
                     LazyColumn {
@@ -379,8 +418,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                     TextButton(onClick = onDismiss) {
                         Text("Cancel")
                     }
-                }
-            )
+                })
         }
     }
 
@@ -408,8 +446,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                 contentAlignment = Alignment.Center
             ) {
                 CircularProgressIndicator(
-                    modifier = Modifier
-                        .size(50.dp)
+                    modifier = Modifier.size(50.dp)
                 )
             }
         }
@@ -417,16 +454,14 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
 
     @Composable
     fun NoDeviceSelectedAlert(onDismiss: () -> Unit) {
-        AlertDialog(
-            onDismissRequest = { onDismiss() },
+        AlertDialog(onDismissRequest = { onDismiss() },
             title = { Text(text = "No Device Selected") },
             text = { Text(text = "Please select a device to connect.") },
             confirmButton = {
                 Button(onClick = { onDismiss() }) {
                     Text("OK")
                 }
-            }
-        )
+            })
     }
 
     @Composable
@@ -466,8 +501,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
     @Composable
     private fun MapButton(text: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
         Button(
-            modifier = modifier.padding(4.dp),
-            onClick = onClick
+            modifier = modifier.padding(4.dp), onClick = onClick
         ) {
             Text(text = text, style = MaterialTheme.typography.bodyMedium)
         }
@@ -496,19 +530,16 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
         val R = 6371
         val dLat = Math.toRadians(lat2 - lat1)
         val dLon = Math.toRadians(lon2 - lon1)
-        val a = sin(dLat / 2) * sin(dLat / 2) +
-                cos(Math.toRadians(lat1)) * cos(Math.toRadians(lat2)) *
-                sin(dLon / 2) * sin(dLon / 2)
+        val a =
+            sin(dLat / 2) * sin(dLat / 2) + cos(Math.toRadians(lat1)) * cos(Math.toRadians(lat2)) * sin(
+                dLon / 2
+            ) * sin(dLon / 2)
         val c = 2 * atan2(sqrt(a), sqrt(1 - a))
         return R * c * 1000
     }
 
     private fun isLocationChanged(
-        newLat: Double,
-        newLon: Double,
-        oldLat: Double,
-        oldLon: Double,
-        threshold: Double
+        newLat: Double, newLon: Double, oldLat: Double, oldLon: Double, threshold: Double
     ): Boolean {
         val distance = haversine(newLat, newLon, oldLat, oldLon)
         return distance > threshold

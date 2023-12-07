@@ -58,6 +58,7 @@ android {
 }
 
 dependencies {
+    implementation("com.github.pires:obd-java-api:1.0")
     implementation("com.github.eltonvs:kotlin-obd-api:1.3.0")
     implementation("com.google.android.gms:play-services-location:18.0.0")
     implementation("androidx.core:core-ktx:1.9.0")

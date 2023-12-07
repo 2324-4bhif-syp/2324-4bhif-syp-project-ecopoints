@@ -11,6 +11,7 @@ import android.hardware.SensorManager
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
@@ -39,8 +40,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import at.htl.ecopoints.activity.BluetoothDeviceListActivity
 import at.htl.ecopoints.activity.MapActivity
+import at.htl.ecopoints.db.CarData
+import at.htl.ecopoints.db.CarDataRepository
+import at.htl.ecopoints.db.CarDatabase
 import at.htl.ecopoints.service.AccelerometerSensorService
 import at.htl.ecopoints.service.LocationService
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
@@ -49,6 +54,8 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import java.sql.Timestamp
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.util.Locale
@@ -60,10 +67,31 @@ class MainActivity : ComponentActivity() {
     private var locationService: LocationService = LocationService()
     private var locationManager: LocationManager? = null
     private var isGPSEnabled: Boolean? = false
-
+    private lateinit var carDataRepository: CarDataRepository
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val carDatabase = CarDatabase.getDatabase(applicationContext)
+
+        val carDataRepository = CarDataRepository(carDatabase.carDataDao())
+
+        lifecycleScope.launch {
+            val carData = CarData(
+                longitude = 10.0,
+                latitude = 20.0,
+                currentEngineRPM = 1500.0,
+                currentVelocity = 60.0,
+                throttlePosition = 50.0,
+                engineRunTime = "2 hours",
+                timestamp = Timestamp.valueOf("2023-11-29 12:30:00")
+            )
+            carDataRepository.insertCarData(carData)
+        }
+        lifecycleScope.launch {
+            val allCarData = carDataRepository.getAllCarData()
+
+            for (carData in allCarData) Log.d("CarData: ", carData.toString())
+        }
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         locationRequest = com.google.android.gms.location.LocationRequest.create().apply {

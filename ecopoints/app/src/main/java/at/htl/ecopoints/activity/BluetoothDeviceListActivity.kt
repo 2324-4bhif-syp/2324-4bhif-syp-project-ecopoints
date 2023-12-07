@@ -23,7 +23,6 @@ import androidx.core.app.ActivityCompat
 import at.htl.ecopoints.service.BluetoothDeviceListService
 
 class BluetoothDeviceListActivity : ComponentActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val bluetoothDeviceService = BluetoothDeviceListService()
@@ -51,7 +50,6 @@ class BluetoothDeviceListActivity : ComponentActivity() {
         intent.putExtra("deviceAddress", device.address)
         startActivity(intent)
     }
-
 
     @Composable
     fun BluetoothDeviceList(devices: List<BluetoothDevice>) {

@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.sql.Timestamp
 
-@Entity(tableName = "car_data")
+@Entity(tableName = "ECO_CARDATA")
 data class CarData(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,

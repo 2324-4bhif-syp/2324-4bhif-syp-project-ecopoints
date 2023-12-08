@@ -3,6 +3,7 @@ package at.htl.ecopoints.db
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import android.content.Context
+import android.util.Log
 import androidx.room.Room
 
 @Database(entities = [CarData::class], version = 1)
@@ -14,12 +15,16 @@ abstract class CarDatabase : RoomDatabase() {
 
         fun getDatabase(context: Context): CarDatabase{
             if (INSTANCE == null){
-                synchronized(this){
-                    INSTANCE = Room.databaseBuilder(
-                        context.applicationContext,
-                        CarDatabase::class.java,
-                        "SQLLiteCarDatabase"
-                    ).build()
+                try {
+                    synchronized(this){
+                        INSTANCE = Room.databaseBuilder(
+                            context.applicationContext,
+                            CarDatabase::class.java,
+                            "ECO_POINTS_DATABASE"
+                        ).build()
+                    }
+                } catch (e: Exception){
+                    Log.e("CarDatabase", e.message.toString());
                 }
             }
             return INSTANCE!!

@@ -34,6 +34,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
@@ -119,7 +120,8 @@ class MainActivity : ComponentActivity() {
 
             EcoPointsTheme {
                 Surface(
-                    modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
                 ) {
 
                     SensorReading()
@@ -127,7 +129,9 @@ class MainActivity : ComponentActivity() {
                     ShowMap()
                     ShowBluetoothDevicesButton()
                     ShowTrip()
-                    Box {
+                    Box(
+                        modifier = Modifier.fillMaxSize()
+                    ){
 
                         BottomNavBar(
                             currentScreen = currentScreen,

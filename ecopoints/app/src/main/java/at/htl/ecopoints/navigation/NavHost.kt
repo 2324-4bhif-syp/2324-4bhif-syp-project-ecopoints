@@ -2,6 +2,7 @@ package at.htl.ecopoints.navigation
 
 import android.content.Context
 import android.content.Intent
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
@@ -28,8 +29,7 @@ fun BottomNavBar(
 ) {
     val screens = listOf("Home", "Trip", "Ranking", "Profile")
     BottomNavigation(
-        modifier = Modifier
-            .padding(0.dp, 775.dp, 0.dp, 0.dp)
+        modifier = Modifier.fillMaxWidth()
     ) {
         screens.forEach { screen ->
             BottomNavigationItem(

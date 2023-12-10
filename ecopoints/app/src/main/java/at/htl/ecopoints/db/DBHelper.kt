@@ -1,10 +1,18 @@
 package at.htl.ecopoints.db
 
+import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import at.htl.ecopoints.backendService.CarDataService
+import at.htl.ecopoints.backendService.TripService
+import at.htl.ecopoints.model.Trip
+import java.sql.Timestamp
+import java.time.LocalDate
+import java.util.Date
+import java.util.UUID
 
 class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     SQLiteOpenHelper(context, DATABASE_NAME, factory, DATABASE_VERSION) {
@@ -48,6 +56,80 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         val db = this.readableDatabase
 
         return db.rawQuery("SELECT * FROM " + TABLE_NAME, null)
+    }
+
+    fun deleteAllCarData(){
+        val db = this.writableDatabase
+        db.delete(TABLE_NAME, null, null)
+        db.close()
+    }
+
+    @SuppressLint("Range")
+    fun syncWithBackend(){
+        val cursor = getAllCarData()
+
+        cursor!!.moveToFirst()
+        val carDataList = ArrayList<CarData>()
+
+        do{
+            carDataList.add(getCarDataFromCursor(cursor))
+        }while(cursor.moveToNext())
+
+        val trip = createTrip(carDataList)
+        val id: UUID = trip.id
+
+        val tripService = TripService()
+        tripService.createTrip(trip)
+
+        for(carData in carDataList){
+            val carDataToSave = createCarData(carData, id)
+            val carDataService = CarDataService()
+            carDataService.createCarData(carDataToSave)
+        }
+    }
+
+    private fun createCarData(carData: CarData, tripId: UUID): at.htl.ecopoints.model.CarData{
+        val id: Long = 0
+        val longitude = carData.longitude
+        val latitude = carData.latitude
+        val currentEngineRPM = carData.currentEngineRPM
+        val currentVelocity = carData.currentVelocity
+        val throttlePosition = carData.throttlePosition
+        val engineRunTime = carData.engineRunTime
+        val timeStamp = Timestamp.valueOf(carData.timestamp.toString())
+
+        return at.htl.ecopoints.model.CarData(id, tripId, longitude, latitude, currentEngineRPM, currentVelocity, throttlePosition, engineRunTime, timeStamp)
+    }
+
+    private fun createTrip(carDataList: ArrayList<CarData>): Trip{
+        val id: UUID = UUID.randomUUID()
+        val distance = 0.0
+        val avgSpeed = 0.0
+        var avgEngineRotation = 0.0
+        val date: Date = Date()
+        val rewardedEcoPoints = 0.0
+
+        for(carData in carDataList) {
+            avgEngineRotation += carData.currentEngineRPM
+        }
+
+        avgEngineRotation /= carDataList.size
+
+        return Trip(id, distance, avgSpeed, avgEngineRotation, date, rewardedEcoPoints)
+    }
+
+    @SuppressLint("Range")
+    private fun getCarDataFromCursor(cursor: Cursor): CarData{
+        return CarData(
+            cursor.getLong(cursor.getColumnIndex(ID_COL)),
+            cursor.getDouble(cursor.getColumnIndex(LATITUDE_COL)),
+            cursor.getDouble(cursor.getColumnIndex(LONGITUDE_COl)),
+            cursor.getDouble(cursor.getColumnIndex(CURRENTENGINERPM_COL)),
+            cursor.getDouble(cursor.getColumnIndex(CURRENTVELOCITY_COL)),
+            cursor.getDouble(cursor.getColumnIndex(THROTTLEPOSITION_COL)),
+            cursor.getString(cursor.getColumnIndex(ENGINERUNTIME_COL)),
+            Timestamp.valueOf(cursor.getString(cursor.getColumnIndex(TIMESTAMP_COL)))
+        )
     }
 
     companion object{

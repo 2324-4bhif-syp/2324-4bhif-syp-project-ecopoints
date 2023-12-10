@@ -79,9 +79,8 @@ class MainActivity : ComponentActivity() {
             timestamp = Timestamp.valueOf("2023-11-29 12:30:00")
         )
         db.addCarData(carData)
-        val cursor = db.getAllCarData()
-        cursor!!.moveToFirst()
-        println(cursor.getString(cursor.getColumnIndex(DBHelper.CURRENTVELOCITY_COL)) + "\n")
+
+        //db.syncWithBackend()
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 

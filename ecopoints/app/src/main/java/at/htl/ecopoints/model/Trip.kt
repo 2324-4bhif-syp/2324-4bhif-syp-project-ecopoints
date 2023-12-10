@@ -1,6 +1,7 @@
 package at.htl.ecopoints.model
 
 import com.google.gson.annotations.SerializedName
+import java.time.LocalDate
 import java.util.Date
 import java.util.UUID
 

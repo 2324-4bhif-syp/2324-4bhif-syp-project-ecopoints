@@ -52,8 +52,10 @@ import at.htl.ecopoints.interfaces.OnLocationChangedListener
 import at.htl.ecopoints.service.BluetoothDeviceListService
 import at.htl.ecopoints.service.TestLocationService
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
+import com.github.eltonvs.obd.command.ObdCommand
 import com.github.eltonvs.obd.command.engine.RPMCommand
 import com.github.eltonvs.obd.command.engine.SpeedCommand
+import com.github.eltonvs.obd.command.temperature.EngineCoolantTemperatureCommand
 import com.github.eltonvs.obd.connection.ObdDeviceConnection
 import com.github.pires.obd.commands.protocol.EchoOffCommand
 import com.github.pires.obd.commands.protocol.LineFeedOffCommand
@@ -70,12 +72,17 @@ import com.google.maps.android.compose.rememberCameraPositionState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 import java.util.Timer
 import java.util.TimerTask
 import java.util.UUID
+import java.util.concurrent.atomic.AtomicInteger
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
@@ -97,7 +104,8 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
 
 
     @RequiresApi(Build.VERSION_CODES.S)
-    @SuppressLint("MissingPermission", "UnusedMaterialScaffoldPaddingParameter",
+    @SuppressLint(
+        "MissingPermission", "UnusedMaterialScaffoldPaddingParameter",
         "SourceLockedOrientationActivity"
     )
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -279,9 +287,12 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
     fun Read(
         bluetoothSocket: BluetoothSocket?, inputStream: InputStream?, outputStream: OutputStream?
     ) {
-        var rpm by remember { mutableStateOf("0") }
-        val speed by remember { mutableStateOf("0") }
-        val coolantTemp by remember { mutableStateOf("0") }
+//        var rpm by remember { mutableStateOf("0") }
+//        var speed by remember { mutableStateOf("0") }
+//        var coolantTemp by remember { mutableStateOf("0") }
+        val rpm = remember { mutableStateOf("0") }
+        val speed = remember { mutableStateOf("0") }
+        val coolantTemp = remember { mutableStateOf("0") }
         val coroutineScope = rememberCoroutineScope()
         if (bluetoothSocket != null && inputStream != null && outputStream != null) {
             EchoOffCommand().run(inputStream, outputStream)
@@ -289,81 +300,61 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
             TimeoutCommand(125).run(inputStream, outputStream)
             SelectProtocolCommand(ObdProtocols.AUTO).run(inputStream, outputStream)
 
+            val obdConnection = ObdDeviceConnection(inputStream, outputStream)
+
+            fun fetchData(command: ObdCommand): String = runBlocking {
+                try {
+                    withContext(Dispatchers.IO) {
+                        val obdConnection = ObdDeviceConnection(inputStream, outputStream)
+                        obdConnection.run(command).value
+                    }
+                } catch (e: Exception) {
+                    Log.e(tag, e.toString())
+                    "0" // Handle errors gracefully
+                }
+            }
+
+            val i: AtomicInteger = AtomicInteger(0);
+
             val timer = Timer()
             val task = object : TimerTask() {
-                val obdConnection = ObdDeviceConnection(inputStream, outputStream)
-                suspend fun getRpm(): String {
-                    try {
-                        val res = obdConnection.run(RPMCommand()).value
-                        Log.d(tag, "RPM: $res")
-                        return res
-
-                    } catch (_: Exception) {
-
-                    }
-                    return "0"
-                }
-
-                suspend fun getSpeed(): String {
-                    try {
-                        val res = obdConnection.run(SpeedCommand()).value
-                        Log.d(tag, "Speed: $res")
-                        return res
-
-                    } catch (_: Exception) {
-
-                    }
-                    return "0"
-                }
-
                 override fun run() {
-                    try {
-                        coroutineScope.launch(Dispatchers.IO) {
-                            rpm = getRpm()
-                           // speed = getSpeed()
+                    var rpmres = "0"
+                    var spdres = "0"
+                    var colres = "0"
+                    val obdConnection = ObdDeviceConnection(inputStream, outputStream)
+
+                    coroutineScope.launch(Dispatchers.IO)
+                    {
+                        try {
+                            i.set(i.get() + 1)
+                            Log.d(tag, "${i.get()}")
+                            if (i.get() == 1) {
+                                rpmres = fetchData(RPMCommand())
+                                Log.d(tag, "RPm $rpmres")
+                            } else if (i.get() == 2) {
+                                spdres = fetchData(SpeedCommand())
+                                Log.d(
+                                    tag, "speed $spdres"
+                                )
+                            } else if (i.get() == 3) {
+                                colres = fetchData(EngineCoolantTemperatureCommand())
+                                Log.d(tag, "col $colres")
+                            }
+
+                            rpm.value = rpmres
+                            speed.value = spdres
+                            coolantTemp.value = colres
+
+                            if (i.get() == 4) {
+                                Log.d(tag, "rpm main $rpm")
+                                Log.d(tag, "speed main $speed")
+                                Log.d(tag, "col  main$coolantTemp")
+                                i.set(0)
+                            }
+                        } catch (e: Exception) {
+                            Log.e(tag, e.toString())
                         }
-                        /*val speedCommand = SpeedCommand();
-                        val rpmCommand = RPMCommand();
-                        val coolantTemperatureCommand = EngineCoolantTemperatureCommand()
-
-                        speedCommand.run(inputStream, outputStream)
-                        val speedResponse = speedCommand.result.replace("410D", "")
-                        speed = speedResponse.toInt(16).toString()
-
-                        rpmCommand.run(inputStream, outputStream)
-                        val rpmResponse = rpmCommand.result.replace("410C", "")
-
-
-                        coolantTemperatureCommand.run(inputStream, outputStream)
-                        val coolantResponse = rpmCommand.result.replace("410D", "")
-                        coolantTemp = (coolantResponse.toInt(16) - 40).toString()
-
-
-                        val spd = SpeedCommand();
-                        spd.run(
-                            inputStream, outputStream
-                        );
-                        val speedtes = spd.result;
-                        Log.d(TAG, "Speed: $speedtes")
-                        speed = speedtes;
-
-                        var r = RPMCommand();
-                        r.run(
-                            inputStream, outputStream
-                        );
-                        var rpmres = r.result;
-                        Log.d(TAG, "RPM: $rpmres")
-                        rpm = rpmres;
-
-
-                        var t = EngineCoolantTemperatureCommand();
-                        t.run(
-                            inputStream, outputStream
-                        );
-                        coolantTemp = t.result;
-                        Log.d(TAG, "Cooland: $coolantTemp")*/
-                    } catch (e: Exception) {
-                        Log.e(tag, e.toString())
                     }
                 }
             }
@@ -490,36 +481,6 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
         }
     }
 
-//    @SuppressLint("CoroutineCreationDuringComposition")
-//    @Composable
-//    fun ConnectToDevice(
-//        connecting: Boolean,
-//        device: BluetoothDevice?,
-//        onDismiss: () -> Unit,
-//        onConnect: (Boolean) -> Unit
-//    ) {
-//        if (device == null) {
-//            NoDeviceSelectedAlert(onDismiss = onDismiss)
-//        } else if (connecting) {
-//
-//            CoroutineScope(Dispatchers.Main).launch {
-//                bluetoothService.connectDevice(device)
-//                onConnect(bluetoothService.connected())
-//            }
-//
-//            Box(
-//                modifier = Modifier
-//                    .fillMaxSize()
-//                    .background(Color(0x88000000)),
-//                contentAlignment = Alignment.Center
-//            ) {
-//                CircularProgressIndicator(
-//                    modifier = Modifier.size(50.dp)
-//                )
-//            }
-//        }
-//    }
-
     @Composable
     fun NoDeviceSelectedAlert(onDismiss: () -> Unit) {
         AlertDialog(onDismissRequest = { onDismiss() },
@@ -532,7 +493,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
             })
     }
 
-//region Map
+    // region Map
 
     @Composable
     private fun DrawPolyline() {
@@ -628,5 +589,5 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
         }
     }
 
-//endregion
+    //endregion
 }

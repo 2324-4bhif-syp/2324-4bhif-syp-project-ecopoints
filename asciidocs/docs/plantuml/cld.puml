@@ -19,7 +19,6 @@ class Trip {
 
 class CarData {
     id: Long
-    tripId: UUID
     longitude: double
     latitude: double
     currentEngineRPM: double
@@ -27,8 +26,22 @@ class CarData {
     throttlePosition: double
     engineRunTime: String
     timeStamp: Timestamp
- }
+    tripId: UUID
+}
+
+class CarDataEntry {
+    longitude: double
+    latitude: double
+    currentEngineRPM: double
+    currentVelocity: double
+    throttlePosition: double
+    engineRunTime: String
+    timeStamp: Timestamp
+    tripId: UUID
+}
+
 
 User "1" -- "*" Trip : > drives
- CarData "*" -- "1"  Trip : < has
+CarData "*" -- "1"  Trip : < has
+CarDataEntry -u-|> CarData
 @enduml

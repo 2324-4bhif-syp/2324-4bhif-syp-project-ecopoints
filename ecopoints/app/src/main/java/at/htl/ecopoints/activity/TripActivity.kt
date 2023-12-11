@@ -50,7 +50,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import at.htl.ecopoints.interfaces.OnLocationChangedListener
-import at.htl.ecopoints.MainActivity
 import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.service.BluetoothDeviceListService
 import at.htl.ecopoints.service.TestLocationService
@@ -84,8 +83,6 @@ import java.util.Timer
 import java.util.TimerTask
 import java.util.UUID
 import java.util.concurrent.atomic.AtomicInteger
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
@@ -176,13 +173,11 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                         verticalArrangement = Arrangement.Bottom,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Spacer(modifier = Modifier.height(16.dp)) // Space between text and buttons
 
                         StartStopButton()
                         ConnectionInfo(deviceNameText, connection)
 
                         Row(
-                            modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceEvenly
                         ) {
                             Button(
@@ -201,7 +196,10 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                             ) {
                                 Text(text = "Select Device")
                             }
+
                         }
+                        Spacer(modifier = Modifier.height(50.dp))
+
 
                         if (ActivityCompat.checkSelfPermission(
                                 this@TripActivity, Manifest.permission.BLUETOOTH_CONNECT
@@ -221,6 +219,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                                 })
                         }
                     }
+
 
                     Box {
                         BottomNavBar(
@@ -312,8 +311,6 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
             TimeoutCommand(125).run(inputStream, outputStream)
             SelectProtocolCommand(ObdProtocols.AUTO).run(inputStream, outputStream)
 
-            val obdConnection = ObdDeviceConnection(inputStream, outputStream)
-
             fun fetchData(command: ObdCommand): String = runBlocking {
                 try {
                     withContext(Dispatchers.IO) {
@@ -326,7 +323,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                 }
             }
 
-            val i: AtomicInteger = AtomicInteger(0);
+            val i = AtomicInteger(0);
 
             val timer = Timer()
             val task = object : TimerTask() {
@@ -334,8 +331,6 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                     var rpmres = "0"
                     var spdres = "0"
                     var colres = "0"
-                    val obdConnection = ObdDeviceConnection(inputStream, outputStream)
-
                     coroutineScope.launch(Dispatchers.IO)
                     {
                         try {

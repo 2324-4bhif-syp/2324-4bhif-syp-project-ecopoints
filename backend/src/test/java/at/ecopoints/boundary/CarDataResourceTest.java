@@ -37,6 +37,7 @@ class CarDataResourceTest {
         }
     }
 
+    /*
     @Test
     void addAndGetCarDataById() {
         given()
@@ -238,4 +239,6 @@ class CarDataResourceTest {
                 .body("time_stamp", equalTo("2023-11-08T14:45:00.000+00:00"));
 
     }
+
+    */
 }

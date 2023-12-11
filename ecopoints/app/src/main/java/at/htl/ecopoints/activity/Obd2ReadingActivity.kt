@@ -101,7 +101,6 @@ class Obd2ReadingActivity : ComponentActivity() {
 
         val service = Obd2Service(deviceAddress)
 
-
         Button(onClick = { buttonClicked = true }) {
             Text("Read with Custom Comm V1")
         }

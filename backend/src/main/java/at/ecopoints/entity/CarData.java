@@ -1,6 +1,9 @@
 package at.ecopoints.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import jakarta.persistence.*;
 
@@ -17,7 +20,7 @@ import java.util.UUID;
                 ),
                 @NamedQuery(
                         name = "CarData.findByTripId",
-                        query = "select c from CarData c where c.tripId = :tripId"
+                        query = "select c from CarData c where c.trip = :tripId"
                 )
         }
 )
@@ -25,9 +28,6 @@ public class CarData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @JsonProperty("trip_id")
-    private UUID tripId;
     private double longitude;
     private double latitude;
 
@@ -42,13 +42,18 @@ public class CarData {
     @JsonProperty("time_stamp")
     private Timestamp timeStamp;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH, CascadeType.REMOVE})
+    @ManyToOne(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE,
+            CascadeType.REFRESH,
+            CascadeType.DETACH,
+            CascadeType.REMOVE
+    })
     private Trip trip;
 
     //region Constructors
     public CarData(){}
-    public CarData(UUID tripId, double longitude, double latitude, double currentEngineRPM, double currentVelocity, double throttlePosition, String engineRunTime, Timestamp timeStamp, Trip trip) {
-        this.tripId = tripId;
+    public CarData(double longitude, double latitude, double currentEngineRPM, double currentVelocity, double throttlePosition, String engineRunTime, Timestamp timeStamp, Trip trip) {
         this.longitude = longitude;
         this.latitude = latitude;
         this.currentEngineRPM = currentEngineRPM;
@@ -67,14 +72,6 @@ public class CarData {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public UUID getTripId() {
-        return tripId;
-    }
-
-    public void setTripId(UUID tripId) {
-        this.tripId = tripId;
     }
 
     public double getLongitude() {
@@ -141,4 +138,14 @@ public class CarData {
         this.trip = trip;
     }
     //endregion
+
+
+    @Override
+    public String toString() {
+        return String.format("CarData{longitude=%s, latitude=%s," +
+                " currentEngineRPM=%s, currentVelocity=%s, throttlePosition=%s, engineRunTime=%s, " +
+                        "timeStamp=%s, trip=%s}",
+                longitude, latitude, currentEngineRPM, currentVelocity,
+                throttlePosition, engineRunTime, timeStamp, trip.getId());
+    }
 }

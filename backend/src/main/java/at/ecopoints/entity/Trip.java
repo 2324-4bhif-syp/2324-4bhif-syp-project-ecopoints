@@ -1,8 +1,10 @@
 package at.ecopoints.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Entity
 @Table(name = "ECO_TRIP")
@@ -11,45 +13,54 @@ import java.util.Date;
                 @NamedQuery(
                         name = "Trip.findAll",
                         query = "select t from Trip t"
-                ),
+                )/*,
                 @NamedQuery(
                         name = "Trip.findByUserId",
                         query = "select t from Trip t where t.user.id = :userId"
-                )
+                )*/
         }
 )
 public class Trip {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Id
+    private UUID id;
     private double distance;
+
+    @JsonProperty("avg_speed")
     private double avgSpeed;
+
+    @JsonProperty("avg_engine_rotation")
     private double avgEngineRotation;
     private Date date;
+
+    @JsonProperty("rewarded_eco_points")
     private double rewardedEcoPoints;
 
+    /*
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH, CascadeType.REMOVE})
     private User user;
+    */
 
     // region Constructors
     public Trip() {}
 
-    public Trip(double distance, double avgSpeed, double avgEngineRotation, Date date, double rewardedEcoPoints, User user) {
+    public Trip(UUID id, double distance, double avgSpeed, double avgEngineRotation, Date date, double rewardedEcoPoints/*, User user*/) {
+        this.id = id;
         this.distance = distance;
         this.avgSpeed = avgSpeed;
         this.avgEngineRotation = avgEngineRotation;
         this.date = date;
         this.rewardedEcoPoints = rewardedEcoPoints;
-        this.user = user;
+        //this.user = user;
     }
     // endregion
     
     // region Getter and Setter
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -93,6 +104,7 @@ public class Trip {
         this.rewardedEcoPoints = rewardedEcoPoints;
     }
 
+    /*
     public User getUser() {
         return user;
     }
@@ -100,5 +112,13 @@ public class Trip {
     public void setUser(User user) {
         this.user = user;
     }
+    */
     // endregion
+
+
+    @Override
+    public String toString() {
+        return String.format("Trip: %s, %s, %s, %s, %s, %s",
+                id, distance, avgSpeed, avgEngineRotation, date, rewardedEcoPoints);
+    }
 }

@@ -1,5 +1,6 @@
 package at.ecopoints.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
 
@@ -21,8 +22,12 @@ public class User {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @JsonProperty("user_name")
     private String userName;
     private String password;
+
+    @JsonProperty("eco_points")
     private double ecoPoints;
 
     // region Constructors
@@ -68,4 +73,10 @@ public class User {
         this.ecoPoints = ecoPoints;
     }
     // endregion
+
+
+    @Override
+    public String toString() {
+        return String.format("User: %s, %s, %s", id, userName, ecoPoints);
+    }
 }

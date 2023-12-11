@@ -1,6 +1,8 @@
 package at.ecopoints.repository;
 
 import at.ecopoints.entity.CarData;
+import at.ecopoints.entity.DTO.CarDataEntry;
+import at.ecopoints.entity.Trip;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
@@ -13,16 +15,36 @@ public class CarDataRepository {
     @Inject
     EntityManager em;
 
-    @Transactional
-    public void save(CarData carData) {
+    @Inject
+    TripRepository tripRepository;
+
+    public void save(CarDataEntry carDataEntry) {
+
+        CarData carData = createCarData(carDataEntry);
+
         em.persist(carData);
+    }
+
+    private CarData createCarData(CarDataEntry carDataEntry) {
+        Trip trip = tripRepository
+                .findById(carDataEntry.tripId());
+
+        return new CarData(
+                carDataEntry.longitude(),
+                carDataEntry.latitude(),
+                carDataEntry.currentEngineRPM(),
+                carDataEntry.currentVelocity(),
+                carDataEntry.throttlePosition(),
+                carDataEntry.engineRunTime(),
+                carDataEntry.timeStamp(),
+                trip
+        );
     }
 
     public CarData findById(Long id) {
         return em.find(CarData.class, id);
     }
 
-    @Transactional
     public void delete(Long id) {
         em.remove(findById(id));
     }
@@ -31,19 +53,10 @@ public class CarDataRepository {
         return em.createQuery("select c from CarData c", CarData.class).getResultList();
     }
 
-    @Transactional
-    public void update(CarData carData){
-        CarData cd = findById(carData.getId());
+    public void update(CarDataEntry carDataEntry, Long id){
+        CarData carData = createCarData(carDataEntry);
+        carData.setId(id);
 
-        cd.setTripId(carData.getTripId());
-        cd.setLatitude(carData.getLatitude());
-        cd.setLongitude(carData.getLongitude());
-        cd.setCurrentVelocity(carData.getCurrentVelocity());
-        cd.setCurrentEngineRPM(carData.getCurrentEngineRPM());
-        cd.setEngineRunTime(carData.getEngineRunTime());
-        cd.setTimeStamp(carData.getTimeStamp());
-        cd.setThrottlePosition(carData.getThrottlePosition());
-
-        em.merge(cd);
+        em.merge(carData);
     }
 }

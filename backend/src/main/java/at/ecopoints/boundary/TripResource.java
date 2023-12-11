@@ -2,12 +2,14 @@ package at.ecopoints.boundary;
 
 import at.ecopoints.entity.Trip;
 import at.ecopoints.repository.TripRepository;
+import io.quarkus.logging.Log;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.util.List;
+import java.util.UUID;
 
 @Path("/trip")
 public class TripResource {
@@ -17,7 +19,7 @@ public class TripResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{id}")
-    public Trip getCarDataById(@PathParam("id") Long id) {
+    public Trip getCarDataById(@PathParam("id") UUID id) {
         return tripRepository.findById(id);
     }
 
@@ -39,9 +41,9 @@ public class TripResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("{id}")
     @Transactional
-    public Response deleteCarData(@PathParam("id") Long id) {
+    public Response deleteCarData(@PathParam("id") UUID id) {
         tripRepository.delete(id);
-        return Response.status(Response.Status.OK).entity("Trip removed successfully").build();
+        return Response.status(Response.Status.NO_CONTENT).entity("Trip removed successfully").build();
     }
 
     @PUT

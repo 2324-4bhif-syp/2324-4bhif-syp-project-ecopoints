@@ -7,27 +7,27 @@ import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @ApplicationScoped
 public class TripRepository {
     @Inject
     EntityManager em;
 
-    @Transactional
     public void save(Trip trip){
         em.persist(trip);
     }
-    public Trip findById(Long id){
+    public Trip findById(UUID id){
         return em.find(Trip.class, id);
     }
-    @Transactional
-    public void delete(Long id){
+
+    public void delete(UUID id){
         em.remove(findById(id));
     }
     public List<Trip> getAll(){
         return em.createQuery("select t from Trip t", Trip.class).getResultList();
     }
-    @Transactional
+
     public void update(Trip trip){
         Trip tr = findById(trip.getId());
 

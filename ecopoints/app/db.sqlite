@@ -1,0 +1,10 @@
+CREATE TABLE car_data (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    longitude REAL NOT NULL,
+    latitude REAL NOT NULL,
+    currentEngineRPM REAL NOT NULL,
+    currentVelocity REAL NOT NULL,
+    throttlePosition REAL NOT NULL,
+    engineRunTime TEXT NOT NULL,
+    timestamp DATETIME
+);

@@ -14,11 +14,14 @@ import android.location.LocationManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -32,6 +35,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -44,6 +49,8 @@ import at.htl.ecopoints.activity.BluetoothDeviceListActivity
 import at.htl.ecopoints.activity.MapActivity
 import at.htl.ecopoints.db.CarData
 import at.htl.ecopoints.db.DBHelper
+import at.htl.ecopoints.activity.TripActivity
+import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.service.AccelerometerSensorService
 import at.htl.ecopoints.service.LocationService
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
@@ -92,6 +99,15 @@ class MainActivity : ComponentActivity() {
             priority = com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
         }
 
+        if (ContextCompat.checkSelfPermission(
+                this, Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            startLocationUpdates()
+        } else {
+            ActivityCompat.requestPermissions(
+                this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1
+            )
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             startLocationUpdates()
         } else {
@@ -107,18 +123,46 @@ class MainActivity : ComponentActivity() {
                     delay(250)
                 }
             }
+            val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Home") }
 
-            EcoPointsTheme {
-                // A surface container using the 'background' color from the theme
+/*            EcoPointsTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    Column() {
+                        SensorReading()
+                        PrintTravelledDistance(total.value)
+                        ShowMap()
+                        ShowBluetoothDevicesButton()
+                        ShowTrip()
+
+
+                    }
+                }
+            }*/
+
+            EcoPointsTheme {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+
                     SensorReading()
-                    LocationTest()
                     PrintTravelledDistance(total.value)
                     ShowMap()
                     ShowBluetoothDevicesButton()
+                    ShowTrip()
+                    Box(
+                        modifier = Modifier.fillMaxSize()
+                    ){
+
+                        BottomNavBar(
+                            currentScreen = currentScreen,
+                            onScreenSelected = { newScreen -> setCurrentScreen(newScreen) },
+                            context = this@MainActivity
+                        )
+                    }
                 }
             }
         }
@@ -130,10 +174,7 @@ class MainActivity : ComponentActivity() {
 
     private fun startLocationUpdates() {
         locationService.startLocationUpdates(
-            this,
-            fusedLocationClient,
-            locationRequest,
-            locationCallback
+            this, fusedLocationClient, locationRequest, locationCallback
         )
     }
 
@@ -176,12 +217,7 @@ class MainActivity : ComponentActivity() {
         }
 
         ShowAccelerometerReading(
-            sensorX,
-            sensorY,
-            sensorZ,
-            sensorXMax,
-            sensorYMax,
-            sensorZMax
+            sensorX, sensorY, sensorZ, sensorXMax, sensorYMax, sensorZMax
         )
 
         fun updateSensors() {
@@ -214,59 +250,19 @@ class MainActivity : ComponentActivity() {
 
         LaunchedEffect(sensorManager) {
             sensorManager.registerListener(
-                sensorListener,
-                accelerometerSensor,
-                SensorManager.SENSOR_DELAY_NORMAL
+                sensorListener, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL
             )
         }
 
         Text(
-            text = "Accelerometer-Sensor Value:",
-            style = TextStyle(fontSize = 20.sp)
+            text = "Accelerometer-Sensor Value:", style = TextStyle(fontSize = 20.sp)
         )
-    }
-    @Composable
-    fun LocationTest() {
-
-        val context = LocalContext.current
-        val permission =
-            ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
-        val permission2 =
-            ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)
-
-        if (permission != PackageManager.PERMISSION_GRANTED || permission2 != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(
-                context as MainActivity,
-                arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                ),
-                1
-            )
-        }
-        locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        isGPSEnabled = locationManager?.isProviderEnabled(LocationManager.GPS_PROVIDER)
-
-        Text(
-            text = "GPS: $isGPSEnabled",
-            style = TextStyle(fontSize = 20.sp),
-            modifier = Modifier.padding(0.dp, 230.dp, 0.dp, 0.dp)
-        )
-
-//    var location : Location = locationManager!!.getLastKnownLocation(LocationManager.GPS_PROVIDER) as Location
-//
-//    speed = location.getSpeed();
-//    currentSpeed = round(speed as Double);
-//    kmhSpeed = currentSpeed*3.6
-//
-//    Text(text = "Speed: $kmhSpeed kmh" , style = TextStyle(fontSize = 20.sp), modifier = Modifier.padding(0.dp, 250.dp, 0.dp, 0.dp))
     }
 
     @Composable
     fun ResetButton(onResetClick: () -> Unit) {
         Box(
-            modifier = Modifier
-                .fillMaxSize()
+            modifier = Modifier.fillMaxSize()
         ) {
             Button(
                 onClick = onResetClick,
@@ -295,64 +291,51 @@ class MainActivity : ComponentActivity() {
                 .padding(16.dp)
         ) {
             Column(
-                modifier = Modifier
-                    .weight(1f)
+                modifier = Modifier.weight(1f)
             ) {
                 Text(
-                    text = "X: $sensorX",
-                    style = TextStyle(
+                    text = "X: $sensorX", style = TextStyle(
                         color = MaterialTheme.colorScheme.secondary,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center
-                    ),
-                    modifier = Modifier.padding(16.dp)
+                    ), modifier = Modifier.padding(16.dp)
                 )
                 Text(
-                    text = "Y: $sensorY",
-                    style = TextStyle(
+                    text = "Y: $sensorY", style = TextStyle(
                         color = MaterialTheme.colorScheme.secondary,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center
-                    ),
-                    modifier = Modifier.padding(16.dp)
+                    ), modifier = Modifier.padding(16.dp)
                 )
                 Text(
-                    text = "Z: $sensorZ",
-                    style = TextStyle(
+                    text = "Z: $sensorZ", style = TextStyle(
                         color = MaterialTheme.colorScheme.secondary,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center
-                    ),
-                    modifier = Modifier.padding(16.dp)
+                    ), modifier = Modifier.padding(16.dp)
                 )
             }
             Column {
                 Text(
-                    text = "XMax: $sensorXMax",
-                    style = TextStyle(
+                    text = "XMax: $sensorXMax", style = TextStyle(
                         color = MaterialTheme.colorScheme.secondary,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center
-                    ),
-                    modifier = Modifier.padding(16.dp)
+                    ), modifier = Modifier.padding(16.dp)
                 )
                 Text(
-                    text = "YMax: $sensorYMax",
-                    style = TextStyle(
+                    text = "YMax: $sensorYMax", style = TextStyle(
                         color = MaterialTheme.colorScheme.secondary,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center
-                    ),
-                    modifier = Modifier.padding(16.dp)
+                    ), modifier = Modifier.padding(16.dp)
                 )
                 Text(
-                    text = "ZMax: $sensorZMax",
-                    style = TextStyle(
+                    text = "ZMax: $sensorZMax", style = TextStyle(
                         color = MaterialTheme.colorScheme.secondary,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center
-                    ),
-                    modifier = Modifier.padding(16.dp)
+                    ), modifier = Modifier.padding(16.dp)
                 )
             }
         }
@@ -367,19 +350,17 @@ class MainActivity : ComponentActivity() {
                 onClick = {
                     startActivity(
                         Intent(
-                            this@MainActivity,
-                            BluetoothDeviceListActivity::class.java
+                            this@MainActivity, BluetoothDeviceListActivity::class.java
                         )
                     )
-                },
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(16.dp)
+                }, modifier = Modifier
+                    .padding(80.dp, 500.dp, 0.dp, 0.dp) //.padding(0.dp, 160.dp, 170.dp, 0.dp)
             ) {
                 Text(text = "Show Paired Bluetooth Devices")
             }
         }
     }
+
 
     @Composable
     fun ShowMap() {
@@ -389,12 +370,29 @@ class MainActivity : ComponentActivity() {
             Button(
                 onClick = {
                     startActivity(Intent(this@MainActivity, MapActivity::class.java))
-                },
-                modifier = Modifier
+                }, modifier = Modifier
                     .align(Alignment.Center)
                     .padding(16.dp)
             ) {
                 Text(text = "Show Map")
+            }
+        }
+    }
+
+    @Composable
+    fun ShowTrip() {
+        Spacer(modifier = Modifier.height(100.dp))
+        Box(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Button(
+                onClick = {
+                    startActivity(Intent(this@MainActivity, TripActivity::class.java))
+                }, modifier = Modifier
+                    .align(Alignment.Center)
+                    .padding(16.dp)
+            ) {
+                Text(text = "Show Trip")
             }
         }
     }

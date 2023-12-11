@@ -1,4 +1,6 @@
-package at.htl.ecopoints
+package at.htl.ecopoints.command
+
+import at.htl.ecopoints.OBDBluetoothInterface
 
 class OBDCommandHelper(private val obdBluetoothInterface: OBDBluetoothInterface) {
 
@@ -23,7 +25,7 @@ class OBDCommandHelper(private val obdBluetoothInterface: OBDBluetoothInterface)
         val rawData =  obdBluetoothInterface.sendCommand(command)
 
         try {
-            val cleanData = rawData.replace("OK", "").replace("SEARCHING...", "").replace("SEARCHING:","")
+            val cleanData = cleanResponse(rawData, command)
             val array = cleanData.split(" ")
 
             if (array.size >= 4) {
@@ -45,7 +47,7 @@ class OBDCommandHelper(private val obdBluetoothInterface: OBDBluetoothInterface)
         val command = "01 05"
         val rawData =  obdBluetoothInterface.sendCommand(command)
         try {
-            val cleanData = rawData.replace("OK", "").replace("SEARCHING...", "").replace("SEARCHING:","")
+            val cleanData = cleanResponse(rawData, command)
             val array = cleanData.split(" ")
 
             if (array.size >= 4) {
@@ -67,7 +69,7 @@ class OBDCommandHelper(private val obdBluetoothInterface: OBDBluetoothInterface)
         val rawData = obdBluetoothInterface.sendCommand(command)
 
         try {
-            val cleanData = rawData.replace("OK", "").replace("SEARCHING...", "").replace("SEARCHING:","")
+            val cleanData = cleanResponse(rawData, command)
             val array = cleanData.split(" ")
 
             if (array.size >= 3) {
@@ -82,5 +84,16 @@ class OBDCommandHelper(private val obdBluetoothInterface: OBDBluetoothInterface)
         }
 
         return "0"
+    }
+
+
+    private fun cleanResponse(response: String, command: String): String {
+        return response
+            .replace("OK", "")
+            .replace("SEARCHING...", "")
+            .replace("SEARCHING:", "")
+            .replace(command, "")
+            .replace(command.trim(), "")
+            .replace(">", "")
     }
 }

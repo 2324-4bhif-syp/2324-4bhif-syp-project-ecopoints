@@ -6,7 +6,15 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
     <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
 
     <application
         android:usesCleartextTraffic="true"
@@ -19,9 +27,30 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EcoPoints"
         tools:targetApi="31">
+        <activity
+            android:name=".activity.ui.theme.ProfileActivity"
+            android:exported="false"
+            android:label="@string/title_activity_profile"
+            android:theme="@style/Theme.EcoPoints" />
+        <activity
+            android:name=".activity.ui.theme.TestActivity"
+            android:exported="false"
+            android:label="@string/title_activity_test" />
+        <activity
+            android:name=".activity.ui.theme.RankingActivity"
+            android:exported="false"
+            android:label="@string/title_activity_ranking"
+            android:theme="@style/Theme.EcoPoints" />
+        <activity
+            android:name=".activity.PersonActivity"
+            android:exported="false"
+            android:label="@string/title_activity_person"
+            android:theme="@style/Theme.EcoPoints" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="${googleMapsApiKey}" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -33,13 +62,10 @@
             </intent-filter>
 
         </activity>
-        <activity android:name=".activity.BluetoothDeviceListActivity"></activity>
-        <activity android:name=".activity.Obd2ReadingActivity"></activity>
-        <activity android:name=".activity.MapActivity"></activity>
-
+        <activity android:name=".activity.BluetoothDeviceListActivity" />
+        <activity android:name=".activity.TripActivity" />
+        <activity android:name=".activity.Obd2ReadingActivity" />
+        <activity android:name=".activity.MapActivity" />
     </application>
-    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT"/>
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
 </manifest>

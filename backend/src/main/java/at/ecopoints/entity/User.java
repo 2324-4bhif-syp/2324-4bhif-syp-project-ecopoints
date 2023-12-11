@@ -1,11 +1,30 @@
 package at.ecopoints.entity;
 
+import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
+
+@Entity
+@Table(name = "ECO_USER")
+@NamedQueries(
+        {
+                @NamedQuery(
+                        name = "User.findAll",
+                        query = "select u from User u"
+                ),
+                @NamedQuery(
+                        name = "User.findByUserName",
+                        query = "select u from User u where u.userName = :userName"
+                )
+        }
+)
 public class User {
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String userName;
     private String password;
     private double ecoPoints;
-    
+
     // region Constructors
     public User() { }
 

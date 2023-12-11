@@ -1,8 +1,26 @@
 package at.ecopoints.entity;
 
+import jakarta.persistence.*;
+
 import java.util.Date;
 
+@Entity
+@Table(name = "ECO_TRIP")
+@NamedQueries(
+        {
+                @NamedQuery(
+                        name = "Trip.findAll",
+                        query = "select t from Trip t"
+                ),
+                @NamedQuery(
+                        name = "Trip.findByUserId",
+                        query = "select t from Trip t where t.user.id = :userId"
+                )
+        }
+)
 public class Trip {
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private double distance;
     private double avgSpeed;
@@ -10,15 +28,19 @@ public class Trip {
     private Date date;
     private double rewardedEcoPoints;
 
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH, CascadeType.REMOVE})
+    private User user;
+
     // region Constructors
     public Trip() {}
 
-    public Trip(double distance, double avgSpeed, double avgEngineRotation, Date date, double rewardedEcoPoints) {
+    public Trip(double distance, double avgSpeed, double avgEngineRotation, Date date, double rewardedEcoPoints, User user) {
         this.distance = distance;
         this.avgSpeed = avgSpeed;
         this.avgEngineRotation = avgEngineRotation;
         this.date = date;
         this.rewardedEcoPoints = rewardedEcoPoints;
+        this.user = user;
     }
     // endregion
     
@@ -69,6 +91,14 @@ public class Trip {
 
     public void setRewardedEcoPoints(double rewardedEcoPoints) {
         this.rewardedEcoPoints = rewardedEcoPoints;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
     // endregion
 }

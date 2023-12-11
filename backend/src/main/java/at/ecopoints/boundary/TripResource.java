@@ -21,11 +21,11 @@ public class TripResource {
         return tripRepository.findById(id);
     }
 
-    /*@GET
+    @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Trip> getAllCarData() {
         return tripRepository.getAll();
-    }*/
+    }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)

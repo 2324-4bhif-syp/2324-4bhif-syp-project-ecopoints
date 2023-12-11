@@ -1,0 +1,102 @@
+= EcoPoints
+:revealjs_theme: white
+ifndef::imagesdir[:imagesdir: ../images]
+ifdef::env-ide[]
+:imagesdir: ../images
+endif::[]
+ifndef::env-ide[]
+:imagesdir: images
+endif::[]
+
+[.font-xx-large]
+== Team
+
+|===
+|Name |Foto
+
+|Abdullah Aldesoky
+| image:team/Abdullah-Aldesoky.jpg[width=120, height=150]
+
+|Oliver Daxinger
+| image:team/Daxinger-Oliver.jpg[width=120, height=150]
+
+
+|===
+
+=== Team
+
+|===
+|Name |Foto
+
+|Laurent Mali
+| image:team/Laurent-Mali.jpg[width=120, height=150]
+
+|Linus Nestler
+| image:team/Linus-Nestler.jpeg[width=120, height=150]
+
+|===
+
+=== Team
+
+|===
+|Name |Foto
+
+|Armin Salkovic
+|image:team/Armin-Salkovic.jpeg[width=120, height=150]
+
+|===
+
+
+== EcoPoints
+
+* "Fahrverhaltensvergleichsplattform"
+* Vergleicht das Fahrverhalten von Fahrern aufgrund von Sensordaten
+** Fahrer können freiwillig mitmachen
+** Die Daten werden vom Auto über dem OBD2 Port ausgelesen
+
+[.font-xx-large]
+== Sprint 1
+
+* Jetpack-compose app
+** Sensordaten auslesen
+** Wer?
+*** Alle
+
+=== Sensor Daten
+
+image:sensor-reading.jpg[500,200]
+
+[.font-xx-large]
+== Sprint 2
+
+* OBD2 Daten auslesen
+** ELM327 über bluetooth
+
+Oliver
+
+* Gps Daten auslesen
+* Google Maps API
+
+=== OBD2
+
+image:bt-devices.jpeg[500,200]
+image:obd2-reading.jpeg[500,200]
+
+=== Maps
+
+image:maps.jpeg[500,200]
+
+== Sprint 2
+
+Armin, Abdullah, Laurent
+
+* Oracle Server
+** Quarkus backend
+** Postgres Datenbank
+
+[.font-xx-large]
+=== Oracle Cloud Server
+* http://132.145.237.245/[]
+
+
+

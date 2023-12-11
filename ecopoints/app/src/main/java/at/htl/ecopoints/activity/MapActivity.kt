@@ -18,6 +18,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material.*
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,16 +37,27 @@ import androidx.compose.ui.unit.dp
 import at.htl.ecopoints.interfaces.OnLocationChangedListener
 import at.htl.ecopoints.service.TestLocationService
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.unit.dp
+import at.htl.ecopoints.ui.theme.EcoPointsTheme
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.CameraPositionState
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapType
+import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
+import kotlinx.coroutines.launch
 
 class MapActivity : ComponentActivity(), OnLocationChangedListener {
 
@@ -104,6 +119,40 @@ class MapActivity : ComponentActivity(), OnLocationChangedListener {
                     }
                 }
             }
+
+        setContent {
+            val htlLeonding = LatLng(48.270270270, 14.2656899796)
+            val cameraPositionState = rememberCameraPositionState {
+                position = CameraPosition.fromLatLngZoom(htlLeonding, 10f)
+            }
+            var mapProperties by remember {
+                mutableStateOf(MapProperties(mapType = MapType.NORMAL))
+            }
+            EcoPointsTheme {
+                // A surface container using the 'background' color from the theme
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    GoogleMap(
+                        modifier = Modifier.fillMaxSize(),
+                        cameraPositionState = cameraPositionState,
+                        properties = mapProperties
+                    ) {
+                        Marker(
+                            state = MarkerState(position = htlLeonding),
+                            title = "Htl Leonding",
+                            snippet = "Marker in Leonding"
+                        )
+                    }
+                    Column {
+                        MapTypeControls(onMapTypeClick = {
+                            Log.d("GoogleMap", "Selected map type $it")
+                            mapProperties = mapProperties.copy(mapType = it)
+                        })
+                    }
+                }
+            }
         }
     }
 
@@ -122,6 +171,19 @@ class MapActivity : ComponentActivity(), OnLocationChangedListener {
     }
 
     @Composable
+    private fun MapTypeControls(
+        onMapTypeClick: (MapType) -> Unit
+    ) {
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .horizontalScroll(state = ScrollState(0)),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            MapType.values().forEach {
+                MapTypeButton(type = it) { onMapTypeClick(it) }
+            }
+        }
     private fun MapTypeControls(
         onMapTypeClick: (MapType) -> Unit
     ) {

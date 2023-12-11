@@ -6,10 +6,12 @@ import android.app.Activity
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothSocket
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -33,7 +35,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -49,8 +50,6 @@ import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import at.htl.ecopoints.interfaces.OnLocationChangedListener
 import at.htl.ecopoints.service.BluetoothDeviceListService
-import at.htl.ecopoints.service.BluetoothService
-import at.htl.ecopoints.service.Obd2Service
 import at.htl.ecopoints.service.TestLocationService
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
 import com.github.eltonvs.obd.command.engine.RPMCommand
@@ -60,7 +59,6 @@ import com.github.pires.obd.commands.protocol.EchoOffCommand
 import com.github.pires.obd.commands.protocol.LineFeedOffCommand
 import com.github.pires.obd.commands.protocol.SelectProtocolCommand
 import com.github.pires.obd.commands.protocol.TimeoutCommand
-import com.github.pires.obd.commands.temperature.EngineCoolantTemperatureCommand
 import com.github.pires.obd.enums.ObdProtocols
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -72,25 +70,21 @@ import com.google.maps.android.compose.rememberCameraPositionState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
-import java.lang.Error
 import java.util.Timer
 import java.util.TimerTask
 import java.util.UUID
-import java.util.concurrent.atomic.AtomicInteger
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.math.sqrt
 
 class TripActivity : ComponentActivity(), OnLocationChangedListener {
-    private val TAG = "TripActivity"
+    private val tag = "TripActivity"
     private var selectedDevice: BluetoothDevice? = null
     private val bluetoothDeviceService = BluetoothDeviceListService()
-    private val bluetoothService: BluetoothService = BluetoothService()
     private val testLocationService: TestLocationService by lazy {
         TestLocationService(this)
     }
@@ -98,12 +92,14 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
     private var latitude = 48.306940
     private var latLngHasChanged = mutableStateOf(false)
     private var tripActive = false
-    private var timer = java.util.Timer()
 
     private val latLngList = mutableStateListOf<Pair<Color, Pair<LatLng, Double>>>()
 
 
-    @SuppressLint("MissingPermission", "UnusedMaterialScaffoldPaddingParameter")
+    @RequiresApi(Build.VERSION_CODES.S)
+    @SuppressLint("MissingPermission", "UnusedMaterialScaffoldPaddingParameter",
+        "SourceLockedOrientationActivity"
+    )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -113,7 +109,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
             var isConnecting by remember { mutableStateOf(false) }
             var connection by remember { mutableStateOf("Not Connected") }
             val currentLocation = LatLng(latitude, longitude)
-            var cameraPositionState = rememberCameraPositionState {
+            val cameraPositionState = rememberCameraPositionState {
                 position = CameraPosition.fromLatLngZoom(currentLocation, 10f)
             }
             var mapProperties by remember {
@@ -157,11 +153,10 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                         Connect(
                             selectedDevice,
                             onDismiss = { isConnecting = false },
-                            onConnect = { it ->
+                            onConnect = {
                                 connection = it
                             })
                     }
-
 
                     Column(
                         modifier = Modifier.fillMaxSize(),
@@ -248,11 +243,11 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
             var outputStream: OutputStream? by remember { mutableStateOf(null) }
             var bluetoothSocket: BluetoothSocket? by remember { mutableStateOf(null) }
             var isConnected by remember {
-                mutableStateOf(false);
+                mutableStateOf(false)
             }
 
             LaunchedEffect(Unit) {
-                val job = CoroutineScope(Dispatchers.IO).launch {
+                CoroutineScope(Dispatchers.IO).launch {
                     try {
                         onConnect("Connecting ...")
                         bluetoothSocket = device.createRfcommSocketToServiceRecord(uuid)
@@ -260,11 +255,11 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                         inputStream = bluetoothSocket?.inputStream
                         outputStream = bluetoothSocket?.outputStream
                         onConnect("Connected")
-                        Log.d(TAG, inputStream.toString())
-                        Log.d(TAG, outputStream.toString())
-                        isConnected = true;
+                        Log.d(tag, inputStream.toString())
+                        Log.d(tag, outputStream.toString())
+                        isConnected = true
                     } catch (e: IOException) {
-                        Log.e(TAG, e.toString())
+                        Log.e(tag, e.toString())
                         onConnect("Failed to connect")
                     }
                 }
@@ -285,8 +280,8 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
         bluetoothSocket: BluetoothSocket?, inputStream: InputStream?, outputStream: OutputStream?
     ) {
         var rpm by remember { mutableStateOf("0") }
-        var speed by remember { mutableStateOf("0") }
-        var coolantTemp by remember { mutableStateOf("0") }
+        val speed by remember { mutableStateOf("0") }
+        val coolantTemp by remember { mutableStateOf("0") }
         val coroutineScope = rememberCoroutineScope()
         if (bluetoothSocket != null && inputStream != null && outputStream != null) {
             EchoOffCommand().run(inputStream, outputStream)
@@ -300,25 +295,25 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                 suspend fun getRpm(): String {
                     try {
                         val res = obdConnection.run(RPMCommand()).value
-                        Log.d(TAG, "RPM: $res")
+                        Log.d(tag, "RPM: $res")
                         return res
 
                     } catch (_: Exception) {
 
                     }
-                    return "0";
+                    return "0"
                 }
 
                 suspend fun getSpeed(): String {
                     try {
                         val res = obdConnection.run(SpeedCommand()).value
-                        Log.d(TAG, "Speed: $res")
+                        Log.d(tag, "Speed: $res")
                         return res
 
                     } catch (_: Exception) {
 
                     }
-                    return "0";
+                    return "0"
                 }
 
                 override fun run() {
@@ -368,7 +363,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                         coolantTemp = t.result;
                         Log.d(TAG, "Cooland: $coolantTemp")*/
                     } catch (e: Exception) {
-                        Log.e(TAG, e.toString())
+                        Log.e(tag, e.toString())
                     }
                 }
             }
@@ -476,7 +471,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                 text = {
                     LazyColumn {
                         items(
-                            pairedDevices.filter { it -> it.name.lowercase().contains("obd") }
+                            pairedDevices.filter { it.name.lowercase().contains("obd") }
                         ) { device ->
                             TextButton(
                                 onClick = { onDeviceSelected(device) },
@@ -602,7 +597,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
     }
 
     private fun haversine(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
-        val R = 6371
+        val r = 6371
         val dLat = Math.toRadians(lat2 - lat1)
         val dLon = Math.toRadians(lon2 - lon1)
         val a =
@@ -610,7 +605,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                 dLon / 2
             ) * sin(dLon / 2)
         val c = 2 * atan2(sqrt(a), sqrt(1 - a))
-        return R * c * 1000
+        return r * c * 1000
     }
 
     private fun isLocationChanged(

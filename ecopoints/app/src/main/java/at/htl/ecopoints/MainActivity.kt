@@ -120,24 +120,6 @@ class MainActivity : ComponentActivity() {
                     delay(250)
                 }
             }
-            val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Home") }
-
-/*            EcoPointsTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Column() {
-                        SensorReading()
-                        PrintTravelledDistance(total.value)
-                        ShowMap()
-                        ShowBluetoothDevicesButton()
-                        ShowTrip()
-
-
-                    }
-                }
-            }*/
 
             EcoPointsTheme {
                 Surface(
@@ -150,6 +132,8 @@ class MainActivity : ComponentActivity() {
                     //ShowMap()
                     ShowBluetoothDevicesButton()
                     ShowTrip()
+
+                    val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Home") }
                     Box(
                         modifier = Modifier.fillMaxSize()
                     ){
@@ -228,7 +212,6 @@ class MainActivity : ComponentActivity() {
             sensorYMax = accelerometerSensorService.sensorYMax
             sensorZMax = accelerometerSensorService.sensorZMax
         }
-
         ResetButton(onResetClick = resetSensors)
 
         val sensorListener = object : SensorEventListener {

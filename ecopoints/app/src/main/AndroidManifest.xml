@@ -62,9 +62,7 @@
             </intent-filter>
 
         </activity>
-        <activity android:name=".activity.BluetoothDeviceListActivity" />
         <activity android:name=".activity.TripActivity" />
-        <activity android:name=".activity.Obd2ReadingActivity" />
     </application>
 
 </manifest>

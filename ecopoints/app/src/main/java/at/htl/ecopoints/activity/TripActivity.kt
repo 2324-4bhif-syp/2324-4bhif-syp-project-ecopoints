@@ -154,7 +154,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                     }
 
                     if (isConnecting) {
-                        Connect(connecting = isConnecting,
+                        Connect(
                             selectedDevice,
                             onDismiss = { isConnecting = false },
                             onConnect = { it ->
@@ -235,7 +235,6 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
     @SuppressLint("MissingPermission", "CoroutineCreationDuringComposition")
     @Composable
     private fun Connect(
-        connecting: Boolean,
         device: BluetoothDevice?,
         onDismiss: () -> Unit,
         onConnect: (String) -> Unit
@@ -307,7 +306,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                     } catch (_: Exception) {
 
                     }
-                    return "00";
+                    return "0";
                 }
 
                 suspend fun getSpeed(): String {
@@ -319,7 +318,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                     } catch (_: Exception) {
 
                     }
-                    return "00";
+                    return "0";
                 }
 
                 override fun run() {
@@ -328,46 +327,46 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                             rpm = getRpm()
                            // speed = getSpeed()
                         }
-//                        val speedCommand = SpeedCommand();
-//                        val rpmCommand = RPMCommand();
-//                        val coolantTemperatureCommand = EngineCoolantTemperatureCommand()
-//
-////                        speedCommand.run(inputStream, outputStream)
-////                        val speedResponse = speedCommand.result.replace("410D", "")
-////                        speed = speedResponse.toInt(16).toString()
-//
-//                        rpmCommand.run(inputStream, outputStream)
-//                        val rpmResponse = rpmCommand.result.replace("410C", "")
+                        /*val speedCommand = SpeedCommand();
+                        val rpmCommand = RPMCommand();
+                        val coolantTemperatureCommand = EngineCoolantTemperatureCommand()
+
+                        speedCommand.run(inputStream, outputStream)
+                        val speedResponse = speedCommand.result.replace("410D", "")
+                        speed = speedResponse.toInt(16).toString()
+
+                        rpmCommand.run(inputStream, outputStream)
+                        val rpmResponse = rpmCommand.result.replace("410C", "")
 
 
-//                        coolantTemperatureCommand.run(inputStream, outputStream)
-//                        val coolantResponse = rpmCommand.result.replace("410D", "")
-//                        coolantTemp = (coolantResponse.toInt(16) - 40).toString()
+                        coolantTemperatureCommand.run(inputStream, outputStream)
+                        val coolantResponse = rpmCommand.result.replace("410D", "")
+                        coolantTemp = (coolantResponse.toInt(16) - 40).toString()
 
 
-//                        val spd = SpeedCommand();
-//                        spd.run(
-//                            inputStream, outputStream
-//                        );
-//                        val speedtes = spd.result;
-//                        Log.d(TAG, "Speed: $speedtes")
-//                        speed = speedtes;
-//
-//                        var r = RPMCommand();
-//                        r.run(
-//                            inputStream, outputStream
-//                        );
-//                        var rpmres = r.result;
-//                        Log.d(TAG, "RPM: $rpmres")
-//                        rpm = rpmres;
-//
-//
-//                        var t = EngineCoolantTemperatureCommand();
-//                        t.run(
-//                            inputStream, outputStream
-//                        );
-//                        coolantTemp = t.result;
-//                        Log.d(TAG, "Cooland: $coolantTemp")
+                        val spd = SpeedCommand();
+                        spd.run(
+                            inputStream, outputStream
+                        );
+                        val speedtes = spd.result;
+                        Log.d(TAG, "Speed: $speedtes")
+                        speed = speedtes;
+
+                        var r = RPMCommand();
+                        r.run(
+                            inputStream, outputStream
+                        );
+                        var rpmres = r.result;
+                        Log.d(TAG, "RPM: $rpmres")
+                        rpm = rpmres;
+
+
+                        var t = EngineCoolantTemperatureCommand();
+                        t.run(
+                            inputStream, outputStream
+                        );
+                        coolantTemp = t.result;
+                        Log.d(TAG, "Cooland: $coolantTemp")*/
                     } catch (e: Exception) {
                         Log.e(TAG, e.toString())
                     }
@@ -376,7 +375,6 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
 
             timer.schedule(task, 1000, 1000)
             Thread.setDefaultUncaughtExceptionHandler { _, throwable ->
-                // Handle the uncaught exception here
                 Log.e("UncaughtException", "Unhandled exception: $throwable")
             }
         }

@@ -68,6 +68,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        /*
         val db = DBHelper(this, null)
         val carData = CarData(
             longitude = 10.0,
@@ -79,8 +80,9 @@ class MainActivity : ComponentActivity() {
             timestamp = Timestamp.valueOf("2023-11-29 12:30:00")
         )
         db.addCarData(carData)
-
-        //db.syncWithBackend()
+        db.syncWithBackend()
+        db.deleteAllCarData()
+         */
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 

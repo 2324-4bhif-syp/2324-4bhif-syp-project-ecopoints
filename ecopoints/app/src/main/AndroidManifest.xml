@@ -65,7 +65,6 @@
         <activity android:name=".activity.BluetoothDeviceListActivity" />
         <activity android:name=".activity.TripActivity" />
         <activity android:name=".activity.Obd2ReadingActivity" />
-        <activity android:name=".activity.MapActivity" />
     </application>
 
 </manifest>

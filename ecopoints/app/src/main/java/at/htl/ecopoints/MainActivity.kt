@@ -35,8 +35,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -46,7 +44,6 @@ import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
-import at.htl.ecopoints.activity.BluetoothDeviceListActivity
 //import at.htl.ecopoints.activity.MapActivity
 import at.htl.ecopoints.db.CarData
 import at.htl.ecopoints.db.DBHelper
@@ -130,7 +127,6 @@ class MainActivity : ComponentActivity() {
                     SensorReading()
                     PrintTravelledDistance(total.value)
                     //ShowMap()
-                    ShowBluetoothDevicesButton()
                     ShowTrip()
 
                     val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Home") }
@@ -271,72 +267,65 @@ class MainActivity : ComponentActivity() {
                 .padding(16.dp)
         ) {
             Column(
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .weight(1f)
             ) {
                 Text(
-                    text = "X: $sensorX", style = TextStyle(
+                    text = "X: $sensorX",
+                    style = TextStyle(
                         color = MaterialTheme.colorScheme.secondary,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center
-                    ), modifier = Modifier.padding(16.dp)
+                    ),
+                    modifier = Modifier.padding(16.dp)
                 )
                 Text(
-                    text = "Y: $sensorY", style = TextStyle(
+                    text = "Y: $sensorY",
+                    style = TextStyle(
                         color = MaterialTheme.colorScheme.secondary,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center
-                    ), modifier = Modifier.padding(16.dp)
+                    ),
+                    modifier = Modifier.padding(16.dp)
                 )
                 Text(
-                    text = "Z: $sensorZ", style = TextStyle(
+                    text = "Z: $sensorZ",
+                    style = TextStyle(
                         color = MaterialTheme.colorScheme.secondary,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center
-                    ), modifier = Modifier.padding(16.dp)
+                    ),
+                    modifier = Modifier.padding(16.dp)
                 )
             }
             Column {
                 Text(
-                    text = "XMax: $sensorXMax", style = TextStyle(
+                    text = "XMax: $sensorXMax",
+                    style = TextStyle(
                         color = MaterialTheme.colorScheme.secondary,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center
-                    ), modifier = Modifier.padding(16.dp)
+                    ),
+                    modifier = Modifier.padding(16.dp)
                 )
                 Text(
-                    text = "YMax: $sensorYMax", style = TextStyle(
+                    text = "YMax: $sensorYMax",
+                    style = TextStyle(
                         color = MaterialTheme.colorScheme.secondary,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center
-                    ), modifier = Modifier.padding(16.dp)
+                    ),
+                    modifier = Modifier.padding(16.dp)
                 )
                 Text(
-                    text = "ZMax: $sensorZMax", style = TextStyle(
+                    text = "ZMax: $sensorZMax",
+                    style = TextStyle(
                         color = MaterialTheme.colorScheme.secondary,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center
-                    ), modifier = Modifier.padding(16.dp)
+                    ),
+                    modifier = Modifier.padding(16.dp)
                 )
-            }
-        }
-    }
-
-    @Composable
-    fun ShowBluetoothDevicesButton() {
-        Box(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            Button(
-                onClick = {
-                    startActivity(
-                        Intent(
-                            this@MainActivity, BluetoothDeviceListActivity::class.java
-                        )
-                    )
-                }, modifier = Modifier
-                    .padding(80.dp, 500.dp, 0.dp, 0.dp) //.padding(0.dp, 160.dp, 170.dp, 0.dp)
-            ) {
-                Text(text = "Show Paired Bluetooth Devices")
             }
         }
     }

@@ -17,7 +17,7 @@ import java.util.*
 
 class BluetoothService {
 
-    private val  TAG = "BluetoothService"
+    private val TAG = "BluetoothService"
     private val uuid: UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
     private lateinit var socket: BluetoothSocket
 
@@ -26,19 +26,18 @@ class BluetoothService {
     public fun getSocket() = socket
 
     @SuppressLint("MissingPermission")
-    suspend fun connectDevice(device: BluetoothDevice) {
-        withContext(Dispatchers.IO) {
-            socket = device.createInsecureRfcommSocketToServiceRecord(uuid)
-            try {
-                if (socket.isConnected) {
-                    socket.close()
-                }
-                socket.connect()
-                Log.d(TAG, socket.isConnected.toString())
-            } catch (e: IOException) {
-                Log.e(TAG, "Error while connecting to device with UUID $device")
-                Log.e(TAG, e.toString())
+    fun connectDevice(device: BluetoothDevice) {
+        socket = device.createInsecureRfcommSocketToServiceRecord(uuid)
+        try {
+            if (socket.isConnected) {
+                socket.close()
             }
+            socket.connect()
+            Log.d(TAG, socket.isConnected.toString())
+        } catch (e: IOException) {
+            Log.e(TAG, "Error while connecting to device with UUID $device")
+            Log.e(TAG, e.toString())
         }
+
     }
 }

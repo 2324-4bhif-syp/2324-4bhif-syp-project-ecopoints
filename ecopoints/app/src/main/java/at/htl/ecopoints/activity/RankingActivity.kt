@@ -45,7 +45,7 @@ class RankingActivity : ComponentActivity() {
 @Composable
 fun Greeting2(name: String, modifier: Modifier = Modifier) {
     Text(
-        text = "Hello $name!",
+        text = "$name under construction!",
         modifier = modifier
     )
 }

@@ -14,7 +14,6 @@ import android.location.LocationManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -43,10 +42,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.lifecycleScope
-//import at.htl.ecopoints.activity.MapActivity
-import at.htl.ecopoints.db.CarData
-import at.htl.ecopoints.db.DBHelper
 import at.htl.ecopoints.activity.TripActivity
 import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.service.AccelerometerSensorService
@@ -57,8 +52,6 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import java.sql.Timestamp
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.util.Locale

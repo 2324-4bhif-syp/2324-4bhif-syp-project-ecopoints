@@ -45,8 +45,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import at.htl.ecopoints.activity.BluetoothDeviceListActivity
-import at.htl.ecopoints.activity.MapActivity
+//import at.htl.ecopoints.activity.MapActivity
 import at.htl.ecopoints.db.CarData
 import at.htl.ecopoints.db.DBHelper
 import at.htl.ecopoints.activity.TripActivity
@@ -59,6 +60,7 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.sql.Timestamp
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
@@ -88,7 +90,6 @@ class MainActivity : ComponentActivity() {
         )
         db.addCarData(carData)
         db.syncWithBackend()
-        db.deleteAllCarData()
          */
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
@@ -146,7 +147,7 @@ class MainActivity : ComponentActivity() {
 
                     SensorReading()
                     PrintTravelledDistance(total.value)
-                    ShowMap()
+                    //ShowMap()
                     ShowBluetoothDevicesButton()
                     ShowTrip()
                     Box(
@@ -357,6 +358,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    /*
 
     @Composable
     fun ShowMap() {
@@ -374,6 +376,9 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+    */
+
 
     @Composable
     fun ShowTrip() {

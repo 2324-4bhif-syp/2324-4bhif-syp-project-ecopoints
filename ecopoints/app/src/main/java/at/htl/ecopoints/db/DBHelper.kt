@@ -52,13 +52,21 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         db.close()
     }
 
-    fun getAllCarData(): Cursor? {
+    fun getAllCarData(): ArrayList<CarData> {
         val db = this.readableDatabase
+        val carDataList = ArrayList<CarData>()
+        val cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME, null)
 
-        return db.rawQuery("SELECT * FROM " + TABLE_NAME, null)
+        if(cursor!!.moveToFirst()) {
+            do {
+                carDataList.add(getCarDataFromCursor(cursor!!))
+            } while (cursor!!.moveToNext())
+        }
+        cursor!!.close()
+        return carDataList
     }
 
-    fun deleteAllCarData(){
+    private fun deleteAllCarData(){
         val db = this.writableDatabase
         db.delete(TABLE_NAME, null, null)
         db.close()
@@ -66,14 +74,10 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
     @SuppressLint("Range")
     fun syncWithBackend(){
-        val cursor = getAllCarData()
+        val carDataList = getAllCarData()
 
-        cursor!!.moveToFirst()
-        val carDataList = ArrayList<CarData>()
-
-        do{
-            carDataList.add(getCarDataFromCursor(cursor))
-        }while(cursor.moveToNext())
+        if(carDataList.size < 1)
+            return
 
         val trip = createTrip(carDataList)
         val id: UUID = trip.id
@@ -86,6 +90,8 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
             val carDataService = CarDataService()
             carDataService.createCarData(carDataToSave)
         }
+
+        deleteAllCarData()
     }
 
     private fun createCarData(carData: CarData, tripId: UUID): at.htl.ecopoints.model.CarData{
@@ -121,7 +127,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     @SuppressLint("Range")
     private fun getCarDataFromCursor(cursor: Cursor): CarData{
         return CarData(
-            cursor.getLong(cursor.getColumnIndex(ID_COL)),
+            0,
             cursor.getDouble(cursor.getColumnIndex(LATITUDE_COL)),
             cursor.getDouble(cursor.getColumnIndex(LONGITUDE_COl)),
             cursor.getDouble(cursor.getColumnIndex(CURRENTENGINERPM_COL)),

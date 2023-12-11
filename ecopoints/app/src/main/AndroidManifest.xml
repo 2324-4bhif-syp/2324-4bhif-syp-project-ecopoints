@@ -28,25 +28,15 @@
         android:theme="@style/Theme.EcoPoints"
         tools:targetApi="31">
         <activity
-            android:name=".activity.ui.theme.ProfileActivity"
+            android:name=".activity.ProfileActivity"
             android:exported="false"
             android:label="@string/title_activity_profile"
             android:theme="@style/Theme.EcoPoints" />
         <activity
-            android:name=".activity.ui.theme.TestActivity"
-            android:exported="false"
-            android:label="@string/title_activity_test" />
-        <activity
-            android:name=".activity.ui.theme.RankingActivity"
+            android:name=".activity.RankingActivity"
             android:exported="false"
             android:label="@string/title_activity_ranking"
             android:theme="@style/Theme.EcoPoints" />
-        <activity
-            android:name=".activity.PersonActivity"
-            android:exported="false"
-            android:label="@string/title_activity_person"
-            android:theme="@style/Theme.EcoPoints" />
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="${googleMapsApiKey}" />

@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
@@ -19,8 +18,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import at.htl.ecopoints.MainActivity
 import at.htl.ecopoints.activity.TripActivity
-import at.htl.ecopoints.activity.ui.theme.ProfileActivity
-import at.htl.ecopoints.activity.ui.theme.RankingActivity
+import at.htl.ecopoints.activity.ProfileActivity
+import at.htl.ecopoints.activity.RankingActivity
 
 @Composable
 fun BottomNavBar(

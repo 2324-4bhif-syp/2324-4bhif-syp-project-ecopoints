@@ -1,4 +1,4 @@
-package at.htl.ecopoints.activity.ui.theme
+package at.htl.ecopoints.activity
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

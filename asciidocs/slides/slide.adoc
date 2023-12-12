@@ -52,7 +52,7 @@ endif::[]
 * "Fahrverhaltensvergleichsplattform"
 * Vergleicht das Fahrverhalten von Fahrern mithilfe von Sensordaten
 ** Fahrer können freiwillig mitmachen
-** Die Daten werden vom Auto über den OBD2-Port ausgelesen
+** Die Daten vom Auto werden über einen OBD2-Port ausgelesen
 
 == Cld
 
@@ -73,10 +73,12 @@ image:sensor-reading.jpg[500,200]
 [.font-xx-large]
 == Sprint 2
 
+=== Linus
+
 * OBD2-Daten auslesen
 ** ELM327 über Bluetooth
 
-Oliver
+=== Oliver
 
 * GPS-Daten auslesen
 * Google Maps API
@@ -90,9 +92,7 @@ image:obd2-reading.jpeg[500,200]
 
 image:maps.jpeg[500,200]
 
-== Sprint 2
-
-Armin, Abdullah, Laurent
+=== Armin, Abdullah, Laurent
 
 * Oracle Server
 ** Quarkus-Backend

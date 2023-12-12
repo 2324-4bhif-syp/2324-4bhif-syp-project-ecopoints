@@ -60,7 +60,7 @@ class ProfileActivity : ComponentActivity() {
     }
 
     @Composable
-    fun ShowFields(){
+    fun ShowFields() {
         var name by remember { mutableStateOf("Abdullah Aldesoky") }
         var email by remember { mutableStateOf("abdulaldesoky@gmail.com") }
         var number by remember { mutableStateOf("06649188653") }
@@ -70,7 +70,7 @@ class ProfileActivity : ComponentActivity() {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            NameTextField(name = name){ newName ->
+            NameTextField(name = name) { newName ->
                 name = newName
             }
             EmailTextField(email = email) { newEmail ->
@@ -115,7 +115,7 @@ class ProfileActivity : ComponentActivity() {
                 value = name,
                 onValueChange = { onNameChanged(it) },
                 label = { Text("Name") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.primary, MaterialTheme.shapes.medium)
             )
         }
     }

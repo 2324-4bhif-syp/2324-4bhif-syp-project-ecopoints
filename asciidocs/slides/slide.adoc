@@ -61,6 +61,8 @@ image:cld.png[500,500]
 [.font-xx-large]
 == Sprint 1
 
+=== Aufgabenstellung
+
 * Jetpack-Compose Applikation
 ** Sensordaten auslesen
 ** Wer?

@@ -54,6 +54,10 @@ endif::[]
 ** Fahrer können freiwillig mitmachen
 ** Die Daten werden vom Auto über dem OBD2 Port ausgelesen
 
+== Cld
+
+image:cld.png[500,500]
+
 [.font-xx-large]
 == Sprint 1
 
@@ -98,5 +102,53 @@ Armin, Abdullah, Laurent
 === Oracle Cloud Server
 * http://132.145.237.245/[]
 
+[.font-xx-large]
+== Sprint 3
 
+=== Linus
 
+* Ein Trip erstellen
+* Mit OBD2 mehrere Daten gleichzeitig auslesen
+** Speichern in einer concurrent-Hashmap
+
+==== Trip
+
+image:tripView.jpeg[500,200]
+
+=== Abdullah
+
+* Datenmodell
+* Bottom-navigation in Kotlin
+* ProfileActivity
+
+==== Bottom Navigation
+
+.Version1
+image:navsView1.png[500,200]
+
+.Version2
+image:navsView2.png[500,200]
+
+==== ProfileActivity
+
+.Version1
+image:profileView1.png[500,200]
+
+.Version2
+image:profileView.png[500,200]
+
+=== Oliver
+
+* Genaue location aufzeichnen
+* Auf maps den verlauf der Fahrt anzeigen
+** Je nach Kraftstoffverbrauch die Farbe ändern
+
+=== Armin
+
+* Synchronisation mit backend von SQLite (kotlin)
+** Trip erstellen und werte berechnen (kotlin)
+* Local SQLite Datenbank Verwaltung (kotlin)
+
+=== Laurent
+* SQLite DB aufsetzen
+* Repositories für DB

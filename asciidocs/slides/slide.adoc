@@ -159,3 +159,11 @@ image:colorsOliver.jpeg[500,200]
 * SQLite DB aufsetzen
 * Repository für DB
 * Local SQLite Datenbank Verwaltung (Kotlin)
+
+=== Sprint-backlog
+
+* https://vm81.htl-leonding.ac.at/agiles/99-375/current[Spring-Backlog]
+
+=== Oracle Cloud Server
+
+* http://ecopoints.ddns.net/[Eco-Points]

@@ -76,10 +76,12 @@ import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapType
 import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext

@@ -72,7 +72,8 @@ a|
 | 05.12.2023
 
 | Laurent
-a| * SQLite DB aufsetzen
+a|
+* SQLite DB aufsetzen
 * Repo in einem eigenen Thread
 * Repository für DB
 ** eins einfügen
@@ -82,13 +83,15 @@ a| * SQLite DB aufsetzen
 | 05.12.2023
 
 | Armin
-a| * Synchronisation mit backend von SQLite (kotlin)
+a|
+* Synchronisation mit backend von SQLite (kotlin)
 * Trip erstellen und werte berechnen (kotlin)
 ** User ignorieren
 | 05.12.2023
 
 | Abdullah
-a| * Datenmodell
+a|
+* Datenmodell
 * Backend
 * Bottom-navigation in Kotlin
 | 05.12.2023

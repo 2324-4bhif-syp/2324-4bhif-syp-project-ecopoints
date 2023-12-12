@@ -8,24 +8,30 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.Response
+import java.io.IOException
 import java.util.UUID
 
 
 abstract class Service {
-    //private final val path: String = "http://132.145.237.245/api/"
-    private final val path: String = "http://0.0.0.0:8080/api/"
+    private final val path: String = "http://132.145.237.245/api/"
 
     fun create(obj: Any, endPoint: String): Response{
-        val gsonBuilder = GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
-        val gson = gsonBuilder.create()
-        val json = gson.toJson(obj)
+        try {
+            val gsonBuilder = GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
+            val gson = gsonBuilder.create()
+            val json = gson.toJson(obj)
 
-        val request = Request.Builder()
-            .url("$path$endPoint")
-            .post(RequestBody.create("application/json".toMediaTypeOrNull(), json))
-            .build()
+            val request = Request.Builder()
+                .url("$path$endPoint")
+                .post(RequestBody.create("application/json".toMediaTypeOrNull(), json))
+                .build()
 
-        return OkHttpClient().newCall(request).execute()
+            return OkHttpClient().newCall(request).execute()
+        } catch (e: IOException) {
+            // Log or handle the exception
+            e.printStackTrace()
+            throw e
+        }
     }
 
     fun update(obj: Any, endPoint: String, id: String): Response{

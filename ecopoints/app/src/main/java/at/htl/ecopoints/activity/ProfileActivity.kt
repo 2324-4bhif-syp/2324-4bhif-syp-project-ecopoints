@@ -98,7 +98,7 @@ class ProfileActivity : ComponentActivity() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.TopCenter)
-                    .scale(0.45f)
+                    .scale(0.40f)
             )
         }
 

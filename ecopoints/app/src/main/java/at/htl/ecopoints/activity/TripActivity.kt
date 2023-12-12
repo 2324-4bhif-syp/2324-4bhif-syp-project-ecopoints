@@ -76,8 +76,10 @@ import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapType
 import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -247,7 +249,11 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
     private fun onStopBtnClick() {
         tripActive = false
 
-        lifecycleScope.launch(Dispatchers.IO)
+        val coroutineExceptionHandler = CoroutineExceptionHandler{_, throwable ->
+            throwable.printStackTrace()
+        }
+
+        lifecycleScope.launch(Dispatchers.IO + coroutineExceptionHandler)
         {
 
             // save the trip to the database
@@ -271,6 +277,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
             }
             db.syncWithBackend()
         }
+
         Log.d("TripActivity", "Trip stopped")
     }
 

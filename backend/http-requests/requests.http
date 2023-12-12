@@ -34,6 +34,20 @@ POST http://localhost:8080/api/trip
 Content-Type: application/json
 
 {
+  "avg_engine_rotation":750.0,
+  "avg_speed":0.0,
+  "date":"2023-12-12T08:50:41.163+0100",
+  "distance":0.0,
+  "id":"26863bec-363d-4eb1-96d4-1d071fe8bb41",
+  "rewarded_eco_points":0.0
+}
+
+###
+
+POST http://localhost:8080/api/trip
+Content-Type: application/json
+
+{
   "id": "457c247e-0723-4170-80c4-826762de4743",
   "distance": 100.0,
   "avg_speed": 44.0,

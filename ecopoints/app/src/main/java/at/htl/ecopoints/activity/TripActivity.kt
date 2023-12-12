@@ -254,24 +254,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
 
         lifecycleScope.launch(Dispatchers.IO)
         {
-
-            // save the trip to the database
             val db = DBHelper(this@TripActivity, null)
-
-            carDataList.add(
-                CarData(
-                    0,
-                    longitude,
-                    latitude,
-                    0.0,
-                    3.0,
-                    4.0,
-                    "0",
-                    Timestamp(System.currentTimeMillis())
-                )
-            )
-
-            val test = db.getAllCarData();
 
             carDataList.forEach {
                 Log.d(tag, it.toString())

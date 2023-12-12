@@ -151,9 +151,9 @@ image:colorsOliver.jpeg[500,200]
 === Armin
 
 * Synchronisation mit backend von SQLite (kotlin)
-** Trip erstellen und werte berechnen (kotlin)
 * Local SQLite Datenbank Verwaltung (kotlin)
 
 === Laurent
 * SQLite DB aufsetzen
 * Repositories für DB
+* Local SQLite Datenbank Verwaltung (kotlin)

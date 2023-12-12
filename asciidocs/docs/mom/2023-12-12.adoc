@@ -76,6 +76,8 @@ a|
 | Abdullah
 a|
 * Film erstellen
+* Navigation verbessern
+* RankingActivity erstellen
 | 09.01.2024
 
 |

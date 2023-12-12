@@ -149,15 +149,11 @@ image:navsView2.png[500,200]
 image:colorsOliver.jpeg[500,200]
 
 === Armin
-
-* Synchronisation mit Backend von SQLite (kotlin)
-** Trip erstellen und Werte berechnen (kotlin)
-* Lokale SQLite-Datenbank Verwaltung (kotlin)
+* Synchronisation mit Backend von SQLite (Kotlin)
+** Trip erstellen und Werte berechnen (Kotlin)
+* Lokale SQLite-Datenbank Verwaltung (Kotlin)
 
 === Laurent
 * SQLite DB aufsetzen
 * Repository für DB
-** eins einfügen
-** mehrere einfügen
-** alle auslesen
-** alle löschen
+* Local SQLite Datenbank Verwaltung (Kotlin)

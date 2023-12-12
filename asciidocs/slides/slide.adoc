@@ -131,11 +131,12 @@ image:navsView2.png[500,200]
 
 === ProfileActivity
 
-.Version1
-image:profileView1.png[500,200]
 
-.Version2
-image:profileView.png[500,200]
+|===
+|Version 1 |Version 2
+| image:profileView1.png[Version 1,500,200] | image:profileView.png[Version 2,500,200]
+|===
+
 
 === Oliver
 

@@ -144,6 +144,10 @@ image:navsView2.png[500,200]
 * Auf maps den verlauf der Fahrt anzeigen
 ** Je nach Kraftstoffverbrauch die Farbe ändern
 
+=== Maps mit Farben/genaue Standort
+
+image:colorsOliver.jpeg[500,200]
+
 === Armin
 
 * Synchronisation mit backend von SQLite (kotlin)

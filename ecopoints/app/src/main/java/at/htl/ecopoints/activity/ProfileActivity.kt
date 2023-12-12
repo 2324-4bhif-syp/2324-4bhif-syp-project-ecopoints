@@ -132,7 +132,7 @@ class ProfileActivity : ComponentActivity() {
                 value = email,
                 onValueChange = { onEmailChanged(it) },
                 label = { Text("E-Mail") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.primary, MaterialTheme.shapes.medium)
             )
         }
     }
@@ -148,7 +148,7 @@ class ProfileActivity : ComponentActivity() {
                 value = number,
                 onValueChange = { onNumberChanged(it) },
                 label = { Text("Number") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.primary, MaterialTheme.shapes.medium)
             )
         }
     }

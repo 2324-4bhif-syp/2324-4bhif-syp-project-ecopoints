@@ -49,6 +49,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import at.htl.ecopoints.backendService.CarDataService
+import at.htl.ecopoints.db.DBHelper
+import at.htl.ecopoints.db.CarData
 import at.htl.ecopoints.interfaces.OnLocationChangedListener
 import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.service.BluetoothDeviceListService
@@ -79,6 +84,7 @@ import kotlinx.coroutines.withContext
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
+import java.sql.Timestamp
 import java.util.Timer
 import java.util.TimerTask
 import java.util.UUID
@@ -99,7 +105,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
     private var latitude = 48.306940
     private var latLngHasChanged = mutableStateOf(false)
     private var tripActive = false
-
+    private var carDataList = mutableStateListOf<CarData>()
     private val latLngList = mutableStateListOf<Pair<Color, Pair<LatLng, Double>>>()
 
 
@@ -240,9 +246,31 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
 
     private fun onStopBtnClick() {
         tripActive = false
-        // save the trip to the database
-        //TODO: save the trip to the database
 
+        lifecycleScope.launch(Dispatchers.IO)
+        {
+
+            // save the trip to the database
+            val db = DBHelper(this@TripActivity, null)
+
+            carDataList.add(
+                CarData(
+                    0,
+                    longitude,
+                    latitude,
+                    0.0,
+                    3.0,
+                    4.0,
+                    "0",
+                    Timestamp(System.currentTimeMillis())
+                )
+            )
+
+            carDataList.forEach {
+                db.addCarData(it)
+            }
+            db.syncWithBackend()
+        }
         Log.d("TripActivity", "Trip stopped")
     }
 

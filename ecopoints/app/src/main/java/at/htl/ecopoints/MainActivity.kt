@@ -120,7 +120,6 @@ class MainActivity : ComponentActivity() {
                     SensorReading()
                     PrintTravelledDistance(total.value)
                     //ShowMap()
-                    ShowTrip()
 
                     val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Home") }
                     Box(
@@ -343,23 +342,4 @@ class MainActivity : ComponentActivity() {
     }
 
     */
-
-
-    @Composable
-    fun ShowTrip() {
-        Spacer(modifier = Modifier.height(100.dp))
-        Box(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            Button(
-                onClick = {
-                    startActivity(Intent(this@MainActivity, TripActivity::class.java))
-                }, modifier = Modifier
-                    .align(Alignment.Center)
-                    .padding(16.dp)
-            ) {
-                Text(text = "Show Trip")
-            }
-        }
-    }
 }

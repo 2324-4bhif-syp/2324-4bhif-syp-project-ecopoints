@@ -50,9 +50,9 @@ endif::[]
 == EcoPoints
 
 * "Fahrverhaltensvergleichsplattform"
-* Vergleicht das Fahrverhalten von Fahrern aufgrund von Sensordaten
+* Vergleicht das Fahrverhalten von Fahrern mithilfe von Sensordaten
 ** Fahrer können freiwillig mitmachen
-** Die Daten werden vom Auto über dem OBD2 Port ausgelesen
+** Die Daten werden vom Auto über den OBD2-Port ausgelesen
 
 == Cld
 
@@ -61,24 +61,24 @@ image:cld.png[500,500]
 [.font-xx-large]
 == Sprint 1
 
-* Jetpack-compose app
+* Jetpack-Compose Applikation
 ** Sensordaten auslesen
 ** Wer?
 *** Alle
 
-=== Sensor Daten
+=== Sensordaten
 
 image:sensor-reading.jpg[500,200]
 
 [.font-xx-large]
 == Sprint 2
 
-* OBD2 Daten auslesen
-** ELM327 über bluetooth
+* OBD2-Daten auslesen
+** ELM327 über Bluetooth
 
 Oliver
 
-* Gps Daten auslesen
+* GPS-Daten auslesen
 * Google Maps API
 
 === OBD2
@@ -95,7 +95,7 @@ image:maps.jpeg[500,200]
 Armin, Abdullah, Laurent
 
 * Oracle Server
-** Quarkus backend
+** Quarkus-Backend
 ** Postgres Datenbank
 
 [.font-xx-large]
@@ -108,8 +108,8 @@ Armin, Abdullah, Laurent
 === Linus
 
 * TripActivity erstellen
-* Mit OBD2 mehrere Daten gleichzeitig auslesen
-* Daten werden ausgelesen aber nicht in ui angezeigt
+* Mit dem OBD2-Port mehrere Daten gleichzeitig auslesen
+* Daten werden ausgelesen aber nicht in der UI angezeigt
 
 === Trip
 
@@ -118,7 +118,7 @@ image:tripView.jpeg[500,200]
 === Abdullah
 
 * Datenmodell
-* Bottom-navigation in Kotlin
+* Bottom-Navigation in Kotlin
 * ProfileActivity
 
 === Bottom Navigation
@@ -140,20 +140,24 @@ image:navsView2.png[500,200]
 
 === Oliver
 
-* Genaue location aufzeichnen
-* Auf maps den verlauf der Fahrt anzeigen
+* Genaue Location aufzeichnen
+* Auf Google Maps den Verlauf der Fahrt anzeigen
 ** Je nach Kraftstoffverbrauch die Farbe ändern
 
-=== Maps mit Farben/genaue Standort
+=== Maps mit Farben/genauer Standort
 
 image:colorsOliver.jpeg[500,200]
 
 === Armin
 
-* Synchronisation mit backend von SQLite (kotlin)
-** Trip erstellen und werte berechnen (kotlin)
-* Local SQLite Datenbank Verwaltung (kotlin)
+* Synchronisation mit Backend von SQLite (kotlin)
+** Trip erstellen und Werte berechnen (kotlin)
+* Lokale SQLite-Datenbank Verwaltung (kotlin)
 
 === Laurent
 * SQLite DB aufsetzen
-* Repositories für DB
+* Repository für DB
+** eins einfügen
+** mehrere einfügen
+** alle auslesen
+** alle löschen

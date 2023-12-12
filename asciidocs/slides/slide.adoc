@@ -109,7 +109,7 @@ Armin, Abdullah, Laurent
 
 * TripActivity erstellen
 * Mit OBD2 mehrere Daten gleichzeitig auslesen
-** Speichern in einer concurrent-Hashmap
+* Daten werden ausgelesen aber nicht in ui angezeigt
 
 === Trip
 

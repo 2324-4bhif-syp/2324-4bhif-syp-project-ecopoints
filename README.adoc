@@ -2,6 +2,8 @@
 
 = EcoPoints
 
+image::img/ecopoints-icon.png[width=120, height=150]
+
 == Team
 
 .Team

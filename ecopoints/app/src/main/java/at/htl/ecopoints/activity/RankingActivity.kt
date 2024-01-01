@@ -3,6 +3,8 @@ package at.htl.ecopoints.activity
 import android.app.ActionBar.LayoutParams
 import androidx.activity.ComponentActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.ListView
 import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
@@ -30,6 +32,7 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.toColorInt
 import at.htl.ecopoints.navigation.BottomNavBar
+import at.htl.ecopoints.service.RankingAdapter
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
 
 class RankingActivity : ComponentActivity() {
@@ -37,6 +40,9 @@ class RankingActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val listView = ListView(this)
+        listView.adapter = RankingAdapter(this, arrayOf("Armin", "Linus"), arrayOf(567.0, 533.0))
+        
         setContent {
             val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Ranking") }
 
@@ -46,7 +52,7 @@ class RankingActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     DisplayHeader()
-                    DisplayRankingTable()
+                    this.addContentView(listView, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT))
 
                     Box {
                         BottomNavBar(

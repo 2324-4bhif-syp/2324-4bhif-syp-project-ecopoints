@@ -1,10 +1,12 @@
 package at.htl.ecopoints.activity
 
+import android.app.ActionBar.LayoutParams
 import androidx.activity.ComponentActivity
 import android.os.Bundle
 import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
+import android.widget.Toolbar
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -35,11 +37,71 @@ class RankingActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val tableLayout = TableLayout(this)
+        setContent {
+            val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Ranking") }
+
+            EcoPointsTheme {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    DisplayHeader()
+                    DisplayRankingTable()
+
+                    Box {
+                        BottomNavBar(
+                            currentScreen = currentScreen,
+                            onScreenSelected = { newScreen -> setCurrentScreen(newScreen) },
+                            context = this@RankingActivity
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    @Composable
+    fun DisplayRankingTable() {
         val layoutParams = TableLayout.LayoutParams(
             TableLayout.LayoutParams.MATCH_PARENT,
             TableLayout.LayoutParams.WRAP_CONTENT
         )
+        val tableLayout = createRankingTableLayout(layoutParams)
+
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+        ) {
+            Box(
+                modifier = Modifier
+                    .padding(10.dp)
+                    .height(400.dp)
+                    .width(300.dp),
+            ) {
+                addContentView(tableLayout, layoutParams)
+            }
+        }
+    }
+
+    @Composable
+    fun DisplayHeader() {
+        Column(
+            modifier = Modifier,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top
+        ) {
+            Text(
+                text = "Ranking",
+                color = Color.Green,
+                fontSize = TextUnit(30f, TextUnitType.Sp)
+            )
+        }
+    }
+
+    private fun createRankingTableLayout(layoutParams: TableLayout.LayoutParams): TableLayout{
+        val tableLayout = TableLayout(this)
+
         tableLayout.layoutParams = layoutParams
 
         val headerRow = TableRow(this)
@@ -66,6 +128,8 @@ class RankingActivity : ComponentActivity() {
         )
         dataRow1.layoutParams = dataParams
 
+        // currently these are just test data-sets
+
         val dataTextView1 = createTextView("1", false)
         dataRow1.addView(dataTextView1)
         val dataTextView2 = createTextView("Armin", false)
@@ -86,57 +150,7 @@ class RankingActivity : ComponentActivity() {
 
         tableLayout.addView(dataRow2)
 
-        setContent {
-            val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Ranking") }
-
-            EcoPointsTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    DisplayHeader()
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center,
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .padding(10.dp)
-                                .height(400.dp)
-                                .width(300.dp),
-                        ) {
-                            addContentView(tableLayout, layoutParams)
-                        }
-                    }
-
-                    Box {
-                        BottomNavBar(
-                            currentScreen = currentScreen,
-                            onScreenSelected = { newScreen -> setCurrentScreen(newScreen) },
-                            context = this@RankingActivity
-                        )
-                    }
-                }
-            }
-        }
-    }
-
-    @Composable
-    fun DisplayHeader() {
-        Column(
-            modifier = Modifier,
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
-        ) {
-            Text(
-                text = "Ranking",
-                color = Color.Green,
-                fontSize = TextUnit(30f, TextUnitType.Sp)
-            )
-        }
+        return tableLayout
     }
 
     private fun createTextView(text: String, isHeader: Boolean): TextView {

@@ -15,7 +15,8 @@ class Trip {
     avgEngineRotation: double
     date: Date
     rewardedEcoPoints: double
-    carId: Long
+    car: Car
+    user: User
 }
 
 class Brand {
@@ -25,7 +26,7 @@ class Brand {
 
 class Car {
     id: Long
-    brandId: Long
+    brand: Brand
     model: String
 }
 
@@ -38,7 +39,7 @@ class CarData {
     throttlePosition: double
     engineRunTime: String
     timeStamp: Timestamp
-    tripId: UUID
+    trip: Trip
 }
 
 class CarDataEntry {
@@ -49,7 +50,7 @@ class CarDataEntry {
     throttlePosition: double
     engineRunTime: String
     timeStamp: Timestamp
-    tripId: UUID
+    trip: Trip
 }
 
 

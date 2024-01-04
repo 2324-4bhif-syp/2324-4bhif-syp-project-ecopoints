@@ -19,9 +19,11 @@ class RankingAdapter(private val context: Activity,
 
         val userName: TextView = view.findViewById(R.id.user_name)
         val ecoPoints: TextView = view.findViewById(R.id.eco_points)
+        val rank: TextView = view.findViewById(R.id.rank)
 
         userName.text = users[position].userName
         ecoPoints.text = users[position].ecoPoints.toString()
+        rank.text = (position + 1).toString()
 
         return view
     }

@@ -4,6 +4,8 @@ import android.app.ActionBar.LayoutParams
 import androidx.activity.ComponentActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.ArrayAdapter
+import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.TableLayout
 import android.widget.TableRow
@@ -31,6 +33,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.toColorInt
+import at.htl.ecopoints.model.User
 import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.service.RankingAdapter
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
@@ -41,8 +44,16 @@ class RankingActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val listView = ListView(this)
-        listView.adapter = RankingAdapter(this, arrayOf("Armin", "Linus"), arrayOf(567.0, 533.0))
-        
+        val users: Array<User> = arrayOf(
+                            User(null, "Armin", "123", 547.1),
+                            User(null, "Linus", "123", 533.9),
+                            User(null, "Oliver", "123", 513.4),
+                            User(null, "Laurent", "123", 431.3),
+                            User(null, "Abdullah", "123", 115.5))
+
+        listView.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+        listView.adapter = RankingAdapter(this, users)
+
         setContent {
             val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Ranking") }
 
@@ -51,7 +62,6 @@ class RankingActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    DisplayHeader()
                     this.addContentView(listView, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT))
 
                     Box {
@@ -64,120 +74,5 @@ class RankingActivity : ComponentActivity() {
                 }
             }
         }
-    }
-
-    @Composable
-    fun DisplayRankingTable() {
-        val layoutParams = TableLayout.LayoutParams(
-            TableLayout.LayoutParams.MATCH_PARENT,
-            TableLayout.LayoutParams.WRAP_CONTENT
-        )
-        val tableLayout = createRankingTableLayout(layoutParams)
-
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-        ) {
-            Box(
-                modifier = Modifier
-                    .padding(10.dp)
-                    .height(400.dp)
-                    .width(300.dp),
-            ) {
-                addContentView(tableLayout, layoutParams)
-            }
-        }
-    }
-
-    @Composable
-    fun DisplayHeader() {
-        Column(
-            modifier = Modifier,
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
-        ) {
-            Text(
-                text = "Ranking",
-                color = Color.Green,
-                fontSize = TextUnit(30f, TextUnitType.Sp)
-            )
-        }
-    }
-
-    private fun createRankingTableLayout(layoutParams: TableLayout.LayoutParams): TableLayout{
-        val tableLayout = TableLayout(this)
-
-        tableLayout.layoutParams = layoutParams
-
-        val headerRow = TableRow(this)
-        val headerParams = TableRow.LayoutParams(
-            TableRow.LayoutParams.MATCH_PARENT,
-            TableRow.LayoutParams.WRAP_CONTENT
-        )
-        headerRow.layoutParams = headerParams
-
-        val rankHeader = createTextView("Rank", true)
-        val nameHeader = createTextView("Name", true)
-        val ecoPointsHeader = createTextView("Eco-Points", true)
-
-        headerRow.addView(rankHeader)
-        headerRow.addView(nameHeader)
-        headerRow.addView(ecoPointsHeader)
-
-        tableLayout.addView(headerRow)
-
-        val dataRow1 = TableRow(this)
-        val dataParams = TableRow.LayoutParams(
-            TableRow.LayoutParams.MATCH_PARENT,
-            TableRow.LayoutParams.WRAP_CONTENT
-        )
-        dataRow1.layoutParams = dataParams
-
-        // currently these are just test data-sets
-
-        val dataTextView1 = createTextView("1", false)
-        dataRow1.addView(dataTextView1)
-        val dataTextView2 = createTextView("Armin", false)
-        dataRow1.addView(dataTextView2)
-        val dataTextView3 = createTextView("567", false)
-        dataRow1.addView(dataTextView3)
-
-        tableLayout.addView(dataRow1)
-
-        val dataRow2 = TableRow(this)
-        dataRow2.layoutParams = dataParams
-        val dataTextView4 = createTextView("2", false)
-        dataRow2.addView(dataTextView4)
-        val dataTextView5 = createTextView("Linus", false)
-        dataRow2.addView(dataTextView5)
-        val dataTextView6 = createTextView("533", false)
-        dataRow2.addView(dataTextView6)
-
-        tableLayout.addView(dataRow2)
-
-        return tableLayout
-    }
-
-    private fun createTextView(text: String, isHeader: Boolean): TextView {
-        val textView = TextView(this)
-        val params = TableRow.LayoutParams(
-            TableRow.LayoutParams.MATCH_PARENT,
-            TableRow.LayoutParams.WRAP_CONTENT
-        )
-
-        textView.layoutParams = params
-        textView.text = text
-        textView.setPadding(30, 15, 30, 15)
-
-        if (isHeader) {
-            textView.setBackgroundColor(("#51B435").toColorInt())
-            textView.setTextColor(resources.getColor(android.R.color.black))
-
-        } else {
-            textView.setBackgroundColor(("#F0F7F7").toColorInt())
-        }
-
-        return textView
     }
 }

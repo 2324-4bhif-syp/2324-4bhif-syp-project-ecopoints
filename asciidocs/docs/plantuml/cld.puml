@@ -9,12 +9,24 @@ class User{
 }
 
 class Trip {
-    id: Long
+    id: UUID
     distance: double
     avgSpeed: double
     avgEngineRotation: double
     date: Date
     rewardedEcoPoints: double
+    carId: Long
+}
+
+class Brand {
+    id: Long
+    name: String
+}
+
+class Car {
+    id: Long
+    brandId: Long
+    model: String
 }
 
 class CarData {
@@ -44,4 +56,6 @@ class CarDataEntry {
 User "1" -- "*" Trip : > drives
 CarData "*" -- "1"  Trip : < has
 CarDataEntry -u-|> CarData
+Trip "*" -- "1" Car : > driven with
+Car "*" -- "1" Brand : < has
 @enduml

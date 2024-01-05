@@ -2,6 +2,7 @@ package at.htl.ecopoints.service
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,6 +25,14 @@ class RankingAdapter(private val context: Activity,
         userName.text = users[position].userName
         ecoPoints.text = users[position].ecoPoints.toString()
         rank.text = (position + 1).toString()
+
+        if(position == 0) {
+            rank.setTextColor(Color.parseColor("#FFD700"))
+        } else if(position == 1) {
+            rank.setTextColor(Color.parseColor("#C0C0C0"))
+        } else if(position == 2) {
+            rank.setTextColor(Color.parseColor("#CD7F32"))
+        }
 
         return view
     }

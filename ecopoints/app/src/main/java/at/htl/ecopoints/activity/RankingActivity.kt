@@ -81,7 +81,9 @@ class RankingActivity : ComponentActivity() {
             User(null, "Abdullah", "123", 115.5),
             User(null, "Joe", "123", 107.1),
             User(null, "Mary", "123", 93.9),
-            User(null, "Chris", "123", 13.4))
+            User(null, "Chris", "123", 13.4),
+            User(null, "Luke", "123", 11.3),
+            User(null, "John", "123", 5.5))
 
         listView.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
         listView.adapter = RankingAdapter(this, users)

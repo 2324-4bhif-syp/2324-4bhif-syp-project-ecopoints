@@ -49,10 +49,17 @@ class RankingActivity : ComponentActivity() {
                             User(null, "Linus", "123", 533.9),
                             User(null, "Oliver", "123", 513.4),
                             User(null, "Laurent", "123", 431.3),
+                            User(null, "Abdullah", "123", 115.5),
+                            User(null, "Armin", "123", 547.1),
+                            User(null, "Linus", "123", 533.9),
+                            User(null, "Oliver", "123", 513.4),
+                            User(null, "Laurent", "123", 431.3),
                             User(null, "Abdullah", "123", 115.5))
 
         listView.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
         listView.adapter = RankingAdapter(this, users)
+        listView.divider = null
+        listView.setPadding(0,0,0, 180)
 
         setContent {
             val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Ranking") }
@@ -60,11 +67,14 @@ class RankingActivity : ComponentActivity() {
             EcoPointsTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    color = MaterialTheme.colorScheme.background,
                 ) {
+
                     this.addContentView(listView, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT))
 
-                    Box {
+                    Box(
+                        Modifier.padding(top = 56.dp)
+                    ) {
                         BottomNavBar(
                             currentScreen = currentScreen,
                             onScreenSelected = { newScreen -> setCurrentScreen(newScreen) },

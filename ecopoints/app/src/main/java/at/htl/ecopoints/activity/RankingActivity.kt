@@ -33,7 +33,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.core.graphics.toColorInt
+import androidx.core.graphics.translationMatrix
 import at.htl.ecopoints.model.User
 import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.service.RankingAdapter
@@ -52,17 +54,15 @@ class RankingActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background,
                 ) {
-                    ShowRanking(context = this)
-
-                    Box(
-                        Modifier.padding(top = 56.dp)
-                    ) {
+                    Box{
                         BottomNavBar(
                             currentScreen = currentScreen,
                             onScreenSelected = { newScreen -> setCurrentScreen(newScreen) },
                             context = this@RankingActivity
                         )
                     }
+
+                    ShowRanking(context = this)
                 }
             }
         }
@@ -74,21 +74,15 @@ class RankingActivity : ComponentActivity() {
 
         // JUST TESTING-DATA
         val users: Array<User> = arrayOf(
-            User(null, "Armin", "123", 547.1),
-            User(null, "Linus", "123", 533.9),
-            User(null, "Oliver", "123", 513.4),
-            User(null, "Laurent", "123", 431.3),
-            User(null, "Abdullah", "123", 115.5),
-            User(null, "Joe", "123", 107.1),
-            User(null, "Mary", "123", 93.9),
-            User(null, "Chris", "123", 13.4),
-            User(null, "Luke", "123", 11.3),
-            User(null, "John", "123", 5.5))
+            User(null, "Joe", "123", 547.1),
+            User(null, "Mary", "123", 533.9),
+            User(null, "Chris", "123", 513.4),
+            User(null, "John", "123", 431.3))
 
         listView.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
         listView.adapter = RankingAdapter(this, users)
         listView.divider = null
-        listView.setPadding(0,0,0, 180)
+        listView.isVerticalScrollBarEnabled = true
 
         this.addContentView(listView, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT))
     }

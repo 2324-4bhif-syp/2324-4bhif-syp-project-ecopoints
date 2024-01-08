@@ -9,12 +9,25 @@ class User{
 }
 
 class Trip {
-    id: Long
+    id: UUID
     distance: double
     avgSpeed: double
     avgEngineRotation: double
     date: Date
     rewardedEcoPoints: double
+    car: Car
+    user: User
+}
+
+class Brand {
+    id: Long
+    name: String
+}
+
+class Car {
+    id: Long
+    brand: Brand
+    model: String
 }
 
 class CarData {
@@ -26,7 +39,7 @@ class CarData {
     throttlePosition: double
     engineRunTime: String
     timeStamp: Timestamp
-    tripId: UUID
+    trip: Trip
 }
 
 class CarDataEntry {
@@ -37,11 +50,13 @@ class CarDataEntry {
     throttlePosition: double
     engineRunTime: String
     timeStamp: Timestamp
-    tripId: UUID
+    trip: Trip
 }
 
 
 User "1" -- "*" Trip : > drives
 CarData "*" -- "1"  Trip : < has
 CarDataEntry -u-|> CarData
+Trip "*" -- "1" Car : > driven with
+Car "*" -- "1" Brand : < has
 @enduml

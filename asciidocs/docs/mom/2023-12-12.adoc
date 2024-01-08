@@ -44,6 +44,8 @@ ifndef::imagesdir[:imagesdir: images]
 
 * Film für den Tag der offenen Tür erstellen
 * View-Model
+* Datenmodell überarbeiten
+** Auto, mit welchem gefahren wurde, soll auch gespeichert werden
 
 == Vereinbarungen und Entscheidungen
 
@@ -70,7 +72,7 @@ a|
 | Armin
 a|
 * UI verbessern
-* Logo erstellen
+* Datenmodell überarbeiten
 | 09.01.2024
 
 | Abdullah

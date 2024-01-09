@@ -7,7 +7,6 @@ endif::[]
 ifndef::env-ide[]
 :imagesdir: images
 endif::[]
-:title-slide-background-image: ecopoints-icon.png
 
 [.font-xx-large]
 == Team

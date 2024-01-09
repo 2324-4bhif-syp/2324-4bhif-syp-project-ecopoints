@@ -54,32 +54,6 @@ ifndef::imagesdir[:imagesdir: images]
 |===
 |wer |macht was |bis wann
 
-| Linus
-a|
-* View-Model erstellen
-| 09.01.2024
-
-| Oliver
-a|
-* Map überarbeiten
-| 09.01.2024
-
-| Laurent
-a|
-* Film erstellen
-| 09.01.2024
-
-| Armin
-a|
-* UI verbessern
-* Datenmodell überarbeiten
-| 09.01.2024
-
-| Abdullah
-a|
-* Film erstellen
-* Navigation verbessern
-* RankingActivity erstellen
-| 09.01.2024
-
-|
+| Alle
+a| Film Erstellen
+| 9.01.2023

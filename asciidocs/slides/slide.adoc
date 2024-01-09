@@ -20,9 +20,10 @@ image:team/teamall.jpeg[]
 ** Fahrer können freiwillig mitmachen
 ** Die Daten vom Auto werden über einen OBD2-Port ausgelesen
 
-== Cld
-
-image:cld.png[500,500]
+//
+// == Cld
+//
+// image:cld.png[500,500]
 
 [.font-xx-large]
 == Sprint 1
@@ -133,3 +134,7 @@ image:colorsOliver.jpeg[500,200]
 === Oracle Cloud Server
 
 * http://ecopoints.ddns.net/[Eco-Points]
+
+== Sprint 4
+
+=== Video für den Tag der offenen Tür

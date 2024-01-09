@@ -412,6 +412,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
             Text(text = "Coolant-Temp ${coolantTemp}")
         }
     }
+
     fun fetchData(command: ObdCommand, inputStream: InputStream, outputStream: OutputStream): String = runBlocking {
         try {
             withContext(Dispatchers.IO) {
@@ -423,7 +424,6 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
             "0" // Handle errors gracefully
         }
     }
-
 
     @Composable
     fun StartStopButton() {

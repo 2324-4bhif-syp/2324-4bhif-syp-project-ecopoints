@@ -29,7 +29,7 @@ anderen vergleichen
 //
 // image:cld.png[500,500]
 
-[.font-xx-large]
+[.font-xx-large, background-image="traffic.jpg", background-opacity="0.3"]
 == Sprint 1
 
 === Aufgabenstellung
@@ -43,7 +43,7 @@ anderen vergleichen
 
 image:sensor-reading.jpg[500,200]
 
-[.font-xx-large]
+[.font-xx-large, background-image="traffic.jpg", background-opacity="0.3"]
 == Sprint 2
 
 [background-image="obd2.jpeg", background-opacity="0.5"]
@@ -77,7 +77,7 @@ image:maps.jpeg[500,200]
 === Oracle Cloud Server
 * http://132.145.237.245/[]
 
-[.font-xx-large]
+[.font-xx-large, background-image="traffic.jpg", background-opacity="0.3"]
 == Sprint 3
 
 === Linus

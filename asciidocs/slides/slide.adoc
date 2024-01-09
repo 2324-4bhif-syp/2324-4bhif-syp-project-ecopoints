@@ -114,7 +114,7 @@ image:navsView2.png[500,200]
 | image:profileView1.png[500,200] | image:profileView.png[500,200]
 |===
 
-
+[background-image="fahrt.jpg", background-opacity="0.5"]
 === Oliver
 
 * Genaue Location aufzeichnen
@@ -123,7 +123,7 @@ image:navsView2.png[500,200]
 
 === Maps mit Farben/genauer Standort
 
-image:colorsOliver.jpeg[500,200]
+image:colors.jpeg[500,200]
 
 === Armin
 * Synchronisation mit Backend von SQLite (Kotlin)

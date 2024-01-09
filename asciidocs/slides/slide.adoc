@@ -1,3 +1,4 @@
+[background-image="ecopoints-icon.png", background-opacity="0.1"]
 = EcoPoints
 :revealjs_theme: white
 ifndef::imagesdir[:imagesdir: ../images]
@@ -13,7 +14,6 @@ endif::[]
 
 image:team/teamall.jpeg[]
 
-[background-image="ecopoints-icon.png", background-opacity="0.3"]
 == EcoPoints
 
 * "Fahrverhaltensvergleichsplattform"

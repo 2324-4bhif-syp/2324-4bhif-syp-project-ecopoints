@@ -9,6 +9,7 @@ ifndef::env-ide[]
 endif::[]
 :title-slide-background-image: app.jpg
 :title-slide-background-opacity: 0.3
+:revealjs_theme: black
 
 [.font-xx-large]
 == Team

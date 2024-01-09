@@ -18,18 +18,16 @@ endif::[]
 | image:team/Abdullah-Aldesoky.jpg[width=50, height=70]
 
 |Oliver Daxinger
-| image:team/Daxinger-Oliver.jpg[width=50, height=150]
-
-
+| image:team/Daxinger-Oliver.jpg[width=50, height=70]
 
 |Laurent Mali
-| image:team/Laurent-Mali.jpg[width=50, height=150]
+| image:team/Laurent-Mali.jpg[width=50, height=70]
 
 |Linus Nestler
-| image:team/Linus-Nestler.jpeg[width=50, height=150]
+| image:team/Linus-Nestler.jpeg[width=50, height=70]
 
 |Armin Salkovic
-|image:team/Armin-Salkovic.jpeg[width=50, height=150]
+|image:team/Armin-Salkovic.jpeg[width=50, height=70]
 
 |===
 

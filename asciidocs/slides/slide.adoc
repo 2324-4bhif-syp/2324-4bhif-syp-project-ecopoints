@@ -135,6 +135,9 @@ image:colorsOliver.jpeg[500,200]
 
 * http://ecopoints.ddns.net/[Eco-Points]
 
+[.font-xx-large]
 == Sprint 4
 
-=== Video für den Tag der offenen Tür
+=== Vorbereitung für den Tag der offenen Tür (Video)
+
+image::traffic.jpg[background, size=cover]

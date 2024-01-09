@@ -46,6 +46,7 @@ image:sensor-reading.jpg[500,200]
 [.font-xx-large]
 == Sprint 2
 
+[background-image="obd2.jpg", background-opacity="0.5"]
 === Linus
 
 * OBD2-Daten auslesen

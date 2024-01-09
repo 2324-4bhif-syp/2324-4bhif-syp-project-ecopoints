@@ -7,6 +7,8 @@ endif::[]
 ifndef::env-ide[]
 :imagesdir: images
 endif::[]
+:title-slide-background-image: app.jpg
+:title-slide-background-opacity: 0.3
 
 [.font-xx-large]
 == Team

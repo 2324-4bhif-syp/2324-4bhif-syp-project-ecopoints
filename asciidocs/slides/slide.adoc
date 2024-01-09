@@ -14,7 +14,7 @@ endif::[]
 
 image:team/teamall.jpeg[]
 
-[background-image="umwelt.jpg"", background-opacity="0.5"]
+[background-image="umwelt.jpg", background-opacity="0.5"]
 == EcoPoints
 
 * "Fahrverhaltensvergleichsplattform"

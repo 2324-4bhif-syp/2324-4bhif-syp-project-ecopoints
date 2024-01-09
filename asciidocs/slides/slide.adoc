@@ -98,6 +98,7 @@ image:tripView.jpeg[500,200]
 * Bottom-Navigation in Kotlin
 * ProfileActivity
 
+[background-image="bottom-nav.jpg", background-opacity="0.5"]
 === Bottom Navigation
 
 .Version1
@@ -107,7 +108,6 @@ image:navsView1.png[500,200]
 image:navsView2.png[500,200]
 
 === ProfileActivity
-
 
 |===
 |Version 1 |Version 2

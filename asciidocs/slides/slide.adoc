@@ -141,4 +141,5 @@ image:colorsOliver.jpeg[500,200]
 == Sprint 4
 
 === Vorbereitung für den Tag der offenen Tür (Video)
-:page-background-image: image:traffic.jpg[background, size=cover]
+
+image::traffic.jpg[background, size=cover, background-opacity="0.5"]

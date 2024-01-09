@@ -92,13 +92,13 @@ image:maps.jpeg[500,200]
 
 image:tripView.jpeg[500,200]
 
+[background-image="bottom-nav.png", background-opacity="0.5"]
 === Abdullah
 
 * Datenmodell
 * Bottom-Navigation in Kotlin
 * ProfileActivity
 
-[background-image="bottom-nav.png", background-opacity="0.5"]
 === Bottom Navigation
 
 .Version1

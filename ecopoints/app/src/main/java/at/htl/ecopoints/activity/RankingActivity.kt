@@ -1,7 +1,9 @@
 package at.htl.ecopoints.activity
 
 import android.app.ActionBar.LayoutParams
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import androidx.activity.ComponentActivity
 import android.os.Bundle
 import android.view.View
@@ -62,27 +64,41 @@ class RankingActivity : ComponentActivity() {
                         )
                     }
 
-                    ShowRanking(context = this)
+                    ShowRanking(context = this, activity = this@RankingActivity)
                 }
             }
         }
     }
 
     @Composable
-    fun ShowRanking(context: Context) {
-        val listView = ListView(this)
+    fun ShowRanking(context: Context, activity: Activity) {
+        val listView = ListView(context)
 
         // JUST TESTING-DATA
         val users: Array<User> = arrayOf(
             User(null, "Joe", "123", 547.1),
             User(null, "Mary", "123", 533.9),
             User(null, "Chris", "123", 513.4),
-            User(null, "John", "123", 431.3))
-
+            User(null, "John", "123", 431.3),
+        )/*
+            User(null, "Hary", "123", 347.1),
+            User(null, "Jane", "123", 333.9),
+            User(null, "Max", "123", 313.4),
+            User(null, "Mike", "123", 231.3))
+*/
         listView.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
-        listView.adapter = RankingAdapter(this, users)
+        listView.adapter = RankingAdapter(activity, users)
         listView.divider = null
         listView.isVerticalScrollBarEnabled = true
+
+        listView.isClickable = true
+        listView.setOnItemClickListener { parent, view, position, id ->
+            val userName = users[position].userName
+
+            val i = Intent(context, RankingUserActivity::class.java)
+            i.putExtra("userName", userName)
+            context.startActivity(i)
+        }
 
         this.addContentView(listView, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT))
     }

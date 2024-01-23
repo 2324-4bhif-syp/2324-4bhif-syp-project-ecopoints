@@ -1,0 +1,3 @@
+- Sensoren
+- Beschreibung
+- was kann man damit auslesen?

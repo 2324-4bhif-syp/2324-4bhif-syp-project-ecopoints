@@ -2,8 +2,10 @@ package at.htl.ecopoints.activity
 
 import android.app.ActionBar.LayoutParams
 import android.app.Activity
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.ColorDrawable
 import androidx.activity.ComponentActivity
 import android.os.Bundle
 import android.view.View
@@ -42,6 +44,7 @@ import at.htl.ecopoints.model.User
 import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.service.RankingAdapter
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
+import at.htl.ecopoints.R
 
 class RankingActivity : ComponentActivity() {
 
@@ -90,14 +93,27 @@ class RankingActivity : ComponentActivity() {
         listView.adapter = RankingAdapter(activity, users)
         listView.divider = null
         listView.isVerticalScrollBarEnabled = true
+        val dialog: Dialog = Dialog(context)
 
         listView.isClickable = true
         listView.setOnItemClickListener { parent, view, position, id ->
-            val userName = users[position].userName
+            dialog.setContentView(R.layout.user_ranking_popup)
+            dialog.findViewById<TextView>(R.id.user_name).text = users[position].userName
+            dialog.findViewById<TextView>(R.id.rank).text = (position + 1).toString()
+            dialog.findViewById<TextView>(R.id.eco_points).text = users[position].ecoPoints.toString()
 
-            val i = Intent(context, RankingUserActivity::class.java)
-            i.putExtra("userName", userName)
-            context.startActivity(i)
+            val rank = dialog.findViewById<TextView>(R.id.rank)
+
+            if(position == 0) {
+                rank.setTextColor(android.graphics.Color.parseColor("#FFD700"))
+            } else if(position == 1) {
+                rank.setTextColor(android.graphics.Color.parseColor("#C0C0C0"))
+            } else if(position == 2) {
+                rank.setTextColor(android.graphics.Color.parseColor("#CD7F32"))
+            }
+
+            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.Transparent.hashCode()))
+            dialog.show()
         }
 
         this.addContentView(listView, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT))

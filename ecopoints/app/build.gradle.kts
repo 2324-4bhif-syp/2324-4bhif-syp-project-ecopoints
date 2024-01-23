@@ -126,4 +126,8 @@ dependencies {
 
     // CircularImageView
     implementation("de.hdodenhof:circleimageview:3.1.0")
+
+    //Circular Progress Bar
+    implementation("androidx.compose.foundation:foundation:1.5.4")
+
 }

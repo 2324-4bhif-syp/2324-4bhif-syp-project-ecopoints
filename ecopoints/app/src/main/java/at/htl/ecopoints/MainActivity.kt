@@ -1,48 +1,46 @@
 package at.htl.ecopoints
 
-import android.Manifest
 import android.annotation.SuppressLint
+import android.app.ActionBar
+import android.app.Activity
+import android.app.Dialog
 import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.graphics.Color
-import android.hardware.Sensor
-import android.hardware.SensorEvent
-import android.hardware.SensorEventListener
-import android.hardware.SensorManager
-import android.location.Location
-import android.location.LocationManager
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.widget.ListView
+import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.size
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.tooling.preview.Preview
+import at.htl.ecopoints.model.Trip
+import at.htl.ecopoints.service.TripAdapter
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.UUID
 
 
 class MainActivity : ComponentActivity() {
@@ -56,8 +54,20 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    ShowPhoto()
-                    Preview()
+                    //ShowPhoto()
+                    Spacer(modifier = Modifier.height(20.dp))
+
+                    Text(
+                        text = "Last Rides:",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp,
+                        modifier = Modifier.padding(horizontal = 16.dp)
+                    )
+
+                    Spacer(modifier = Modifier.height(20.dp))
+
+
+                    ShowTrips(context = this, activity = this@MainActivity)
 
                     val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Home") }
                     Box(
@@ -96,94 +106,52 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun CustomCircularProgressIndicator(
-        modifier: Modifier = Modifier,
-        initialValue: Int,
-        primaryColor: Color,
-        secondaryColor: Color,
-        minValue: Int = 0,
-        maxValue: Int = 100,
-        circleRadius: Float,
-        onPositionChange:(Int)->Unit
-    ){
-        var circleCenter by remember {
-            mutableStateOf(Offset.Zero)
+    fun ShowTrips(context: Context, activity: Activity) {
+        val listView = ListView(context)
+        val trips: Array<Trip> = arrayOf(
+            Trip(
+                id = UUID.randomUUID(),
+                distance = 100.0,
+                avgSpeed = 60.0,
+                avgEngineRotation = 1500.0,
+                date = Date(System.currentTimeMillis() + 26300060),
+                rewardedEcoPoints = 10.0
+            ),
+            Trip(
+                id = UUID.randomUUID(),
+                distance = 75.5,
+                avgSpeed = 50.0,
+                avgEngineRotation = 1200.0,
+                date = Date(System.currentTimeMillis() - 56400000),
+                rewardedEcoPoints = 8.0
+            )
+
+        )
+
+        listView.layoutParams = ActionBar.LayoutParams(
+            ActionBar.LayoutParams.MATCH_PARENT,
+            ActionBar.LayoutParams.WRAP_CONTENT
+        )
+        listView.adapter = TripAdapter(activity, trips)
+        listView.divider = null
+        listView.isVerticalScrollBarEnabled = true
+        val dialog: Dialog = Dialog(context)
+
+        listView.isClickable = true
+        listView.setOnItemClickListener { parent, view, position, id ->
+            dialog.findViewById<TextView>(R.id.tripDate).text = trips[position].date.toString()
+            dialog.findViewById<TextView>(R.id.distance).text = trips[position].distance.toString()
+
+            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.Transparent.hashCode()))
+            dialog.show()
         }
 
-        var positionValue by remember {
-            mutableStateOf(initialValue)
-        }
-
-        Box(
-            modifier = modifier
-        ){
-            Canvas(
-                modifier = Modifier
-                    .fillMaxSize()
-            ){
-                val width = size.width
-                val height = size.height
-                val circleThickness = width / 30f
-                circleCenter = Offset(x = width/2f, y = height/2f)
-
-                drawCircle(
-                    brush = Brush.radialGradient(
-                        listOf(
-                        )
-                    ),
-
-                    radius = circleRadius,
-                    center = circleCenter
-                )
-
-                drawCircle(
-                    style = Stroke(
-                        width = circleThickness
-                    ),
-                    color = androidx.compose.ui.graphics.Color.Gray,
-                    radius = circleRadius,
-                    center = circleCenter
-                )
-
-                drawArc(
-                    color = androidx.compose.ui.graphics.Color.Cyan,
-                    startAngle = 90f,
-                    sweepAngle = (360/maxValue) * positionValue.toFloat(),
-                    style = Stroke(
-                        width = circleThickness,
-                        cap = StrokeCap.Round
-                    ),
-                    useCenter = false,
-                    size = Size(
-                        width = circleRadius * 2f,
-                        height = circleRadius * 2f
-                    ),
-                    topLeft = Offset(
-                        (width - circleRadius * 2f)/2f,
-                        (height - circleRadius * 2f)/2f
-                    )
-                )
-
-
-            }
-        }
-    }
-
-    @Preview(showBackground = true)
-    @Composable
-    fun Preview(){
-        CustomCircularProgressIndicator(
-            modifier = Modifier
-                .size(250.dp)
-                .background(androidx.compose.ui.graphics.Color.DarkGray)
-            ,
-            initialValue = 67,
-            primaryColor = Color.valueOf(105f,245f,140f,0.8f),
-            secondaryColor = Color.valueOf(154f,156f,155f,0.8f),
-            circleRadius = 230f,
-            onPositionChange = {
-
-            }
+        this.addContentView(listView,
+            ActionBar.LayoutParams(
+                ActionBar.LayoutParams.MATCH_PARENT,
+                ActionBar.LayoutParams.WRAP_CONTENT
+            )
         )
     }
+
 }

@@ -17,6 +17,7 @@ import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Place
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.zIndex
 import at.htl.ecopoints.MainActivity
 import at.htl.ecopoints.activity.TripActivity
 import at.htl.ecopoints.activity.ProfileActivity

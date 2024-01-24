@@ -33,6 +33,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.view.marginTop
 import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
 import at.htl.ecopoints.model.Trip
@@ -54,15 +55,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    //ShowPhoto()
+                    ShowPhoto()
                     Spacer(modifier = Modifier.height(20.dp))
-
-                    Text(
-                        text = "Last Rides:",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp,
-                        modifier = Modifier.padding(horizontal = 16.dp)
-                    )
 
                     Spacer(modifier = Modifier.height(20.dp))
 
@@ -128,6 +122,7 @@ class MainActivity : ComponentActivity() {
 
         )
 
+        listView.setPadding(0, 500, 0, 0)
         listView.layoutParams = ActionBar.LayoutParams(
             ActionBar.LayoutParams.MATCH_PARENT,
             ActionBar.LayoutParams.WRAP_CONTENT

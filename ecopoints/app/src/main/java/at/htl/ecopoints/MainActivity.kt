@@ -28,8 +28,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.Black
+import androidx.compose.ui.graphics.Color.Companion.Cyan
+import androidx.compose.ui.graphics.Color.Companion.DarkGray
+import androidx.compose.ui.graphics.Color.Companion.Gray
+import androidx.compose.ui.graphics.Color.Companion.Green
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -56,11 +66,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     ShowPhoto()
-                    Spacer(modifier = Modifier.height(20.dp))
-
-                    Spacer(modifier = Modifier.height(20.dp))
-
-
+                    ShowText()
                     ShowTrips(context = this, activity = this@MainActivity)
 
                     val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Home") }
@@ -93,10 +99,29 @@ class MainActivity : ComponentActivity() {
                     .fillMaxWidth()
                     .align(Alignment.TopStart)
                     .scale(3.0f)
-                    .padding(top = 25.dp)
+                    .padding(top = 50.dp)
             )
         }
 
+    }
+
+    @Composable
+    fun ShowText(){
+        val gradientColors = listOf(Gray, Green, DarkGray)
+
+        Text(
+            text = "Last Rides:",
+            fontSize = 25.sp,
+            fontWeight = FontWeight.Bold,
+            fontStyle = FontStyle.Italic,
+            modifier = Modifier.padding(10.dp, 260.dp, 0.dp,0.dp),
+
+            style = TextStyle(
+                brush = Brush.linearGradient(
+                    colors = gradientColors
+                )
+            )
+        )
     }
 
     @Composable
@@ -105,7 +130,7 @@ class MainActivity : ComponentActivity() {
         val trips: Array<Trip> = arrayOf(
             Trip(
                 id = UUID.randomUUID(),
-                distance = 100.0,
+                distance = 96.3,
                 avgSpeed = 60.0,
                 avgEngineRotation = 1500.0,
                 date = Date(System.currentTimeMillis() + 26300060),
@@ -113,16 +138,48 @@ class MainActivity : ComponentActivity() {
             ),
             Trip(
                 id = UUID.randomUUID(),
-                distance = 75.5,
+                distance = 75.4,
                 avgSpeed = 50.0,
                 avgEngineRotation = 1200.0,
                 date = Date(System.currentTimeMillis() - 56400000),
+                rewardedEcoPoints = 8.0
+            ),
+            Trip(
+                id = UUID.randomUUID(),
+                distance = 60.2,
+                avgSpeed = 50.0,
+                avgEngineRotation = 1200.0,
+                date = Date(System.currentTimeMillis() - 66400000),
+                rewardedEcoPoints = 8.0
+            ),
+            Trip(
+                id = UUID.randomUUID(),
+                distance = 12.5,
+                avgSpeed = 50.0,
+                avgEngineRotation = 1200.0,
+                date = Date(System.currentTimeMillis() - 176400000),
+                rewardedEcoPoints = 8.0
+            ),
+            Trip(
+                id = UUID.randomUUID(),
+                distance = 43.6,
+                avgSpeed = 50.0,
+                avgEngineRotation = 1200.0,
+                date = Date(System.currentTimeMillis() - 286400000),
+                rewardedEcoPoints = 8.0
+            ),
+            Trip(
+                id = UUID.randomUUID(),
+                distance = 16.7,
+                avgSpeed = 50.0,
+                avgEngineRotation = 1200.0,
+                date = Date(System.currentTimeMillis() - 396400000),
                 rewardedEcoPoints = 8.0
             )
 
         )
 
-        listView.setPadding(0, 500, 0, 0)
+        listView.setPadding(0, 800, 0, 0)
         listView.layoutParams = ActionBar.LayoutParams(
             ActionBar.LayoutParams.MATCH_PARENT,
             ActionBar.LayoutParams.WRAP_CONTENT
@@ -130,16 +187,6 @@ class MainActivity : ComponentActivity() {
         listView.adapter = TripAdapter(activity, trips)
         listView.divider = null
         listView.isVerticalScrollBarEnabled = true
-        val dialog: Dialog = Dialog(context)
-
-        listView.isClickable = true
-        listView.setOnItemClickListener { parent, view, position, id ->
-            dialog.findViewById<TextView>(R.id.tripDate).text = trips[position].date.toString()
-            dialog.findViewById<TextView>(R.id.distance).text = trips[position].distance.toString()
-
-            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.Transparent.hashCode()))
-            dialog.show()
-        }
 
         this.addContentView(listView,
             ActionBar.LayoutParams(

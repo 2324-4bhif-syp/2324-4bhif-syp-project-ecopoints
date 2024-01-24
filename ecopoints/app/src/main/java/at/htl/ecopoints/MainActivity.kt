@@ -7,6 +7,7 @@ import android.app.Dialog
 import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.widget.ListView
 import android.widget.TextView
 import androidx.activity.ComponentActivity
@@ -47,6 +48,7 @@ import androidx.core.view.marginTop
 import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
 import at.htl.ecopoints.model.Trip
+import at.htl.ecopoints.service.TankerkoenigApiClient
 import at.htl.ecopoints.service.TripAdapter
 import java.text.SimpleDateFormat
 import java.util.Date

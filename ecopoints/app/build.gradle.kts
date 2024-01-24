@@ -129,5 +129,5 @@ dependencies {
 
     //Circular Progress Bar
     implementation("androidx.compose.foundation:foundation:1.5.4")
-
+    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
 }

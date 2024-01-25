@@ -186,7 +186,7 @@ class MainActivity : ComponentActivity() {
                 distance = 96.3,
                 avgSpeed = 60.0,
                 avgEngineRotation = 1500.0,
-                date = Date(System.currentTimeMillis() + 26300060),
+                date = Date(System.currentTimeMillis() - 26300060),
                 rewardedEcoPoints = 10.0
             ),
             Trip(

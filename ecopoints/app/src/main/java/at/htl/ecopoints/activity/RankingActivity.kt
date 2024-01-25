@@ -8,6 +8,9 @@ import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import androidx.activity.ComponentActivity
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.BulletSpan
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
@@ -40,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.core.graphics.toColorInt
 import androidx.core.graphics.translationMatrix
+import androidx.core.text.scale
 import at.htl.ecopoints.model.User
 import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.service.RankingAdapter
@@ -101,8 +105,25 @@ class RankingActivity : ComponentActivity() {
             dialog.findViewById<TextView>(R.id.user_name).text = users[position].userName
             dialog.findViewById<TextView>(R.id.rank).text = (position + 1).toString()
             dialog.findViewById<TextView>(R.id.eco_points).text = users[position].ecoPoints.toString()
+            dialog.findViewById<TextView>(R.id.driven_distance).text = "Driven Distance: " + "345" + " km"
 
             val rank = dialog.findViewById<TextView>(R.id.rank)
+
+            val items = arrayOf("BMW (316d)", "Opel (Kadett)")
+            val builder =  SpannableStringBuilder()
+
+            builder.append("Driven Cars\n")
+
+            items.forEach { item ->
+                builder.scale(0.9f, { append(
+                    item + "\n",
+                    BulletSpan(),
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                ) })
+            }
+
+            dialog.findViewById<TextView>(R.id.driven_cars).setText(builder,  TextView.BufferType.SPANNABLE)
+
 
             if(position == 0) {
                 rank.setTextColor(android.graphics.Color.parseColor("#FFD700"))

@@ -108,7 +108,7 @@ class MainActivity : ComponentActivity() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.TopStart)
-                    .scale(3.0f)
+                    .scale(2.5f)
                     .padding(top = 50.dp)
             )
         }
@@ -141,9 +141,22 @@ class MainActivity : ComponentActivity() {
         Log.i("Tankpreis", "Diesel: ${dieselPrice}")
         Log.i("Tankpreis", "E5: ${e5Price}")
 
+        Text(
+            text = "Diesel\n" + dieselPrice.toString() + "€",
+            fontSize = 25.sp,
+            fontStyle = FontStyle.Italic,
+            modifier = Modifier.padding(60.dp, 240.dp, 0.dp,0.dp),
+
+            )
+
+        Text(
+            text = "Benzin\n" + e5Price.toString() + "€",
+            fontSize = 25.sp,
+            fontStyle = FontStyle.Italic,
+            modifier = Modifier.padding(250.dp, 240.dp, 0.dp,0.dp),
+
+            )
     }
-
-
 
     @Composable
     fun ShowText(){
@@ -154,7 +167,7 @@ class MainActivity : ComponentActivity() {
             fontSize = 25.sp,
             fontWeight = FontWeight.Bold,
             fontStyle = FontStyle.Italic,
-            modifier = Modifier.padding(10.dp, 260.dp, 0.dp,0.dp),
+            modifier = Modifier.padding(10.dp, 340.dp, 0.dp,0.dp),
 
             style = TextStyle(
                 brush = Brush.linearGradient(
@@ -203,7 +216,7 @@ class MainActivity : ComponentActivity() {
 
         )
 
-        listView.setPadding(0, 800, 0, 0)
+        listView.setPadding(0, 1000, 0, 0)
         listView.layoutParams = ActionBar.LayoutParams(
             ActionBar.LayoutParams.MATCH_PARENT,
             ActionBar.LayoutParams.WRAP_CONTENT

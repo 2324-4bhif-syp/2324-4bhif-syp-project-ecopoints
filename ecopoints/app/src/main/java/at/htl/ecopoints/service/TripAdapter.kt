@@ -20,9 +20,8 @@ class TripAdapter (private val context: Activity,
         val date: TextView = view.findViewById(R.id.tripDate)
         val distance: TextView = view.findViewById(R.id.distance)
 
-        date.text = trips[position].date.toString();
+        date.text = trips[position].date.toGMTString();
         distance.text = trips[position].distance.toString()
-
 
         return view
     }

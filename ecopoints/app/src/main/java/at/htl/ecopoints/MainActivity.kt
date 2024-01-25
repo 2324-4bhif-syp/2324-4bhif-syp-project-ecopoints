@@ -161,22 +161,6 @@ class MainActivity : ComponentActivity() {
                 avgEngineRotation = 1200.0,
                 date = Date(System.currentTimeMillis() - 176400000),
                 rewardedEcoPoints = 8.0
-            ),
-            Trip(
-                id = UUID.randomUUID(),
-                distance = 43.6,
-                avgSpeed = 50.0,
-                avgEngineRotation = 1200.0,
-                date = Date(System.currentTimeMillis() - 286400000),
-                rewardedEcoPoints = 8.0
-            ),
-            Trip(
-                id = UUID.randomUUID(),
-                distance = 16.7,
-                avgSpeed = 50.0,
-                avgEngineRotation = 1200.0,
-                date = Date(System.currentTimeMillis() - 396400000),
-                rewardedEcoPoints = 8.0
             )
 
         )

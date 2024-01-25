@@ -3,6 +3,9 @@ package at.htl.ecopoints.service;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,36 +13,28 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Map;
+
+import at.htl.ecopoints.db.CarData;
+import at.htl.ecopoints.model.GasData;
 
 public class TankerkoenigApiClient{
 
     private static final String API_KEY = "5b14766e-b489-5782-49b0-d376c5c04c4b";
     private static final String BASE_URL = "https://creativecommons.tankerkoenig.de/json/detail.php?id=005056ba-7cb6-1ed2-bceb-90e59ad2cd35&apikey=";
 
-    public interface TankerkoenigApiCallback {
-        void onApiResult(String result);
-    }
+    public String callApi() {
+        StringBuilder informationString = new StringBuilder();
+        try {
+            URL url = new URL(BASE_URL + API_KEY);
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("GET");
+            con.setConnectTimeout(5000);
+            con.setReadTimeout(10000);
 
-    public void runApi(TankerkoenigApiCallback callback) {
-        new ApiTask(callback).execute(BASE_URL + API_KEY);
-    }
-
-    private static class ApiTask extends AsyncTask<String, Void, String> {
-        private final TankerkoenigApiCallback callback;
-
-        public ApiTask(TankerkoenigApiCallback callback) {
-            this.callback = callback;
-        }
-
-        @Override
-        protected String doInBackground(String... urls) {
-            StringBuilder informationString = new StringBuilder();
-            try {
-                URL url = new URL(urls[0]);
-                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setRequestMethod("GET");
-
-                InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+            int responseCode = con.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                InputStream in = new BufferedInputStream(con.getInputStream());
                 BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 
                 String line;
@@ -48,19 +43,33 @@ public class TankerkoenigApiClient{
                 }
 
                 reader.close();
-                urlConnection.disconnect();
-            } catch (IOException e) {
-                Log.e("TankerkoenigApiClient", "Error fetching data from Tankerkönig API", e);
+            } else {
+                Log.e("TankerkoenigApiClient", "HTTP Error: " + responseCode);
             }
 
-            return informationString.toString();
+            con.disconnect();
+        } catch (IOException e) {
+            Log.e("TankerkoenigApiClient", "Error fetching data from Tankerkönig API", e);
         }
 
-        @Override
-        protected void onPostExecute(String result) {
-            if (callback != null) {
-                callback.onApiResult(result);
-            }
-        }
+        return informationString.toString();
     }
+
+    public GasData getApiData() throws IOException {
+
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> jsonData = mapper.readValue(callApi(), new TypeReference<Map<String, Object>>() {});
+        Map<String, Object> stationData = (Map<String, Object>) jsonData.get("station");
+        double diesel = (double) stationData.get("diesel");
+        double e5 = (double) stationData.get("e5");
+
+        GasData gasData = new GasData();
+        gasData.setDiesel(diesel);
+        gasData.setE5(e5);
+
+        return gasData;
+    }
+
+
+
 }

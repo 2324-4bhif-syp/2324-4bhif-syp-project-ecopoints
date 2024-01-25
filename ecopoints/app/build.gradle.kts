@@ -130,4 +130,8 @@ dependencies {
     //Circular Progress Bar
     implementation("androidx.compose.foundation:foundation:1.5.4")
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
+
+    //json to java
+    implementation("com.github.moxy-community:moxy:2.2.2")
+    implementation ("com.fasterxml.jackson.core:jackson-databind:2.13.0")
 }

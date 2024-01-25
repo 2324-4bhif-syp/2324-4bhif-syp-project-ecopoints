@@ -45,15 +45,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.marginTop
+import androidx.lifecycle.lifecycleScope
 import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
 import at.htl.ecopoints.model.Trip
 import at.htl.ecopoints.service.TankerkoenigApiClient
 import at.htl.ecopoints.service.TripAdapter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.UUID
+import kotlin.concurrent.thread
 
 
 class MainActivity : ComponentActivity() {
@@ -67,6 +72,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    ShowPrices()
+
                     ShowPhoto()
                     ShowText()
                     ShowTrips(context = this, activity = this@MainActivity)
@@ -89,6 +96,7 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     fun ShowPhoto() {
+
         val painter = painterResource(id = R.drawable.app_icon)
 
         Box(
@@ -100,11 +108,54 @@ class MainActivity : ComponentActivity() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.TopStart)
-                    .scale(3.0f)
+                    .scale(2.5f)
                     .padding(top = 50.dp)
             )
         }
 
+    }
+
+
+
+    @Composable
+    fun ShowPrices() {
+        var dieselPrice = 0.0;
+        var e5Price = 0.0;
+
+        val tankerkoenigApiClient = TankerkoenigApiClient()
+        try {
+            thread {
+            val gasData = tankerkoenigApiClient.getApiData()
+                dieselPrice = gasData.diesel
+                e5Price = gasData.e5
+            }
+
+            while(dieselPrice == 0.0 && e5Price == 0.0) {
+                Thread.sleep(0.1.toLong())
+            }
+
+        }catch (e: Exception) {
+            Log.e("Tankpreis Error", "Error: ${e.message}")
+        }
+
+        Log.i("Tankpreis", "Diesel: ${dieselPrice}")
+        Log.i("Tankpreis", "E5: ${e5Price}")
+
+        Text(
+            text = "Diesel\n" + dieselPrice.toString() + "€",
+            fontSize = 25.sp,
+            fontStyle = FontStyle.Italic,
+            modifier = Modifier.padding(60.dp, 240.dp, 0.dp,0.dp),
+
+            )
+
+        Text(
+            text = "Benzin\n" + e5Price.toString() + "€",
+            fontSize = 25.sp,
+            fontStyle = FontStyle.Italic,
+            modifier = Modifier.padding(250.dp, 240.dp, 0.dp,0.dp),
+
+            )
     }
 
     @Composable
@@ -116,7 +167,7 @@ class MainActivity : ComponentActivity() {
             fontSize = 25.sp,
             fontWeight = FontWeight.Bold,
             fontStyle = FontStyle.Italic,
-            modifier = Modifier.padding(10.dp, 260.dp, 0.dp,0.dp),
+            modifier = Modifier.padding(10.dp, 340.dp, 0.dp,0.dp),
 
             style = TextStyle(
                 brush = Brush.linearGradient(
@@ -135,7 +186,7 @@ class MainActivity : ComponentActivity() {
                 distance = 96.3,
                 avgSpeed = 60.0,
                 avgEngineRotation = 1500.0,
-                date = Date(System.currentTimeMillis() + 26300060),
+                date = Date(System.currentTimeMillis() - 26300060),
                 rewardedEcoPoints = 10.0
             ),
             Trip(
@@ -165,7 +216,7 @@ class MainActivity : ComponentActivity() {
 
         )
 
-        listView.setPadding(0, 800, 0, 0)
+        listView.setPadding(0, 1000, 0, 0)
         listView.layoutParams = ActionBar.LayoutParams(
             ActionBar.LayoutParams.MATCH_PARENT,
             ActionBar.LayoutParams.WRAP_CONTENT

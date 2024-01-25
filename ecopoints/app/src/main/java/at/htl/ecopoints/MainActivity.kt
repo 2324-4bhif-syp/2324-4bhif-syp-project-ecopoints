@@ -45,15 +45,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.marginTop
+import androidx.lifecycle.lifecycleScope
 import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
 import at.htl.ecopoints.model.Trip
 import at.htl.ecopoints.service.TankerkoenigApiClient
 import at.htl.ecopoints.service.TripAdapter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.UUID
+import kotlin.concurrent.thread
 
 
 class MainActivity : ComponentActivity() {
@@ -67,6 +72,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    ShowPrices()
+
                     ShowPhoto()
                     ShowText()
                     ShowTrips(context = this, activity = this@MainActivity)
@@ -89,6 +96,7 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     fun ShowPhoto() {
+
         val painter = painterResource(id = R.drawable.app_icon)
 
         Box(
@@ -106,6 +114,36 @@ class MainActivity : ComponentActivity() {
         }
 
     }
+
+
+
+    @Composable
+    fun ShowPrices() {
+        var dieselPrice = 0.0;
+        var e5Price = 0.0;
+
+        val tankerkoenigApiClient = TankerkoenigApiClient()
+        try {
+            thread {
+            val gasData = tankerkoenigApiClient.getApiData()
+                dieselPrice = gasData.diesel
+                e5Price = gasData.e5
+            }
+
+            while(dieselPrice == 0.0 && e5Price == 0.0) {
+
+            }
+
+        }catch (e: Exception) {
+            Log.e("Tankpreis Error", "Error: ${e.message}")
+        }
+
+        Log.i("Tankpreis", "Diesel: ${dieselPrice}")
+        Log.i("Tankpreis", "E5: ${e5Price}")
+
+    }
+
+
 
     @Composable
     fun ShowText(){

@@ -131,7 +131,7 @@ class MainActivity : ComponentActivity() {
             }
 
             while(dieselPrice == 0.0 && e5Price == 0.0) {
-
+                Thread.sleep(0.1.toLong())
             }
 
         }catch (e: Exception) {

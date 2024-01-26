@@ -49,9 +49,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import at.htl.ecopoints.backendService.CarDataService
 import at.htl.ecopoints.db.DBHelper
 import at.htl.ecopoints.db.CarData
 import at.htl.ecopoints.interfaces.OnLocationChangedListener
@@ -60,10 +58,12 @@ import at.htl.ecopoints.service.BluetoothDeviceListService
 import at.htl.ecopoints.service.TestLocationService
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
 import com.github.eltonvs.obd.command.ObdCommand
+import com.github.eltonvs.obd.command.control.VINCommand
 import com.github.eltonvs.obd.command.engine.RPMCommand
 import com.github.eltonvs.obd.command.engine.SpeedCommand
 import com.github.eltonvs.obd.command.temperature.EngineCoolantTemperatureCommand
 import com.github.eltonvs.obd.connection.ObdDeviceConnection
+import com.github.pires.obd.commands.control.VinCommand
 import com.github.pires.obd.commands.protocol.EchoOffCommand
 import com.github.pires.obd.commands.protocol.LineFeedOffCommand
 import com.github.pires.obd.commands.protocol.SelectProtocolCommand
@@ -76,12 +76,10 @@ import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapType
 import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
-import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -89,6 +87,7 @@ import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 import java.sql.Timestamp
+import java.util.Random
 import java.util.Timer
 import java.util.TimerTask
 import java.util.UUID
@@ -139,6 +138,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
 
             testLocationService.setOnLocationChangedListener(this)
 
+
             EcoPointsTheme {
                 activity.requestedOrientation =
                     android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
@@ -168,6 +168,10 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                             DrawPolyline()
                         }
                     }
+
+
+                    //TESTING
+//                    ReadTest()
 
                     if (isConnecting) {
                         Connect(
@@ -320,15 +324,53 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
 //        var rpm by remember { mutableStateOf("0") }
 //        var speed by remember { mutableStateOf("0") }
 //        var coolantTemp by remember { mutableStateOf("0") }
-        var rpm by remember { mutableStateOf("0") }
-        var speed by remember { mutableStateOf("0") }
-        var coolantTemp by remember { mutableStateOf("0") }
+        var rpm by remember { mutableStateOf("3") }
+        var speed by remember { mutableStateOf("2") }
+        var coolantTemp by remember { mutableStateOf("1") }
+        var vin by remember { mutableStateOf("0") }
         val coroutineScope = rememberCoroutineScope()
         if (bluetoothSocket != null && inputStream != null && outputStream != null) {
             EchoOffCommand().run(inputStream, outputStream)
             LineFeedOffCommand().run(inputStream, outputStream)
-            TimeoutCommand(125).run(inputStream, outputStream)
+            TimeoutCommand(5000).run(inputStream, outputStream)
             SelectProtocolCommand(ObdProtocols.AUTO).run(inputStream, outputStream)
+
+
+//            LaunchedEffect(Unit) {
+//                try{
+
+//                }
+//                catch (e: Exception){
+//                    Log.e(tag, e.toString())
+//                }
+//            }
+
+//            LaunchedEffect(Unit) {
+//                        val obdConnection = ObdDeviceConnection(inputStream, outputStream)
+//                while (true) {
+//                    try {
+//
+////                    var rnd: Random = Random()
+////                    rpm = rnd.nextInt(100).toString()
+////                    speed = rnd.nextInt(100).toString()
+////                    coolantTemp = rnd.nextInt(100).toString()
+//
+//                        if (vin.length < 5) {
+//                            vin = obdConnection.run(VINCommand()).value
+//                            SelectProtocolCommand(ObdProtocols.AUTO).run(inputStream, outputStream)
+//                            Log.d(tag, "VIN $vin")
+//
+//                        }
+//                        delay(500)
+//                        rpm = obdConnection.run(RPMCommand()).formattedValue
+//                        Log.d(tag, "rpm  $rpm")
+//
+//
+//                    } catch (e: Exception) {
+//                        Log.e(tag, e.toString())
+//                    }
+//                }
+//            }
 
 
             val i = AtomicInteger(0);
@@ -337,69 +379,122 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
             val uiScope = CoroutineScope(Dispatchers.Main + job)
 
 
-            val timer = Timer()
-            val task = object : TimerTask() {
-                override fun run() {
-                    var rpmres = "0"
-                    var spdres = "0"
-                    var colres = "0"
-                    uiScope.launch {
-                        withContext(Dispatchers.IO) {
-                            try {
-                                i.set(i.get() + 1)
-                                Log.d(tag, "${i.get()}")
-                                if (i.get() == 1) {
-                                    rpmres = fetchData(RPMCommand(), inputStream, outputStream)
-                                    Log.d(tag, "RPm $rpmres")
-                                } else if (i.get() == 2) {
-                                    spdres = fetchData(SpeedCommand(),inputStream, outputStream)
-                                    Log.d(
-                                        tag, "speed $spdres"
-                                    )
-                                } else if (i.get() == 3) {
-                                    colres = fetchData(EngineCoolantTemperatureCommand(),inputStream, outputStream)
-                                    Log.d(tag, "col $colres")
-                                }
-
-
-                                if (i.get() == 4) {
-                                    carDataList.add(
-                                        CarData(
-                                            0,
-                                            longitude,
-                                            latitude,
-                                            rpmres.toDouble(),
-                                            spdres.toDouble(),
-                                            colres.toDouble(),
-                                            "0",
-                                            Timestamp(System.currentTimeMillis())
-                                        )
-                                    )
-
-                                    withContext(Dispatchers.Main){
-                                        Log.d(tag, "rpm main $rpm")
-                                        Log.d(tag, "speed main $speed")
-                                        Log.d(tag, "col  main$coolantTemp")
-                                        rpm = rpmres
-                                        speed = spdres
-                                        coolantTemp = colres
-
-                                    }
-                                    i.set(0)
-                                }
-                            } catch (e: Exception) {
-                                Log.e(tag, e.toString())
+//            val timer = Timer()
+//            val task = object : TimerTask() {
+//                override fun run() {
+            var rpmres = "0"
+            var spdres = "0"
+            var colres = "0"
+            LaunchedEffect(Unit) {
+                withContext(Dispatchers.IO)
+                {
+                    while (true) {
+                        try {
+                            i.set(i.get() + 1)
+                            Log.d(tag, "${i.get()}")
+                            if (i.get() == 1) {
+                                rpm = fetchData(RPMCommand(), inputStream, outputStream)
+                                Log.d(tag, "RPm $rpmres")
+                            } else if (i.get() == 2) {
+                                speed = fetchData(SpeedCommand(), inputStream, outputStream)
+                                Log.d(
+                                    tag, "speed $spdres"
+                                )
+                            } else if (i.get() == 3) {
+                                coolantTemp = fetchData(
+                                    EngineCoolantTemperatureCommand(),
+                                    inputStream,
+                                    outputStream
+                                )
+                                Log.d(tag, "col $colres")
                             }
+
+//
+                            if (i.get() == 4) {
+//                                    carDataList.add(
+//                                        CarData(
+//                                            0,
+//                                            longitude,
+//                                            latitude,
+//                                            rpmres.toDouble(),
+//                                            spdres.toDouble(),
+//                                            colres.toDouble(),
+//                                            "0",
+//                                            Timestamp(System.currentTimeMillis())
+//                                        )
+//                                    )
+
+//                                    withContext(Dispatchers.Main) {
+//                                        Log.d(tag, "rpm main $rpm")
+//                                        Log.d(tag, "speed main $speed")
+//                                        Log.d(tag, "col  main$coolantTemp")
+//                                        rpm = rpmres
+//                                        speed = spdres
+//                                        coolantTemp = colres
+//
+//                                    }
+                                i.set(0)
+                            }
+                        } catch (e: Exception) {
+                            Log.e(tag, e.toString())
                         }
+                        delay(1000)
                     }
+
                 }
             }
+        }
 
-            timer.schedule(task, 1000, 1000)
-            Thread.setDefaultUncaughtExceptionHandler { _, throwable ->
-                Log.e("UncaughtException", "Unhandled exception: $throwable")
+//            timer.schedule(task, 1000, 1000)
+//            Thread.setDefaultUncaughtExceptionHandler { _, throwable ->
+//                Log.e("UncaughtException", "Unhandled exception: $throwable")
+//            }
+
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Center
+        )
+        {
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(text = "Current-Speed ${speed}")
+            Text(text = "Current-Rpm ${rpm}")
+            Text(text = "Coolant-Temp ${coolantTemp}")
+            Text(text = "VIN ${vin}")
+        }
+    }
+
+    @SuppressLint("CoroutineCreationDuringComposition")
+    @Composable
+    fun ReadTest(
+    ) {
+//        var rpm by remember { mutableStateOf("0") }
+//        var speed by remember { mutableStateOf("0") }
+//        var coolantTemp by remember { mutableStateOf("0") }
+        var rpm by remember { mutableStateOf("3") }
+        var speed by remember { mutableStateOf("2") }
+        var coolantTemp by remember { mutableStateOf("1") }
+        var vin by remember { mutableStateOf("0") }
+
+
+        LaunchedEffect(Unit) {
+            while (true) {
+                var rnd: Random = Random()
+                rpm = rnd.nextInt(100).toString()
+                speed = rnd.nextInt(100).toString()
+                coolantTemp = rnd.nextInt(100).toString()
+                vin = rnd.nextInt(100).toString()
+
+//                Log.d("TEST", "rpm main $rpm")
+//                Log.d("TEST", "speed main $speed")
+//                Log.d("TEST", "col  main$coolantTemp")
+//                Log.d("TEST", "vin  main$vin")
+                delay(1000)
             }
         }
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -410,9 +505,15 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
             Text(text = "Current-Speed ${speed}")
             Text(text = "Current-Rpm ${rpm}")
             Text(text = "Coolant-Temp ${coolantTemp}")
+            Text(text = "VIN ${vin}")
         }
     }
-    fun fetchData(command: ObdCommand, inputStream: InputStream, outputStream: OutputStream): String = runBlocking {
+
+    fun fetchData(
+        command: ObdCommand,
+        inputStream: InputStream,
+        outputStream: OutputStream
+    ): String = runBlocking {
         try {
             withContext(Dispatchers.IO) {
                 val obdConnection = ObdDeviceConnection(inputStream, outputStream)
@@ -540,7 +641,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
             })
     }
 
-    // region Map
+// region Map
 
     @Composable
     private fun DrawPolyline() {
@@ -636,5 +737,5 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
         }
     }
 
-    //endregion
+//endregion
 }

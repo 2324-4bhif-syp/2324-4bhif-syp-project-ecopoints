@@ -376,7 +376,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                     }
 
                     // Add a delay to avoid running the loop too frequently
-                    delay(1000)
+                    delay(500)
                 }
 
             }

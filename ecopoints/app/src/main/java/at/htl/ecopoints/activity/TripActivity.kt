@@ -40,7 +40,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,25 +49,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.lifecycleScope
-import at.htl.ecopoints.db.DBHelper
 import at.htl.ecopoints.db.CarData
+import at.htl.ecopoints.db.DBHelper
 import at.htl.ecopoints.interfaces.OnLocationChangedListener
 import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.service.BluetoothDeviceListService
 import at.htl.ecopoints.service.TestLocationService
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
 import com.github.eltonvs.obd.command.ObdCommand
-import com.github.eltonvs.obd.command.control.VINCommand
-import com.github.eltonvs.obd.command.engine.RPMCommand
-import com.github.eltonvs.obd.command.engine.SpeedCommand
-import com.github.eltonvs.obd.command.temperature.EngineCoolantTemperatureCommand
+import com.github.eltonvs.obd.command.ObdResponse
 import com.github.eltonvs.obd.connection.ObdDeviceConnection
 import com.github.pires.obd.commands.control.VinCommand
-import com.github.pires.obd.commands.protocol.EchoOffCommand
-import com.github.pires.obd.commands.protocol.LineFeedOffCommand
-import com.github.pires.obd.commands.protocol.SelectProtocolCommand
-import com.github.pires.obd.commands.protocol.TimeoutCommand
-import com.github.pires.obd.enums.ObdProtocols
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
@@ -78,7 +69,6 @@ import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -86,16 +76,14 @@ import kotlinx.coroutines.withContext
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
-import java.sql.Timestamp
-import java.util.Random
-import java.util.Timer
-import java.util.TimerTask
 import java.util.UUID
-import java.util.concurrent.atomic.AtomicInteger
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.math.sqrt
+
 
 class TripActivity : ComponentActivity(), OnLocationChangedListener {
     private val tag = "TripActivity"
@@ -317,206 +305,123 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
         }
     }
 
+    @SuppressLint("UnrememberedMutableState")
     @Composable
     fun Read(
         bluetoothSocket: BluetoothSocket?, inputStream: InputStream?, outputStream: OutputStream?
     ) {
-//        var rpm by remember { mutableStateOf("0") }
-//        var speed by remember { mutableStateOf("0") }
-//        var coolantTemp by remember { mutableStateOf("0") }
         var rpm by remember { mutableStateOf("3") }
-        var speed by remember { mutableStateOf("2") }
-        var coolantTemp by remember { mutableStateOf("1") }
+        var speed by remember { mutableStateOf("0") }
         var vin by remember { mutableStateOf("0") }
-        val coroutineScope = rememberCoroutineScope()
+
         if (bluetoothSocket != null && inputStream != null && outputStream != null) {
-            EchoOffCommand().run(inputStream, outputStream)
-            LineFeedOffCommand().run(inputStream, outputStream)
-            TimeoutCommand(5000).run(inputStream, outputStream)
-            SelectProtocolCommand(ObdProtocols.AUTO).run(inputStream, outputStream)
-
-
 //            LaunchedEffect(Unit) {
-//                try{
-
-//                }
-//                catch (e: Exception){
-//                    Log.e(tag, e.toString())
-//                }
-//            }
-
-//            LaunchedEffect(Unit) {
-//                        val obdConnection = ObdDeviceConnection(inputStream, outputStream)
-//                while (true) {
+//                CoroutineScope(Dispatchers.IO).launch {
 //                    try {
+//                        withContext(Dispatchers.IO) {
+//                            while (vin.length < 10) {
+//                                try {
+//                                    val vincommand = VinCommand()
+//                                    vincommand.run(
+//                                        bluetoothSocket.getInputStream(),
+//                                        bluetoothSocket.getOutputStream()
+//                                    )
 //
-////                    var rnd: Random = Random()
-////                    rpm = rnd.nextInt(100).toString()
-////                    speed = rnd.nextInt(100).toString()
-////                    coolantTemp = rnd.nextInt(100).toString()
-//
-//                        if (vin.length < 5) {
-//                            vin = obdConnection.run(VINCommand()).value
-//                            SelectProtocolCommand(ObdProtocols.AUTO).run(inputStream, outputStream)
-//                            Log.d(tag, "VIN $vin")
-//
+//                                    vin = vincommand.formattedResult
+//                                } catch (e: Exception) {
+//                                    Log.d(tag, e.toString())
+//                                }
+//                            }
 //                        }
-//                        delay(500)
-//                        rpm = obdConnection.run(RPMCommand()).formattedValue
-//                        Log.d(tag, "rpm  $rpm")
-//
 //
 //                    } catch (e: Exception) {
 //                        Log.e(tag, e.toString())
 //                    }
 //                }
 //            }
-
-
-            val i = AtomicInteger(0);
-
-            val job = Job()
-            val uiScope = CoroutineScope(Dispatchers.Main + job)
-
-
-//            val timer = Timer()
-//            val task = object : TimerTask() {
-//                override fun run() {
-            var rpmres = "0"
-            var spdres = "0"
-            var colres = "0"
-            LaunchedEffect(Unit) {
-                withContext(Dispatchers.IO)
-                {
-                    while (true) {
-                        try {
-                            i.set(i.get() + 1)
-                            Log.d(tag, "${i.get()}")
-                            if (i.get() == 1) {
-                                rpm = fetchData(RPMCommand(), inputStream, outputStream)
-                                Log.d(tag, "RPm $rpmres")
-                            } else if (i.get() == 2) {
-                                speed = fetchData(SpeedCommand(), inputStream, outputStream)
-                                Log.d(
-                                    tag, "speed $spdres"
-                                )
-                            } else if (i.get() == 3) {
-                                coolantTemp = fetchData(
-                                    EngineCoolantTemperatureCommand(),
-                                    inputStream,
-                                    outputStream
-                                )
-                                Log.d(tag, "col $colres")
-                            }
-
 //
-                            if (i.get() == 4) {
-//                                    carDataList.add(
-//                                        CarData(
-//                                            0,
-//                                            longitude,
-//                                            latitude,
-//                                            rpmres.toDouble(),
-//                                            spdres.toDouble(),
-//                                            colres.toDouble(),
-//                                            "0",
-//                                            Timestamp(System.currentTimeMillis())
-//                                        )
-//                                    )
+//            if (vin.length > 10)
+            LaunchedEffect(Unit)
+            {
+                while (true) {
+                    lifecycleScope.launch {
 
-//                                    withContext(Dispatchers.Main) {
-//                                        Log.d(tag, "rpm main $rpm")
-//                                        Log.d(tag, "speed main $speed")
-//                                        Log.d(tag, "col  main$coolantTemp")
-//                                        rpm = rpmres
-//                                        speed = spdres
-//                                        coolantTemp = colres
-//
-//                                    }
-                                i.set(0)
+                        val res = fetchDataAsync(
+                            command = com.github.eltonvs.obd.command.engine.RPMCommand(),
+                            inputStream = inputStream,
+                            outputStream = outputStream
+                        )
+
+                        if (res != null) {
+
+                            Log.d(tag, res.rawResponse.value);
+                            val e = res.rawResponse.value.split(" ")
+
+                            if (e.size >= 5) {
+                                val combinedHex = e[3] + e[4]
+
+                                val combinedDecimal = combinedHex.toInt(16)
+                                rpm = (combinedDecimal / 4).toString()
+
                             }
-                        } catch (e: Exception) {
-                            Log.e(tag, e.toString())
                         }
-                        delay(1000)
+
+//                        speed = fetchDataAsync(
+//                            command = SpeedCommand(),
+//                            inputStream = inputStream,
+//                            outputStream = outputStream
+//                        )
+                        Log.d(tag, "RPM: $rpm")
+                        Log.d(tag, "Speed: $speed")
                     }
 
+                    // Add a delay to avoid running the loop too frequently
+                    delay(1000)
                 }
+
             }
-        }
 
-//            timer.schedule(task, 1000, 1000)
-//            Thread.setDefaultUncaughtExceptionHandler { _, throwable ->
-//                Log.e("UncaughtException", "Unhandled exception: $throwable")
-//            }
-
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.Center
-        )
-        {
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(text = "Current-Speed ${speed}")
-            Text(text = "Current-Rpm ${rpm}")
-            Text(text = "Coolant-Temp ${coolantTemp}")
-            Text(text = "VIN ${vin}")
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.Center
+            )
+            {
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(text = "Current-Speed ${speed}")
+                Text(text = "Current-Rpm ${rpm}")
+                Text(text = "VIN ${vin}")
+            }
         }
     }
 
-    @SuppressLint("CoroutineCreationDuringComposition")
-    @Composable
-    fun ReadTest(
-    ) {
-//        var rpm by remember { mutableStateOf("0") }
-//        var speed by remember { mutableStateOf("0") }
-//        var coolantTemp by remember { mutableStateOf("0") }
-        var rpm by remember { mutableStateOf("3") }
-        var speed by remember { mutableStateOf("2") }
-        var coolantTemp by remember { mutableStateOf("1") }
-        var vin by remember { mutableStateOf("0") }
-
-
-        LaunchedEffect(Unit) {
-            while (true) {
-                var rnd: Random = Random()
-                rpm = rnd.nextInt(100).toString()
-                speed = rnd.nextInt(100).toString()
-                coolantTemp = rnd.nextInt(100).toString()
-                vin = rnd.nextInt(100).toString()
-
-//                Log.d("TEST", "rpm main $rpm")
-//                Log.d("TEST", "speed main $speed")
-//                Log.d("TEST", "col  main$coolantTemp")
-//                Log.d("TEST", "vin  main$vin")
-                delay(1000)
-            }
-        }
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.Center
-        ) {
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(text = "Current-Speed ${speed}")
-            Text(text = "Current-Rpm ${rpm}")
-            Text(text = "Coolant-Temp ${coolantTemp}")
-            Text(text = "VIN ${vin}")
+    private suspend fun fetchDataAsync(
+        command: ObdCommand,
+        inputStream: InputStream,
+        outputStream: OutputStream
+    ): ObdResponse? = withContext(Dispatchers.IO) {
+        try {
+            val obdConnection = ObdDeviceConnection(inputStream, outputStream)
+            obdConnection.run(command)
+        } catch (e: Exception) {
+            Log.e(tag, e.toString())
+            // Return a default response or handle errors as needed
+            null
         }
     }
 
-    fun fetchData(
+
+    private fun fetchData(
         command: ObdCommand,
         inputStream: InputStream,
         outputStream: OutputStream
     ): String = runBlocking {
         try {
             withContext(Dispatchers.IO) {
-                val obdConnection = ObdDeviceConnection(inputStream, outputStream)
+                val obdConnection =
+                    ObdDeviceConnection(inputStream, outputStream)
+
                 obdConnection.run(command).value
             }
         } catch (e: Exception) {
@@ -529,7 +434,8 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
     @Composable
     fun StartStopButton() {
         Row(
-            modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
         ) {
             Button(
                 onClick = { onStartBtnClick() }, modifier = Modifier
@@ -553,7 +459,8 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
     fun ConnectionInfo(deviceName: String, connection: String) {
         var connectionStateColor: Color = Color.Red
         if (connection == "Connected") connectionStateColor = Color.Green
-        else if (connection == "Connecting ...") connectionStateColor = Color.Yellow
+        else if (connection == "Connecting ...") connectionStateColor =
+            Color.Yellow
 
 
         Row(
@@ -610,7 +517,9 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                 text = {
                     LazyColumn {
                         items(
-                            pairedDevices.filter { it.name.lowercase().contains("obd") }
+                            pairedDevices.filter {
+                                it.name.lowercase().contains("obd")
+                            }
                         ) { device ->
                             TextButton(
                                 onClick = { onDeviceSelected(device) },
@@ -648,7 +557,10 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
         if (!latLngHasChanged.value) {
             for (i in 0 until latLngList.size - 1) {
                 Polyline(
-                    points = listOf(latLngList[i].second.first, latLngList[i + 1].second.first),
+                    points = listOf(
+                        latLngList[i].second.first,
+                        latLngList[i + 1].second.first
+                    ),
                     color = latLngList[i].first,
                     width = 10f
                 )
@@ -678,7 +590,11 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
         MapButton(text = type.toString(), onClick = onClick)
 
     @Composable
-    private fun MapButton(text: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
+    private fun MapButton(
+        text: String,
+        onClick: () -> Unit,
+        modifier: Modifier = Modifier
+    ) {
         Button(
             modifier = modifier.padding(4.dp), onClick = onClick
         ) {
@@ -705,12 +621,19 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
         return (3..21).random().toDouble()
     }
 
-    private fun haversine(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
+    private fun haversine(
+        lat1: Double,
+        lon1: Double,
+        lat2: Double,
+        lon2: Double
+    ): Double {
         val r = 6371
         val dLat = Math.toRadians(lat2 - lat1)
         val dLon = Math.toRadians(lon2 - lon1)
         val a =
-            sin(dLat / 2) * sin(dLat / 2) + cos(Math.toRadians(lat1)) * cos(Math.toRadians(lat2)) * sin(
+            sin(dLat / 2) * sin(dLat / 2) + cos(Math.toRadians(lat1)) * cos(
+                Math.toRadians(lat2)
+            ) * sin(
                 dLon / 2
             ) * sin(dLon / 2)
         val c = 2 * atan2(sqrt(a), sqrt(1 - a))
@@ -718,7 +641,11 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
     }
 
     private fun isLocationChanged(
-        newLat: Double, newLon: Double, oldLat: Double, oldLon: Double, threshold: Double
+        newLat: Double,
+        newLon: Double,
+        oldLat: Double,
+        oldLon: Double,
+        threshold: Double
     ): Boolean {
         val distance = haversine(newLat, newLon, oldLat, oldLon)
         return distance > threshold
@@ -728,11 +655,21 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
         val newLatitude = lat.toDouble()
         val newLongitude = lon.toDouble()
 
-        if (isLocationChanged(newLatitude, newLongitude, latitude, longitude, 1.0)) {
+        if (isLocationChanged(
+                newLatitude,
+                newLongitude,
+                latitude,
+                longitude,
+                1.0
+            )
+        ) {
             latitude = newLatitude
             longitude = newLongitude
 
-            Log.d("MapTracking", "Location changed to $latitude, $longitude")
+            Log.d(
+                "MapTracking",
+                "Location changed to $latitude, $longitude"
+            )
             addItemToList(LatLng(latitude, longitude))
         }
     }

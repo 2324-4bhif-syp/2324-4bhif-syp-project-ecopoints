@@ -183,9 +183,7 @@ image::sprint6/plakat.jpeg[600,400]
 
 video::sprint6/rpmvid.mp4[width=500,height=500,opts=autoplay]
 
-=== UI-Improvements
-
-* Navbar & Buttons (Linus)
+=== UI-Improvements - Navbar & Buttons (Linus)
 
 |===
 |Vorher |Nacher

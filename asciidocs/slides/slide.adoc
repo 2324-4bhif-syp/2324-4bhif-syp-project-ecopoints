@@ -157,9 +157,10 @@ image:colors.jpeg[500,200]
 [background-image="sprint6/plakat.jpeg", background-opacity="0.5"]
 === Tag der offenen Tür
 
-* Film fertiggestellt
+* Film fertiggestellt (Abdul)
 * Fake Daten für die Präsentation
-* Plakat
+* Plakat (Armin, Laurent)
+* Eco Points Rechnung(Abdul)
 
 === Plakat
 
@@ -180,6 +181,23 @@ image::sprint6/plakat.jpeg[600,400]
 === Auslesen und Anzeigen
 
 video::sprint6/rpmvid.mp4[width=500,height=500,opts=autoplay]
+
+=== UI-Improvements
+
+* Navbar & Buttons (Linus)
+
+|===
+|Vorher |Nacher
+| image:tripView.jpeg[500,200] | image:sprint6/new-navbar.jpeg[500,200]
+|===
+
+== Rangliste
+
+|===
+|Rangliste |Popup
+| image:sprint6/ranking.jpeg[500,200] | image:sprint6/ranking-popup.jpeg[500,200]
+|===
+
 
 === Hompage
 

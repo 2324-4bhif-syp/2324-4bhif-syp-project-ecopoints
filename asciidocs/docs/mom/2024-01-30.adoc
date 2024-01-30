@@ -35,14 +35,15 @@ ifndef::imagesdir[:imagesdir: images]
 |Htl-Leonding 4bhif
 
 |von-bis
-|
+| 6. Einheit
 |Dauer
-|
+| 10 min
 |===
 
 == Besprochene Themen
 
-
+* am Ranking weiterarbeiten
+* Echte Daten in der Homepage für die Fahrten repräsentiern
 
 == Vereinbarungen und Entscheidungen
 
@@ -53,28 +54,30 @@ ifndef::imagesdir[:imagesdir: images]
 
 | Linus
 a|
-
-|
+* Dropdown für Auswahl des Fahrzeuges
+| 13.02.2024
 
 | Oliver
 a|
-
-|
+* Strecke auf der Map zeichnen
+| 13.02.2024
 
 | Laurent
 a|
-
-|
+* Login erstellen
+* User am Server speichern
+| 13.02.2024
 
 | Armin
 a|
-
-|
+* am Ranking weiterarbeiten
+* API einbinden, um alle Auto-Marken und -Modelle zu bekommen
+| 13.02.2024
 
 | Abdullah
 a|
-
-|
+* Homepage überarbeiten
+| 13.02.2024
 
 |
 

@@ -153,8 +153,8 @@ image:colors.jpeg[500,200]
 
 == Sprint 6
 
-
-=== Tag der Offenen Tür
+[background-image"sprint6/plakat.png", background-opacity="0.5"]
+=== Tag der offenen Tür
 
 * Film fertiggestellt
 * Fake Daten für die Präsentation

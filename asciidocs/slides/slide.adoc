@@ -154,20 +154,20 @@ image:colors.jpeg[500,200]
 [.font-xx-large, background-image="traffic.jpg", background-opacity="0.3"]
 == Sprint 6
 
-[background-image"sprint6/plakat.jpeg", background-opacity="0.5"]
+[background-image="sprint6/plakat.jpeg", background-opacity="0.5"]
 === Tag der offenen Tür
 
 * Film fertiggestellt
 * Fake Daten für die Präsentation
 * Plakat
 
-[background-image"app.jpg"]
+[background-image="app.jpg"]
 === Ranking
 
 * Armin
 * Rangliste
 
-[background-image"app.jpg"]
+[background-image="app.jpg"]
 === Ranking
 
 |===
@@ -175,19 +175,19 @@ image:colors.jpeg[500,200]
 | image:sprint6/ranking.jpeg[500,200] | image:sprint6/ranking-popup.jpeg[500,200]
 |===
 
-[background-image"app.jpg"]
+[background-image="app.jpg"]
 === Auslesen und Anzeigen
 
-video::sprint6/rpmvid.mp4[width=500,height=300,opts=autoplay]
+video::sprint6/rpmvid.mp4[width=500,height=500,opts=autoplay]
 
-[background-image"app.jpg"]
+[background-image="app.jpg"]
 === Hompage
 
 * Abdullah
 * Fahrten
 * TankPreise APi
 
-[background-image"app.jpg"]
+[background-image="app.jpg"]
 === Homepage
 
 |===

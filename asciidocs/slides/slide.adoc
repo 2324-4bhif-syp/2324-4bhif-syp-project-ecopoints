@@ -154,7 +154,7 @@ image:colors.jpeg[500,200]
 == Sprint 6
 
 
-== Tag der Offenen Tür
+=== Tag der Offenen Tür
 
 * Film fertiggestellt
 * Fake Daten für die Präsentation
@@ -165,7 +165,7 @@ image:colors.jpeg[500,200]
 * Armin
 * Rangliste
 
-==== Ranking
+=== Ranking
 
 |===
 |Rangliste |Popup
@@ -185,7 +185,7 @@ video::sprint6/rpmvid.mp4[width=500,start=200,opts=autoplay]
 * Fahrten
 * TankPreise APi
 
-==== Homepage
+=== Homepage
 
 |===
 |Dark |Light

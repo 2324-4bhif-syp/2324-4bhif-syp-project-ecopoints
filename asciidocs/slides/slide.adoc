@@ -151,9 +151,10 @@ image:colors.jpeg[500,200]
 [background-image="traffic.jpg", background-opacity="0.3"]
 === Vorbereitung für den Tag der offenen Tür (Video)
 
+[.font-xx-large, background-image="traffic.jpg", background-opacity="0.3"]
 == Sprint 6
 
-[background-image"sprint6/plakat.png", background-opacity="0.5"]
+[background-image"sprint6/plakat.jpeg", background-opacity="0.5"]
 === Tag der offenen Tür
 
 * Film fertiggestellt
@@ -176,7 +177,7 @@ image:colors.jpeg[500,200]
 
 * Linus
 
-video::sprint6/rpmvid.mp4[width=500,start=200,opts=autoplay]
+video::sprint6/rpmvid.mp4[width=500,height=200,opts=autoplay]
 
 
 === Hompage

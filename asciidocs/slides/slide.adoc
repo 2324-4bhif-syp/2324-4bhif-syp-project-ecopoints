@@ -166,6 +166,7 @@ image:colors.jpeg[500,200]
 
 image::sprint6/plakat.jpeg[600,400]
 
+[background-image="sprint6/stock-img-ranking.jpeg", background-opacity="0.5"]
 === Ranking
 
 * Armin
@@ -190,14 +191,6 @@ video::sprint6/rpmvid.mp4[width=500,height=500,opts=autoplay]
 |Vorher |Nacher
 | image:tripView.jpeg[400,200] | image:sprint6/new-navbar.jpeg[400,200]
 |===
-
-== Rangliste
-
-|===
-|Rangliste |Popup
-| image:sprint6/ranking.jpeg[500,200] | image:sprint6/ranking-popup.jpeg[500,200]
-|===
-
 
 === Hompage
 

@@ -457,7 +457,6 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                 onClick = { onStopBtnClick() }, modifier = Modifier
                     .padding(8.dp)
                     .weight(1f)
-                    .height(1.dp)
             ) {
                 Text(text = "Stop")
             }

@@ -7,58 +7,31 @@ endif::[]
 ifndef::env-ide[]
 :imagesdir: images
 endif::[]
+:title-slide-background-image: app.jpg
+:title-slide-background-opacity: 0.3
+:revealjs_theme: black
 
 [.font-xx-large]
 == Team
 
-|===
-|Name |Foto
+image:team/teamall.jpeg[]
 
-|Abdullah Aldesoky
-| image:team/Abdullah-Aldesoky.jpg[width=120, height=150]
-
-|Oliver Daxinger
-| image:team/Daxinger-Oliver.jpg[width=120, height=150]
-
-
-|===
-
-=== Team
-
-|===
-|Name |Foto
-
-|Laurent Mali
-| image:team/Laurent-Mali.jpg[width=120, height=150]
-
-|Linus Nestler
-| image:team/Linus-Nestler.jpeg[width=120, height=150]
-
-|===
-
-=== Team
-
-|===
-|Name |Foto
-
-|Armin Salkovic
-|image:team/Armin-Salkovic.jpeg[width=120, height=150]
-
-|===
-
-
+[background-image="umwelt.jpg", background-opacity="0.5"]
 == EcoPoints
 
 * "Fahrverhaltensvergleichsplattform"
 * Vergleicht das Fahrverhalten von Fahrern mithilfe von Sensordaten
+* Soll fahrer dazu motivieren umweltbewusster zu fahren in dem sie Punkte sammeln können und sich mit
+anderen vergleichen
 ** Fahrer können freiwillig mitmachen
 ** Die Daten vom Auto werden über einen OBD2-Port ausgelesen
 
-== Cld
+//
+// == Cld
+//
+// image:cld.png[500,500]
 
-image:cld.png[500,500]
-
-[.font-xx-large]
+[.font-xx-large, background-image="traffic.jpg", background-opacity="0.3"]
 == Sprint 1
 
 === Aufgabenstellung
@@ -72,14 +45,16 @@ image:cld.png[500,500]
 
 image:sensor-reading.jpg[500,200]
 
-[.font-xx-large]
+[.font-xx-large, background-image="traffic.jpg", background-opacity="0.3"]
 == Sprint 2
 
+[background-image="obd2.jpg", background-opacity="0.5"]
 === Linus
 
 * OBD2-Daten auslesen
 ** ELM327 über Bluetooth
 
+[background-image="google-maps.jpg", background-opacity="0.5"]
 === Oliver
 
 * GPS-Daten auslesen
@@ -94,6 +69,7 @@ image:obd2-reading.jpeg[500,200]
 
 image:maps.jpeg[500,200]
 
+[background-image="db.jpg", background-opacity="0.5"]
 === Armin, Abdullah, Laurent
 
 * Oracle Server
@@ -104,19 +80,20 @@ image:maps.jpeg[500,200]
 === Oracle Cloud Server
 * http://132.145.237.245/[]
 
-[.font-xx-large]
+[.font-xx-large, background-image="traffic.jpg", background-opacity="0.3"]
 == Sprint 3
 
 === Linus
 
 * TripActivity erstellen
 * Mit dem OBD2-Port mehrere Daten gleichzeitig auslesen
-* Daten werden ausgelesen aber nicht in der UI angezeigt
+* Daten werden ausgelesen aber noch nicht in der UI angezeigt
 
 === Trip
 
 image:tripView.jpeg[500,200]
 
+[background-image="bottom-nav.png", background-opacity="0.5"]
 === Abdullah
 
 * Datenmodell
@@ -133,13 +110,12 @@ image:navsView2.png[500,200]
 
 === ProfileActivity
 
-
 |===
 |Version 1 |Version 2
 | image:profileView1.png[500,200] | image:profileView.png[500,200]
 |===
 
-
+[background-image="fahrt.jpg", background-opacity="0.5"]
 === Oliver
 
 * Genaue Location aufzeichnen
@@ -148,13 +124,14 @@ image:navsView2.png[500,200]
 
 === Maps mit Farben/genauer Standort
 
-image:colorsOliver.jpeg[500,200]
+image:colors.jpeg[500,200]
 
 === Armin
 * Synchronisation mit Backend von SQLite (Kotlin)
 ** Trip erstellen und Werte berechnen (Kotlin)
 * Lokale SQLite-Datenbank Verwaltung (Kotlin)
 
+[background-image="db.jpg", background-opacity="0.5"]
 === Laurent
 * SQLite DB aufsetzen
 * Repository für DB
@@ -167,3 +144,9 @@ image:colorsOliver.jpeg[500,200]
 === Oracle Cloud Server
 
 * http://ecopoints.ddns.net/[Eco-Points]
+
+[.font-xx-large, background-image="traffic.jpg", background-opacity="0.3"]
+== Sprint 4
+
+[background-image="traffic.jpg", background-opacity="0.3"]
+=== Vorbereitung für den Tag der offenen Tür (Video)

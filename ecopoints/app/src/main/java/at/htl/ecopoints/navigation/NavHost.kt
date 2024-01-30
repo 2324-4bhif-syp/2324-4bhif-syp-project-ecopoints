@@ -14,8 +14,10 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.Place
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.zIndex
 import at.htl.ecopoints.MainActivity
 import at.htl.ecopoints.activity.TripActivity
 import at.htl.ecopoints.activity.ProfileActivity
@@ -44,8 +46,8 @@ fun BottomNavBar(
                     icon = {
                         val icon = when (screen) {
                             "Home" -> Icons.Default.Home
-                            "Trip" -> Icons.Default.List
-                            "Ranking" -> Icons.Default.KeyboardArrowUp
+                            "Trip" -> Icons.Default.Place
+                            "Ranking" -> Icons.Default.List
                             "Profile" -> Icons.Default.AccountCircle
                             else -> Icons.Default.Home
                         }

@@ -411,26 +411,6 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
         }
     }
 
-
-    private fun fetchData(
-        command: ObdCommand,
-        inputStream: InputStream,
-        outputStream: OutputStream
-    ): String = runBlocking {
-        try {
-            withContext(Dispatchers.IO) {
-                val obdConnection =
-                    ObdDeviceConnection(inputStream, outputStream)
-
-                obdConnection.run(command).value
-            }
-        } catch (e: Exception) {
-            Log.e(tag, e.toString())
-            "0" // Handle errors gracefully
-        }
-    }
-
-
     @Composable
     fun StartStopButton() {
         Row(

@@ -1,125 +1,82 @@
 package at.htl.ecopoints
 
-import android.Manifest
 import android.annotation.SuppressLint
+import android.app.ActionBar
+import android.app.Activity
+import android.app.Dialog
 import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.hardware.Sensor
-import android.hardware.SensorEvent
-import android.hardware.SensorEventListener
-import android.hardware.SensorManager
-import android.location.Location
-import android.location.LocationManager
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
+import android.widget.ListView
+import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.Black
+import androidx.compose.ui.graphics.Color.Companion.Cyan
+import androidx.compose.ui.graphics.Color.Companion.DarkGray
+import androidx.compose.ui.graphics.Color.Companion.Gray
+import androidx.compose.ui.graphics.Color.Companion.Green
+import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import at.htl.ecopoints.activity.TripActivity
+import androidx.core.view.marginTop
+import androidx.lifecycle.lifecycleScope
 import at.htl.ecopoints.navigation.BottomNavBar
-import at.htl.ecopoints.service.AccelerometerSensorService
-import at.htl.ecopoints.service.LocationService
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.LocationServices
-import kotlinx.coroutines.delay
-import java.text.DecimalFormat
-import java.text.DecimalFormatSymbols
+import at.htl.ecopoints.model.Trip
+import at.htl.ecopoints.service.TankerkoenigApiClient
+import at.htl.ecopoints.service.TripAdapter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
+import java.util.UUID
+import kotlin.concurrent.thread
+
 
 class MainActivity : ComponentActivity() {
-    private var totalDistance: Float = 0.0f
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private lateinit var locationRequest: com.google.android.gms.location.LocationRequest
-    private var locationService: LocationService = LocationService()
-    private var locationManager: LocationManager? = null
-    private var isGPSEnabled: Boolean? = false
     @SuppressLint("Range")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        /*
-        val db = DBHelper(this, null)
-        val carData = CarData(
-            longitude = 10.0,
-            latitude = 20.0,
-            currentEngineRPM = 1500.0,
-            currentVelocity = 60.0,
-            throttlePosition = 50.0,
-            engineRunTime = "2 hours",
-            timestamp = Timestamp.valueOf("2023-11-29 12:30:00")
-        )
-        db.addCarData(carData)
-        db.syncWithBackend()
-         */
-
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-
-        locationRequest = com.google.android.gms.location.LocationRequest.create().apply {
-            interval = 1000
-            fastestInterval = 500
-            priority = com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
-        }
-
-        if (ContextCompat.checkSelfPermission(
-                this, Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            startLocationUpdates()
-        } else {
-            ActivityCompat.requestPermissions(
-                this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1
-            )
-        }
-
         setContent {
-            val total = remember { mutableStateOf(totalDistance) }
-
-            LaunchedEffect(totalDistance) {
-                while (true) {
-                    total.value = totalDistance
-                    delay(250)
-                }
-            }
-
             EcoPointsTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    ShowPrices()
 
-                    SensorReading()
-                    PrintTravelledDistance(total.value)
-                    //ShowMap()
+                    ShowPhoto()
+                    ShowText()
+                    ShowTrips(context = this, activity = this@MainActivity)
 
                     val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Home") }
                     Box(
@@ -137,209 +94,143 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    fun onLocationChanged(location: Location) {
-        totalDistance += locationService.getDistance(location)
-    }
-
-    private fun startLocationUpdates() {
-        locationService.startLocationUpdates(
-            this, fusedLocationClient, locationRequest, locationCallback
-        )
-    }
-
-    private val locationCallback = object : LocationCallback() {
-        override fun onLocationResult(locationResult: LocationResult?) {
-            locationResult?.lastLocation?.let { onLocationChanged(it) }
-        }
-    }
-
     @Composable
-    fun PrintTravelledDistance(totalDistance: Float) {
-        val decimalFormat = DecimalFormat("#,##0.00", DecimalFormatSymbols(Locale.GERMAN))
-        Text(
-            text = "Travelled Distance: ${decimalFormat.format(totalDistance)} m",
-            style = TextStyle(fontSize = 20.sp),
-            modifier = Modifier.padding(0.dp, 280.dp, 0.dp, 0.dp)
-        )
-    }
+    fun ShowPhoto() {
 
-    @Composable
-    fun SensorReading() {
+        val painter = painterResource(id = R.drawable.app_icon)
 
-        var sensorX by remember { mutableStateOf("x") }
-        var sensorY by remember { mutableStateOf("y") }
-        var sensorZ by remember { mutableStateOf("z") }
-        var sensorXMax by remember { mutableStateOf("") }
-        var sensorYMax by remember { mutableStateOf("") }
-        var sensorZMax by remember { mutableStateOf("") }
-
-        val sensorManager =
-            LocalContext.current.getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        val accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
-        val accelerometerSensorService = AccelerometerSensorService()
-
-        val resetSensors: () -> Unit = {
-            accelerometerSensorService.resetSensors()
-            sensorXMax = accelerometerSensorService.sensorXMax
-            sensorYMax = accelerometerSensorService.sensorYMax
-            sensorZMax = accelerometerSensorService.sensorZMax
-        }
-
-        ShowAccelerometerReading(
-            sensorX, sensorY, sensorZ, sensorXMax, sensorYMax, sensorZMax
-        )
-
-        fun updateSensors() {
-            sensorX = accelerometerSensorService.sensorX
-            sensorY = accelerometerSensorService.sensorY
-            sensorZ = accelerometerSensorService.sensorZ
-        }
-
-        fun updateMaxSensors() {
-            sensorXMax = accelerometerSensorService.sensorXMax
-            sensorYMax = accelerometerSensorService.sensorYMax
-            sensorZMax = accelerometerSensorService.sensorZMax
-        }
-        ResetButton(onResetClick = resetSensors)
-
-        val sensorListener = object : SensorEventListener {
-            override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-
-            }
-
-            override fun onSensorChanged(event: SensorEvent?) {
-                if (event?.sensor?.type == Sensor.TYPE_ACCELEROMETER) {
-                    accelerometerSensorService.setSensors(event)
-                    updateSensors()
-                    updateMaxSensors()
-                }
-            }
-        }
-
-        LaunchedEffect(sensorManager) {
-            sensorManager.registerListener(
-                sensorListener, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL
+        Box(
+            modifier = Modifier
+        ) {
+            Image(
+                painter = painter,
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.TopStart)
+                    .scale(2.5f)
+                    .padding(top = 50.dp)
             )
         }
 
+    }
+
+
+
+    @Composable
+    fun ShowPrices() {
+        var dieselPrice = 0.0;
+        var e5Price = 0.0;
+
+        val tankerkoenigApiClient = TankerkoenigApiClient()
+        try {
+            thread {
+            val gasData = tankerkoenigApiClient.getApiData()
+                dieselPrice = gasData.diesel
+                e5Price = gasData.e5
+            }
+
+            while(dieselPrice == 0.0 && e5Price == 0.0) {
+                Thread.sleep(0.1.toLong())
+            }
+
+        }catch (e: Exception) {
+            Log.e("Tankpreis Error", "Error: ${e.message}")
+        }
+
+        Log.i("Tankpreis", "Diesel: ${dieselPrice}")
+        Log.i("Tankpreis", "E5: ${e5Price}")
+
         Text(
-            text = "Accelerometer-Sensor Value:", style = TextStyle(fontSize = 20.sp)
+            text = "Diesel\n" + dieselPrice.toString() + "€",
+            fontSize = 25.sp,
+            fontStyle = FontStyle.Italic,
+            modifier = Modifier.padding(60.dp, 240.dp, 0.dp,0.dp),
+
+            )
+
+        Text(
+            text = "Benzin\n" + e5Price.toString() + "€",
+            fontSize = 25.sp,
+            fontStyle = FontStyle.Italic,
+            modifier = Modifier.padding(250.dp, 240.dp, 0.dp,0.dp),
+
+            )
+    }
+
+    @Composable
+    fun ShowText(){
+        val gradientColors = listOf(Gray, Green, DarkGray)
+
+        Text(
+            text = "Last Rides:",
+            fontSize = 25.sp,
+            fontWeight = FontWeight.Bold,
+            fontStyle = FontStyle.Italic,
+            modifier = Modifier.padding(10.dp, 340.dp, 0.dp,0.dp),
+
+            style = TextStyle(
+                brush = Brush.linearGradient(
+                    colors = gradientColors
+                )
+            )
         )
     }
 
     @Composable
-    fun ResetButton(onResetClick: () -> Unit) {
-        Box(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            Button(
-                onClick = onResetClick,
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(0.dp, 160.dp, 170.dp, 0.dp)
+    fun ShowTrips(context: Context, activity: Activity) {
+        val listView = ListView(context)
+        val trips: Array<Trip> = arrayOf(
+            Trip(
+                id = UUID.randomUUID(),
+                distance = 96.3,
+                avgSpeed = 60.0,
+                avgEngineRotation = 1500.0,
+                date = Date(System.currentTimeMillis() - 26300060),
+                rewardedEcoPoints = 10.0
+            ),
+            Trip(
+                id = UUID.randomUUID(),
+                distance = 75.4,
+                avgSpeed = 50.0,
+                avgEngineRotation = 1200.0,
+                date = Date(System.currentTimeMillis() - 56400000),
+                rewardedEcoPoints = 8.0
+            ),
+            Trip(
+                id = UUID.randomUUID(),
+                distance = 60.2,
+                avgSpeed = 50.0,
+                avgEngineRotation = 1200.0,
+                date = Date(System.currentTimeMillis() - 66400000),
+                rewardedEcoPoints = 8.0
+            ),
+            Trip(
+                id = UUID.randomUUID(),
+                distance = 12.5,
+                avgSpeed = 50.0,
+                avgEngineRotation = 1200.0,
+                date = Date(System.currentTimeMillis() - 176400000),
+                rewardedEcoPoints = 8.0
+            )
 
-            ) {
-                Text(text = "Reset")
-            }
-        }
+        )
+
+        listView.setPadding(0, 1000, 0, 0)
+        listView.layoutParams = ActionBar.LayoutParams(
+            ActionBar.LayoutParams.MATCH_PARENT,
+            ActionBar.LayoutParams.WRAP_CONTENT
+        )
+        listView.adapter = TripAdapter(activity, trips)
+        listView.divider = null
+        listView.isVerticalScrollBarEnabled = true
+
+        this.addContentView(listView,
+            ActionBar.LayoutParams(
+                ActionBar.LayoutParams.MATCH_PARENT,
+                ActionBar.LayoutParams.WRAP_CONTENT
+            )
+        )
     }
 
-    @Composable
-    fun ShowAccelerometerReading(
-        sensorX: String,
-        sensorY: String,
-        sensorZ: String,
-        sensorXMax: String,
-        sensorYMax: String,
-        sensorZMax: String
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-            ) {
-                Text(
-                    text = "X: $sensorX",
-                    style = TextStyle(
-                        color = MaterialTheme.colorScheme.secondary,
-                        fontWeight = FontWeight.Bold,
-                        textAlign = TextAlign.Center
-                    ),
-                    modifier = Modifier.padding(16.dp)
-                )
-                Text(
-                    text = "Y: $sensorY",
-                    style = TextStyle(
-                        color = MaterialTheme.colorScheme.secondary,
-                        fontWeight = FontWeight.Bold,
-                        textAlign = TextAlign.Center
-                    ),
-                    modifier = Modifier.padding(16.dp)
-                )
-                Text(
-                    text = "Z: $sensorZ",
-                    style = TextStyle(
-                        color = MaterialTheme.colorScheme.secondary,
-                        fontWeight = FontWeight.Bold,
-                        textAlign = TextAlign.Center
-                    ),
-                    modifier = Modifier.padding(16.dp)
-                )
-            }
-            Column {
-                Text(
-                    text = "XMax: $sensorXMax",
-                    style = TextStyle(
-                        color = MaterialTheme.colorScheme.secondary,
-                        fontWeight = FontWeight.Bold,
-                        textAlign = TextAlign.Center
-                    ),
-                    modifier = Modifier.padding(16.dp)
-                )
-                Text(
-                    text = "YMax: $sensorYMax",
-                    style = TextStyle(
-                        color = MaterialTheme.colorScheme.secondary,
-                        fontWeight = FontWeight.Bold,
-                        textAlign = TextAlign.Center
-                    ),
-                    modifier = Modifier.padding(16.dp)
-                )
-                Text(
-                    text = "ZMax: $sensorZMax",
-                    style = TextStyle(
-                        color = MaterialTheme.colorScheme.secondary,
-                        fontWeight = FontWeight.Bold,
-                        textAlign = TextAlign.Center
-                    ),
-                    modifier = Modifier.padding(16.dp)
-                )
-            }
-        }
-    }
-
-    /*
-
-    @Composable
-    fun ShowMap() {
-        Box(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            Button(
-                onClick = {
-                    startActivity(Intent(this@MainActivity, MapActivity::class.java))
-                }, modifier = Modifier
-                    .align(Alignment.Center)
-                    .padding(16.dp)
-            ) {
-                Text(text = "Show Map")
-            }
-        }
-    }
-
-    */
 }

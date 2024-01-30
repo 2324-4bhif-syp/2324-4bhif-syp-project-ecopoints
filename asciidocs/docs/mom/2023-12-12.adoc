@@ -35,14 +35,17 @@ ifndef::imagesdir[:imagesdir: images]
 |Htl-Leonding 4bhif
 
 |von-bis
-| . Einheit
+| 6. Einheit
 |Dauer
-| . min
+| 45 min
 |===
 
 == Besprochene Themen
 
-* .
+* Film für den Tag der offenen Tür erstellen
+* View-Model
+* Datenmodell überarbeiten
+** Auto, mit welchem gefahren wurde, soll auch gespeichert werden
 
 == Vereinbarungen und Entscheidungen
 
@@ -51,29 +54,6 @@ ifndef::imagesdir[:imagesdir: images]
 |===
 |wer |macht was |bis wann
 
-| Linus
-a|
-* .
-| 19.12.2023
-
-| Oliver
-a|
-* .
-| 19.12.2023
-
-| Laurent
-a|
-* .
-| 19.12.2023
-
-| Armin
-a|
-* .
-| 05.12.2023
-
-| Abdullah
-a|
-* .
-| 19.12.2023
-
-|
+| Alle
+a| Film Erstellen
+| 9.01.2023

@@ -161,11 +161,13 @@ image:colors.jpeg[500,200]
 * Fake Daten für die Präsentation
 * Plakat
 
+[background-image"app.jpg"]
 === Ranking
 
 * Armin
 * Rangliste
 
+[background-image"app.jpg"]
 === Ranking
 
 |===
@@ -173,19 +175,19 @@ image:colors.jpeg[500,200]
 | image:sprint6/ranking.jpeg[500,200] | image:sprint6/ranking-popup.jpeg[500,200]
 |===
 
+[background-image"app.jpg"]
 === Auslesen und Anzeigen
 
-* Linus
+video::sprint6/rpmvid.mp4[width=500,height=300,opts=autoplay]
 
-video::sprint6/rpmvid.mp4[width=500,height=200,opts=autoplay]
-
-
+[background-image"app.jpg"]
 === Hompage
 
 * Abdullah
 * Fahrten
 * TankPreise APi
 
+[background-image"app.jpg"]
 === Homepage
 
 |===

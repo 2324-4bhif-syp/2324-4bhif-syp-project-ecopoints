@@ -102,7 +102,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
 
     @RequiresApi(Build.VERSION_CODES.S)
     @SuppressLint(
-        "MissingPermission", "UnusedMaterialScaffoldPaddingParameter",
+        "UnusedMaterialScaffoldPaddingParameter",
         "SourceLockedOrientationActivity"
     )
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -146,14 +146,25 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                             }
                         })
                     }) {
-                        GoogleMap(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(200.dp),
-                            cameraPositionState = cameraPositionState,
-                            properties = mapProperties,
+
+                        if (ActivityCompat.checkSelfPermission(
+                                this,
+                                Manifest.permission.ACCESS_COARSE_LOCATION
+                            ) != PackageManager.PERMISSION_GRANTED
                         ) {
-                            DrawPolyline()
+                            ActivityCompat.requestPermissions(
+                                this@TripActivity, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), 1
+                            )
+                        } else {
+                            GoogleMap(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(200.dp),
+                                cameraPositionState = cameraPositionState,
+                                properties = mapProperties,
+                            ) {
+                                DrawPolyline()
+                            }
                         }
                     }
 
@@ -257,7 +268,8 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
         Log.d("TripActivity", "Trip stopped")
     }
 
-    @SuppressLint("MissingPermission", "CoroutineCreationDuringComposition")
+    @RequiresApi(Build.VERSION_CODES.S)
+    @SuppressLint("CoroutineCreationDuringComposition")
     @Composable
     private fun Connect(
         device: BluetoothDevice?,
@@ -275,22 +287,32 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
             var isConnected by remember {
                 mutableStateOf(false)
             }
+            if (ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.BLUETOOTH_CONNECT
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    this@TripActivity, arrayOf(Manifest.permission.BLUETOOTH_CONNECT), 1
+                )
+            } else {
 
-            LaunchedEffect(Unit) {
-                CoroutineScope(Dispatchers.IO).launch {
-                    try {
-                        onConnect("Connecting ...")
-                        bluetoothSocket = device.createRfcommSocketToServiceRecord(uuid)
-                        bluetoothSocket?.connect()
-                        inputStream = bluetoothSocket?.inputStream
-                        outputStream = bluetoothSocket?.outputStream
-                        onConnect("Connected")
-                        Log.d(tag, inputStream.toString())
-                        Log.d(tag, outputStream.toString())
-                        isConnected = true
-                    } catch (e: IOException) {
-                        Log.e(tag, e.toString())
-                        onConnect("Failed to connect")
+                LaunchedEffect(Unit) {
+                    CoroutineScope(Dispatchers.IO).launch {
+                        try {
+                            onConnect("Connecting ...")
+                            bluetoothSocket = device.createRfcommSocketToServiceRecord(uuid)
+                            bluetoothSocket?.connect()
+                            inputStream = bluetoothSocket?.inputStream
+                            outputStream = bluetoothSocket?.outputStream
+                            onConnect("Connected")
+                            Log.d(tag, inputStream.toString())
+                            Log.d(tag, outputStream.toString())
+                            isConnected = true
+                        } catch (e: IOException) {
+                            Log.e(tag, e.toString())
+                            onConnect("Failed to connect")
+                        }
                     }
                 }
             }
@@ -483,7 +505,6 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
         }
     }
 
-    @SuppressLint("MissingPermission")
     @Composable
     fun BluetoothDeviceSelectionDialog(
         pairedDevices: List<BluetoothDevice>,
@@ -498,6 +519,16 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                     LazyColumn {
                         items(
                             pairedDevices.filter {
+                                if (ActivityCompat.checkSelfPermission(
+                                        this@TripActivity,
+                                        Manifest.permission.BLUETOOTH_CONNECT
+                                    ) != PackageManager.PERMISSION_GRANTED
+                                ) {
+                                    ActivityCompat.requestPermissions(
+                                        this@TripActivity,
+                                        arrayOf(Manifest.permission.BLUETOOTH_CONNECT), 1
+                                    )
+                                }
                                 it.name.lowercase().contains("obd")
                             }
                         ) { device ->

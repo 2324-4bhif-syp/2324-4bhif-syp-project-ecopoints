@@ -146,7 +146,49 @@ image:colors.jpeg[500,200]
 * http://ecopoints.ddns.net/[Eco-Points]
 
 [.font-xx-large, background-image="traffic.jpg", background-opacity="0.3"]
-== Sprint 4
+== Sprint 4 / 5
 
 [background-image="traffic.jpg", background-opacity="0.3"]
 === Vorbereitung für den Tag der offenen Tür (Video)
+
+== Sprint 6
+
+
+== Tag der Offenen Tür
+
+* Film fertiggestellt
+* Fake Daten für die Präsentation
+* Plakat
+
+=== Ranking
+
+* Armin
+* Rangliste
+
+==== Ranking
+
+|===
+|Rangliste |Popup
+| image:sprint6/ranking.jpeg[500,200] | image:sprint6/ranking-popup.jpeg[500,200]
+|===
+
+=== Auslesen und Anzeigen
+
+* Linus
+
+video::sprint6/rpmvid.mp4[width=500,start=200,opts=autoplay]
+
+
+=== Hompage
+
+* Abdullah
+* Fahrten
+* TankPreise APi
+
+==== Homepage
+
+|===
+|Dark |Light
+| image:sprint6/home.jpeg[500,200] | image:sprint6/home-light.jpeg[500,200]
+|===
+

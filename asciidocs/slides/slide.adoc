@@ -188,7 +188,7 @@ video::sprint6/rpmvid.mp4[width=500,height=500,opts=autoplay]
 
 |===
 |Vorher |Nacher
-| image:tripView.jpeg[500,200] | image:sprint6/new-navbar.jpeg[500,200]
+| image:tripView.jpeg[400,200] | image:sprint6/new-navbar.jpeg[400,200]
 |===
 
 == Rangliste

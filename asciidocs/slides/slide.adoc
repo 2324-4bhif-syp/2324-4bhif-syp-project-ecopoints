@@ -160,8 +160,6 @@ image:colors.jpeg[500,200]
 * Film fertiggestellt (Abdul)
 * Fake Daten für die Präsentation
 * Plakat (Armin, Laurent)
-* Eco Points Rechnung(Abdul, Laurent)
-* UI-Verbesserungen
 
 === Plakat
 

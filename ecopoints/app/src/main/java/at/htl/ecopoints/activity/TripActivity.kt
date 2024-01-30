@@ -194,6 +194,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                             horizontalArrangement = Arrangement.SpaceEvenly
                         ) {
                             Button(
+                                shape = MaterialTheme.shapes.medium,
                                 onClick = { isConnecting = true },
                                 modifier = Modifier
                                     .padding(8.dp)
@@ -202,6 +203,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                                 Text(text = "Connect")
                             }
                             Button(
+                                shape = MaterialTheme.shapes.medium,
                                 onClick = { showDialog = true },
                                 modifier = Modifier
                                     .padding(8.dp)
@@ -440,6 +442,8 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
             horizontalArrangement = Arrangement.Center
         ) {
             Button(
+                shape = MaterialTheme.shapes.medium,
+
                 onClick = { onStartBtnClick() }, modifier = Modifier
                     .padding(8.dp)
                     .weight(1f)
@@ -448,9 +452,12 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
             }
 
             Button(
+                shape = MaterialTheme.shapes.medium,
+
                 onClick = { onStopBtnClick() }, modifier = Modifier
                     .padding(8.dp)
                     .weight(1f)
+                    .height(1.dp)
             ) {
                 Text(text = "Stop")
             }

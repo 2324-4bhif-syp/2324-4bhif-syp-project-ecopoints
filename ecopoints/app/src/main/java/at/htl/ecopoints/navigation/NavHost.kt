@@ -12,16 +12,14 @@ import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Place
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.zIndex
 import at.htl.ecopoints.MainActivity
-import at.htl.ecopoints.activity.TripActivity
 import at.htl.ecopoints.activity.ProfileActivity
 import at.htl.ecopoints.activity.RankingActivity
+import at.htl.ecopoints.activity.TripActivity
 
 @Composable
 fun BottomNavBar(
@@ -31,6 +29,7 @@ fun BottomNavBar(
 ) {
     val screens = listOf("Home", "Trip", "Ranking", "Profile")
 
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -39,7 +38,8 @@ fun BottomNavBar(
 
         BottomNavigation(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            backgroundColor = androidx.compose.material3.MaterialTheme.colorScheme.background
         ) {
             screens.forEach { screen ->
                 BottomNavigationItem(
@@ -51,7 +51,7 @@ fun BottomNavBar(
                             "Profile" -> Icons.Default.AccountCircle
                             else -> Icons.Default.Home
                         }
-                        Icon(icon, contentDescription = null)
+                        Icon(icon, contentDescription = null, tint = androidx.compose.material3.MaterialTheme.colorScheme.primary)
                     },
                     selected = currentScreen == screen,
                     onClick = {

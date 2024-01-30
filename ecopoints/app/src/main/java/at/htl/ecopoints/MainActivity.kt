@@ -204,7 +204,7 @@ class MainActivity : ComponentActivity() {
                 avgEngineRotation = 1200.0,
                 date = Date(System.currentTimeMillis() - 66400000),
                 rewardedEcoPoints = 8.0
-            ),
+            )/*,
             Trip(
                 id = UUID.randomUUID(),
                 distance = 12.5,
@@ -213,7 +213,7 @@ class MainActivity : ComponentActivity() {
                 date = Date(System.currentTimeMillis() - 176400000),
                 rewardedEcoPoints = 8.0
             )
-
+*/
         )
 
         listView.setPadding(0, 1000, 0, 0)

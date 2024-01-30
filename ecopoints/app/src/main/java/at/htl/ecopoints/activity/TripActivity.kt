@@ -622,10 +622,10 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
     private fun addItemToList(newItem: LatLng) {
         val fuelCons = generateRandomFuelCons()
         val color = when {
-            fuelCons <= 6.0 -> Color.Green
-            fuelCons > 6.0 && fuelCons <= 12 -> Color.Yellow
-            fuelCons > 12 && fuelCons <= 20 -> Color.Red
-            else -> Color.Black
+            fuelCons <= 6.0 -> Color.Green //Green
+            fuelCons > 6.0 && fuelCons <= 12 -> Color.Green  //Yellow
+            fuelCons > 12 && fuelCons <= 20 -> Color.Green //Red
+            else -> Color.Green //Black
         }
         latLngList.add(Pair(color, Pair(newItem, fuelCons)))
         latLngHasChanged.value = true

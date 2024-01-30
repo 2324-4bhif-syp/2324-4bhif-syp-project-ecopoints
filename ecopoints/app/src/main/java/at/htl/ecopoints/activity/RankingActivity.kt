@@ -15,6 +15,8 @@ import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import android.widget.ListView
+import android.widget.Spinner
+import android.widget.SpinnerAdapter
 import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
@@ -25,10 +27,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Text
+import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -57,6 +62,8 @@ class RankingActivity : ComponentActivity() {
 
         setContent {
             val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Ranking") }
+            val spinnerItems = listOf("Option 1", "Option 2", "Option 3") // Add your spinner items here
+            val selectedOption = remember { mutableStateOf(spinnerItems.first()) }
 
             EcoPointsTheme {
                 Surface(
@@ -70,6 +77,33 @@ class RankingActivity : ComponentActivity() {
                             context = this@RankingActivity
                         )
                     }
+
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(106.dp),
+                        verticalArrangement = Arrangement.Top
+                    ) {
+                        DropdownMenu(
+                            expanded = false,
+                            onDismissRequest = {  },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp)
+                        ) {
+                            spinnerItems.forEach { item ->
+                                DropdownMenuItem(
+                                    onClick = {
+                                        selectedOption.value = item
+                                    }
+                                ) {
+                                    Text(text = item)
+                                }
+                            }
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
 
                     ShowRanking(context = this, activity = this@RankingActivity)
                 }
@@ -115,7 +149,7 @@ class RankingActivity : ComponentActivity() {
             builder.append("Driven Cars\n")
 
             items.forEach { item ->
-                builder.scale(0.9f, { append(
+                builder.scale(0.85f, { append(
                     item + "\n",
                     BulletSpan(),
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
@@ -123,7 +157,6 @@ class RankingActivity : ComponentActivity() {
             }
 
             dialog.findViewById<TextView>(R.id.driven_cars).setText(builder,  TextView.BufferType.SPANNABLE)
-
 
             if(position == 0) {
                 rank.setTextColor(android.graphics.Color.parseColor("#FFD700"))

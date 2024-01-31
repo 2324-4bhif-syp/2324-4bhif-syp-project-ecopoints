@@ -77,6 +77,7 @@ a|
 | Abdullah
 a|
 * Homepage überarbeiten
+* Pop Up für die letzten Fahrten
 * Echte Daten für die Fahrten aus der DB in der Homepage repräsentieren
 * Csv file + einlesen für paar 'fake' Daten
 | 13.02.2024

@@ -43,7 +43,7 @@ ifndef::imagesdir[:imagesdir: images]
 == Besprochene Themen
 
 * am Ranking weiterarbeiten
-* Echte Daten in der Homepage für die Fahrten repräsentiern
+* Echte Daten in der Homepage für die Fahrten repräsentieren
 
 == Vereinbarungen und Entscheidungen
 
@@ -77,6 +77,8 @@ a|
 | Abdullah
 a|
 * Homepage überarbeiten
+* Echte Daten für die Fahrten aus der DB in der Homepage repräsentieren
+* Csv file + einlesen für paar 'fake' Daten
 | 13.02.2024
 
 |

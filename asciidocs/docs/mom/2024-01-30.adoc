@@ -20,11 +20,11 @@ ifndef::imagesdir[:imagesdir: images]
 |
 
 
+|
 |Abdullah Al-Desoky
-|
 
-|Oliver Daxinger
 |
+|Oliver Daxinger
 
 |===
 
@@ -78,6 +78,7 @@ a|
 a|
 * Homepage überarbeiten
 * Pop Up für die letzten Fahrten
+* DB für Trip erstellen
 * Echte Daten für die Fahrten aus der DB in der Homepage repräsentieren
 * Csv file + einlesen für paar 'fake' Daten
 | 13.02.2024

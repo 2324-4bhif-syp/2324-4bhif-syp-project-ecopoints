@@ -1,7 +1,7 @@
 package at.htl.ecopoints.backendService
 
 import android.util.Log
-import at.htl.ecopoints.model.Trip
+import at.htl.ecopoints.db.Trip
 import okhttp3.Response
 import java.util.UUID
 

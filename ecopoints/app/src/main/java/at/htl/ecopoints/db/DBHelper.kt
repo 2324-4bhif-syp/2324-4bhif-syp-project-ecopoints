@@ -8,16 +8,19 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import at.htl.ecopoints.backendService.CarDataService
 import at.htl.ecopoints.backendService.TripService
-import at.htl.ecopoints.model.Trip
 import java.sql.Timestamp
-import java.time.LocalDate
 import java.util.Date
 import java.util.UUID
 
 class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     SQLiteOpenHelper(context, DATABASE_NAME, factory, DATABASE_VERSION) {
     override fun onCreate(db: SQLiteDatabase) {
-        val query = ("CREATE TABLE " + TABLE_NAME + " ("
+        createCarDataTable(db)
+        createTripTable(db)
+    }
+
+    private fun createCarDataTable(db: SQLiteDatabase){
+        val query = ("CREATE TABLE " + TABLE_CARDATA + " ("
                 + ID_COL + " INTEGER PRIMARY KEY, " +
                 LONGITUDE_COl + " REAL," +
                 LATITUDE_COL + " REAL," +
@@ -30,9 +33,31 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         db.execSQL(query)
     }
 
+    private fun createTripTable(db: SQLiteDatabase){
+        val query = ("CREATE TABLE " + TABLE_TRIP + " ("
+                + ID_COL + " INTEGER PRIMARY KEY, " +
+                DISTANCE_COL + " REAL," +
+                AVGSPEED_COL + " REAL," +
+                AVGENGINE_ROTATION_COL + " REAL," +
+                DATE_COL + " TEXT," +
+                REWARDEDECOPOINTS_COL + " TEXT" + ")")
+
+        db.execSQL(query)
+    }
+
     override fun onUpgrade(db: SQLiteDatabase, p1: Int, p2: Int) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME)
-        onCreate(db)
+        dropAndRecreateCarDataTable(db)
+        dropAndRecreateTripTable(db)
+    }
+
+    private fun dropAndRecreateCarDataTable(db: SQLiteDatabase) {
+        db.execSQL("DROP TABLE IF EXISTS $TABLE_CARDATA")
+        createCarDataTable(db)
+    }
+
+    private fun dropAndRecreateTripTable(db: SQLiteDatabase) {
+        db.execSQL("DROP TABLE IF EXISTS $TABLE_TRIP")
+        createTripTable(db)
     }
 
     fun addCarData(carData: CarData){
@@ -47,7 +72,22 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         values.put(TIMESTAMP_COL, carData.timestamp.toString())
 
         val db = this.writableDatabase
-        db.insert(TABLE_NAME, null, values)
+        db.insert(TABLE_CARDATA, null, values)
+
+        db.close()
+    }
+
+    fun addTrip(trip: Trip){
+        val values = ContentValues()
+
+        values.put(DISTANCE_COL, trip.distance)
+        values.put(AVGSPEED_COL, trip.avgSpeed)
+        values.put(AVGENGINE_ROTATION_COL, trip.avgEngineRotation)
+        values.put(DATE_COL, trip.date.toString())
+        values.put(REWARDEDECOPOINTS_COL, trip.rewardedEcoPoints)
+
+        val db = this.writableDatabase
+        db.insert(TABLE_TRIP, null, values)
 
         db.close()
     }
@@ -55,7 +95,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     fun getAllCarData(): ArrayList<CarData> {
         val db = this.readableDatabase
         val carDataList = ArrayList<CarData>()
-        val cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME, null)
+        val cursor = db.rawQuery("SELECT * FROM " + TABLE_CARDATA, null)
 
         if(cursor!!.moveToFirst()) {
             do {
@@ -66,14 +106,34 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         return carDataList
     }
 
+    fun getAllTrips(): ArrayList<Trip> {
+        val db = this.readableDatabase
+        val tripList = ArrayList<Trip>()
+        val cursor = db.rawQuery("SELECT * FROM " + TABLE_TRIP, null)
+
+        if(cursor!!.moveToFirst()) {
+            do {
+                tripList.add(getTripFromCursor(cursor!!))
+            } while (cursor!!.moveToNext())
+        }
+        cursor!!.close()
+        return tripList
+    }
+
     private fun deleteAllCarData(){
         val db = this.writableDatabase
-        db.delete(TABLE_NAME, null, null)
+        db.delete(TABLE_CARDATA, null, null)
+        db.close()
+    }
+
+    private fun deleteAllTrips(){
+        val db = this.writableDatabase
+        db.delete(TABLE_TRIP, null, null)
         db.close()
     }
 
     @SuppressLint("Range")
-    fun syncWithBackend(){
+    fun syncCarDataWithBackend(){
         val carDataList = getAllCarData()
 
         if(carDataList.size < 1)
@@ -93,6 +153,23 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
         deleteAllCarData()
     }
+
+    @SuppressLint("Range")
+    fun syncTripsWithBackend(){
+        val tripList = getAllTrips()
+
+        if(tripList.size < 1)
+            return
+
+        val tripService = TripService()
+
+        for(trip in tripList){
+            tripService.createTrip(trip)
+        }
+
+        deleteAllTrips()
+    }
+
 
     private fun createCarData(carData: CarData, tripId: UUID): at.htl.ecopoints.model.CarData{
         val id: Long = 0
@@ -138,11 +215,25 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         )
     }
 
+    @SuppressLint("Range")
+    private fun getTripFromCursor(cursor: Cursor): Trip{
+        return Trip(
+            UUID.randomUUID(),
+            cursor.getDouble(cursor.getColumnIndex(DISTANCE_COL)),
+            cursor.getDouble(cursor.getColumnIndex(AVGSPEED_COL)),
+            cursor.getDouble(cursor.getColumnIndex(AVGENGINE_ROTATION_COL)),
+            Date(cursor.getString(cursor.getColumnIndex(DATE_COL))),
+            cursor.getDouble(cursor.getColumnIndex(REWARDEDECOPOINTS_COL))
+        )
+    }
+
     companion object{
         private val DATABASE_NAME = "ECO_LOCAL_DB"
         private val DATABASE_VERSION = 1
-        val TABLE_NAME = "ECO_CARDATA"
+        val TABLE_CARDATA = "ECO_CARDATA"
+        val TABLE_TRIP = "ECO_TRIP"
 
+        //CarData
         val ID_COL = "id"
         val LONGITUDE_COl = "longitude"
         val LATITUDE_COL = "latitude"
@@ -151,5 +242,13 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         val THROTTLEPOSITION_COL = "throttle_position"
         val ENGINERUNTIME_COL = "engine_run_time"
         val TIMESTAMP_COL = "timestamp"
+
+        //Trip
+        val DISTANCE_COL = "distance"
+        val AVGSPEED_COL = "avg_speed"
+        val AVGENGINE_ROTATION_COL = "avg_engine_rotation"
+        val DATE_COL = "date"
+        val REWARDEDECOPOINTS_COL = "rewarded_eco_points"
+
     }
 }

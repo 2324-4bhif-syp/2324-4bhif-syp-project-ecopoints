@@ -59,7 +59,6 @@ import at.htl.ecopoints.ui.theme.EcoPointsTheme
 import com.github.eltonvs.obd.command.ObdCommand
 import com.github.eltonvs.obd.command.ObdResponse
 import com.github.eltonvs.obd.connection.ObdDeviceConnection
-import com.github.pires.obd.commands.control.VinCommand
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
@@ -71,14 +70,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 import java.util.UUID
-import java.util.regex.Matcher
-import java.util.regex.Pattern
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
@@ -265,7 +261,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                 Log.d(tag, it.toString())
                 db.addCarData(it)
             }
-            db.syncWithBackend()
+            db.syncCarDataWithBackend()
         }
         Log.d("TripActivity", "Trip stopped")
     }

@@ -78,9 +78,18 @@ a|
 
 | Abdullah
 a|
+* UI bearbeiten
 * Homepage überarbeiten
+** Logo
+** Darkmode
+** Kraftstoff Preise
+* Trips-Liste Anzeige
+** Sollen auf jeder Screensize funktionieren
 * Pop Up für die letzten Fahrten
+** AvgSpeed, Distance, etc..
+** Aus der CarData Tabelle holen, wo die TripId die Id des jetzigen Trips entspricht
 * DB für Trip erstellen
+** Man kriegt die Trips Daten durch CarData (Man startet ein Trip dann werden die Daten gesammelt, nachdem die Fahrt zu ende ist, werden die daten in Trip aktualisiert)
 * Echte Daten für die Fahrten aus der DB in der Homepage repräsentieren
 * Csv file + einlesen für paar 'fake' Daten
 | 13.02.2024

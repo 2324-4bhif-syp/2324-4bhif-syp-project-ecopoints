@@ -51,6 +51,7 @@ import androidx.core.app.ActivityCompat
 import androidx.lifecycle.lifecycleScope
 import at.htl.ecopoints.db.DBHelper
 import at.htl.ecopoints.interfaces.OnLocationChangedListener
+import at.htl.ecopoints.model.CarData
 import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.service.BluetoothDeviceListService
 import at.htl.ecopoints.service.TestLocationService

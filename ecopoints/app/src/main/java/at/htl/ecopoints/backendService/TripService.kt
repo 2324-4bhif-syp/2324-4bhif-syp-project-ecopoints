@@ -1,5 +1,6 @@
 package at.htl.ecopoints.backendService
 
+import at.htl.ecopoints.model.Trip
 import okhttp3.Response
 import java.util.UUID
 

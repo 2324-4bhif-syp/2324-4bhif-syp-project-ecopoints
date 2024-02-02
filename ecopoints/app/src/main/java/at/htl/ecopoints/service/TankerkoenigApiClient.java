@@ -15,7 +15,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
 
-import at.htl.ecopoints.db.CarData;
 import at.htl.ecopoints.model.GasData;
 
 public class TankerkoenigApiClient{

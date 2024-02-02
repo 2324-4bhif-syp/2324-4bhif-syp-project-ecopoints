@@ -49,7 +49,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.lifecycleScope
-import at.htl.ecopoints.db.CarData
 import at.htl.ecopoints.db.DBHelper
 import at.htl.ecopoints.interfaces.OnLocationChangedListener
 import at.htl.ecopoints.navigation.BottomNavBar

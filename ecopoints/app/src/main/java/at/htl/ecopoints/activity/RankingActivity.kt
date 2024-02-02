@@ -22,17 +22,23 @@ import android.widget.TableRow
 import android.widget.TextView
 import android.widget.Toolbar
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Text
+import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -41,6 +47,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
@@ -51,7 +58,6 @@ import androidx.core.graphics.translationMatrix
 import androidx.core.text.scale
 import at.htl.ecopoints.model.User
 import at.htl.ecopoints.navigation.BottomNavBar
-import at.htl.ecopoints.service.RankingAdapter
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
 import at.htl.ecopoints.R
 
@@ -62,14 +68,15 @@ class RankingActivity : ComponentActivity() {
 
         setContent {
             val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Ranking") }
-            val spinnerItems = listOf("Option 1", "Option 2", "Option 3") // Add your spinner items here
-            val selectedOption = remember { mutableStateOf(spinnerItems.first()) }
 
             EcoPointsTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background,
                 ) {
+                    ShowOptionsForRankType()
+                    DisplayRanking()
+
                     Box{
                         BottomNavBar(
                             currentScreen = currentScreen,
@@ -77,40 +84,94 @@ class RankingActivity : ComponentActivity() {
                             context = this@RankingActivity
                         )
                     }
-
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(106.dp),
-                        verticalArrangement = Arrangement.Top
-                    ) {
-                        DropdownMenu(
-                            expanded = false,
-                            onDismissRequest = {  },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(8.dp)
-                        ) {
-                            spinnerItems.forEach { item ->
-                                DropdownMenuItem(
-                                    onClick = {
-                                        selectedOption.value = item
-                                    }
-                                ) {
-                                    Text(text = item)
-                                }
-                            }
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    ShowRanking(context = this, activity = this@RankingActivity)
                 }
             }
         }
     }
 
+    @Composable
+    fun DisplayRanking(){
+        // JUST TESTING-DATA
+        val users: Array<User> = arrayOf(
+            User(null, "Joe", "123", 547.1),
+            User(null, "Mary", "123", 533.9),
+            User(null, "Chris", "123", 513.4),
+            User(null, "John", "123", 431.3),
+            User(null, "Hary", "123", 347.1),
+            User(null, "Jane", "123", 333.9),
+            User(null, "Max", "123", 313.4),
+            User(null, "Mike", "123", 231.3))
+
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(0.dp, 100.dp, 0.dp, 0.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+
+        ){
+            users.forEach { user ->
+                Button(
+                    onClick = {
+
+                    },
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth()
+                ){
+                    Text(
+                        text = user.userName,
+                        fontSize = TextUnit(20f, TextUnitType.Sp),
+                        modifier = Modifier
+                            .padding(8.dp)
+                    )
+                    Text(
+                        text = user.ecoPoints.toString(),
+                        fontSize = TextUnit(20f, TextUnitType.Sp)
+                    )
+                }
+            }
+        }
+    }
+    
+    @Composable
+    fun ShowOptionsForRankType(){
+        val options = listOf("Eco-Points", "Consumption")
+        val selectedOption = remember { mutableStateOf(options[0]) }
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            Row {
+                options.forEach() { option ->
+                    Button(
+                        onClick = {
+                            selectedOption.value = option
+                        },
+                        modifier = Modifier
+                            .padding(8.dp)
+                    ){
+                        Text(
+                            text = option,
+                            fontSize = TextUnit(20f, TextUnitType.Sp)
+                        )
+                    }
+                }
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Text(text = selectedOption.value, fontSize = TextUnit(20f, TextUnitType.Sp))
+            }
+        }
+    }
+
+    /*
     @Composable
     fun ShowRanking(context: Context, activity: Activity) {
         val listView = ListView(context)
@@ -172,4 +233,6 @@ class RankingActivity : ComponentActivity() {
 
         this.addContentView(listView, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT))
     }
+
+    */
 }

@@ -1,3 +1,4 @@
+/*
 package at.htl.ecopoints.service
 
 import android.annotation.SuppressLint
@@ -38,3 +39,4 @@ class RankingAdapter(private val context: Activity,
     }
 
 }
+*/

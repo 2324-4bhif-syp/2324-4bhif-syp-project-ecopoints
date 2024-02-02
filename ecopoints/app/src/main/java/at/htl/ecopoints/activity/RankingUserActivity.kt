@@ -1,3 +1,4 @@
+/*
 package at.htl.ecopoints.activity
 
 import android.app.Activity
@@ -46,3 +47,4 @@ class RankingUserActivity : ComponentActivity() {
         }
     }
 }
+*/

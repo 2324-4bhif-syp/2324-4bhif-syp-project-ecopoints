@@ -124,8 +124,8 @@ class MainActivity : ComponentActivity() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.TopStart)
-                    .scale(2.5f)
-                    .padding(top = 50.dp)
+                    .scale(2.0f)
+                    .padding(top = 30.dp)
             )
         }
     }
@@ -151,14 +151,11 @@ class MainActivity : ComponentActivity() {
             Log.e("Tankpreis Error", "Error: ${e.message}")
         }
 
-        Log.i("Tankpreis", "Diesel: ${dieselPrice}")
-        Log.i("Tankpreis", "E5: ${e5Price}")
-
         Text(
             text = "Diesel\n" + dieselPrice.toString() + "€",
             fontSize = 25.sp,
             fontStyle = FontStyle.Italic,
-            modifier = Modifier.padding(60.dp, 240.dp, 0.dp,0.dp),
+            modifier = Modifier.padding(80.dp, 150.dp, 0.dp,0.dp),
 
             )
 
@@ -166,7 +163,7 @@ class MainActivity : ComponentActivity() {
             text = "Benzin\n" + e5Price.toString() + "€",
             fontSize = 25.sp,
             fontStyle = FontStyle.Italic,
-            modifier = Modifier.padding(250.dp, 240.dp, 0.dp,0.dp),
+            modifier = Modifier.padding(260.dp, 150.dp, 0.dp,0.dp),
 
             )
     }
@@ -194,7 +191,11 @@ class MainActivity : ComponentActivity() {
     fun LastTrips() {
         var showDialog by remember { mutableStateOf(false) }
         var selectedTripDate by remember { mutableStateOf<Date?>(null) }
-        val gradientColors = listOf(White, Color(0xFF43A047), Color(0xFF66BB6A), Green, White)
+        val gradientColors = listOf(
+            Color(0xFF9bd99e),
+            Color(0xFF05900a),
+            Color(0xFF9bd99e)
+        )
 
 
         val trips = listOf(

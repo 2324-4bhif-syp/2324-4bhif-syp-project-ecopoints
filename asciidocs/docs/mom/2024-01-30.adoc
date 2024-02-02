@@ -55,11 +55,13 @@ ifndef::imagesdir[:imagesdir: images]
 | Linus
 a|
 * Dropdown für Auswahl des Fahrzeuges
+* Current Data (Speed, Rpm) anzeigen
 | 13.02.2024
 
 | Oliver
 a|
-* Strecke auf der Map zeichnen
+* Map In TripView verkleinern, wenn man draufklickt soll sie groß werden
+* Funktion um aus CarDats(Lat Long) Strecke auf der Map zeichnen
 | 13.02.2024
 
 | Laurent
@@ -85,3 +87,4 @@ a|
 
 |
 
+=== test

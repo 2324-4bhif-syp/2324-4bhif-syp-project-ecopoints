@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -177,7 +178,7 @@ class MainActivity : ComponentActivity() {
             fontSize = 25.sp,
             fontWeight = FontWeight.Bold,
             fontStyle = FontStyle.Italic,
-            modifier = Modifier.padding(10.dp, 340.dp, 0.dp,0.dp),
+            modifier = Modifier.padding(10.dp, 240.dp, 0.dp,0.dp),
 
             style = TextStyle(
                 brush = Brush.linearGradient(
@@ -244,7 +245,7 @@ class MainActivity : ComponentActivity() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(0.dp, 360.dp, 0.dp, 0.dp),
+                .padding(0.dp, 260.dp, 0.dp, 0.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.height(16.dp))
@@ -256,12 +257,13 @@ class MainActivity : ComponentActivity() {
                         selectedTripDate = trip.date
                     },
                     modifier = Modifier
-                        .padding(8.dp)
+                        .padding(8.dp, 4.dp)
                         .fillMaxWidth()
                         .background(
                             brush = Brush.horizontalGradient(
                                 colors = gradientColors
-                            )
+                            ),
+                            shape = RoundedCornerShape(10.dp)
                         ),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Transparent,

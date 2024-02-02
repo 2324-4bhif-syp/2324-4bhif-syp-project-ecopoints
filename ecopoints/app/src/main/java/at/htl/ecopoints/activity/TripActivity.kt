@@ -565,22 +565,6 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
 
 // region Map
 
-    @Composable
-    private fun DrawPolyline() {
-        if (!latLngHasChanged.value) {
-            for (i in 0 until latLngList.size - 1) {
-                Polyline(
-                    points = listOf(
-                        latLngList[i].second.first,
-                        latLngList[i + 1].second.first
-                    ),
-                    color = latLngList[i].first,
-                    width = 10f
-                )
-            }
-        }
-        latLngHasChanged.value = false
-    }
 
     @Composable
     private fun MapTypeControls(
@@ -597,7 +581,6 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
             }
         }
     }
-
     @Composable
     private fun MapTypeButton(type: MapType, onClick: () -> Unit) =
         MapButton(text = type.toString(), onClick = onClick)
@@ -613,6 +596,23 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
         ) {
             Text(text = text, style = MaterialTheme.typography.bodyMedium)
         }
+    }
+
+    @Composable
+    private fun DrawPolyline() {
+        if (!latLngHasChanged.value) {
+            for (i in 0 until latLngList.size - 1) {
+                Polyline(
+                    points = listOf(
+                        latLngList[i].second.first,
+                        latLngList[i + 1].second.first
+                    ),
+                    color = latLngList[i].first,
+                    width = 10f
+                )
+            }
+        }
+        latLngHasChanged.value = false
     }
 
     private fun addItemToList(newItem: LatLng) {

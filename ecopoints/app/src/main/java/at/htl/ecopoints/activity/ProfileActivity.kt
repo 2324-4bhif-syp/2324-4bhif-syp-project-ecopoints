@@ -34,7 +34,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import at.htl.ecopoints.R
-import at.htl.ecopoints.activity.ui.theme.EcoPointsTheme
+import at.htl.ecopoints.ui.theme.EcoPointsTheme
 import at.htl.ecopoints.databinding.ActivityProfileBinding
 
 class ProfileActivity : ComponentActivity() {

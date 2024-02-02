@@ -23,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -47,6 +48,13 @@ import at.htl.ecopoints.model.Trip
 import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.service.TankerkoenigApiClient
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.CameraPositionState
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.MapProperties
+import com.google.maps.android.compose.Polyline
+import com.google.maps.android.compose.rememberCameraPositionState
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -55,6 +63,17 @@ import kotlin.concurrent.thread
 
 
 class MainActivity : ComponentActivity() {
+    private val latLngList = mutableStateListOf<Pair<Color, Pair<LatLng, Double>>>()
+
+    //sample data for latLngList for a polyline (different latlngs with different colors)
+    init {
+        latLngList.add(Pair(Color.Red, Pair(LatLng(49.0, 14.285830), 0.0)))
+        latLngList.add(Pair(Color.Blue, Pair(LatLng(49.1, 14.285830), 0.0)))
+        latLngList.add(Pair(Color.Green, Pair(LatLng(49.2, 14.285830), 0.0)))
+        latLngList.add(Pair(Color.Yellow, Pair(LatLng(49.3, 14.285830), 0.0)))
+        latLngList.add(Pair(Color.Cyan, Pair(LatLng(49.4, 14.285830), 0.0)))
+    }
+
 
     @SuppressLint("Range")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -222,7 +241,9 @@ class MainActivity : ComponentActivity() {
         )
 
         Column(
-            modifier = Modifier.fillMaxSize().padding(0.dp, 360.dp, 0.dp, 0.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(0.dp, 360.dp, 0.dp, 0.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.height(16.dp))
@@ -263,7 +284,14 @@ class MainActivity : ComponentActivity() {
                             selectedTripDate?.let {
                                 SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(it)
                             } ?: "Unknown Date"
-                        ) },
+                        )
+                    },
+                    text = {
+                        ShowMap(
+                            cameraPositionState = rememberCameraPositionState {
+                                position = CameraPosition.fromLatLngZoom(LatLng(48.306940, 14.285830), 10f)
+                            })
+                    },
                     confirmButton = {
                         TextButton(onClick = {
                             showDialog = false
@@ -271,9 +299,35 @@ class MainActivity : ComponentActivity() {
                         }) {
                             Text("OK")
                         }
-                    }
+                    },
                 )
             }
+        }
+    }
+    
+    @Composable
+    fun ShowMap(cameraPositionState: CameraPositionState){
+        GoogleMap(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp),
+            cameraPositionState = cameraPositionState,
+        ) {
+            DrawPolyLine();
+        }
+    }
+
+    @Composable
+    fun DrawPolyLine() {
+        for (i in 0 until latLngList.size - 1) {
+            Polyline(
+                points = listOf(
+                    latLngList[i].second.first,
+                    latLngList[i + 1].second.first
+                ),
+                color = latLngList[i].first,
+                width = 10f
+            )
         }
     }
 }

@@ -23,7 +23,7 @@ data class Trip(
 ) {
     override fun toString(): String {
         return String.format(
-            "Trip[id=%d, distance=%f, avgSpeed=%f, avgEngineRotation=%f, date=%s, rewardedEcoPoints=%f]",
+            "Trip[id=%s, distance=%f, avgSpeed=%f, avgEngineRotation=%f, date=%s, rewardedEcoPoints=%f]",
             id,
             distance,
             avgSpeed,

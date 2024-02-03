@@ -33,7 +33,7 @@ data class CarData(
     override fun toString(): String {
         return String.format(
             "CarData[id=%d, tripId=%s, longitude=%f, latitude=%f, currentEngineRPM=%f, currentVelocity=%f, " +
-                    "throttlePosition=%f, engineRunTime=%s, timeStamp=%s"/*, trip=%s]"*/,
+                    "throttlePosition=%f, engineRunTime=%s, timeStamp=%s",
             id,
             tripId,
             longitude,
@@ -43,6 +43,6 @@ data class CarData(
             throttlePosition,
             engineRunTime,
             timeStamp,
-            /*trip*/)
+            )
     }
 }

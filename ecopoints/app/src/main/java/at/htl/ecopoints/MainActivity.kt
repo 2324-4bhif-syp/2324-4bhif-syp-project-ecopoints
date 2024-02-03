@@ -47,6 +47,8 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import at.htl.ecopoints.db.DBHelper
+import at.htl.ecopoints.model.CarData
 import at.htl.ecopoints.model.Trip
 import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.service.TankerkoenigApiClient
@@ -58,6 +60,7 @@ import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
+import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -96,6 +99,8 @@ class MainActivity : ComponentActivity() {
                     ShowText()
 
                     LastTrips()
+
+                    test()
 
                     val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Home") }
                     Box(
@@ -361,5 +366,49 @@ class MainActivity : ComponentActivity() {
                 width = 10f
             )
         }
+    }
+
+    @Composable
+    fun test() {
+
+        val dbHelper = DBHelper(this, null)
+
+        val carData = CarData(
+            0,
+            UUID.randomUUID(),
+            48.123456,
+            16.987654,
+            1500.0,
+            60.0,
+            50.0,
+            "5 hours",
+            Timestamp(System.currentTimeMillis())
+        )
+
+        val trip = Trip(
+            UUID.randomUUID(),
+            100.0,
+            55.0,
+            1500.0,
+            Date(),
+            10.0
+        )
+
+        dbHelper.onUpgrade(dbHelper.writableDatabase, 1, 2)
+        dbHelper.addCarData(carData)
+
+        dbHelper.addTrip(trip)
+
+        val carDataList = dbHelper.getAllCarData()
+        for (cd in carDataList) {
+            Log.i("CarData","CarData ID: ${cd.id}, Latitude: ${cd.latitude}, Longitude: ${cd.longitude}")
+        }
+
+        val tripList = dbHelper.getAllTrips()
+        for (t in tripList) {
+            Log.i("TripList","Trip ID: ${t.id}, Distance: ${t.distance}, Avg Speed: ${t.avgSpeed}")
+        }
+
+        dbHelper.close()
     }
 }

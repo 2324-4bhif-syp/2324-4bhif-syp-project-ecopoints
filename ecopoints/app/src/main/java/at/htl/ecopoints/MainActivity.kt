@@ -1,6 +1,7 @@
 package at.htl.ecopoints
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.lazy.items
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -14,6 +15,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -124,8 +127,8 @@ class MainActivity : ComponentActivity() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.TopStart)
-                    .scale(2.5f)
-                    .padding(top = 50.dp)
+                    .scale(2.0f)
+                    .padding(top = 30.dp)
             )
         }
     }
@@ -151,14 +154,11 @@ class MainActivity : ComponentActivity() {
             Log.e("Tankpreis Error", "Error: ${e.message}")
         }
 
-        Log.i("Tankpreis", "Diesel: ${dieselPrice}")
-        Log.i("Tankpreis", "E5: ${e5Price}")
-
         Text(
             text = "Diesel\n" + dieselPrice.toString() + "€",
             fontSize = 25.sp,
             fontStyle = FontStyle.Italic,
-            modifier = Modifier.padding(60.dp, 240.dp, 0.dp,0.dp),
+            modifier = Modifier.padding(80.dp, 150.dp, 0.dp,0.dp),
 
             )
 
@@ -166,7 +166,7 @@ class MainActivity : ComponentActivity() {
             text = "Benzin\n" + e5Price.toString() + "€",
             fontSize = 25.sp,
             fontStyle = FontStyle.Italic,
-            modifier = Modifier.padding(250.dp, 240.dp, 0.dp,0.dp),
+            modifier = Modifier.padding(260.dp, 150.dp, 0.dp,0.dp),
 
             )
     }
@@ -180,7 +180,7 @@ class MainActivity : ComponentActivity() {
             fontSize = 25.sp,
             fontWeight = FontWeight.Bold,
             fontStyle = FontStyle.Italic,
-            modifier = Modifier.padding(10.dp, 340.dp, 0.dp,0.dp),
+            modifier = Modifier.padding(10.dp, 240.dp, 0.dp,0.dp),
 
             style = TextStyle(
                 brush = Brush.linearGradient(
@@ -194,7 +194,11 @@ class MainActivity : ComponentActivity() {
     fun LastTrips() {
         var showDialog by remember { mutableStateOf(false) }
         var selectedTripDate by remember { mutableStateOf<Date?>(null) }
-        val gradientColors = listOf(White, Color(0xFF43A047), Color(0xFF66BB6A), Green, White)
+        val gradientColors = listOf(
+            Color(0xFF9bd99e),
+            Color(0xFF05900a),
+            Color(0xFF9bd99e)
+        )
 
 
         val trips = listOf(
@@ -243,34 +247,62 @@ class MainActivity : ComponentActivity() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(0.dp, 360.dp, 0.dp, 0.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(16.dp)
+                .padding(0.dp, 260.dp, 0.dp, 0.dp)
         ) {
             Spacer(modifier = Modifier.height(16.dp))
 
-            trips.forEach { trip ->
-                Button(
-                    onClick = {
-                        showDialog = true
-                        selectedTripDate = trip.date
-                    },
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .fillMaxWidth()
-                        .background(
-                            brush = Brush.horizontalGradient(
-                                colors = gradientColors
-                            )
-                        ),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Transparent,
-                        contentColor = Black
-                    )
-                ) {
-
-                    val formattedDate = SimpleDateFormat("dd/MM/yyyy, HH:mm", Locale.getDefault()).format(trip.date)
-                    Text(formattedDate + " Uhr.  " + trip.rewardedEcoPoints.toString() + " EP")
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .weight(1f)
+            ) {
+                items(trips) { trip ->
+                    Button(
+                        onClick = {
+                            showDialog = true
+                            selectedTripDate = trip.date
+                        },
+                        modifier = Modifier
+                            .padding(8.dp, 4.dp)
+                            .fillMaxWidth()
+                            .background(
+                                brush = Brush.horizontalGradient(
+                                    colors = gradientColors
+                                ),
+                                shape = RoundedCornerShape(10.dp)
+                            ),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Transparent,
+                            contentColor = Black
+                        )
+                    ) {
+                        val formattedDate = SimpleDateFormat("dd/MM/yyyy, HH:mm", Locale.getDefault()).format(trip.date)
+                        Text(formattedDate + " Uhr.  " + trip.rewardedEcoPoints.toString() + " EP")
+                    }
                 }
+            }
+
+
+            Button(
+                onClick = {
+                    // Navigieren zur "View All" Activity
+                },
+                modifier = Modifier
+                    .padding(120.dp, 10.dp, 120.dp, 250.dp)
+                    .fillMaxWidth()
+                    .background(
+                        brush = Brush.horizontalGradient(
+                            colors = gradientColors
+                        ),
+                        shape = RoundedCornerShape(10.dp)
+                    ),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Transparent,
+                    contentColor = Black
+                )
+            ) {
+                Text("View All")
             }
 
             if (showDialog) {

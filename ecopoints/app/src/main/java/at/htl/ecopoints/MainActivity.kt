@@ -1,6 +1,7 @@
 package at.htl.ecopoints
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.lazy.items
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -245,35 +247,62 @@ class MainActivity : ComponentActivity() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(0.dp, 260.dp, 0.dp, 0.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(16.dp)
+                .padding(0.dp, 260.dp, 0.dp, 0.dp)
         ) {
             Spacer(modifier = Modifier.height(16.dp))
 
-            trips.forEach { trip ->
-                Button(
-                    onClick = {
-                        showDialog = true
-                        selectedTripDate = trip.date
-                    },
-                    modifier = Modifier
-                        .padding(8.dp, 4.dp)
-                        .fillMaxWidth()
-                        .background(
-                            brush = Brush.horizontalGradient(
-                                colors = gradientColors
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .weight(1f)
+            ) {
+                items(trips) { trip ->
+                    Button(
+                        onClick = {
+                            showDialog = true
+                            selectedTripDate = trip.date
+                        },
+                        modifier = Modifier
+                            .padding(8.dp, 4.dp)
+                            .fillMaxWidth()
+                            .background(
+                                brush = Brush.horizontalGradient(
+                                    colors = gradientColors
+                                ),
+                                shape = RoundedCornerShape(10.dp)
                             ),
-                            shape = RoundedCornerShape(10.dp)
-                        ),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Transparent,
-                        contentColor = Black
-                    )
-                ) {
-
-                    val formattedDate = SimpleDateFormat("dd/MM/yyyy, HH:mm", Locale.getDefault()).format(trip.date)
-                    Text(formattedDate + " Uhr.  " + trip.rewardedEcoPoints.toString() + " EP")
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Transparent,
+                            contentColor = Black
+                        )
+                    ) {
+                        val formattedDate = SimpleDateFormat("dd/MM/yyyy, HH:mm", Locale.getDefault()).format(trip.date)
+                        Text(formattedDate + " Uhr.  " + trip.rewardedEcoPoints.toString() + " EP")
+                    }
                 }
+            }
+
+
+            Button(
+                onClick = {
+                    // Navigieren zur "View All" Activity
+                },
+                modifier = Modifier
+                    .padding(120.dp, 10.dp, 120.dp, 250.dp)
+                    .fillMaxWidth()
+                    .background(
+                        brush = Brush.horizontalGradient(
+                            colors = gradientColors
+                        ),
+                        shape = RoundedCornerShape(10.dp)
+                    ),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Transparent,
+                    contentColor = Black
+                )
+            ) {
+                Text("View All")
             }
 
             if (showDialog) {

@@ -100,8 +100,6 @@ class MainActivity : ComponentActivity() {
 
                     LastTrips()
 
-                    test()
-
                     val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Home") }
                     Box(
                         modifier = Modifier.fillMaxSize()
@@ -206,48 +204,7 @@ class MainActivity : ComponentActivity() {
         )
 
 
-        val trips = listOf(
-            Trip(
-                id = UUID.randomUUID(),
-                distance = 96.3,
-                avgSpeed = 60.0,
-                avgEngineRotation = 1500.0,
-                date = Date(System.currentTimeMillis() - 26300060),
-                rewardedEcoPoints = 10.0
-            ),
-            Trip(
-                id = UUID.randomUUID(),
-                distance = 75.4,
-                avgSpeed = 50.0,
-                avgEngineRotation = 1200.0,
-                date = Date(System.currentTimeMillis() - 56400000),
-                rewardedEcoPoints = 8.0
-            ),
-            Trip(
-                id = UUID.randomUUID(),
-                distance = 60.2,
-                avgSpeed = 50.0,
-                avgEngineRotation = 1200.0,
-                date = Date(System.currentTimeMillis() - 66400000),
-                rewardedEcoPoints = 8.0
-            ),
-            Trip(
-                id = UUID.randomUUID(),
-                distance = 96.3,
-                avgSpeed = 60.0,
-                avgEngineRotation = 1500.0,
-                date = Date(System.currentTimeMillis() - 26300060),
-                rewardedEcoPoints = 10.0
-            ),
-            Trip(
-                id = UUID.randomUUID(),
-                distance = 75.4,
-                avgSpeed = 50.0,
-                avgEngineRotation = 1200.0,
-                date = Date(System.currentTimeMillis() - 56400000),
-                rewardedEcoPoints = 8.0
-            ),
-        )
+        val trips = GetTripDataFromDB()
 
         Column(
             modifier = Modifier
@@ -369,46 +326,64 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun test() {
-
+    private fun GetTripDataFromDB(): ArrayList<Trip> {
         val dbHelper = DBHelper(this, null)
 
-        val carData = CarData(
-            0,
+        val trip1 = Trip(
             UUID.randomUUID(),
-            48.123456,
-            16.987654,
-            1500.0,
+            96.3,
             60.0,
-            50.0,
-            "5 hours",
-            Timestamp(System.currentTimeMillis())
+            1500.0,
+            Date(System.currentTimeMillis() - 26300060),
+            11.0
         )
 
-        val trip = Trip(
-            UUID.randomUUID(),
-            100.0,
-            55.0,
-            1500.0,
-            Date(),
-            10.0
+        val trip2 = Trip(
+            id = UUID.randomUUID(),
+            distance = 75.4,
+            avgSpeed = 50.0,
+            avgEngineRotation = 1200.0,
+            date = Date(System.currentTimeMillis() - 56400000),
+            rewardedEcoPoints = 8.0
+        )
+
+        val trip3 = Trip(
+            id = UUID.randomUUID(),
+            distance = 60.2,
+            avgSpeed = 50.0,
+            avgEngineRotation = 1200.0,
+            date = Date(System.currentTimeMillis() - 66400000),
+            rewardedEcoPoints = 8.0
+        )
+
+        val trip4 = Trip(
+            id = UUID.randomUUID(),
+            distance = 96.3,
+            avgSpeed = 60.0,
+            avgEngineRotation = 1500.0,
+            date = Date(System.currentTimeMillis() - 26300060),
+            rewardedEcoPoints = 10.0
+        )
+
+        val trip5 = Trip(
+            id = UUID.randomUUID(),
+            distance = 75.4,
+            avgSpeed = 50.0,
+            avgEngineRotation = 1200.0,
+            date = Date(System.currentTimeMillis() - 56400000),
+            rewardedEcoPoints = 8.0
         )
 
         dbHelper.onUpgrade(dbHelper.writableDatabase, 1, 2)
-        dbHelper.addCarData(carData)
+        dbHelper.addTrip(trip1)
+        dbHelper.addTrip(trip2)
+        dbHelper.addTrip(trip3)
+        dbHelper.addTrip(trip4)
+        dbHelper.addTrip(trip5)
 
-        dbHelper.addTrip(trip)
-
-        val carDataList = dbHelper.getAllCarData()
-        for (cd in carDataList) {
-            Log.i("CarData","CarData ID: ${cd.id}, Latitude: ${cd.latitude}, Longitude: ${cd.longitude}")
-        }
-
-        val tripList = dbHelper.getAllTrips()
-        for (t in tripList) {
-            Log.i("TripList","Trip ID: ${t.id}, Distance: ${t.distance}, Avg Speed: ${t.avgSpeed}")
-        }
-
+        val allTrips = dbHelper.getAllTrips()
         dbHelper.close()
+
+        return allTrips
     }
 }

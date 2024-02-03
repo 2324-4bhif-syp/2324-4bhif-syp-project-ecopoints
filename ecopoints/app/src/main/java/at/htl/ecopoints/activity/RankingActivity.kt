@@ -111,6 +111,10 @@ class RankingActivity : ComponentActivity() {
             User(null, "Max", "123", 313.4),
             User(null, "Mike", "123", 231.3))
 
+        val ranks = HashMap<User, Painter>();
+        ranks.put(users[0], painterResource(id = R.drawable.ranking_place_1))
+        ranks.put(users[1], painterResource(id = R.drawable.ranking_place_2))
+        ranks.put(users[2], painterResource(id = R.drawable.ranking_place_3))
 
         Column(
             modifier = Modifier
@@ -131,6 +135,16 @@ class RankingActivity : ComponentActivity() {
                         .padding(8.dp)
                         .fillMaxWidth()
                 ){
+
+                    ranks.get(user)?.let {
+                        Image(
+                            painter = it,
+                            contentDescription = "Rank",
+                            modifier = Modifier
+                                .width(35.dp)
+                                .height(35.dp)
+                        )
+                    }
                     Text(
                         text = user.userName,
                         fontSize = TextUnit(20f, TextUnitType.Sp),

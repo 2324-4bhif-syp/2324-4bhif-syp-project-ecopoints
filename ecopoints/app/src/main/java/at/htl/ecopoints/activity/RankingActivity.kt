@@ -22,6 +22,7 @@ import android.widget.TableRow
 import android.widget.TextView
 import android.widget.Toolbar
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
@@ -36,9 +37,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Text
 import androidx.compose.material3.Button
+import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -49,6 +53,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
@@ -75,6 +83,7 @@ class RankingActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background,
                 ) {
                     ShowOptionsForRankType()
+
                     DisplayRanking()
 
                     Box{
@@ -106,7 +115,7 @@ class RankingActivity : ComponentActivity() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(0.dp, 100.dp, 0.dp, 0.dp),
+                .padding(0.dp, 150.dp, 0.dp, 0.dp),
             horizontalAlignment = Alignment.CenterHorizontally
 
         ){
@@ -115,6 +124,9 @@ class RankingActivity : ComponentActivity() {
                     onClick = {
 
                     },
+                    colors = ButtonDefaults.buttonColors(
+                        Color.Transparent
+                    ),
                     modifier = Modifier
                         .padding(8.dp)
                         .fillMaxWidth()
@@ -136,25 +148,43 @@ class RankingActivity : ComponentActivity() {
     
     @Composable
     fun ShowOptionsForRankType(){
-        val options = listOf("Eco-Points", "Consumption")
-        val selectedOption = remember { mutableStateOf(options[0]) }
+        val options = HashMap<String, Painter>();
+        options.put("CO₂-Consumption", painterResource(id = R.drawable.ranking_category_co2))
+        options.put("Eco-Points", painterResource(id = R.drawable.ranking_category_ecopoints))
+
+        val selectedOption = remember { mutableStateOf(options.keys.first()) }
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            Row {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
                 options.forEach() { option ->
                     Button(
                         onClick = {
-                            selectedOption.value = option
+                            selectedOption.value = option.key
                         },
+                        colors = ButtonDefaults.buttonColors(
+                             Color.Transparent
+                        ),
                         modifier = Modifier
                             .padding(8.dp)
                     ){
-                        Text(
-                            text = option,
-                            fontSize = TextUnit(20f, TextUnitType.Sp)
+                        var size:Dp = 60.dp;
+                        if(selectedOption.value == option.key) {
+                            size = 80.dp;
+                        }
+
+                        Image(
+                            painter = option.value,
+                            contentDescription = option.key,
+                            modifier = Modifier
+                                .width(size)
+                                .height(size)
                         )
                     }
                 }
@@ -166,8 +196,13 @@ class RankingActivity : ComponentActivity() {
                     .padding(8.dp),
                 horizontalArrangement = Arrangement.Center
             ) {
-                Text(text = selectedOption.value, fontSize = TextUnit(20f, TextUnitType.Sp))
+                Text(
+                    text = selectedOption.value,
+                    fontSize = TextUnit(25f, TextUnitType.Sp),
+                    fontWeight = androidx.compose.ui.text.font.FontWeight.Bold)
             }
+
+            Divider(thickness = 1.dp, color = Color.LightGray)
         }
     }
 

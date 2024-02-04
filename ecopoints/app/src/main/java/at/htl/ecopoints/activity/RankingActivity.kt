@@ -39,6 +39,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
@@ -57,10 +58,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.TextUnit
@@ -131,10 +136,9 @@ class RankingActivity : ComponentActivity() {
 
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .padding(0.dp, 170.dp, 0.dp, 0.dp)
                 .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally
 
         ){
             users.forEach { user ->
@@ -165,19 +169,32 @@ class RankingActivity : ComponentActivity() {
                             text = (users.indexOf(user) + 1).toString(),
                             fontSize = TextUnit(20f, TextUnitType.Sp),
                             modifier = Modifier
-                                .padding(8.dp)
+                                .padding(8.dp),
+                            fontFamily = FontFamily.Serif,
+                            fontWeight = FontWeight.SemiBold
                         )
                     }
+
+                    Image(
+                        painter = painterResource(id = R.drawable.no_profile_pic),
+                        contentDescription = "Profile Picture",
+                        modifier = Modifier
+                            .width(35.dp)
+                            .height(35.dp)
+                            .clip(RoundedCornerShape(30.dp))
+                    )
 
                     Text(
                         text = user.userName,
                         fontSize = TextUnit(20f, TextUnitType.Sp),
                         modifier = Modifier
                             .padding(8.dp)
+                            .weight(1f),
+                        fontWeight = FontWeight.SemiBold
                     )
                     Text(
                         text = user.ecoPoints.toString(),
-                        fontSize = TextUnit(20f, TextUnitType.Sp)
+                        fontSize = TextUnit(20f, TextUnitType.Sp),
                     )
                 }
             }

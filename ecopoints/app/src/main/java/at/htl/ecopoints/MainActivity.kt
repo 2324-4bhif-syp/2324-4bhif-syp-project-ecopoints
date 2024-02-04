@@ -2,6 +2,7 @@ package at.htl.ecopoints
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.lazy.items
 import android.os.Bundle
 import android.util.Log
@@ -9,13 +10,16 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
@@ -48,6 +52,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import at.htl.ecopoints.activity.TripActivity
 import at.htl.ecopoints.csvData.ReadCsv
 import at.htl.ecopoints.db.DBHelper
 import at.htl.ecopoints.model.CarData
@@ -259,26 +264,58 @@ class MainActivity : ComponentActivity() {
             }
 
 
-            Button(
-                onClick = {
-                    // Navigieren zur "View All" Activity
-                },
+            Row(
                 modifier = Modifier
-                    .padding(120.dp, 10.dp, 120.dp, 250.dp)
                     .fillMaxWidth()
-                    .background(
-                        brush = Brush.horizontalGradient(
-                            colors = gradientColors
-                        ),
-                        shape = RoundedCornerShape(10.dp)
-                    ),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Transparent,
-                    contentColor = Black
-                )
+                    .padding(20.dp, 10.dp, 20.dp, 250.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text("View All")
+                Button(
+                    onClick = {
+                        // Navigieren zur "View All" Activity
+                    },
+                    modifier = Modifier
+                        .background(
+                            brush = Brush.horizontalGradient(
+                                colors = gradientColors
+                            ),
+                            shape = RoundedCornerShape(10.dp)
+                        )
+                        .weight(1f)
+                        .padding(8.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Transparent,
+                        contentColor = Black
+                    )
+                ) {
+                    Text("View All")
+                }
+
+                Spacer(modifier = Modifier.width(30.dp))
+
+                Button(
+                    onClick = {
+                        // Navigieren zur "TripActivity"
+                        startActivity(Intent(this@MainActivity, TripActivity::class.java)
+                        )                    },
+                    modifier = Modifier
+                        .background(
+                            brush = Brush.horizontalGradient(
+                                colors = gradientColors
+                            ),
+                            shape = RoundedCornerShape(10.dp)
+                        )
+                        .weight(1f)
+                        .padding(8.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Transparent,
+                        contentColor = Black
+                    )
+                ) {
+                    Text("New Trip")
+                }
             }
+
 
             if (showDialog) {
                 AlertDialog(
@@ -288,16 +325,30 @@ class MainActivity : ComponentActivity() {
                     },
                     title = {
                         Text(
-                            selectedTripDate?.let {
+                            "Trip: " + (selectedTripDate?.let {
                                 SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(it)
-                            } ?: "Unknown Date"
+                            } ?: "Unknown Date")
                         )
                     },
                     text = {
-                        ShowMap(
-                            cameraPositionState = rememberCameraPositionState {
-                                position = CameraPosition.fromLatLngZoom(LatLng(48.306940, 14.285830), 10f)
-                            })
+
+                        Column {
+                            val selectedTrip = trips.find { it.date == selectedTripDate }
+                            if (selectedTrip != null) {
+                                Text("Distance: ${selectedTrip.distance} km")
+                                Text("Average Speed: ${selectedTrip.avgSpeed} km/h")
+                                Text("Average Engine Rotation: ${selectedTrip.avgEngineRotation} rpm")
+                                Text("Eco Points: ${selectedTrip.rewardedEcoPoints}")
+                            } else {
+                                Text("Trip details not available.")
+                            }
+                            Spacer(modifier = Modifier.height(16.dp))
+
+                            ShowMap(
+                                cameraPositionState = rememberCameraPositionState {
+                                    position = CameraPosition.fromLatLngZoom(LatLng(48.306940, 14.285830), 10f)
+                                })
+                        }
                     },
                     confirmButton = {
                         TextButton(onClick = {
@@ -371,6 +422,7 @@ class MainActivity : ComponentActivity() {
 
         dbHelper.close()
     }
+
     @Composable
     fun ShowMap(cameraPositionState: CameraPositionState){
         GoogleMap(

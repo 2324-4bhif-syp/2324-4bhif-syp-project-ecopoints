@@ -26,8 +26,9 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     }
 
     private fun createCarDataTable(db: SQLiteDatabase){
-        val query = ("CREATE TABLE " + TABLE_CARDATA + " ("
-                + ID_COL + " INTEGER PRIMARY KEY, " +
+        val query = ("CREATE TABLE IF NOT EXISTS " + TABLE_CARDATA + " (" +
+                ID_COL + " INTEGER PRIMARY KEY, " +
+                TRIP_ID_COL + " TEXT, " +
                 LONGITUDE_COl + " REAL," +
                 LATITUDE_COL + " REAL," +
                 CURRENTENGINERPM_COL + " REAL," +
@@ -40,8 +41,8 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     }
 
     private fun createTripTable(db: SQLiteDatabase){
-        val query = ("CREATE TABLE " + TABLE_TRIP + " ("
-                + ID_COL + " INTEGER PRIMARY KEY, " +
+        val query = ("CREATE TABLE IF NOT EXISTS " + TABLE_TRIP + " ("
+                + ID_COL + " TEXT PRIMARY KEY, " +
                 DISTANCE_COL + " REAL," +
                 AVGSPEED_COL + " REAL," +
                 AVGENGINE_ROTATION_COL + " REAL," +
@@ -279,12 +280,15 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     }
 
     @SuppressLint("Range")
-    private fun getCarDataFromCursor(cursor: Cursor): CarData{
+    private fun getCarDataFromCursor(cursor: Cursor): CarData {
+        val tripIdString = cursor.getString(cursor.getColumnIndex(TRIP_ID_COL))
+        val tripId = if (tripIdString != null) UUID.fromString(tripIdString) else UUID.randomUUID()
+
         return CarData(
             0,
-            UUID.fromString(cursor.getString(cursor.getColumnIndex(TRIP_ID_COL))),
-            cursor.getDouble(cursor.getColumnIndex(LATITUDE_COL)),
+            tripId,
             cursor.getDouble(cursor.getColumnIndex(LONGITUDE_COl)),
+            cursor.getDouble(cursor.getColumnIndex(LATITUDE_COL)),
             cursor.getDouble(cursor.getColumnIndex(CURRENTENGINERPM_COL)),
             cursor.getDouble(cursor.getColumnIndex(CURRENTVELOCITY_COL)),
             cursor.getDouble(cursor.getColumnIndex(THROTTLEPOSITION_COL)),
@@ -292,6 +296,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
             Timestamp.valueOf(cursor.getString(cursor.getColumnIndex(TIMESTAMP_COL)))
         )
     }
+
 
     @SuppressLint("Range")
     private fun getTripFromCursor(cursor: Cursor): Trip{

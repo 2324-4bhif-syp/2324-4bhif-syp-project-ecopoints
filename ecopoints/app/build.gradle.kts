@@ -134,4 +134,6 @@ dependencies {
     //json to java
     implementation("com.github.moxy-community:moxy:2.2.2")
     implementation ("com.fasterxml.jackson.core:jackson-databind:2.16.1")
+
+    implementation("com.opencsv:opencsv:5.9")
 }

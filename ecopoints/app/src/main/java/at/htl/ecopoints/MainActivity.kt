@@ -1,6 +1,7 @@
 package at.htl.ecopoints
 
 import android.annotation.SuppressLint
+import android.content.Context
 import androidx.compose.foundation.lazy.items
 import android.os.Bundle
 import android.util.Log
@@ -47,6 +48,9 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import at.htl.ecopoints.csvData.ReadCsv
+import at.htl.ecopoints.db.DBHelper
+import at.htl.ecopoints.model.CarData
 import at.htl.ecopoints.model.Trip
 import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.service.TankerkoenigApiClient
@@ -58,7 +62,16 @@ import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
+import com.opencsv.CSVParserBuilder
+import com.opencsv.CSVReaderBuilder
+import java.io.File
+import java.io.FileReader
+import java.io.IOException
+import java.io.InputStream
+import java.io.InputStreamReader
+import java.sql.Timestamp
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.util.Date
 import java.util.Locale
 import java.util.UUID
@@ -200,49 +213,11 @@ class MainActivity : ComponentActivity() {
             Color(0xFF9bd99e)
         )
 
+        //val trips = ReadCsv.readTripCsv();
+        //readTripDataFromCsvAndAddToDB("tripData.csv")
 
-        val trips = listOf(
-            Trip(
-                id = UUID.randomUUID(),
-                distance = 96.3,
-                avgSpeed = 60.0,
-                avgEngineRotation = 1500.0,
-                date = Date(System.currentTimeMillis() - 26300060),
-                rewardedEcoPoints = 10.0
-            ),
-            Trip(
-                id = UUID.randomUUID(),
-                distance = 75.4,
-                avgSpeed = 50.0,
-                avgEngineRotation = 1200.0,
-                date = Date(System.currentTimeMillis() - 56400000),
-                rewardedEcoPoints = 8.0
-            ),
-            Trip(
-                id = UUID.randomUUID(),
-                distance = 60.2,
-                avgSpeed = 50.0,
-                avgEngineRotation = 1200.0,
-                date = Date(System.currentTimeMillis() - 66400000),
-                rewardedEcoPoints = 8.0
-            ),
-            Trip(
-                id = UUID.randomUUID(),
-                distance = 96.3,
-                avgSpeed = 60.0,
-                avgEngineRotation = 1500.0,
-                date = Date(System.currentTimeMillis() - 26300060),
-                rewardedEcoPoints = 10.0
-            ),
-            Trip(
-                id = UUID.randomUUID(),
-                distance = 75.4,
-                avgSpeed = 50.0,
-                avgEngineRotation = 1200.0,
-                date = Date(System.currentTimeMillis() - 56400000),
-                rewardedEcoPoints = 8.0
-            ),
-        )
+        AddTripDataToDB()
+        val trips = getTripDataFromDB()
 
         Column(
             modifier = Modifier
@@ -336,7 +311,66 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-    
+
+
+    @Composable
+    private fun AddTripDataToDB(){
+        val dbHelper = DBHelper(this, null)
+
+        val trip1 = Trip(
+            UUID.randomUUID(),
+            96.3,
+            60.0,
+            1500.0,
+            Date(System.currentTimeMillis() - 26300060),
+            11.0
+        )
+
+        val trip2 = Trip(
+            id = UUID.randomUUID(),
+            distance = 75.4,
+            avgSpeed = 50.0,
+            avgEngineRotation = 1200.0,
+            date = Date(System.currentTimeMillis() - 56400000),
+            rewardedEcoPoints = 8.0
+        )
+
+        val trip3 = Trip(
+            id = UUID.randomUUID(),
+            distance = 60.2,
+            avgSpeed = 50.0,
+            avgEngineRotation = 1200.0,
+            date = Date(System.currentTimeMillis() - 66400000),
+            rewardedEcoPoints = 8.0
+        )
+
+        val trip4 = Trip(
+            id = UUID.randomUUID(),
+            distance = 96.3,
+            avgSpeed = 60.0,
+            avgEngineRotation = 1500.0,
+            date = Date(System.currentTimeMillis() - 26300060),
+            rewardedEcoPoints = 10.0
+        )
+
+        val trip5 = Trip(
+            id = UUID.randomUUID(),
+            distance = 75.4,
+            avgSpeed = 50.0,
+            avgEngineRotation = 1200.0,
+            date = Date(System.currentTimeMillis() - 56400000),
+            rewardedEcoPoints = 8.0
+        )
+
+        dbHelper.onUpgrade(dbHelper.writableDatabase, 1, 2)
+        dbHelper.addTrip(trip1)
+        dbHelper.addTrip(trip2)
+        dbHelper.addTrip(trip3)
+        dbHelper.addTrip(trip4)
+        dbHelper.addTrip(trip5)
+
+        dbHelper.close()
+    }
     @Composable
     fun ShowMap(cameraPositionState: CameraPositionState){
         GoogleMap(
@@ -361,5 +395,49 @@ class MainActivity : ComponentActivity() {
                 width = 10f
             )
         }
+    }
+
+    /*private fun readTripDataFromCsvAndAddToDB(fileName: String) {
+        val dbHelper = DBHelper(this, null)
+
+        dbHelper.onUpgrade(dbHelper.writableDatabase, 1, 2)
+
+        val filePath = "src/csvData/$fileName"
+
+        try {
+            val inputStream: InputStream = assets.open(filePath)
+            val reader = CSVReaderBuilder(InputStreamReader(inputStream))
+                .withCSVParser(CSVParserBuilder().withSeparator(';').build())
+                .build()
+
+            val header = reader.readNext()
+
+            var line = reader.readNext()
+            while (line != null) {
+                val id = UUID.fromString(line[0])
+                val distance = line[1].toDouble()
+                val avgSpeed = line[2].toDouble()
+                val avgEngineRotation = line[3].toDouble()
+                val date = Date(line[4].toLong())
+                val rewardedEcoPoints = line[5].toDouble()
+
+                val trip = Trip(id, distance, avgSpeed, avgEngineRotation, date, rewardedEcoPoints)
+                dbHelper.addTrip(trip)
+
+                line = reader.readNext()
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        } finally {
+            dbHelper.close()
+        }
+    }*/
+
+
+    private fun getTripDataFromDB(): List<Trip> {
+        val dbHelper = DBHelper(this, null)
+        val trips = dbHelper.getAllTrips()
+        dbHelper.close()
+        return trips
     }
 }

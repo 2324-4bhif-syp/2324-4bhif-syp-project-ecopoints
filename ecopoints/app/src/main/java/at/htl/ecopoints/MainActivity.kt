@@ -230,7 +230,7 @@ class MainActivity : ComponentActivity() {
                 .padding(16.dp)
                 .padding(0.dp, 260.dp, 0.dp, 0.dp)
         ) {
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
             LazyColumn(
                 modifier = Modifier
@@ -250,7 +250,7 @@ class MainActivity : ComponentActivity() {
                                 brush = Brush.horizontalGradient(
                                     colors = gradientColors
                                 ),
-                                shape = RoundedCornerShape(10.dp)
+                                shape = RoundedCornerShape(20.dp)
                             ),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Transparent,
@@ -258,7 +258,20 @@ class MainActivity : ComponentActivity() {
                         )
                     ) {
                         val formattedDate = SimpleDateFormat("dd/MM/yyyy, HH:mm", Locale.getDefault()).format(trip.date)
-                        Text(formattedDate + " Uhr.  " + trip.rewardedEcoPoints.toString() + " EP")
+                        Column(
+                            modifier = Modifier
+                                .padding(0.dp)
+                                .fillMaxWidth()
+                        ) {
+                            Row() {
+                                Text(formattedDate + " Uhr")
+                            }
+                            Row {
+                                Text(trip.rewardedEcoPoints.toString() + " EP")
+                                Spacer(modifier = Modifier.weight(1f))
+                                Text(text = trip.distance.toString() + " km")
+                            }
+                        }
                     }
                 }
             }
@@ -295,7 +308,6 @@ class MainActivity : ComponentActivity() {
 
                 Button(
                     onClick = {
-                        // Navigieren zur "TripActivity"
                         startActivity(Intent(this@MainActivity, TripActivity::class.java)
                         )                    },
                     modifier = Modifier

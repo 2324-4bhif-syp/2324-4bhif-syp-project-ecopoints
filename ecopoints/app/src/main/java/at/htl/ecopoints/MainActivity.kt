@@ -229,7 +229,7 @@ class MainActivity : ComponentActivity() {
                     Button(
                         onClick = {
                             showDialog = true
-                            selectedTripDate = trip.date
+                            selectedTripDate = trip.startDate
                         },
                         modifier = Modifier
                             .padding(8.dp, 4.dp)
@@ -245,7 +245,7 @@ class MainActivity : ComponentActivity() {
                             contentColor = Black
                         )
                     ) {
-                        val formattedDate = SimpleDateFormat("dd/MM/yyyy, HH:mm", Locale.getDefault()).format(trip.date)
+                        val formattedDate = SimpleDateFormat("dd/MM/yyyy, HH:mm", Locale.getDefault()).format(trip.startDate)
                         Column(
                             modifier = Modifier
                                 .padding(0.dp)
@@ -268,7 +268,7 @@ class MainActivity : ComponentActivity() {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(20.dp, 10.dp, 20.dp, 250.dp),
+                    .padding(30.dp, 10.dp, 30.dp, 250.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Button(
@@ -280,10 +280,10 @@ class MainActivity : ComponentActivity() {
                             brush = Brush.horizontalGradient(
                                 colors = gradientColors
                             ),
-                            shape = RoundedCornerShape(10.dp)
+                            shape = RoundedCornerShape(30.dp)
                         )
                         .weight(1f)
-                        .padding(8.dp),
+                        .padding(2.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Transparent,
                         contentColor = Black
@@ -303,10 +303,10 @@ class MainActivity : ComponentActivity() {
                             brush = Brush.horizontalGradient(
                                 colors = gradientColors
                             ),
-                            shape = RoundedCornerShape(10.dp)
+                            shape = RoundedCornerShape(30.dp)
                         )
                         .weight(1f)
-                        .padding(8.dp),
+                        .padding(2.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Transparent,
                         contentColor = Black
@@ -333,8 +333,9 @@ class MainActivity : ComponentActivity() {
                     text = {
 
                         Column {
-                            val selectedTrip = trips.find { it.date == selectedTripDate }
+                            val selectedTrip = trips.find { it.startDate == selectedTripDate }
                             if (selectedTrip != null) {
+                                Text("End Date: ${SimpleDateFormat("dd/MM/yyyy, HH:mm", Locale.getDefault()).format(selectedTrip.endDate)}")
                                 Text("Distance: ${selectedTrip.distance} km")
                                 Text("Average Speed: ${selectedTrip.avgSpeed} km/h")
                                 Text("Average Engine Rotation: ${selectedTrip.avgEngineRotation} rpm")
@@ -405,13 +406,16 @@ class MainActivity : ComponentActivity() {
             var line = reader.readNext()
             while (line != null) {
                 val id = UUID.fromString(line[0])
-                val distance = line[1].toDouble()
-                val avgSpeed = line[2].toDouble()
-                val avgEngineRotation = line[3].toDouble()
-                val date = Date(line[4].toLong())
-                val rewardedEcoPoints = line[5].toDouble()
+                val carId = line[1].toLong()
+                val userId = line[2].toLong()
+                val distance = line[3].toDouble()
+                val avgSpeed = line[4].toDouble()
+                val avgEngineRotation = line[5].toDouble()
+                val startDate = Date(line[6].toLong())
+                val endDate = Date(line[7].toLong())
+                val rewardedEcoPoints = line[8].toDouble()
 
-                val trip = Trip(id, distance, avgSpeed, avgEngineRotation, date, rewardedEcoPoints)
+                val trip = Trip(id, carId, userId, distance, avgSpeed, avgEngineRotation, startDate, endDate, rewardedEcoPoints)
                 dbHelper.addTrip(trip)
 
                 line = reader.readNext()

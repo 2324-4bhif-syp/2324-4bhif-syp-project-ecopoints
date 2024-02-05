@@ -1,11 +1,9 @@
 package at.htl.ecopoints.service
 import android.app.Activity
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import at.htl.ecopoints.model.User
 import at.htl.ecopoints.R
 import at.htl.ecopoints.model.Trip
 
@@ -20,7 +18,7 @@ class TripAdapter (private val context: Activity,
         val date: TextView = view.findViewById(R.id.tripDate)
         val distance: TextView = view.findViewById(R.id.distance)
 
-        date.text = trips[position].date.toGMTString();
+        date.text = trips[position].startDate.toGMTString();
         distance.text = trips[position].distance.toString()
 
         return view

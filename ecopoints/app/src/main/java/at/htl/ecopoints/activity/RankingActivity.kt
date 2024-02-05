@@ -155,24 +155,29 @@ class RankingActivity : ComponentActivity() {
                         .fillMaxWidth()
                 ){
 
-                    ranks.get(user)?.let {
-                        Image(
-                            painter = it,
-                            contentDescription = "Rank",
-                            modifier = Modifier
-                                .width(35.dp)
-                                .height(35.dp)
-                        )
-                    }
-                    if(ranks.get(user) == null) {
-                        Text(
-                            text = (users.indexOf(user) + 1).toString(),
-                            fontSize = TextUnit(20f, TextUnitType.Sp),
-                            modifier = Modifier
-                                .padding(8.dp),
-                            fontFamily = FontFamily.Serif,
-                            fontWeight = FontWeight.SemiBold
-                        )
+                    Box(
+                        modifier = Modifier
+                            .padding(end = 15.dp),
+                    ) {
+                        ranks.get(user)?.let {
+                            Image(
+                                painter = it,
+                                contentDescription = "Rank",
+                                modifier = Modifier
+                                    .width(35.dp)
+                                    .height(35.dp)
+                            )
+                        }
+                        if (ranks.get(user) == null) {
+                            Text(
+                                text = (users.indexOf(user) + 1).toString(),
+                                fontSize = TextUnit(20f, TextUnitType.Sp),
+                                modifier = Modifier
+                                    .padding(8.dp),
+                                fontFamily = FontFamily.Serif,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        }
                     }
 
                     Image(
@@ -189,6 +194,7 @@ class RankingActivity : ComponentActivity() {
                         fontSize = TextUnit(20f, TextUnitType.Sp),
                         modifier = Modifier
                             .padding(8.dp)
+                            .padding(start = 15.dp)
                             .weight(1f),
                         fontWeight = FontWeight.SemiBold
                     )

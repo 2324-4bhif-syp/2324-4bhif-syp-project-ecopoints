@@ -26,8 +26,9 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     }
 
     private fun createCarDataTable(db: SQLiteDatabase){
-        val query = ("CREATE TABLE " + TABLE_CARDATA + " ("
-                + ID_COL + " INTEGER PRIMARY KEY, " +
+        val query = ("CREATE TABLE IF NOT EXISTS " + TABLE_CARDATA + " (" +
+                CARDATA_ID_COL_PK + " INTEGER PRIMARY KEY, " +
+                TRIP_ID_COL_FK + " TEXT, " +
                 LONGITUDE_COl + " REAL," +
                 LATITUDE_COL + " REAL," +
                 CURRENTENGINERPM_COL + " REAL," +
@@ -39,17 +40,21 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         db.execSQL(query)
     }
 
-    private fun createTripTable(db: SQLiteDatabase){
-        val query = ("CREATE TABLE " + TABLE_TRIP + " ("
-                + ID_COL + " INTEGER PRIMARY KEY, " +
+    private fun createTripTable(db: SQLiteDatabase) {
+        val query = ("CREATE TABLE IF NOT EXISTS " + TABLE_TRIP + " ("
+                + TRIP_ID_COL_PK + " TEXT PRIMARY KEY, " +
+                CAR_ID_COL_FK + " INTEGER," +
+                USER_ID_COL_FK + " INTEGER," +
                 DISTANCE_COL + " REAL," +
                 AVGSPEED_COL + " REAL," +
                 AVGENGINE_ROTATION_COL + " REAL," +
-                DATE_COL + " TEXT," +
-                REWARDEDECOPOINTS_COL + " TEXT" + ")")
+                START_DATE_COL + " TEXT," +
+                END_DATE_COL + " TEXT," +
+                REWARDEDECOPOINTS_COL + " REAL" + ")")
 
         db.execSQL(query)
     }
+
 
     override fun onUpgrade(db: SQLiteDatabase, p1: Int, p2: Int) {
         dropAndRecreateCarDataTable(db)
@@ -86,10 +91,13 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     fun addTrip(trip: Trip){
         val values = ContentValues()
 
+        values.put(CAR_ID_COL_FK, trip.carId)
+        values.put(USER_ID_COL_FK, trip.userId)
         values.put(DISTANCE_COL, trip.distance)
         values.put(AVGSPEED_COL, trip.avgSpeed)
         values.put(AVGENGINE_ROTATION_COL, trip.avgEngineRotation)
-        values.put(DATE_COL, trip.date.toString())
+        values.put(START_DATE_COL, trip.startDate.toString())
+        values.put(END_DATE_COL, trip.endDate.toString())
         values.put(REWARDEDECOPOINTS_COL, trip.rewardedEcoPoints)
 
         val db = this.writableDatabase
@@ -129,7 +137,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     fun getAllCarDataForTrip(tripId: UUID): List<CarData> {
         val db = this.readableDatabase
         val carDataList = mutableListOf<CarData>()
-        val cursor = db.query(TABLE_CARDATA, null, "$TRIP_ID_COL=?", arrayOf(tripId.toString()), null, null, null)
+        val cursor = db.query(TABLE_CARDATA, null, "$TRIP_ID_COL_FK=?", arrayOf(tripId.toString()), null, null, null)
 
         if (cursor.moveToFirst()) {
             do {
@@ -159,7 +167,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
             tripValues.put(AVGENGINE_ROTATION_COL, avgEngineRotation)
             tripValues.put(DISTANCE_COL, totalDistance)
 
-            db.update(TABLE_TRIP, tripValues, "$TRIP_ID_COL=?", arrayOf(tripId.toString()))
+            db.update(TABLE_TRIP, tripValues, "$TRIP_ID_COL_FK=?", arrayOf(tripId.toString()))
         }
 
         db.close()
@@ -263,10 +271,13 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
     private fun createTrip(carDataList: ArrayList<CarData>): Trip {
         val id: UUID = UUID.randomUUID()
+        val carId = 0L
+        val userId = 0L
         val distance = 0.0
         val avgSpeed = 0.0
         var avgEngineRotation = 0.0
-        val date: Date = Date()
+        val startDate: Date = Date()
+        val endDate: Date = Date()
         val rewardedEcoPoints = 0.0
 
         for(carData in carDataList) {
@@ -275,16 +286,19 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
         avgEngineRotation /= carDataList.size
 
-        return Trip(id, distance, avgSpeed, avgEngineRotation, date, rewardedEcoPoints)
+        return Trip(id, carId, userId, distance, avgSpeed, avgEngineRotation, startDate, endDate, rewardedEcoPoints)
     }
 
     @SuppressLint("Range")
-    private fun getCarDataFromCursor(cursor: Cursor): CarData{
+    private fun getCarDataFromCursor(cursor: Cursor): CarData {
+        val tripIdString = cursor.getString(cursor.getColumnIndex(TRIP_ID_COL_FK))
+        val tripId = if (tripIdString != null) UUID.fromString(tripIdString) else UUID.randomUUID()
+
         return CarData(
             0,
-            UUID.fromString(cursor.getString(cursor.getColumnIndex(TRIP_ID_COL))),
-            cursor.getDouble(cursor.getColumnIndex(LATITUDE_COL)),
+            tripId,
             cursor.getDouble(cursor.getColumnIndex(LONGITUDE_COl)),
+            cursor.getDouble(cursor.getColumnIndex(LATITUDE_COL)),
             cursor.getDouble(cursor.getColumnIndex(CURRENTENGINERPM_COL)),
             cursor.getDouble(cursor.getColumnIndex(CURRENTVELOCITY_COL)),
             cursor.getDouble(cursor.getColumnIndex(THROTTLEPOSITION_COL)),
@@ -293,14 +307,18 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         )
     }
 
+
     @SuppressLint("Range")
     private fun getTripFromCursor(cursor: Cursor): Trip{
         return Trip(
             UUID.randomUUID(),
+            cursor.getLong(cursor.getColumnIndex(CAR_ID_COL_FK)),
+            cursor.getLong(cursor.getColumnIndex(USER_ID_COL_FK)),
             cursor.getDouble(cursor.getColumnIndex(DISTANCE_COL)),
             cursor.getDouble(cursor.getColumnIndex(AVGSPEED_COL)),
             cursor.getDouble(cursor.getColumnIndex(AVGENGINE_ROTATION_COL)),
-            Date(cursor.getString(cursor.getColumnIndex(DATE_COL))),
+            Date(cursor.getString(cursor.getColumnIndex(START_DATE_COL))),
+            Date(cursor.getString(cursor.getColumnIndex(END_DATE_COL))),
             cursor.getDouble(cursor.getColumnIndex(REWARDEDECOPOINTS_COL))
         )
     }
@@ -312,8 +330,8 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         val TABLE_TRIP = "ECO_TRIP"
 
         //CarData
-        val ID_COL = "id"
-        val TRIP_ID_COL = "trip_id"
+        val CARDATA_ID_COL_PK = "id"
+        val TRIP_ID_COL_FK = "trip_id"
         val LONGITUDE_COl = "longitude"
         val LATITUDE_COL = "latitude"
         val CURRENTENGINERPM_COL = "current_engine_rpm"
@@ -323,10 +341,14 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         val TIMESTAMP_COL = "timestamp"
 
         //Trip
+        val TRIP_ID_COL_PK = "id"
+        val CAR_ID_COL_FK = "car_id"
+        val USER_ID_COL_FK = "user_id"
         val DISTANCE_COL = "distance"
         val AVGSPEED_COL = "avg_speed"
         val AVGENGINE_ROTATION_COL = "avg_engine_rotation"
-        val DATE_COL = "date"
+        val START_DATE_COL = "start_date"
+        val END_DATE_COL = "end_date"
         val REWARDEDECOPOINTS_COL = "rewarded_eco_points"
 
     }

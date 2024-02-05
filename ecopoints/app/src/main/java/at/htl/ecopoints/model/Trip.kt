@@ -1,12 +1,21 @@
 package at.htl.ecopoints.model
 
 import com.google.gson.annotations.SerializedName
-import java.time.LocalDate
 import java.util.Date
 import java.util.UUID
 
 data class Trip(
+
+    @SerializedName("id")
     val id: UUID,
+
+    @SerializedName("car_id")
+    val carId: Long,
+
+    @SerializedName("user_id")
+    val userId: Long,
+
+    @SerializedName("distance")
     val distance: Double,
 
     @SerializedName("avg_speed")
@@ -15,21 +24,28 @@ data class Trip(
     @SerializedName("avg_engine_rotation")
     val avgEngineRotation: Double,
 
-    val date: Date,
+    @SerializedName("start_date")
+    val startDate: Date,
+
+    @SerializedName("end_date")
+    val endDate: Date,
 
     @SerializedName("rewarded_eco_points")
     val rewardedEcoPoints: Double,
-    //val user: User
-) {
+
+    ) {
     override fun toString(): String {
         return String.format(
-            "Trip[id=%d, distance=%f, avgSpeed=%f, avgEngineRotation=%f, date=%s, rewardedEcoPoints=%f]",
+            "Trip[id=%s, carId=%d, userId=%d, distance=%f, avgSpeed=%f, avgEngineRotation=%f, startDate=%s, endDate=%s, rewardedEcoPoints=%f]",
             id,
+            carId,
+            userId,
             distance,
             avgSpeed,
             avgEngineRotation,
-            date,
+            startDate,
+            endDate,
             rewardedEcoPoints,
-            /*user*/)
+        )
     }
 }

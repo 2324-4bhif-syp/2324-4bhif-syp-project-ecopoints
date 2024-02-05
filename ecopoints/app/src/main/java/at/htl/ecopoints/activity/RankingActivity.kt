@@ -157,7 +157,8 @@ class RankingActivity : ComponentActivity() {
 
                     Box(
                         modifier = Modifier
-                            .padding(end = 15.dp),
+                            .padding(end = 15.dp)
+                            .width(40.dp),
                     ) {
                         ranks.get(user)?.let {
                             Image(

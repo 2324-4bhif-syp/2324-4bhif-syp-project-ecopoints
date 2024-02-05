@@ -45,9 +45,12 @@ import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.graphics.Color.Companion.Green
 import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import at.htl.ecopoints.activity.TripActivity
@@ -164,20 +167,25 @@ class MainActivity : ComponentActivity() {
         }
 
         Text(
-            text = "Diesel\n" + dieselPrice.toString() + "€",
-            fontSize = 25.sp,
-            fontStyle = FontStyle.Italic,
-            modifier = Modifier.padding(80.dp, 150.dp, 0.dp,0.dp),
-
-            )
+            text = buildAnnotatedString {
+                withStyle(style = SpanStyle(fontSize = 25.sp, fontStyle = FontStyle.Italic)) {
+                    append("Diesel\n")
+                }
+                append("  ${dieselPrice}€")
+            },
+            modifier = Modifier.padding(start = 80.dp, top = 150.dp),
+        )
 
         Text(
-            text = "Benzin\n" + e5Price.toString() + "€",
-            fontSize = 25.sp,
-            fontStyle = FontStyle.Italic,
-            modifier = Modifier.padding(260.dp, 150.dp, 0.dp,0.dp),
+            text = buildAnnotatedString {
+                withStyle(style = SpanStyle(fontSize = 25.sp, fontStyle = FontStyle.Italic)) {
+                    append("Benzin\n")
+                }
+                append("  ${e5Price}€")
+            },
+            modifier = Modifier.padding(start = 260.dp, top = 150.dp),
+        )
 
-            )
     }
 
     @Composable
@@ -268,7 +276,7 @@ class MainActivity : ComponentActivity() {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(30.dp, 10.dp, 30.dp, 250.dp),
+                    .padding(30.dp, 10.dp, 30.dp, 200.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Button(

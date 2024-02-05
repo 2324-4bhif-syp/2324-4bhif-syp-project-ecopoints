@@ -55,6 +55,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import at.htl.ecopoints.activity.TripActivity
 import at.htl.ecopoints.db.DBHelper
+import at.htl.ecopoints.model.CarData
 import at.htl.ecopoints.model.Trip
 import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.service.TankerkoenigApiClient
@@ -70,6 +71,7 @@ import com.opencsv.CSVReaderBuilder
 import java.io.IOException
 import java.io.InputStream
 import java.io.InputStreamReader
+import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -217,7 +219,19 @@ class MainActivity : ComponentActivity() {
             Color(0xFF9bd99e)
         )
 
-        readTripDataFromCsvAndAddToDB("tripData.csv")
+        //version 1
+        //readTripDataFromCsvAndAddToDB("tripData.csv")
+        //val trips = getTripDataFromDB()
+
+        //version 2
+        val dbHelper = DBHelper(this, null)
+        dbHelper.onUpgrade(dbHelper.writableDatabase, 1, 2)
+
+        readTripData2FromCsvAndAddToDB("tripData2.csv");
+        readCarDataFromCsvAndAddToDB("carData.csv");
+
+        dbHelper.close()
+
         val trips = getTripDataFromDB()
 
         Column(
@@ -441,4 +455,93 @@ class MainActivity : ComponentActivity() {
         dbHelper.close()
         return trips
     }
+
+    private fun readCarDataFromCsvAndAddToDB(fileName: String) {
+        val dbHelper = DBHelper(this, null)
+
+        var counter = 0;
+
+        try {
+            val inputStream: InputStream = assets.open(fileName)
+            val reader = CSVReaderBuilder(InputStreamReader(inputStream))
+                .withCSVParser(CSVParserBuilder().withSeparator(';').build())
+                .build()
+
+            val header = reader.readNext()
+
+            var line = reader.readNext()
+            while (line != null) {
+
+                val dateString = line[8]
+                val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+                val date = dateFormat.parse(dateString)
+                val timeStamp = Timestamp(date.time)
+
+                val id = line[0].toLong()
+                val tripId =  UUID.fromString(line[1])
+                val longitude =  line[2].toDouble()
+                val latitude =  line[3].toDouble()
+                val currentEngineRPM =  line[4].toDouble()
+                val currentVelocity =  line[5].toDouble()
+                val throttlePosition =  line[6].toDouble()
+                val engineRunTime =  line[7]
+
+                val carData = CarData(
+                    id, tripId, longitude, latitude, currentEngineRPM, currentVelocity, throttlePosition, engineRunTime, timeStamp
+                )
+
+                dbHelper.addCarData(carData);
+
+                counter++;
+
+                if(counter == 4) {
+                    dbHelper.updateTripValues(UUID.fromString(line[1]))
+                    counter = 0;
+                }
+
+                line = reader.readNext()
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        } finally {
+            dbHelper.close()
+        }
+    }
+
+    private fun readTripData2FromCsvAndAddToDB(fileName: String) {
+        val dbHelper = DBHelper(this, null)
+
+        try {
+            val inputStream: InputStream = assets.open(fileName)
+            val reader = CSVReaderBuilder(InputStreamReader(inputStream))
+                .withCSVParser(CSVParserBuilder().withSeparator(';').build())
+                .build()
+
+            val header = reader.readNext()
+
+            var line = reader.readNext()
+            while (line != null) {
+                val id = UUID.fromString(line[0])
+                val carId = line[1].toLong()
+                val userId = line[2].toLong()
+                val distance = line[3].toDouble()
+                val avgSpeed = line[4].toDouble()
+                val avgEngineRotation = line[5].toDouble()
+                val startDate = Date(line[6].toLong())
+                val endDate = Date(line[7].toLong())
+                val rewardedEcoPoints = line[8].toDouble()
+
+                val trip = Trip(id, carId, userId, distance, avgSpeed, avgEngineRotation, startDate, endDate, rewardedEcoPoints)
+                dbHelper.addTrip(trip)
+
+                line = reader.readNext()
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        } finally {
+            dbHelper.close()
+        }
+    }
+
+
 }

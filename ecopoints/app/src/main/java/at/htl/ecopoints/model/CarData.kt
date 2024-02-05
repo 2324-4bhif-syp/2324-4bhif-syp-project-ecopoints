@@ -28,7 +28,6 @@ data class CarData(
     @SerializedName("time_stamp")
     val timeStamp: Timestamp,
 
-    //val trip: Trip
 ) {
     override fun toString(): String {
         return String.format(

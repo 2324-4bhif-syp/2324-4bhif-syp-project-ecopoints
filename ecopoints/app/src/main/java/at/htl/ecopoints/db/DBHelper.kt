@@ -10,6 +10,8 @@ import at.htl.ecopoints.backendService.CarDataService
 import at.htl.ecopoints.backendService.TripService
 import at.htl.ecopoints.model.CarData
 import at.htl.ecopoints.model.Trip
+import java.math.BigDecimal
+import java.math.RoundingMode
 import java.sql.Timestamp
 import java.util.Date
 import java.util.UUID
@@ -74,6 +76,8 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     fun addCarData(carData: CarData){
         val values = ContentValues()
 
+        values.put(CARDATA_ID_COL_PK, carData.id.toString())
+        values.put(TRIP_ID_COL_FK, carData.tripId.toString())
         values.put(LONGITUDE_COl, carData.longitude)
         values.put(LATITUDE_COL, carData.latitude)
         values.put(CURRENTENGINERPM_COL, carData.currentEngineRPM)
@@ -91,6 +95,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     fun addTrip(trip: Trip){
         val values = ContentValues()
 
+        values.put(TRIP_ID_COL_PK, trip.id.toString())
         values.put(CAR_ID_COL_FK, trip.carId)
         values.put(USER_ID_COL_FK, trip.userId)
         values.put(DISTANCE_COL, trip.distance)
@@ -135,20 +140,19 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     }
 
     fun getAllCarDataForTrip(tripId: UUID): List<CarData> {
-        val db = this.readableDatabase
-        val carDataList = mutableListOf<CarData>()
-        val cursor = db.query(TABLE_CARDATA, null, "$TRIP_ID_COL_FK=?", arrayOf(tripId.toString()), null, null, null)
 
-        if (cursor.moveToFirst()) {
-            do {
-                carDataList.add(getCarDataFromCursor(cursor))
-            } while (cursor.moveToNext())
+        var carDatas = getAllCarData();
+        val carDataList = mutableListOf<CarData>()
+
+        for (carData in carDatas) {
+            if (carData.tripId == tripId) {
+                carDataList.add(carData)
+            }
         }
 
-        cursor.close()
-        db.close()
         return carDataList
     }
+
 
     fun updateTripValues(tripId: UUID) {
         val db = this.readableDatabase
@@ -160,14 +164,19 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
             val avgSpeed = carDataList.map { it.currentVelocity }.average()
             val avgEngineRotation = carDataList.map { it.currentEngineRPM }.average()
-
             val totalDistance = calculateTotalDistance(carDataList)
 
-            tripValues.put(AVGSPEED_COL, avgSpeed)
-            tripValues.put(AVGENGINE_ROTATION_COL, avgEngineRotation)
-            tripValues.put(DISTANCE_COL, totalDistance)
+            val roundedAvgSpeed = BigDecimal(avgSpeed).setScale(2, RoundingMode.HALF_UP).toDouble()
+            val roundedAvgEngineRotation = BigDecimal(avgEngineRotation).setScale(2, RoundingMode.HALF_UP).toDouble()
+            val roundedTotalDistance = BigDecimal(totalDistance).setScale(2, RoundingMode.HALF_UP).toDouble()
 
-            db.update(TABLE_TRIP, tripValues, "$TRIP_ID_COL_FK=?", arrayOf(tripId.toString()))
+
+            tripValues.put(AVGSPEED_COL, roundedAvgSpeed)
+            tripValues.put(AVGENGINE_ROTATION_COL, roundedAvgEngineRotation)
+            tripValues.put(DISTANCE_COL, roundedTotalDistance)
+
+
+            db.update(TABLE_TRIP, tripValues, "$TRIP_ID_COL_PK=?", arrayOf(tripId.toString()))
         }
 
         db.close()

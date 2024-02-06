@@ -149,7 +149,6 @@ dependencies {
 
     // Jackson
     implementation("com.fasterxml.jackson.core:jackson-databind:2.16.1")
-
 }
 
 // Allow references to generated code

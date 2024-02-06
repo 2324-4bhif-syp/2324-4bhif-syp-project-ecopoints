@@ -114,7 +114,7 @@ class MainActivity : ComponentActivity() {
                     val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Home") }
                     Box(
                         modifier = Modifier.fillMaxSize()
-                    ){
+                    ) {
 
                         BottomNavBar(
                             currentScreen = currentScreen,
@@ -155,16 +155,16 @@ class MainActivity : ComponentActivity() {
         val tankerkoenigApiClient = TankerkoenigApiClient()
         try {
             thread {
-            val gasData = tankerkoenigApiClient.getApiData()
+                val gasData = tankerkoenigApiClient.getApiData()
                 dieselPrice = gasData.diesel
                 e5Price = gasData.e5
             }
 
-            while(dieselPrice == 0.0 && e5Price == 0.0) {
+            while (dieselPrice == 0.0 && e5Price == 0.0) {
                 Thread.sleep(0.1.toLong())
             }
 
-        }catch (e: Exception) {
+        } catch (e: Exception) {
             Log.e("Tankpreis Error", "Error: ${e.message}")
         }
 
@@ -191,7 +191,7 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun ShowText(){
+    fun ShowText() {
         val gradientColors = listOf(Gray, Green, DarkGray)
 
         Text(
@@ -199,7 +199,7 @@ class MainActivity : ComponentActivity() {
             fontSize = 25.sp,
             fontWeight = FontWeight.Bold,
             fontStyle = FontStyle.Italic,
-            modifier = Modifier.padding(10.dp, 240.dp, 0.dp,0.dp),
+            modifier = Modifier.padding(10.dp, 240.dp, 0.dp, 0.dp),
 
             style = TextStyle(
                 brush = Brush.linearGradient(
@@ -267,7 +267,10 @@ class MainActivity : ComponentActivity() {
                             contentColor = Black
                         )
                     ) {
-                        val formattedDate = SimpleDateFormat("dd/MM/yyyy, HH:mm", Locale.getDefault()).format(trip.startDate)
+                        val formattedDate = SimpleDateFormat(
+                            "dd/MM/yyyy, HH:mm",
+                            Locale.getDefault()
+                        ).format(trip.startDate)
                         Column(
                             modifier = Modifier
                                 .padding(0.dp)
@@ -287,54 +290,60 @@ class MainActivity : ComponentActivity() {
             }
 
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(30.dp, 10.dp, 30.dp, 200.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Bottom,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Button(
-                    onClick = {
-                        // Navigieren zur "View All" Activity
-                    },
+                Row(
                     modifier = Modifier
-                        .background(
-                            brush = Brush.horizontalGradient(
-                                colors = gradientColors
-                            ),
-                            shape = RoundedCornerShape(30.dp)
-                        )
-                        .weight(1f)
-                        .padding(2.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Transparent,
-                        contentColor = Black
-                    )
+                        .fillMaxWidth()
+                        .padding(30.dp, 10.dp, 30.dp, 50.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text("View All")
-                }
-
-                Spacer(modifier = Modifier.width(30.dp))
-
-                Button(
-                    onClick = {
-                        startActivity(Intent(this@MainActivity, TripActivity::class.java)
-                        )                    },
-                    modifier = Modifier
-                        .background(
-                            brush = Brush.horizontalGradient(
-                                colors = gradientColors
-                            ),
-                            shape = RoundedCornerShape(30.dp)
+                    Button(
+                        onClick = {
+                            // Navigieren zur "View All" Activity
+                        },
+                        modifier = Modifier
+                            .background(
+                                brush = Brush.horizontalGradient(
+                                    colors = gradientColors
+                                ),
+                                shape = RoundedCornerShape(30.dp)
+                            )
+                            .weight(1f)
+                            .padding(2.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Transparent,
+                            contentColor = Black
                         )
-                        .weight(1f)
-                        .padding(2.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Transparent,
-                        contentColor = Black
-                    )
-                ) {
-                    Text("New Trip")
+                    ) {
+                        Text("View All")
+                    }
+                    Spacer(modifier = Modifier.width(20.dp))
+                    Button(
+                        onClick = {
+                            startActivity(
+                                Intent(this@MainActivity, TripActivity::class.java)
+                            )
+                        },
+                        modifier = Modifier
+                            .background(
+                                brush = Brush.horizontalGradient(
+                                    colors = gradientColors
+                                ),
+                                shape = RoundedCornerShape(30.dp)
+                            )
+                            .weight(1f)
+                            .padding(2.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Transparent,
+                            contentColor = Black
+                        )
+                    ) {
+                        Text("New Trip")
+                    }
                 }
             }
 
@@ -357,7 +366,14 @@ class MainActivity : ComponentActivity() {
                         Column {
                             val selectedTrip = trips.find { it.startDate == selectedTripDate }
                             if (selectedTrip != null) {
-                                Text("End Date: ${SimpleDateFormat("dd/MM/yyyy, HH:mm", Locale.getDefault()).format(selectedTrip.endDate)}")
+                                Text(
+                                    "End Date: ${
+                                        SimpleDateFormat(
+                                            "dd/MM/yyyy, HH:mm",
+                                            Locale.getDefault()
+                                        ).format(selectedTrip.endDate)
+                                    }"
+                                )
                                 Text("Distance: ${selectedTrip.distance} km")
                                 Text("Average Speed: ${selectedTrip.avgSpeed} km/h")
                                 Text("Average Engine Rotation: ${selectedTrip.avgEngineRotation} rpm")
@@ -369,7 +385,10 @@ class MainActivity : ComponentActivity() {
 
                             ShowMap(
                                 cameraPositionState = rememberCameraPositionState {
-                                    position = CameraPosition.fromLatLngZoom(LatLng(48.306940, 14.285830), 10f)
+                                    position = CameraPosition.fromLatLngZoom(
+                                        LatLng(48.306940, 14.285830),
+                                        10f
+                                    )
                                 })
                         }
                     },
@@ -387,7 +406,7 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun ShowMap(cameraPositionState: CameraPositionState){
+    fun ShowMap(cameraPositionState: CameraPositionState) {
         GoogleMap(
             modifier = Modifier
                 .fillMaxWidth()
@@ -437,7 +456,17 @@ class MainActivity : ComponentActivity() {
                 val endDate = Date(line[7].toLong())
                 val rewardedEcoPoints = line[8].toDouble()
 
-                val trip = Trip(id, carId, userId, distance, avgSpeed, avgEngineRotation, startDate, endDate, rewardedEcoPoints)
+                val trip = Trip(
+                    id,
+                    carId,
+                    userId,
+                    distance,
+                    avgSpeed,
+                    avgEngineRotation,
+                    startDate,
+                    endDate,
+                    rewardedEcoPoints
+                )
                 dbHelper.addTrip(trip)
 
                 line = reader.readNext()
@@ -478,23 +507,31 @@ class MainActivity : ComponentActivity() {
                 val timeStamp = Timestamp(date.time)
 
                 val id = line[0].toLong()
-                val tripId =  UUID.fromString(line[1])
-                val longitude =  line[2].toDouble()
-                val latitude =  line[3].toDouble()
-                val currentEngineRPM =  line[4].toDouble()
-                val currentVelocity =  line[5].toDouble()
-                val throttlePosition =  line[6].toDouble()
-                val engineRunTime =  line[7]
+                val tripId = UUID.fromString(line[1])
+                val longitude = line[2].toDouble()
+                val latitude = line[3].toDouble()
+                val currentEngineRPM = line[4].toDouble()
+                val currentVelocity = line[5].toDouble()
+                val throttlePosition = line[6].toDouble()
+                val engineRunTime = line[7]
 
                 val carData = CarData(
-                    id, tripId, longitude, latitude, currentEngineRPM, currentVelocity, throttlePosition, engineRunTime, timeStamp
+                    id,
+                    tripId,
+                    longitude,
+                    latitude,
+                    currentEngineRPM,
+                    currentVelocity,
+                    throttlePosition,
+                    engineRunTime,
+                    timeStamp
                 )
 
                 dbHelper.addCarData(carData);
 
                 counter++;
 
-                if(counter == 4) {
+                if (counter == 4) {
                     dbHelper.updateTripValues(UUID.fromString(line[1]))
                     counter = 0;
                 }
@@ -531,7 +568,17 @@ class MainActivity : ComponentActivity() {
                 val endDate = Date(line[7].toLong())
                 val rewardedEcoPoints = line[8].toDouble()
 
-                val trip = Trip(id, carId, userId, distance, avgSpeed, avgEngineRotation, startDate, endDate, rewardedEcoPoints)
+                val trip = Trip(
+                    id,
+                    carId,
+                    userId,
+                    distance,
+                    avgSpeed,
+                    avgEngineRotation,
+                    startDate,
+                    endDate,
+                    rewardedEcoPoints
+                )
                 dbHelper.addTrip(trip)
 
                 line = reader.readNext()

@@ -2,6 +2,7 @@ package at.htl.ecopoints.activity
 
 import androidx.activity.ComponentActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -214,10 +215,12 @@ class RankingActivity : ComponentActivity() {
     fun ShowFuelTypeDropdown() {
         var expanded = remember { mutableStateOf(false) }
 
-        var diesel: FuelType = FuelType("Diesel", false)
-        var petrol: FuelType = FuelType("Petrol", false)
+        var diesel: FuelType = FuelType("Diesel")
+        var petrol: FuelType = FuelType("Petrol")
 
-        val fuelTypes = arrayOf(diesel, petrol)
+        var fuelTypes = mutableListOf(diesel, petrol)
+
+        var selectedFuelType = remember { fuelTypes }
 
         Box(
             modifier = Modifier
@@ -239,18 +242,27 @@ class RankingActivity : ComponentActivity() {
 
                 fuelTypes.forEach { fuelType ->
                     DropdownMenuItem(
-                        onClick = {  },
+                        onClick = {
+                            selectedFuelType.contains(fuelType).let {
+                                if (it) {
+                                    selectedFuelType.remove(fuelType)
+                                } else {
+                                    selectedFuelType.add(fuelType)
+                                }
+                            }
+                        }
                     ) {
                         Text(
                             text = fuelType.name,
                             modifier = Modifier
                                 .weight(1f))
-                        if(fuelType.selection) {
-                            Icon(
-                                imageVector = Icons.Rounded.Check,
-                                contentDescription = "Selected"
+
+                        // Icon only shown if fueltype is selected
+                        Icon(
+                            imageVector = Icons.Rounded.Check,
+                            contentDescription = "Selected",
+                            tint = if (selectedFuelType.contains(fuelType)) Color.Black else Color.Transparent,
                             )
-                        }
                     }
                 }
             }

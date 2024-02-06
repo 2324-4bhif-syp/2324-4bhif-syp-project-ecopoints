@@ -26,7 +26,7 @@
         android:layout_gravity="center_horizontal"
         android:background="@drawable/custom_edittext"
         android:orientation="vertical"
-        android:padding="24dp">
+        android:padding="24dp" />
 
         <TextView
             android:id="@+id/loginText"
@@ -81,7 +81,7 @@
                 android:hint="Loading..."
                 android:layout_marginStart="50dp"
                 android:textSize="18sp"/>
-            
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -116,18 +116,9 @@
                 android:layout_below="@id/textView_show_email"
                 android:background="@android:color/darker_gray"
                 android:id="@+id/divider_email"/>
-        </RelativeLayout>
 
-        <Button
-            android:id="@+id/loginButton"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginTop="30dp"
-            android:backgroundTint="@color/lavender"
-            android:text="Login"
-            android:textSize="18sp"
-            app:cornerRadius="20dp" />
-    </LinearLayout>
+
+
     <TextView
         android:id="@+id/tvEcoPoints"
         android:layout_width="wrap_content"

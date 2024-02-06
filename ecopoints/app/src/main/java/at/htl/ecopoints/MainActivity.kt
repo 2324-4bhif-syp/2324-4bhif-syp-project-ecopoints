@@ -60,6 +60,7 @@ import at.htl.ecopoints.model.Trip
 import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.service.TankerkoenigApiClient
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
+import at.htl.ecopoints.ui.theme.ShowMap
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.CameraPositionState
@@ -80,18 +81,6 @@ import kotlin.concurrent.thread
 
 
 class MainActivity : ComponentActivity() {
-    private val latLngList = mutableStateListOf<Pair<Color, Pair<LatLng, Double>>>()
-
-    //sample data for latLngList for a polyline (different latlngs with different colors)
-    init {
-        latLngList.add(Pair(Color.Red, Pair(LatLng(49.0, 14.285830), 0.0)))
-        latLngList.add(Pair(Color.Blue, Pair(LatLng(49.1, 14.285830), 0.0)))
-        latLngList.add(Pair(Color.Green, Pair(LatLng(49.2, 14.285830), 0.0)))
-        latLngList.add(Pair(Color.Yellow, Pair(LatLng(49.3, 14.285830), 0.0)))
-        latLngList.add(Pair(Color.Cyan, Pair(LatLng(49.4, 14.285830), 0.0)))
-    }
-
-
     @SuppressLint("Range")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -218,6 +207,7 @@ class MainActivity : ComponentActivity() {
             Color(0xFF05900a),
             Color(0xFF9bd99e)
         )
+
 
         //version 1
         //readTripDataFromCsvAndAddToDB("tripData.csv")
@@ -353,24 +343,40 @@ class MainActivity : ComponentActivity() {
                         )
                     },
                     text = {
-
                         Column {
                             val selectedTrip = trips.find { it.startDate == selectedTripDate }
                             if (selectedTrip != null) {
-                                Text("End Date: ${SimpleDateFormat("dd/MM/yyyy, HH:mm", Locale.getDefault()).format(selectedTrip.endDate)}")
+                                Text("End Date: ${SimpleDateFormat("dd/MM/yyyy, HH:mm",
+                                    Locale.getDefault()).format(selectedTrip.endDate)}")
                                 Text("Distance: ${selectedTrip.distance} km")
                                 Text("Average Speed: ${selectedTrip.avgSpeed} km/h")
-                                Text("Average Engine Rotation: ${selectedTrip.avgEngineRotation} rpm")
+                                Text("Average Engine Rotation: " +
+                                        "${selectedTrip.avgEngineRotation} rpm")
                                 Text("Eco Points: ${selectedTrip.rewardedEcoPoints}")
                             } else {
                                 Text("Trip details not available.")
                             }
                             Spacer(modifier = Modifier.height(16.dp))
 
+
+                            Log.d("TripID", selectedTrip?.id.toString())
+                            Log.d("LatLngs",
+                                getLatLngsFromTripDB(selectedTrip!!.id).count().toString()
+                            )
+
                             ShowMap(
+                                /*cameraPositionState = rememberCameraPositionState {
+                                    position = CameraPosition.fromLatLngZoom(
+                                        LatLng(getLatLngsFromTripDB(selectedTrip!!.id)
+                                            .first().second.first.latitude,
+                                            getLatLngsFromTripDB(selectedTrip!!.id)
+                                                .first().second.first.longitude), 10f)
+                                }*/
                                 cameraPositionState = rememberCameraPositionState {
-                                    position = CameraPosition.fromLatLngZoom(LatLng(48.306940, 14.285830), 10f)
-                                })
+                                    position = CameraPosition.fromLatLngZoom(
+                                        LatLng(48.2082, 16.3738), 10f)
+                                },
+                                getLatLngsFromTripDB(selectedTrip!!.id))
                         }
                     },
                     confirmButton = {
@@ -383,32 +389,6 @@ class MainActivity : ComponentActivity() {
                     },
                 )
             }
-        }
-    }
-
-    @Composable
-    fun ShowMap(cameraPositionState: CameraPositionState){
-        GoogleMap(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp),
-            cameraPositionState = cameraPositionState,
-        ) {
-            DrawPolyLine();
-        }
-    }
-
-    @Composable
-    fun DrawPolyLine() {
-        for (i in 0 until latLngList.size - 1) {
-            Polyline(
-                points = listOf(
-                    latLngList[i].second.first,
-                    latLngList[i + 1].second.first
-                ),
-                color = latLngList[i].first,
-                width = 10f
-            )
         }
     }
 
@@ -543,5 +523,48 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    private fun getLatLngsFromTripDB(tripId : UUID): List<Pair<Color, Pair<LatLng, Double>>> {
+        val dbHelper = DBHelper(this, null)
+        val data = dbHelper.getAllCarData()
+        val latLngs = mutableStateListOf<Pair<Color, Pair<LatLng, Double>>>()
 
+        //for testing purposes, change to fuel consumption when finished
+        //TODO: change to fuel consumption
+
+        for(d in data) {
+            if(d.tripId == tripId) {
+                if (d.currentEngineRPM <= 1500)
+                    latLngs.add(
+                        Pair(
+                            Color.Green,
+                            Pair(LatLng(d.latitude, d.longitude), d.currentEngineRPM)
+                        )
+                    )
+                else if (d.currentEngineRPM > 1500 && d.currentEngineRPM <= 2500)
+                    latLngs.add(
+                        Pair(
+                            Color.Yellow,
+                            Pair(LatLng(d.latitude, d.longitude), d.currentEngineRPM)
+                        )
+                    )
+                else if (d.currentEngineRPM > 2500 && d.currentEngineRPM <= 3500)
+                    latLngs.add(
+                        Pair(
+                            Color.Red,
+                            Pair(LatLng(d.latitude, d.longitude), d.currentEngineRPM)
+                        )
+                    )
+                else
+                    latLngs.add(
+                        Pair(
+                            Color.Black,
+                            Pair(LatLng(d.latitude, d.longitude), d.currentEngineRPM)
+                        )
+                    )
+            }
+        }
+
+        dbHelper.close()
+        return latLngs
+    }
 }

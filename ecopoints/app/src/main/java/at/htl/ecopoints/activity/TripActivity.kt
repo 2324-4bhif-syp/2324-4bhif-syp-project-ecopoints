@@ -13,6 +13,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,6 +27,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.ButtonColors
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Scaffold
 import androidx.compose.material.TopAppBar
 import androidx.compose.material3.AlertDialog
@@ -47,6 +50,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.lifecycleScope
 import at.htl.ecopoints.db.DBHelper
@@ -108,6 +113,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
             val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Trip") }
 
             var showDialog: Boolean by remember { mutableStateOf(false) }
+            var showBigMap: Boolean by remember { mutableStateOf(false) }
             var deviceNameText by remember { mutableStateOf("Not Selected") }
             var isConnecting by remember { mutableStateOf(false) }
             var connection by remember { mutableStateOf("Not Connected") }
@@ -135,10 +141,10 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalAlignment = Alignment.End
                             ) {
-                                MapTypeControls(onMapTypeClick = {
-                                    Log.d("GoogleMap", "Selected map type $it")
-                                    mapProperties = mapProperties.copy(mapType = it)
-                                })
+//                                MapTypeControls(onMapTypeClick = {
+//                                    Log.d("GoogleMap", "Selected map type $it")
+//                                    mapProperties = mapProperties.copy(mapType = it)
+//                                })
                             }
                         })
                     }) {
@@ -149,17 +155,30 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                             ) != PackageManager.PERMISSION_GRANTED
                         ) {
                             ActivityCompat.requestPermissions(
-                                this@TripActivity, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), 1
+                                this@TripActivity,
+                                arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
+                                1
                             )
                         } else {
-                            GoogleMap(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(200.dp),
-                                cameraPositionState = cameraPositionState,
-                                properties = mapProperties,
+                            Column(
+                                horizontalAlignment = Alignment.End,
+                                verticalArrangement = Arrangement.Center,
+                                modifier = Modifier.fillMaxSize()
                             ) {
-                                DrawPolyline()
+                                Button(onClick = {showBigMap = true },
+                                    shape = MaterialTheme.shapes.medium,
+                                    modifier = Modifier.background(Color.Green)
+                                    ) {
+                                    GoogleMap(
+                                        modifier = Modifier
+                                            .height(150.dp)
+                                            .width(150.dp),
+                                        cameraPositionState = cameraPositionState,
+                                        properties = mapProperties,
+                                    ) {
+                                        DrawPolyline()
+                                    }
+                                }
                             }
                         }
                     }
@@ -167,6 +186,22 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
 
                     //TESTING
 //                    ReadTest()
+
+                    if(showBigMap){
+                        Dialog(onDismissRequest = { /*TODO*/ }) {
+                            Column(Modifier.background(MaterialTheme.colorScheme.background)) {
+                                val copyCamState = cameraPositionState
+                                GoogleMap(
+                                    modifier = Modifier
+                                        .height(200.dp)
+                                        .width(200.dp),
+                                    properties = mapProperties,
+                                ) {
+                                    DrawPolyline()
+                                }
+                            }
+                        }
+                    }
 
                     if (isConnecting) {
                         Connect(
@@ -581,6 +616,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
             }
         }
     }
+
     @Composable
     private fun MapTypeButton(type: MapType, onClick: () -> Unit) =
         MapButton(text = type.toString(), onClick = onClick)

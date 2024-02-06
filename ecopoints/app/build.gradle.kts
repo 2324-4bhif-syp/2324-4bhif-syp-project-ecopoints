@@ -1,8 +1,10 @@
 import org.jetbrains.kotlin.konan.properties.Properties
 
 plugins {
+    kotlin("kapt")
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -136,4 +138,21 @@ dependencies {
     implementation ("com.fasterxml.jackson.core:jackson-databind:2.16.1")
 
     implementation("com.opencsv:opencsv:5.9")
+
+    // Hilt
+    implementation("com.google.dagger:hilt-android:2.48")
+    kapt("com.google.dagger:hilt-android-compiler:2.48")
+
+    // RxJava
+    implementation("io.reactivex.rxjava3:rxjava:3.1.8")
+    implementation("androidx.compose.runtime:runtime-rxjava3:1.5.4")
+
+    // Jackson
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.16.1")
+
+}
+
+// Allow references to generated code
+kapt {
+    correctErrorTypes = true
 }

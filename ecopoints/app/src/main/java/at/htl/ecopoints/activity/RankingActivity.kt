@@ -4,6 +4,7 @@ import androidx.activity.ComponentActivity
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,6 +21,8 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
@@ -47,6 +50,7 @@ import at.htl.ecopoints.model.User
 import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
 import at.htl.ecopoints.R
+import at.htl.ecopoints.model.FuelType
 
 class RankingActivity : ComponentActivity() {
 
@@ -209,8 +213,11 @@ class RankingActivity : ComponentActivity() {
     @Composable
     fun ShowFuelTypeDropdown() {
         var expanded = remember { mutableStateOf(false) }
-        var fuelTypes = arrayOf("Diesel", "Petrol")
 
+        var diesel: FuelType = FuelType("Diesel", false)
+        var petrol: FuelType = FuelType("Petrol", false)
+
+        val fuelTypes = arrayOf(diesel, petrol)
 
         Box(
             modifier = Modifier
@@ -231,8 +238,19 @@ class RankingActivity : ComponentActivity() {
             ) {
 
                 fuelTypes.forEach { fuelType ->
-                    DropdownMenuItem(onClick = { /*TODO*/ }) {
-                        Text(text = fuelType)
+                    DropdownMenuItem(
+                        onClick = {  },
+                    ) {
+                        Text(
+                            text = fuelType.name,
+                            modifier = Modifier
+                                .weight(1f))
+                        if(fuelType.selection) {
+                            Icon(
+                                imageVector = Icons.Rounded.Check,
+                                contentDescription = "Selected"
+                            )
+                        }
                     }
                 }
             }

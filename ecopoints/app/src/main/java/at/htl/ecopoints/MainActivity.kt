@@ -209,12 +209,11 @@ class MainActivity : ComponentActivity() {
             Color(0xFF9bd99e)
         )
 
-
-        //version 1
+        //version 1: To read the trip values from the csv and add them to the database (hardcoded)
         //readTripDataFromCsvAndAddToDB("tripData.csv")
         //val trips = getTripDataFromDB()
 
-        //version 2
+        //version 2: To update the trip values, we need to read the carData.csv and update the trip values after every trip
         val dbHelper = DBHelper(this, null)
         dbHelper.onUpgrade(dbHelper.writableDatabase, 1, 2)
 

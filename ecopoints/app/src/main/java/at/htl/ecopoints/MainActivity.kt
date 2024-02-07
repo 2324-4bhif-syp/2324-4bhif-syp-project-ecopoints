@@ -69,6 +69,7 @@ import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.opencsv.CSVParserBuilder
 import com.opencsv.CSVReaderBuilder
+import kotlinx.coroutines.selects.select
 import java.io.IOException
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -217,7 +218,7 @@ class MainActivity : ComponentActivity() {
         val dbHelper = DBHelper(this, null)
         dbHelper.onUpgrade(dbHelper.writableDatabase, 1, 2)
 
-        readTripData2FromCsvAndAddToDB("tripData2.csv");
+        readTripData2FromCsvAndAddToDB("tripData.csv");
         readCarDataFromCsvAndAddToDB("carData.csv");
 
         dbHelper.close()
@@ -353,6 +354,7 @@ class MainActivity : ComponentActivity() {
                                 Text("Average Engine Rotation: " +
                                         "${selectedTrip.avgEngineRotation} rpm")
                                 Text("Eco Points: ${selectedTrip.rewardedEcoPoints}")
+                                Text("Trip ID: ${selectedTrip.id}") // for testing purposes TODO: remove
                             } else {
                                 Text("Trip details not available.")
                             }
@@ -360,21 +362,19 @@ class MainActivity : ComponentActivity() {
 
 
                             Log.d("TripID", selectedTrip?.id.toString())
-                            Log.d("LatLngs",
-                                getLatLngsFromTripDB(selectedTrip!!.id).count().toString()
-                            )
+                            if (selectedTrip != null) {
+                                Log.d("LatLngs",
+                                    getLatLngsFromTripDB(selectedTrip.id).count().toString()
+                                )
+                            }
 
                             ShowMap(
-                                /*cameraPositionState = rememberCameraPositionState {
+                                cameraPositionState = rememberCameraPositionState {
                                     position = CameraPosition.fromLatLngZoom(
                                         LatLng(getLatLngsFromTripDB(selectedTrip!!.id)
                                             .first().second.first.latitude,
                                             getLatLngsFromTripDB(selectedTrip!!.id)
                                                 .first().second.first.longitude), 10f)
-                                }*/
-                                cameraPositionState = rememberCameraPositionState {
-                                    position = CameraPosition.fromLatLngZoom(
-                                        LatLng(48.2082, 16.3738), 10f)
                                 },
                                 getLatLngsFromTripDB(selectedTrip!!.id))
                         }
@@ -562,6 +562,46 @@ class MainActivity : ComponentActivity() {
                         )
                     )
             }
+        }
+
+        dbHelper.close()
+        return latLngs
+    }
+
+    private fun getAllLatLngsFromDB() : List<Pair<Color, Pair<LatLng, Double>>>{
+        val dbHelper = DBHelper(this, null)
+        val data = dbHelper.getAllCarData()
+        val latLngs = mutableStateListOf<Pair<Color, Pair<LatLng, Double>>>()
+
+        for(d in data) {
+            if (d.currentEngineRPM <= 1500)
+                latLngs.add(
+                    Pair(
+                        Color.Green,
+                        Pair(LatLng(d.latitude, d.longitude), d.currentEngineRPM)
+                    )
+                )
+            else if (d.currentEngineRPM > 1500 && d.currentEngineRPM <= 2500)
+                latLngs.add(
+                    Pair(
+                        Color.Yellow,
+                        Pair(LatLng(d.latitude, d.longitude), d.currentEngineRPM)
+                    )
+                )
+            else if (d.currentEngineRPM > 2500 && d.currentEngineRPM <= 3500)
+                latLngs.add(
+                    Pair(
+                        Color.Red,
+                        Pair(LatLng(d.latitude, d.longitude), d.currentEngineRPM)
+                    )
+                )
+            else
+                latLngs.add(
+                    Pair(
+                        Color.Black,
+                        Pair(LatLng(d.latitude, d.longitude), d.currentEngineRPM)
+                    )
+                )
         }
 
         dbHelper.close()

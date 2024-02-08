@@ -26,6 +26,7 @@ android {
         var properties = Properties()
         properties.load(project.rootProject.file("local.properties").inputStream())
         manifestPlaceholders["googleMapsApiKey"] = "${properties.getProperty("MAPS_API_KEY")}"
+        manifestPlaceholders["ninjaCarApiKey"] = "${properties.getProperty("ninjas.cars.api.key")}"
     }
 
     buildTypes {

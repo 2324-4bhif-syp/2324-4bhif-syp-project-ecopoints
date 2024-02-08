@@ -48,6 +48,9 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="${googleMapsApiKey}" />
+        <meta-data
+            android:name="ninjas.car.api.key"
+            android:value="${ninjaCarApiKey}" />
 
         <activity
             android:name=".MainActivity"

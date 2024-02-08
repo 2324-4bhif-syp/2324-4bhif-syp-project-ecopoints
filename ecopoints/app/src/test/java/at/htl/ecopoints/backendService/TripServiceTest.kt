@@ -108,7 +108,10 @@ class TripServiceTest {
             avgSpeed = avgSpeed,
             avgEngineRotation = 3000.0,
             rewardedEcoPoints = 10.0,
-            startDate = Date()
+            startDate = Date(),
+            endDate = Date(),
+            carId = 1L,
+            userId = 1L
         )
     }
 }

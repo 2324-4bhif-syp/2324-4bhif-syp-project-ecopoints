@@ -2,10 +2,9 @@ package at.htl.ecopoints.activity
 
 import androidx.activity.ComponentActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -218,9 +217,9 @@ class RankingActivity : ComponentActivity() {
         var diesel: FuelType = FuelType("Diesel")
         var petrol: FuelType = FuelType("Petrol")
 
-        var fuelTypes = mutableListOf(diesel, petrol)
+        val fuelTypes = listOf<FuelType>(diesel, petrol)
 
-        var selectedFuelType = remember { fuelTypes }
+        var selectedFuelTypes = remember { mutableListOf(diesel, petrol) }
 
         Box(
             modifier = Modifier
@@ -235,34 +234,51 @@ class RankingActivity : ComponentActivity() {
                         .width(25.dp)
                         .height(25.dp))
             }
+
             DropdownMenu(
                 expanded = expanded.value,
                 onDismissRequest = { expanded.value = false }
             ) {
 
                 fuelTypes.forEach { fuelType ->
-                    DropdownMenuItem(
-                        onClick = {
-                            selectedFuelType.contains(fuelType).let {
-                                if (it) {
-                                    selectedFuelType.remove(fuelType)
-                                } else {
-                                    selectedFuelType.add(fuelType)
+                    AnimatedContent(
+                        targetState = selectedFuelTypes.contains(fuelType),
+                        label = "Animate the selected item"
+                    ) { isSelected ->
+                        if (isSelected) {
+                            DropdownMenuItem(
+                                onClick = {
+                                    selectedFuelTypes.contains(fuelType).let {
+                                        if (it) {
+                                            selectedFuelTypes.remove(fuelType)
+                                        } else {
+                                            selectedFuelTypes.add(fuelType)
+                                        }
+                                    }
                                 }
+                            ) {
+                                Text(
+                                    text = fuelType.name,
+                                    modifier = Modifier
+                                        .weight(1f))
+                                Icon(
+                                    imageVector = Icons.Rounded.Check,
+                                    contentDescription = "Selected",
+                                )
+                            }
+                        } else {
+                            DropdownMenuItem(
+                                onClick = {
+                                        selectedFuelTypes.add(fuelType)
+                                    }
+                            ) {
+                                Text(
+                                    text = fuelType.name,
+                                    modifier = Modifier
+                                        .weight(1f)
+                                )
                             }
                         }
-                    ) {
-                        Text(
-                            text = fuelType.name,
-                            modifier = Modifier
-                                .weight(1f))
-
-                        // Icon only shown if fueltype is selected
-                        Icon(
-                            imageVector = Icons.Rounded.Check,
-                            contentDescription = "Selected",
-                            tint = if (selectedFuelType.contains(fuelType)) Color.Black else Color.Transparent,
-                            )
                     }
                 }
             }

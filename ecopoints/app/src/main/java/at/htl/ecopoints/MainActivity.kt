@@ -331,7 +331,6 @@ class MainActivity : ComponentActivity() {
                         )
                     },
                     text = {
-
                         Column {
                             val selectedTrip = trips.find { it.date == selectedTripDate }
                             if (selectedTrip != null) {

@@ -27,8 +27,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.ButtonColors
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Scaffold
 import androidx.compose.material.TopAppBar
 import androidx.compose.material3.AlertDialog
@@ -183,19 +181,26 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                         }
                     }
 
-
-                    //TESTING
-//                    ReadTest()
-
                     if(showBigMap){
-                        Dialog(onDismissRequest = { /*TODO*/ }) {
-                            Column(Modifier.background(MaterialTheme.colorScheme.background)) {
-                                val copyCamState = cameraPositionState
+                        Dialog(
+                            onDismissRequest = { showBigMap = false },
+                            properties = DialogProperties(
+                                dismissOnBackPress = true,
+                                dismissOnClickOutside = true,
+                                usePlatformDefaultWidth = false)
+                            )
+                        {
+                            Column(Modifier.background(Color.Transparent)) {
+                                Button(onClick = { showBigMap = false }) {
+                                    Text("Close")
+                                }
+                                MapTypeControls(onMapTypeClick = {
+                                    Log.d("GoogleMap", "Selected map type $it")
+                                    mapProperties = mapProperties.copy(mapType = it)
+                                })
                                 GoogleMap(
-                                    modifier = Modifier
-                                        .height(200.dp)
-                                        .width(200.dp),
-                                    properties = mapProperties,
+                                    modifier = Modifier.fillMaxSize(),
+                                    properties = mapProperties
                                 ) {
                                     DrawPolyline()
                                 }

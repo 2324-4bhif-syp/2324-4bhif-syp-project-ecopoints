@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -28,6 +29,7 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.ListItem
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.material.icons.rounded.DateRange
@@ -47,6 +49,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -204,22 +207,44 @@ class RankingActivity : ComponentActivity() {
 
         AlertDialog(
             onDismissRequest = onDismiss,
+            modifier = Modifier.fillMaxWidth(),
+
             title = {
-                Text(
-                    text = user.userName,
-                    fontSize = TextUnit(25f, TextUnitType.Sp),
-                    fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
-                )
+                Row {
+                    Text(
+                        text = user.userName,
+                        fontSize = TextUnit(25f, TextUnitType.Sp),
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier
+                            .weight(1f)
+                    )
+
+                    Image(
+                        painter = painterResource(id = R.drawable.no_profile_pic),
+                        contentDescription = "Profile Picture",
+                        modifier = Modifier
+                            .width(80.dp)
+                            .height(80.dp)
+                            .clip(RoundedCornerShape(30.dp))
+                    )
+                }
                     },
             text = {
-                Text(text = "Eco-Points: " + (user.ecoPoints).toString())
+                Column {
+                    Text(text = "Eco-Points: " + (user.ecoPoints).toString())
 
+                    Text(text = "Driven Distance: ... km")
+                    Text(text = "Fuel Consumption: ... l")
+                    Text(text = "CO₂-Consumption: ... g")
+                    Text(text = "Driven Cars: ...")
+                }
             },
             confirmButton = {
                 TextButton(onClick = onDismiss) {
-                    Text("Cancel")
+                    Text(text = "Return")
                 }
-            })
+            }
+        )
     }
 
     @OptIn(ExperimentalFoundationApi::class)

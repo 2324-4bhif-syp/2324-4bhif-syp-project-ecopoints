@@ -17,7 +17,6 @@ public class FuelType {
         this.name = name;
     }
 
-
     @Override
     public boolean equals(@Nullable Object obj) {
         if (obj instanceof FuelType) {

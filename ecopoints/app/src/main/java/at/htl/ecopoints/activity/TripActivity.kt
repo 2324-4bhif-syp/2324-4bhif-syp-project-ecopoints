@@ -12,7 +12,6 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
@@ -28,6 +27,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
@@ -36,7 +36,6 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -53,7 +52,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.lifecycleScope
@@ -72,8 +70,9 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapType
+import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.Polyline
-import com.google.maps.android.compose.TileOverlay
 import com.google.maps.android.compose.rememberCameraPositionState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -156,18 +155,18 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
 
                         if (ActivityCompat.checkSelfPermission(
                                 this,
-                                Manifest.permission.ACCESS_COARSE_LOCATION
+                                Manifest.permission.ACCESS_FINE_LOCATION
                             ) != PackageManager.PERMISSION_GRANTED
                         ) {
                             ActivityCompat.requestPermissions(
                                 this@TripActivity,
-                                arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
+                                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                                 1
                             )
                         } else {
                             Column(
-                                horizontalAlignment = Alignment.End,
-                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.Start,
+                                verticalArrangement = Arrangement.Top,
                                 modifier = Modifier.fillMaxSize()
                             ) {
                                 Button(onClick = {showBigMap = true },
@@ -179,7 +178,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                                             .height(150.dp)
                                             .width(150.dp),
                                         cameraPositionState = cameraPositionState,
-                                        properties = mapProperties,
+                                        properties = mapProperties
                                     ) {
                                         DrawPolyline()
                                     }
@@ -197,7 +196,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                                 usePlatformDefaultWidth = true) // cover the full screen or not
                             )
                         {
-                            /*Row(Modifier.background(Color.Transparent)) {
+                            Column(Modifier.background(Color.Black)) {
                                 IconButton(onClick = { showBigMap = false }) {
                                     Text("Close")
                                 }
@@ -213,17 +212,22 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                                     Log.d("GoogleMap", "Selected map type $it")
                                     mapProperties = mapProperties.copy(mapType = it)
                                 })
-                            }*/
-                            OutlinedCard(
-                                border = BorderStroke(5.dp, Color.Blue),
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(16.dp),
-                            ) {
-                                GoogleMap(
-                                    properties = mapProperties,
-                                )
                             }
+                            /*Card(
+                                modifier = Modifier
+                                    .height(180.dp),
+                                shape = RoundedCornerShape(8.dp)
+                            ) {
+                                val cameraPositionState = rememberCameraPositionState {
+                                    position = CameraPosition.fromLatLngZoom(LatLng(latitude, longitude), 13f)
+                                }
+                                GoogleMap(
+                                    modifier = Modifier.fillMaxSize(),
+                                    cameraPositionState = cameraPositionState
+                                ) {
+
+                                }
+                            }*/
                         }
                     }
 
@@ -636,7 +640,11 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
             horizontalArrangement = Arrangement.Center
         ) {
             MapType.values().forEach {
-                MapTypeButton(type = it) { onMapTypeClick(it) }
+                if (it == MapType.NORMAL || it == MapType.SATELLITE || it == MapType.HYBRID) {
+                    MapTypeButton(type = it) {
+                        onMapTypeClick(it)
+                    }
+                }
             }
         }
     }

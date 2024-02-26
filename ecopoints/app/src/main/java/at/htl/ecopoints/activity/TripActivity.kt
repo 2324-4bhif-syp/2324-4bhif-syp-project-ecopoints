@@ -12,6 +12,7 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
@@ -27,11 +28,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Card
+import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.TopAppBar
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -68,6 +73,7 @@ import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapType
 import com.google.maps.android.compose.Polyline
+import com.google.maps.android.compose.TileOverlay
 import com.google.maps.android.compose.rememberCameraPositionState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -99,6 +105,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
     private val latLngList = mutableStateListOf<Pair<Color, Pair<LatLng, Double>>>()
 
 
+    @OptIn(ExperimentalMaterial3Api::class)
     @RequiresApi(Build.VERSION_CODES.S)
     @SuppressLint(
         "UnusedMaterialScaffoldPaddingParameter",
@@ -182,28 +189,40 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                     }
 
                     if(showBigMap){
-                        Dialog(
+                        AlertDialog(
                             onDismissRequest = { showBigMap = false },
                             properties = DialogProperties(
                                 dismissOnBackPress = true,
                                 dismissOnClickOutside = true,
-                                usePlatformDefaultWidth = false)
+                                usePlatformDefaultWidth = true) // cover the full screen or not
                             )
                         {
-                            Column(Modifier.background(Color.Transparent)) {
-                                Button(onClick = { showBigMap = false }) {
+                            /*Row(Modifier.background(Color.Transparent)) {
+                                IconButton(onClick = { showBigMap = false }) {
                                     Text("Close")
+                                }
+                                GoogleMap(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(500.dp),
+                                    properties = mapProperties,
+                                ) {
+                                    DrawPolyline()
                                 }
                                 MapTypeControls(onMapTypeClick = {
                                     Log.d("GoogleMap", "Selected map type $it")
                                     mapProperties = mapProperties.copy(mapType = it)
                                 })
+                            }*/
+                            OutlinedCard(
+                                border = BorderStroke(5.dp, Color.Blue),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp),
+                            ) {
                                 GoogleMap(
-                                    modifier = Modifier.fillMaxSize(),
-                                    properties = mapProperties
-                                ) {
-                                    DrawPolyline()
-                                }
+                                    properties = mapProperties,
+                                )
                             }
                         }
                     }

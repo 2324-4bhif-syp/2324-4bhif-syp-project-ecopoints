@@ -209,34 +209,44 @@ video::sprint6/rpmvid.mp4[width=500,height=500,opts=autoplay]
 === Oliver
 
 * Google Map in Trips integrieren
-* Gefahrene Strecke in Trips anzeigen
+* Gefahrene Strecke aus DB lesen & anzeigen
 * MapButton in Trip, Karte größer/kleiner
 
 === Trip
 
 |===
 |Home |Map
-| image:sprint7/home.jpg[800,300]
-| image:sprint7/map.jpg[800,300]
+| image:sprint7/home.jpg[600,400]
+| image:sprint7/map.jpg[600,400]
 |===
 
 === Map in Trips
 
-image:sprint7/trip.jpg[800,300]
+image:sprint7/trip.jpg[600,400]
 
 [background-image="trip.jpg", background-opacity="0.3"]
 === Abdullah
 
+* Homepage überarbeiten
 * Last Trips
+* DB für Trip
+* Testdaten für Trip
 
-[background-image="fahrt.jpg", background-opacity="0.3"]
+=== Homepage
+
+image:sprint7/homepage.jpg[600,400]
+
 === Armin
-* idk
 
-[background-image="fahrt.jpg", background-opacity="0.3"]
+* Ranking
+* Auto-API angefangen
+
+=== Ranking
+
+image:sprint7/ranking.jpg[600,400]
+
 === Linus
 * idk
 
-[background-image="db.jpg", background-opacity="0.3"]
 === Laurent
 * idk

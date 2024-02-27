@@ -236,7 +236,7 @@ image:sprint7/trip.jpg[500,200]
 
 image:sprint7/homepage.jpg[500,200]
 
-[background-image="sprint6/ranking.jpg", background-opacity="0.3"]
+[background-image="sprint7/ranking.jpg", background-opacity="0.3"]
 === Armin
 
 * Ranking
@@ -246,6 +246,7 @@ image:sprint7/homepage.jpg[500,200]
 
 image:sprint7/ranking.jpg[500,200]
 
+[background-image="sprint7/profileNew.jpg", background-opacity="0.3"]
 === Laurent
 
 * Profilepage überarbeitet
@@ -258,6 +259,7 @@ image:sprint7/ranking.jpg[500,200]
 | image:sprint7/profileNew.jpg[500,200]
 |===
 
+[background-image="traffic.jpg", background-opacity="0.3"]
 === Linus
 
 * Auto-Auswahl angefangen (krank)

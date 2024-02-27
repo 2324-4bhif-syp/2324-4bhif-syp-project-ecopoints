@@ -4,26 +4,36 @@ import androidx.activity.ComponentActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.IconButton
+import androidx.compose.material.ListItem
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.CheckCircle
+import androidx.compose.material.icons.rounded.DateRange
+import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
@@ -34,8 +44,12 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -193,34 +207,58 @@ class RankingActivity : ComponentActivity() {
 
         AlertDialog(
             onDismissRequest = onDismiss,
+            modifier = Modifier.fillMaxWidth(),
+
             title = {
-                Text(
-                    text = user.userName,
-                    fontSize = TextUnit(25f, TextUnitType.Sp),
-                    fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
-                )
+                Row {
+                    Text(
+                        text = user.userName,
+                        fontSize = TextUnit(25f, TextUnitType.Sp),
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier
+                            .weight(1f)
+                    )
+
+                    Image(
+                        painter = painterResource(id = R.drawable.no_profile_pic),
+                        contentDescription = "Profile Picture",
+                        modifier = Modifier
+                            .width(80.dp)
+                            .height(80.dp)
+                            .clip(RoundedCornerShape(30.dp))
+                    )
+                }
                     },
             text = {
-                Text(text = "Eco-Points: " + (user.ecoPoints).toString())
+                Column {
+                    Text(text = "Eco-Points: " + (user.ecoPoints).toString())
 
+                    Text(text = "Driven Distance: ... km")
+                    Text(text = "Fuel Consumption: ... l")
+                    Text(text = "CO₂-Consumption: ... g")
+                    Text(text = "Driven Cars: ...")
+                }
             },
             confirmButton = {
                 TextButton(onClick = onDismiss) {
-                    Text("Cancel")
+                    Text(text = "Return")
                 }
-            })
+            }
+        )
     }
 
+    @OptIn(ExperimentalFoundationApi::class)
     @Composable
     fun ShowFuelTypeDropdown() {
         var expanded = remember { mutableStateOf(false) }
 
         var diesel: FuelType = FuelType("Diesel")
         var petrol: FuelType = FuelType("Petrol")
+        val fuelTypes = listOf<FuelType>(diesel, petrol)
 
-        var fuelTypes = mutableListOf(diesel, petrol)
-
-        var selectedFuelType = remember { fuelTypes }
+        val selectedItems = remember {
+            mutableStateListOf<FuelType>(diesel, petrol)
+        }
 
         Box(
             modifier = Modifier
@@ -235,34 +273,40 @@ class RankingActivity : ComponentActivity() {
                         .width(25.dp)
                         .height(25.dp))
             }
-            DropdownMenu(
-                expanded = expanded.value,
-                onDismissRequest = { expanded.value = false }
-            ) {
 
-                fuelTypes.forEach { fuelType ->
-                    DropdownMenuItem(
-                        onClick = {
-                            selectedFuelType.contains(fuelType).let {
-                                if (it) {
-                                    selectedFuelType.remove(fuelType)
-                                } else {
-                                    selectedFuelType.add(fuelType)
+            if(expanded.value) {
+                DropdownMenu(
+                    expanded = expanded.value,
+                    onDismissRequest = { expanded.value = false },
+                ) {
+                    fuelTypes.forEach { fuelType ->
+                        val isSelected = selectedItems.contains(fuelType)
+
+                        androidx.compose.material3.ListItem(
+                            modifier = Modifier.combinedClickable(
+                                onClick = {
+                                    if (isSelected) {
+                                        selectedItems.remove(fuelType)
+                                    } else {
+                                        selectedItems.add(fuelType)
+                                    }
                                 }
-                            }
-                        }
-                    ) {
-                        Text(
-                            text = fuelType.name,
-                            modifier = Modifier
-                                .weight(1f))
-
-                        // Icon only shown if fueltype is selected
-                        Icon(
-                            imageVector = Icons.Rounded.Check,
-                            contentDescription = "Selected",
-                            tint = if (selectedFuelType.contains(fuelType)) Color.Black else Color.Transparent,
-                            )
+                            ),
+                            leadingContent = {
+                                if (isSelected) {
+                                    Icon(
+                                        imageVector = Icons.Rounded.CheckCircle,
+                                        contentDescription = null,
+                                        tint = MaterialTheme.colorScheme.primary
+                                    )
+                                }
+                            },
+                            headlineContent = {
+                                Text(
+                                    text = fuelType.name
+                                )
+                            },
+                        )
                     }
                 }
             }

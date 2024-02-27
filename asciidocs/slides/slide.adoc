@@ -205,7 +205,7 @@ video::sprint6/rpmvid.mp4[width=500,height=500,opts=autoplay]
 [.font-xx-large, background-image="traffic.jpg", background-opacity="0.3"]
 == Sprint 7
 
-[background-image="google-maps.jpg", background-opacity="0.2"]
+[background-image="traffic.jpg", background-opacity="0.2"]
 === Oliver
 
 * Google Map in Trips integrieren
@@ -224,7 +224,7 @@ video::sprint6/rpmvid.mp4[width=500,height=500,opts=autoplay]
 
 image:sprint7/trip.jpg[500,200]
 
-[background-image="app.jpg", background-opacity="0.2"]
+[background-image="sprint7/homepage.jpg", background-opacity="0.2"]
 === Abdullah
 
 * Homepage überarbeiten

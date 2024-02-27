@@ -214,8 +214,11 @@ video::sprint6/rpmvid.mp4[width=500,height=500,opts=autoplay]
 
 === Trip
 
-image:sprint7/home.jpg[800,300]
-image:sprint7/map.jpg[800,300]
+|===
+|Home |Map
+| image:sprint7/home.jpg[800,300]
+| image:sprint7/map.jpg[800,300]
+|===
 
 === Map in Trips
 

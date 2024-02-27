@@ -42,6 +42,11 @@ import at.htl.ecopoints.R
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
 import at.htl.ecopoints.databinding.ActivityProfileBinding
 import at.htl.ecopoints.navigation.BottomNavBar
+import groovyjarjarpicocli.CommandLine.Help.Column
+import jdk.javadoc.internal.doclets.formats.html.markup.Text
+import java.awt.Button
+import java.lang.reflect.Modifier
+import javax.lang.model.element.Modifier
 
 class ProfileActivity : ComponentActivity() {
 
@@ -105,8 +110,116 @@ class ProfileActivity : ComponentActivity() {
                             bottom.linkTo(topImg.bottom)
                             start.linkTo(parent.start)
                             end.linkTo(parent.end)
-                        }
+                        })
+            }
+            Text("Laurent Mali",
+            fontSize=25.sp,
+            fontWeight=FontWeight.Bold,
+                modifier = Modifier.padding(top=16.dp),
+            color =Color(android.graphics.Color.parseColor("#747679"))
+            )
+            Text("l.mali@HTBLALeonding.onmicrosoft.com",
+                fontSize=25.sp,
+                color =Color(android.graphics.Color.parseColor("#747679"))
+            )
+            Button(onClick = {},
+            Modifier
+                .fillMaxWidth()
+                .padding(start=32.dp, end=32.dp, top=10.dp, bottom=10.dp)
+                .height(55.dp), colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Color(android.graphics.Color.parseColor("#ffffff"))
+                ), shape = RoundedCornerShape(15)
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxHeight(),
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Image(painter = painterResource(id = R.drawable.ic_1),
+                    contentDescription = "",
+                    modifier = Modifier
+                        .padding(end=5.dp)
+                        .clickable{})
+                }
+                Column(
+                        modifier.Modifier
+                            .padding(start = 16.dp)
+                            .weight(1f),
+                    verticalArrangement=Arrangement.Center,
+                    horizontalArrangement = Arrangement.Start
+                ) {
+                    Text(
+                        text = "My Rides",
+                        color = Color.Black,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold
                     )
+                }
+            }
+            Button(onClick = {},
+                Modifier
+                    .fillMaxWidth()
+                    .padding(start=32.dp, end=32.dp, top=10.dp, bottom=10.dp)
+                    .height(55.dp), colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Color(android.graphics.Color.parseColor("#ffffff"))
+                ), shape = RoundedCornerShape(15)
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxHeight(),
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Image(painter = painterResource(id = R.drawable.ic_2),
+                        contentDescription = "",
+                        modifier = Modifier
+                            .padding(end=5.dp)
+                            .clickable{})
+                }
+                Column(
+                    modifier.Modifier
+                        .padding(start = 16.dp)
+                        .weight(1f),
+                    verticalArrangement=Arrangement.Center,
+                    horizontalArrangement = Arrangement.Start
+                ) {
+                    Text(
+                        text = "Account Settings",
+                        color = Color.Black,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+            Button(onClick = {},
+                Modifier
+                    .fillMaxWidth()
+                    .padding(start=32.dp, end=32.dp, top=10.dp, bottom=10.dp)
+                    .height(55.dp), colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Color(android.graphics.Color.parseColor("#ffffff"))
+                ), shape = RoundedCornerShape(15)
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxHeight(),
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Image(painter = painterResource(id = R.drawable.ic_3),
+                        contentDescription = "",
+                        modifier = Modifier
+                            .padding(end=5.dp)
+                            .clickable{})
+                }
+                Column(
+                    modifier.Modifier
+                        .padding(start = 16.dp)
+                        .weight(1f),
+                    verticalArrangement=Arrangement.Center,
+                    horizontalArrangement = Arrangement.Start
+                ) {
+                    Text(
+                        text = "My Cars",
+                        color = Color.Black,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
             }
         }
     }

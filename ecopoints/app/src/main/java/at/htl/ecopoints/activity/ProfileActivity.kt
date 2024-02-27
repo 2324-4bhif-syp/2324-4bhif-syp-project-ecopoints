@@ -9,6 +9,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,7 +19,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material3.MaterialTheme
@@ -34,19 +37,17 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.focus.FocusRequester.Companion.createRefs
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import at.htl.ecopoints.R
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
 import at.htl.ecopoints.databinding.ActivityProfileBinding
 import at.htl.ecopoints.navigation.BottomNavBar
-import groovyjarjarpicocli.CommandLine.Help.Column
-import jdk.javadoc.internal.doclets.formats.html.markup.Text
-import java.awt.Button
-import java.lang.reflect.Modifier
-import javax.lang.model.element.Modifier
+
 
 class ProfileActivity : ComponentActivity() {
 
@@ -114,11 +115,11 @@ class ProfileActivity : ComponentActivity() {
             }
             Text("Laurent Mali",
             fontSize=25.sp,
-            fontWeight=FontWeight.Bold,
+            fontWeight= FontWeight.Bold,
                 modifier = Modifier.padding(top=16.dp),
             color =Color(android.graphics.Color.parseColor("#747679"))
             )
-            Text("l.mali@HTBLALeonding.onmicrosoft.com",
+            Text("Mali",
                 fontSize=25.sp,
                 color =Color(android.graphics.Color.parseColor("#747679"))
             )
@@ -134,18 +135,18 @@ class ProfileActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxHeight(),
                     verticalArrangement = Arrangement.Center
                 ) {
-                    Image(painter = painterResource(id = R.drawable.ic_1),
+                    Image(painter = painterResource(id = R.drawable.ic_profile),
                     contentDescription = "",
                     modifier = Modifier
                         .padding(end=5.dp)
                         .clickable{})
                 }
                 Column(
-                        modifier.Modifier
+                        Modifier
                             .padding(start = 16.dp)
                             .weight(1f),
                     verticalArrangement=Arrangement.Center,
-                    horizontalArrangement = Arrangement.Start
+                    horizontalAlignment = Alignment.Start
                 ) {
                     Text(
                         text = "My Rides",
@@ -167,18 +168,18 @@ class ProfileActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxHeight(),
                     verticalArrangement = Arrangement.Center
                 ) {
-                    Image(painter = painterResource(id = R.drawable.ic_2),
+                    Image(painter = painterResource(id = R.drawable.ic_profile),
                         contentDescription = "",
                         modifier = Modifier
                             .padding(end=5.dp)
                             .clickable{})
                 }
                 Column(
-                    modifier.Modifier
+                    Modifier
                         .padding(start = 16.dp)
                         .weight(1f),
                     verticalArrangement=Arrangement.Center,
-                    horizontalArrangement = Arrangement.Start
+                    horizontalAlignment = Alignment.Start
                 ) {
                     Text(
                         text = "Account Settings",
@@ -200,18 +201,18 @@ class ProfileActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxHeight(),
                     verticalArrangement = Arrangement.Center
                 ) {
-                    Image(painter = painterResource(id = R.drawable.ic_3),
+                    Image(painter = painterResource(id = R.drawable.ic_profile),
                         contentDescription = "",
                         modifier = Modifier
                             .padding(end=5.dp)
                             .clickable{})
                 }
                 Column(
-                    modifier.Modifier
+                    Modifier
                         .padding(start = 16.dp)
                         .weight(1f),
                     verticalArrangement=Arrangement.Center,
-                    horizontalArrangement = Arrangement.Start
+                    horizontalAlignment = Alignment.Start
                 ) {
                     Text(
                         text = "My Cars",

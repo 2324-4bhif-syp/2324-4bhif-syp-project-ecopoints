@@ -202,3 +202,38 @@ video::sprint6/rpmvid.mp4[width=500,height=500,opts=autoplay]
 | image:sprint6/home.jpeg[500,200] | image:sprint6/home-light.jpeg[500,200]
 |===
 
+[.font-xx-large, background-image="traffic.jpg", background-opacity="0.3"]
+== Sprint 7
+
+[background-image="map.jpg", background-opacity="0.3"]
+=== Oliver
+
+* Google Map in Trips integrieren
+* Gefahrene Strecke in Trips anzeigen
+* MapButton in Trip, Karte größer/kleiner
+
+=== Trip
+
+image:sprint7/home.jpg[500,200]
+image:sprint7/map.jpg[500,200]
+
+=== Map in Trips
+
+image:sprint7/trip.jpg[500,200]
+
+[background-image="trip.jpg", background-opacity="0.3"]
+=== Abdullah
+
+* Last Trips
+
+[background-image="fahrt.jpg", background-opacity="0.3"]
+=== Armin
+* idk
+
+[background-image="fahrt.jpg", background-opacity="0.3"]
+=== Linus
+* idk
+
+[background-image="db.jpg", background-opacity="0.3"]
+=== Laurent
+* idk

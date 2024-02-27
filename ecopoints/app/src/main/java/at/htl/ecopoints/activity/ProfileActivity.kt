@@ -95,6 +95,18 @@ class ProfileActivity : ComponentActivity() {
                             start.linkTo(parent.start)
                         }
                 )
+
+                Image(
+                    painter = painterResource(id = R.drawable.no_profile_pic),
+                    null,
+                    Modifier
+                        .constrainAs(profile) {
+                            top.linkTo(topImg.bottom)
+                            bottom.linkTo(topImg.bottom)
+                            start.linkTo(parent.start)
+                            end.linkTo(parent.end)
+                        }
+                    )
             }
         }
     }

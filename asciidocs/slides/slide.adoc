@@ -21,8 +21,8 @@ image:team/teamall.jpeg[]
 
 * "Fahrverhaltensvergleichsplattform"
 * Vergleicht das Fahrverhalten von Fahrern mithilfe von Sensordaten
-* Soll fahrer dazu motivieren umweltbewusster zu fahren in dem sie Punkte sammeln können und sich mit
-anderen vergleichen
+* Soll Fahrer dazu motivieren, umweltbewusster zu fahren, in dem sie Punkte sammeln und sich mit
+Anderen vergleichen
 ** Fahrer können freiwillig mitmachen
 ** Die Daten vom Auto werden über einen OBD2-Port ausgelesen
 

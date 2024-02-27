@@ -205,7 +205,7 @@ video::sprint6/rpmvid.mp4[width=500,height=500,opts=autoplay]
 [.font-xx-large, background-image="traffic.jpg", background-opacity="0.3"]
 == Sprint 7
 
-[background-image="map.jpg", background-opacity="0.3"]
+[background-image="maps.jpeg", background-opacity="0.3"]
 === Oliver
 
 * Google Map in Trips integrieren
@@ -236,6 +236,7 @@ image:sprint7/trip.jpg[500,200]
 
 image:sprint7/homepage.jpg[500,200]
 
+[background-image="sprint6/ranking.jpg", background-opacity="0.3"]
 === Armin
 
 * Ranking

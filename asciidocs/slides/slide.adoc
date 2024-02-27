@@ -214,12 +214,12 @@ video::sprint6/rpmvid.mp4[width=500,height=500,opts=autoplay]
 
 === Trip
 
-image:sprint7/home.jpg[500,200]
-image:sprint7/map.jpg[500,200]
+image:sprint7/home.jpg[800,300]
+image:sprint7/map.jpg[800,300]
 
 === Map in Trips
 
-image:sprint7/trip.jpg[500,200]
+image:sprint7/trip.jpg[800,300]
 
 [background-image="trip.jpg", background-opacity="0.3"]
 === Abdullah

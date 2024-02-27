@@ -146,13 +146,13 @@ image:colors.jpeg[500,200]
 * http://ecopoints.ddns.net/[Eco-Points]
 
 [.font-xx-large, background-image="traffic.jpg", background-opacity="0.3"]
-== Sprint 4 / 5
+== Sprint 4
 
 [background-image="traffic.jpg", background-opacity="0.3"]
 === Vorbereitung für den Tag der offenen Tür (Video)
 
 [.font-xx-large, background-image="traffic.jpg", background-opacity="0.3"]
-== Sprint 6
+== Sprint 5
 
 [background-image="sprint6/plakat.jpeg", background-opacity="0.5"]
 === Tag der offenen Tür
@@ -203,7 +203,7 @@ video::sprint6/rpmvid.mp4[width=500,height=500,opts=autoplay]
 |===
 
 [.font-xx-large, background-image="traffic.jpg", background-opacity="0.3"]
-== Sprint 7
+== Sprint 6
 
 [background-image="traffic.jpg", background-opacity="0.2"]
 === Oliver

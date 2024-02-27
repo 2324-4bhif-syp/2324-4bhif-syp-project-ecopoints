@@ -5,9 +5,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.20">
-<meta name="author" content="Linus Nestler">
+<meta name="author" content="1.0, 2024-02-27: Seventh Sprint">
 <link rel="icon" type="image/png" href="themes/favicon.png">
-<title>Erstes Sprint-Planning</title>
+<title>Siebtes Sprint-Planning</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -438,12 +438,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article toc2 toc-left">
 <div id="header">
-<h1>Erstes Sprint-Planning</h1>
+<h1>Siebtes Sprint-Planning</h1>
 <div class="details">
-<span id="author" class="author">Linus Nestler</span><br>
-<span id="revnumber">version 1.0,</span>
-<span id="revdate">2023-10-17</span>
-<br><span id="revremark">First Sprint</span>
+<span id="author" class="author">1.0, 2024-02-27: Seventh Sprint</span><br>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -465,15 +462,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <thead>
 <tr>
 <th class="tableblock halign-left valign-top">anwesend</th>
-<th class="tableblock halign-left valign-top">abwesend</th>
+<th class="tableblock halign-left valign-top">Abwesend</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Linus Nestler</p>
-</div></div></td>
 <td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Linus Nestler</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Laurent Mali</p></td>
@@ -484,12 +479,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Abdulla Al-Desoky</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Abdullah Al-Desoky</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Oliver Daxinger</p></td>
+<td class="tableblock halign-left valign-top"></td>
 </tr>
 </tbody>
 </table>
@@ -506,11 +501,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">von-bis</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Di. 2023-10-17 5. Einheit</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">6. Einheit</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Dauer</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">30 min</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">20 min</p></td>
 </tr>
 </tbody>
 </table>
@@ -522,34 +517,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="ulist">
 <ul>
 <li>
-<p>Das erste zu erstellende Produkt (MVP)</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Auslesen von Sensoren</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Beschleunigungssensor</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
+<p>Daten laufend während dem Trip an DB senden, nicht nur lokal speichern</p>
 </li>
 <li>
-<p>Android App</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Android Buch</p>
+<p>Zusätzliche Tabelle in Trips "public", ob der Trip
+veröffentlicht werden soll oder nicht. (Vom User auswählbar)</p>
 </li>
 <li>
-<p>Jetpack Compose <a href="https://developer.android.com/jetpack/compose/tutorial">Jetpack Compose Tutorial</a></p>
-</li>
-</ul>
-</div>
+<p>Gescheite Testdaten für den Trip machen (Fahrt abschließen, Location sollte
+zum speichern sein)</p>
 </li>
 </ul>
 </div>
@@ -574,18 +550,39 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Alle</p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
-<ul>
-<li>
-<p>Maximalen Beschleunigungswert ab dem Programmstart anzeigen</p>
-</li>
-<li>
-<p>Mit Reset Button zurücksetzen</p>
-</li>
-</ul>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Linus</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>an Autoauswahl weiterarbeiten</p>
 </div></div></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">07.11.2023</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">12.03.2024</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oliver</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>/</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">12.03.2024</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Laurent</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>/</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">12.03.2024</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Armin</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>/</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">12.03.2024</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Abdullah</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>/</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">12.03.2024</p></td>
 </tr>
 </tbody>
 </table>
@@ -594,7 +591,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.0<br>
 Last updated 2024-02-27 13:24:13 UTC
 </div>
 </div>

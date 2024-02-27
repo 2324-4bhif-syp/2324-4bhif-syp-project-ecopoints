@@ -245,8 +245,20 @@ image:sprint7/homepage.jpg[500,200]
 
 image:sprint7/ranking.jpg[500,200]
 
-=== Linus
-* idk
-
 === Laurent
-* idk
+
+* Profilepage überarbeitet
+
+=== Profile
+
+|===
+|Old |New
+| image:sprint7/profileOld.jpg[500,200]
+| image:sprint7/profileNew.jpg[500,200]
+|===
+
+=== Linus
+
+* Auto-Auswahl angefangen (krank)
+
+

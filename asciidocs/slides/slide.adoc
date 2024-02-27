@@ -216,13 +216,13 @@ video::sprint6/rpmvid.mp4[width=500,height=500,opts=autoplay]
 
 |===
 |Home |Map
-| image:sprint7/home.jpg[600,400]
-| image:sprint7/map.jpg[600,400]
+| image:sprint7/home.jpg[500,200]
+| image:sprint7/map.jpg[500,200]
 |===
 
 === Map in Trips
 
-image:sprint7/trip.jpg[600,400]
+image:sprint7/trip.jpg[500,200]
 
 [background-image="trip.jpg", background-opacity="0.3"]
 === Abdullah
@@ -234,7 +234,7 @@ image:sprint7/trip.jpg[600,400]
 
 === Homepage
 
-image:sprint7/homepage.jpg[600,400]
+image:sprint7/homepage.jpg[500,200]
 
 === Armin
 
@@ -243,7 +243,7 @@ image:sprint7/homepage.jpg[600,400]
 
 === Ranking
 
-image:sprint7/ranking.jpg[600,400]
+image:sprint7/ranking.jpg[500,200]
 
 === Linus
 * idk

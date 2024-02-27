@@ -119,7 +119,7 @@ class ProfileActivity : ComponentActivity() {
                 modifier = Modifier.padding(top=16.dp),
             color =Color(android.graphics.Color.parseColor("#747679"))
             )
-            Text("Mali",
+            Text("LauMal",
                 fontSize=25.sp,
                 color =Color(android.graphics.Color.parseColor("#747679"))
             )

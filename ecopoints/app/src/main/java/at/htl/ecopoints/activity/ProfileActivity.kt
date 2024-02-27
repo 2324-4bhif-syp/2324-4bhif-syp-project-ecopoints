@@ -19,6 +19,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -40,6 +43,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.focus.FocusRequester.Companion.createRefs
 import androidx.compose.ui.graphics.Color
@@ -70,8 +74,6 @@ class ProfileActivity : ComponentActivity() {
                 ) {
                     Profile()
 
-
-
                     Box {
                         BottomNavBar(
                             currentScreen = currentScreen,
@@ -89,17 +91,13 @@ class ProfileActivity : ComponentActivity() {
         Column(
             Modifier
                 .fillMaxHeight()
-                .fillMaxWidth()
-                .background(
-                    color =
-                    Color(android.graphics.Color.parseColor("#ececec"))
-                ),
+                .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             ConstraintLayout {
                 val (topImg, profile) = createRefs()
                 Image(
-                    painter = painterResource(id = R.drawable.app_icon),
+                    painter = painterResource(id = R.drawable.top_background),
                     null,
                     Modifier
                         .fillMaxWidth()
@@ -118,7 +116,10 @@ class ProfileActivity : ComponentActivity() {
                             bottom.linkTo(topImg.bottom)
                             start.linkTo(parent.start)
                             end.linkTo(parent.end)
-                        })
+                        }
+                        .size(200.dp)
+                        .clip(CircleShape)
+                )
             }
             Text("Laurent Mali",
             fontSize=25.sp,

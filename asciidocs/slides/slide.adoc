@@ -205,7 +205,7 @@ video::sprint6/rpmvid.mp4[width=500,height=500,opts=autoplay]
 [.font-xx-large, background-image="traffic.jpg", background-opacity="0.3"]
 == Sprint 7
 
-[background-image="google-maps.jpg", background-opacity="0.3"]
+[background-image="google-maps.jpg", background-opacity="0.2"]
 === Oliver
 
 * Google Map in Trips integrieren
@@ -224,7 +224,7 @@ video::sprint6/rpmvid.mp4[width=500,height=500,opts=autoplay]
 
 image:sprint7/trip.jpg[500,200]
 
-[background-image="trip.jpg", background-opacity="0.3"]
+[background-image="app.jpg", background-opacity="0.2"]
 === Abdullah
 
 * Homepage überarbeiten
@@ -236,7 +236,7 @@ image:sprint7/trip.jpg[500,200]
 
 image:sprint7/homepage.jpg[500,200]
 
-[background-image="sprint7/ranking.jpg", background-opacity="0.3"]
+[background-image="sprint7/ranking.jpg", background-opacity="0.2"]
 === Armin
 
 * Ranking
@@ -246,7 +246,7 @@ image:sprint7/homepage.jpg[500,200]
 
 image:sprint7/ranking.jpg[500,200]
 
-[background-image="sprint7/profileNew.jpg", background-opacity="0.3"]
+[background-image="sprint7/profileNew.jpg", background-opacity="0.2"]
 === Laurent
 
 * Profilepage überarbeitet
@@ -259,7 +259,7 @@ image:sprint7/ranking.jpg[500,200]
 | image:sprint7/profileNew.jpg[500,200]
 |===
 
-[background-image="traffic.jpg", background-opacity="0.3"]
+[background-image="traffic.jpg", background-opacity="0.2"]
 === Linus
 
 * Auto-Auswahl angefangen (krank)

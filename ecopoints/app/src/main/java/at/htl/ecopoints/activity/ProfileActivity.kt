@@ -24,6 +24,13 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.CheckCircle
+import androidx.compose.material.icons.rounded.Dashboard
+import androidx.compose.material.icons.rounded.DriveEta
+import androidx.compose.material.icons.rounded.LocationOn
+import androidx.compose.material.icons.rounded.Settings
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -135,11 +142,11 @@ class ProfileActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxHeight(),
                     verticalArrangement = Arrangement.Center
                 ) {
-                    Image(painter = painterResource(id = R.drawable.ic_profile),
-                    contentDescription = "",
-                    modifier = Modifier
-                        .padding(end=5.dp)
-                        .clickable{})
+                    Icon(
+                        imageVector = Icons.Rounded.LocationOn,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary
+                    )
                 }
                 Column(
                         Modifier
@@ -168,11 +175,11 @@ class ProfileActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxHeight(),
                     verticalArrangement = Arrangement.Center
                 ) {
-                    Image(painter = painterResource(id = R.drawable.ic_profile),
-                        contentDescription = "",
-                        modifier = Modifier
-                            .padding(end=5.dp)
-                            .clickable{})
+                    Icon(
+                        imageVector = Icons.Rounded.Settings,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary
+                    )
                 }
                 Column(
                     Modifier
@@ -201,11 +208,11 @@ class ProfileActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxHeight(),
                     verticalArrangement = Arrangement.Center
                 ) {
-                    Image(painter = painterResource(id = R.drawable.ic_profile),
-                        contentDescription = "",
-                        modifier = Modifier
-                            .padding(end=5.dp)
-                            .clickable{})
+                    Icon(
+                        imageVector = Icons.Rounded.DriveEta,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary
+                    )
                 }
                 Column(
                     Modifier

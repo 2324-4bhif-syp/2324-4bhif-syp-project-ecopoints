@@ -36,6 +36,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import at.htl.ecopoints.R
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
@@ -89,6 +90,10 @@ class ProfileActivity : ComponentActivity() {
                     null,
                     Modifier
                         .fillMaxWidth()
+                        .constrainAs(topImg) {
+                            top.linkTo(parent.top)
+                            start.linkTo(parent.start)
+                        }
                 )
             }
         }

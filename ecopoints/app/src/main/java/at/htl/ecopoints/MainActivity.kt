@@ -1,7 +1,6 @@
 package at.htl.ecopoints
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import androidx.compose.foundation.lazy.items
 import android.os.Bundle
@@ -45,38 +44,37 @@ import androidx.compose.ui.graphics.Color.Companion.DarkGray
 import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.graphics.Color.Companion.Green
 import androidx.compose.ui.graphics.Color.Companion.Transparent
-import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import at.htl.ecopoints.activity.TripActivity
-import at.htl.ecopoints.csvData.ReadCsv
 import at.htl.ecopoints.db.DBHelper
 import at.htl.ecopoints.model.CarData
 import at.htl.ecopoints.model.Trip
 import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.service.TankerkoenigApiClient
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
+import at.htl.ecopoints.ui.theme.ShowMap
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.CameraPositionState
 import com.google.maps.android.compose.GoogleMap
-import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.opencsv.CSVParserBuilder
 import com.opencsv.CSVReaderBuilder
-import java.io.File
-import java.io.FileReader
+import kotlinx.coroutines.selects.select
 import java.io.IOException
 import java.io.InputStream
 import java.io.InputStreamReader
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.util.Date
 import java.util.Locale
 import java.util.UUID
@@ -84,18 +82,6 @@ import kotlin.concurrent.thread
 
 
 class MainActivity : ComponentActivity() {
-    private val latLngList = mutableStateListOf<Pair<Color, Pair<LatLng, Double>>>()
-
-    //sample data for latLngList for a polyline (different latlngs with different colors)
-    init {
-        latLngList.add(Pair(Color.Red, Pair(LatLng(49.0, 14.285830), 0.0)))
-        latLngList.add(Pair(Color.Blue, Pair(LatLng(49.1, 14.285830), 0.0)))
-        latLngList.add(Pair(Color.Green, Pair(LatLng(49.2, 14.285830), 0.0)))
-        latLngList.add(Pair(Color.Yellow, Pair(LatLng(49.3, 14.285830), 0.0)))
-        latLngList.add(Pair(Color.Cyan, Pair(LatLng(49.4, 14.285830), 0.0)))
-    }
-
-
     @SuppressLint("Range")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -173,20 +159,25 @@ class MainActivity : ComponentActivity() {
         }
 
         Text(
-            text = "Diesel\n" + dieselPrice.toString() + "€",
-            fontSize = 25.sp,
-            fontStyle = FontStyle.Italic,
-            modifier = Modifier.padding(80.dp, 150.dp, 0.dp,0.dp),
-
-            )
+            text = buildAnnotatedString {
+                withStyle(style = SpanStyle(fontSize = 25.sp, fontStyle = FontStyle.Italic)) {
+                    append("Diesel\n")
+                }
+                append("  ${dieselPrice}€")
+            },
+            modifier = Modifier.padding(start = 80.dp, top = 150.dp),
+        )
 
         Text(
-            text = "Benzin\n" + e5Price.toString() + "€",
-            fontSize = 25.sp,
-            fontStyle = FontStyle.Italic,
-            modifier = Modifier.padding(260.dp, 150.dp, 0.dp,0.dp),
+            text = buildAnnotatedString {
+                withStyle(style = SpanStyle(fontSize = 25.sp, fontStyle = FontStyle.Italic)) {
+                    append("Benzin\n")
+                }
+                append("  ${e5Price}€")
+            },
+            modifier = Modifier.padding(start = 260.dp, top = 150.dp),
+        )
 
-            )
     }
 
     @Composable
@@ -218,10 +209,19 @@ class MainActivity : ComponentActivity() {
             Color(0xFF9bd99e)
         )
 
-        //val trips = ReadCsv.readTripCsv();
+        //version 1: To read the trip values from the csv and add them to the database (hardcoded)
         //readTripDataFromCsvAndAddToDB("tripData.csv")
+        //val trips = getTripDataFromDB()
 
-        AddTripDataToDB()
+        //version 2: To update the trip values, we need to read the carData.csv and update the trip values after every trip
+        val dbHelper = DBHelper(this, null)
+        dbHelper.onUpgrade(dbHelper.writableDatabase, 1, 2)
+
+        readTripData2FromCsvAndAddToDB("tripData.csv");
+        readCarDataFromCsvAndAddToDB("carData.csv");
+
+        dbHelper.close()
+
         val trips = getTripDataFromDB()
 
         Column(
@@ -230,7 +230,7 @@ class MainActivity : ComponentActivity() {
                 .padding(16.dp)
                 .padding(0.dp, 260.dp, 0.dp, 0.dp)
         ) {
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
             LazyColumn(
                 modifier = Modifier
@@ -241,7 +241,7 @@ class MainActivity : ComponentActivity() {
                     Button(
                         onClick = {
                             showDialog = true
-                            selectedTripDate = trip.date
+                            selectedTripDate = trip.startDate
                         },
                         modifier = Modifier
                             .padding(8.dp, 4.dp)
@@ -250,15 +250,28 @@ class MainActivity : ComponentActivity() {
                                 brush = Brush.horizontalGradient(
                                     colors = gradientColors
                                 ),
-                                shape = RoundedCornerShape(10.dp)
+                                shape = RoundedCornerShape(20.dp)
                             ),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Transparent,
                             contentColor = Black
                         )
                     ) {
-                        val formattedDate = SimpleDateFormat("dd/MM/yyyy, HH:mm", Locale.getDefault()).format(trip.date)
-                        Text(formattedDate + " Uhr.  " + trip.rewardedEcoPoints.toString() + " EP")
+                        val formattedDate = SimpleDateFormat("dd/MM/yyyy, HH:mm", Locale.getDefault()).format(trip.startDate)
+                        Column(
+                            modifier = Modifier
+                                .padding(0.dp)
+                                .fillMaxWidth()
+                        ) {
+                            Row() {
+                                Text(formattedDate + " Uhr")
+                            }
+                            Row {
+                                Text(trip.rewardedEcoPoints.toString() + " EP")
+                                Spacer(modifier = Modifier.weight(1f))
+                                Text(text = trip.distance.toString() + " km")
+                            }
+                        }
                     }
                 }
             }
@@ -267,7 +280,7 @@ class MainActivity : ComponentActivity() {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(20.dp, 10.dp, 20.dp, 250.dp),
+                    .padding(30.dp, 10.dp, 30.dp, 200.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Button(
@@ -279,10 +292,10 @@ class MainActivity : ComponentActivity() {
                             brush = Brush.horizontalGradient(
                                 colors = gradientColors
                             ),
-                            shape = RoundedCornerShape(10.dp)
+                            shape = RoundedCornerShape(30.dp)
                         )
                         .weight(1f)
-                        .padding(8.dp),
+                        .padding(2.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Transparent,
                         contentColor = Black
@@ -295,7 +308,6 @@ class MainActivity : ComponentActivity() {
 
                 Button(
                     onClick = {
-                        // Navigieren zur "TripActivity"
                         startActivity(Intent(this@MainActivity, TripActivity::class.java)
                         )                    },
                     modifier = Modifier
@@ -303,10 +315,10 @@ class MainActivity : ComponentActivity() {
                             brush = Brush.horizontalGradient(
                                 colors = gradientColors
                             ),
-                            shape = RoundedCornerShape(10.dp)
+                            shape = RoundedCornerShape(30.dp)
                         )
                         .weight(1f)
-                        .padding(8.dp),
+                        .padding(2.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Transparent,
                         contentColor = Black
@@ -331,23 +343,29 @@ class MainActivity : ComponentActivity() {
                         )
                     },
                     text = {
-
                         Column {
-                            val selectedTrip = trips.find { it.date == selectedTripDate }
+                            val selectedTrip = trips.find { it.startDate == selectedTripDate }
                             if (selectedTrip != null) {
+                                Text("End Date: ${SimpleDateFormat("dd/MM/yyyy, HH:mm",
+                                    Locale.getDefault()).format(selectedTrip.endDate)}")
                                 Text("Distance: ${selectedTrip.distance} km")
                                 Text("Average Speed: ${selectedTrip.avgSpeed} km/h")
-                                Text("Average Engine Rotation: ${selectedTrip.avgEngineRotation} rpm")
+                                Text("Average Engine Rotation: " +
+                                        "${selectedTrip.avgEngineRotation} rpm")
                                 Text("Eco Points: ${selectedTrip.rewardedEcoPoints}")
                             } else {
                                 Text("Trip details not available.")
                             }
                             Spacer(modifier = Modifier.height(16.dp))
-
                             ShowMap(
                                 cameraPositionState = rememberCameraPositionState {
-                                    position = CameraPosition.fromLatLngZoom(LatLng(48.306940, 14.285830), 10f)
-                                })
+                                    position = CameraPosition.fromLatLngZoom(
+                                        LatLng(getLatLngsFromTripDB(selectedTrip!!.id)
+                                            .first().second.first.latitude,
+                                            getLatLngsFromTripDB(selectedTrip!!.id)
+                                                .first().second.first.longitude), 10f)
+                                },
+                                getLatLngsFromTripDB(selectedTrip!!.id))
                         }
                     },
                     confirmButton = {
@@ -363,101 +381,13 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-
-    @Composable
-    private fun AddTripDataToDB(){
-        val dbHelper = DBHelper(this, null)
-
-        val trip1 = Trip(
-            UUID.randomUUID(),
-            96.3,
-            60.0,
-            1500.0,
-            Date(System.currentTimeMillis() - 26300060),
-            11.0
-        )
-
-        val trip2 = Trip(
-            id = UUID.randomUUID(),
-            distance = 75.4,
-            avgSpeed = 50.0,
-            avgEngineRotation = 1200.0,
-            date = Date(System.currentTimeMillis() - 56400000),
-            rewardedEcoPoints = 8.0
-        )
-
-        val trip3 = Trip(
-            id = UUID.randomUUID(),
-            distance = 60.2,
-            avgSpeed = 50.0,
-            avgEngineRotation = 1200.0,
-            date = Date(System.currentTimeMillis() - 66400000),
-            rewardedEcoPoints = 8.0
-        )
-
-        val trip4 = Trip(
-            id = UUID.randomUUID(),
-            distance = 96.3,
-            avgSpeed = 60.0,
-            avgEngineRotation = 1500.0,
-            date = Date(System.currentTimeMillis() - 26300060),
-            rewardedEcoPoints = 10.0
-        )
-
-        val trip5 = Trip(
-            id = UUID.randomUUID(),
-            distance = 75.4,
-            avgSpeed = 50.0,
-            avgEngineRotation = 1200.0,
-            date = Date(System.currentTimeMillis() - 56400000),
-            rewardedEcoPoints = 8.0
-        )
-
-        dbHelper.onUpgrade(dbHelper.writableDatabase, 1, 2)
-        dbHelper.addTrip(trip1)
-        dbHelper.addTrip(trip2)
-        dbHelper.addTrip(trip3)
-        dbHelper.addTrip(trip4)
-        dbHelper.addTrip(trip5)
-
-        dbHelper.close()
-    }
-
-    @Composable
-    fun ShowMap(cameraPositionState: CameraPositionState){
-        GoogleMap(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp),
-            cameraPositionState = cameraPositionState,
-        ) {
-            DrawPolyLine();
-        }
-    }
-
-    @Composable
-    fun DrawPolyLine() {
-        for (i in 0 until latLngList.size - 1) {
-            Polyline(
-                points = listOf(
-                    latLngList[i].second.first,
-                    latLngList[i + 1].second.first
-                ),
-                color = latLngList[i].first,
-                width = 10f
-            )
-        }
-    }
-
-    /*private fun readTripDataFromCsvAndAddToDB(fileName: String) {
+    private fun readTripDataFromCsvAndAddToDB(fileName: String) {
         val dbHelper = DBHelper(this, null)
 
         dbHelper.onUpgrade(dbHelper.writableDatabase, 1, 2)
-
-        val filePath = "src/csvData/$fileName"
 
         try {
-            val inputStream: InputStream = assets.open(filePath)
+            val inputStream: InputStream = assets.open(fileName)
             val reader = CSVReaderBuilder(InputStreamReader(inputStream))
                 .withCSVParser(CSVParserBuilder().withSeparator(';').build())
                 .build()
@@ -467,13 +397,16 @@ class MainActivity : ComponentActivity() {
             var line = reader.readNext()
             while (line != null) {
                 val id = UUID.fromString(line[0])
-                val distance = line[1].toDouble()
-                val avgSpeed = line[2].toDouble()
-                val avgEngineRotation = line[3].toDouble()
-                val date = Date(line[4].toLong())
-                val rewardedEcoPoints = line[5].toDouble()
+                val carId = line[1].toLong()
+                val userId = line[2].toLong()
+                val distance = line[3].toDouble()
+                val avgSpeed = line[4].toDouble()
+                val avgEngineRotation = line[5].toDouble()
+                val startDate = Date(line[6].toLong())
+                val endDate = Date(line[7].toLong())
+                val rewardedEcoPoints = line[8].toDouble()
 
-                val trip = Trip(id, distance, avgSpeed, avgEngineRotation, date, rewardedEcoPoints)
+                val trip = Trip(id, carId, userId, distance, avgSpeed, avgEngineRotation, startDate, endDate, rewardedEcoPoints)
                 dbHelper.addTrip(trip)
 
                 line = reader.readNext()
@@ -483,13 +416,146 @@ class MainActivity : ComponentActivity() {
         } finally {
             dbHelper.close()
         }
-    }*/
-
+    }
 
     private fun getTripDataFromDB(): List<Trip> {
         val dbHelper = DBHelper(this, null)
         val trips = dbHelper.getAllTrips()
         dbHelper.close()
         return trips
+    }
+
+    private fun readCarDataFromCsvAndAddToDB(fileName: String) {
+        val dbHelper = DBHelper(this, null)
+
+        var counter = 0;
+
+        try {
+            val inputStream: InputStream = assets.open(fileName)
+            val reader = CSVReaderBuilder(InputStreamReader(inputStream))
+                .withCSVParser(CSVParserBuilder().withSeparator(';').build())
+                .build()
+
+            val header = reader.readNext()
+
+            var line = reader.readNext()
+            while (line != null) {
+
+                val dateString = line[8]
+                val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+                val date = dateFormat.parse(dateString)
+                val timeStamp = Timestamp(date.time)
+
+                val id = line[0].toLong()
+                val tripId =  UUID.fromString(line[1])
+                val longitude =  line[2].toDouble()
+                val latitude =  line[3].toDouble()
+                val currentEngineRPM =  line[4].toDouble()
+                val currentVelocity =  line[5].toDouble()
+                val throttlePosition =  line[6].toDouble()
+                val engineRunTime =  line[7]
+
+                val carData = CarData(
+                    id, tripId, longitude, latitude, currentEngineRPM, currentVelocity, throttlePosition, engineRunTime, timeStamp
+                )
+
+                dbHelper.addCarData(carData);
+
+                counter++;
+
+                if(counter == 4) {
+                    dbHelper.updateTripValues(UUID.fromString(line[1]))
+                    counter = 0;
+                }
+
+                line = reader.readNext()
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        } finally {
+            dbHelper.close()
+        }
+    }
+
+    private fun readTripData2FromCsvAndAddToDB(fileName: String) {
+        val dbHelper = DBHelper(this, null)
+
+        try {
+            val inputStream: InputStream = assets.open(fileName)
+            val reader = CSVReaderBuilder(InputStreamReader(inputStream))
+                .withCSVParser(CSVParserBuilder().withSeparator(';').build())
+                .build()
+
+            val header = reader.readNext()
+
+            var line = reader.readNext()
+            while (line != null) {
+                val id = UUID.fromString(line[0])
+                val carId = line[1].toLong()
+                val userId = line[2].toLong()
+                val distance = line[3].toDouble()
+                val avgSpeed = line[4].toDouble()
+                val avgEngineRotation = line[5].toDouble()
+                val startDate = Date(line[6].toLong())
+                val endDate = Date(line[7].toLong())
+                val rewardedEcoPoints = line[8].toDouble()
+
+                val trip = Trip(id, carId, userId, distance, avgSpeed, avgEngineRotation, startDate, endDate, rewardedEcoPoints)
+                dbHelper.addTrip(trip)
+
+                line = reader.readNext()
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        } finally {
+            dbHelper.close()
+        }
+    }
+
+    private fun getLatLngsFromTripDB(tripId : UUID): List<Pair<Color, Pair<LatLng, Double>>> {
+        val dbHelper = DBHelper(this, null)
+        val data = dbHelper.getAllCarData()
+        val latLngs = mutableStateListOf<Pair<Color, Pair<LatLng, Double>>>()
+
+        //for testing purposes, change to fuel consumption when finished
+        //TODO: change to fuel consumption
+
+        for(d in data) {
+            if(d.tripId == tripId) {
+                if (d.currentEngineRPM <= 1500)
+                    latLngs.add(
+                        Pair(
+                            Color.Green,
+                            Pair(LatLng(d.latitude, d.longitude), d.currentEngineRPM)
+                        )
+                    )
+                else if (d.currentEngineRPM > 1500 && d.currentEngineRPM <= 2500)
+                    latLngs.add(
+                        Pair(
+                            Color.Yellow,
+                            Pair(LatLng(d.latitude, d.longitude), d.currentEngineRPM)
+                        )
+                    )
+                else if (d.currentEngineRPM > 2500 && d.currentEngineRPM <= 3500)
+                    latLngs.add(
+                        Pair(
+                            Color.Red,
+                            Pair(LatLng(d.latitude, d.longitude), d.currentEngineRPM)
+                        )
+                    )
+                else
+                    latLngs.add(
+                        Pair(
+                            Color.Black,
+                            Pair(LatLng(d.latitude, d.longitude), d.currentEngineRPM)
+                        )
+                    )
+            }
+        }
+
+        dbHelper.close()
+        if(latLngs.isEmpty())
+            latLngs.add(Pair(Color.Black, Pair(LatLng(0.0, 0.0), 0.0)))
+        return latLngs
     }
 }

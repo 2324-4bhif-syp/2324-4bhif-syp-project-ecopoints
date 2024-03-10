@@ -28,7 +28,6 @@ data class CarData(
     @SerializedName("time_stamp")
     val timeStamp: Timestamp = Timestamp.valueOf("2021-01-01 00:00:00"),
 
-    //val trip: Trip
 ) {
 
     override fun toString(): String {

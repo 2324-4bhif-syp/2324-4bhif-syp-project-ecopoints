@@ -21,8 +21,8 @@ image:team/teamall.jpeg[]
 
 * "Fahrverhaltensvergleichsplattform"
 * Vergleicht das Fahrverhalten von Fahrern mithilfe von Sensordaten
-* Soll fahrer dazu motivieren umweltbewusster zu fahren in dem sie Punkte sammeln können und sich mit
-anderen vergleichen
+* Soll Fahrer dazu motivieren, umweltbewusster zu fahren, in dem sie Punkte sammeln und sich mit
+Anderen vergleichen
 ** Fahrer können freiwillig mitmachen
 ** Die Daten vom Auto werden über einen OBD2-Port ausgelesen
 
@@ -67,7 +67,7 @@ image:obd2-reading.jpeg[500,200]
 
 === Maps
 
-image:maps.jpeg[500,200]
+image:maps.jpg[500,200]
 
 [background-image="db.jpg", background-opacity="0.5"]
 === Armin, Abdullah, Laurent
@@ -146,13 +146,13 @@ image:colors.jpeg[500,200]
 * http://ecopoints.ddns.net/[Eco-Points]
 
 [.font-xx-large, background-image="traffic.jpg", background-opacity="0.3"]
-== Sprint 4 / 5
+== Sprint 4
 
 [background-image="traffic.jpg", background-opacity="0.3"]
 === Vorbereitung für den Tag der offenen Tür (Video)
 
 [.font-xx-large, background-image="traffic.jpg", background-opacity="0.3"]
-== Sprint 6
+== Sprint 5
 
 [background-image="sprint6/plakat.jpeg", background-opacity="0.5"]
 === Tag der offenen Tür
@@ -201,4 +201,67 @@ video::sprint6/rpmvid.mp4[width=500,height=500,opts=autoplay]
 |Dark |Light
 | image:sprint6/home.jpeg[500,200] | image:sprint6/home-light.jpeg[500,200]
 |===
+
+[.font-xx-large, background-image="traffic.jpg", background-opacity="0.3"]
+== Sprint 6
+
+[background-image="traffic.jpg", background-opacity="0.2"]
+=== Oliver
+
+* Google Map in Trips integrieren
+* Gefahrene Strecke aus DB lesen & anzeigen
+* MapButton in Trip, Karte größer/kleiner
+
+=== Trip
+
+|===
+|Home |Map
+| image:sprint7/home.jpg[500,200]
+| image:sprint7/map.jpg[500,200]
+|===
+
+=== Map in Trips
+
+image:sprint7/trip.jpg[500,200]
+
+[background-image="sprint7/homepage.jpg", background-opacity="0.2"]
+=== Abdullah
+
+* Homepage überarbeiten
+* Last Trips
+* DB für Trip
+* Testdaten für Trip
+
+=== Homepage
+
+image:sprint7/homepage.jpg[500,200]
+
+[background-image="sprint7/ranking.jpg", background-opacity="0.2"]
+=== Armin
+
+* Ranking
+* Auto-API angefangen
+
+=== Ranking
+
+image:sprint7/ranking.jpg[500,200]
+
+[background-image="sprint7/profileNew.jpg", background-opacity="0.2"]
+=== Laurent
+
+* Profilepage überarbeitet
+
+=== Profile
+
+|===
+|Old |New
+| image:sprint7/profileOld.jpg[500,200]
+| image:sprint7/profileNew.jpg[500,200]
+|===
+
+[background-image="traffic.jpg", background-opacity="0.2"]
+=== Linus
+
+* Auto-Auswahl angefangen (krank)
+
 

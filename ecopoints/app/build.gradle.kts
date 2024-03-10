@@ -1,8 +1,10 @@
 import org.jetbrains.kotlin.konan.properties.Properties
 
 plugins {
+    kotlin("kapt")
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -26,6 +28,7 @@ android {
         var properties = Properties()
         properties.load(project.rootProject.file("local.properties").inputStream())
         manifestPlaceholders["googleMapsApiKey"] = "${properties.getProperty("MAPS_API_KEY")}"
+        manifestPlaceholders["ninjaCarApiKey"] = "${properties.getProperty("ninjas.cars.api.key")}"
     }
 
     buildTypes {
@@ -38,11 +41,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
@@ -136,4 +139,34 @@ dependencies {
     implementation ("com.fasterxml.jackson.core:jackson-databind:2.16.1")
 
     implementation("com.opencsv:opencsv:5.9")
+
+
+    // layout
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.compose.ui:ui:1.4.3")
+    implementation("androidx.compose.ui:ui-tooling:1.4.3")
+    implementation("androidx.compose.foundation:foundation:1.4.3")
+    implementation("androidx.compose.material:material:1.4.3")
+    implementation("androidx.compose.material:material-icons-core:1.4.3")
+    implementation("androidx.compose.material:material-icons-extended:1.4.3")
+    implementation("androidx.activity:activity-compose:1.7.2")
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+
+    // Hilt
+    implementation("com.google.dagger:hilt-android:2.48")
+    kapt("com.google.dagger:hilt-android-compiler:2.48")
+
+    // RxJava
+    implementation("io.reactivex.rxjava3:rxjava:3.1.8")
+    implementation("androidx.compose.runtime:runtime-rxjava3:1.5.4")
+
+    // Jackson
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.16.1")
+}
+
+// Allow references to generated code
+kapt {
+    correctErrorTypes = true
+
 }

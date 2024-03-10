@@ -13,6 +13,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,10 +27,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
+import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.TopAppBar
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -47,6 +52,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.DialogProperties
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.lifecycleScope
 import at.htl.ecopoints.db.DBHelper
@@ -64,6 +70,8 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapType
+import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
 import kotlinx.coroutines.CoroutineScope
@@ -96,6 +104,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
     private val latLngList = mutableStateListOf<Pair<Color, Pair<LatLng, Double>>>()
 
 
+    @OptIn(ExperimentalMaterial3Api::class)
     @RequiresApi(Build.VERSION_CODES.S)
     @SuppressLint(
         "UnusedMaterialScaffoldPaddingParameter",
@@ -108,6 +117,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
             val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Trip") }
 
             var showDialog: Boolean by remember { mutableStateOf(false) }
+            var showBigMap: Boolean by remember { mutableStateOf(false) }
             var deviceNameText by remember { mutableStateOf("Not Selected") }
             var isConnecting by remember { mutableStateOf(false) }
             var connection by remember { mutableStateOf("Not Connected") }
@@ -135,38 +145,91 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalAlignment = Alignment.End
                             ) {
-                                MapTypeControls(onMapTypeClick = {
-                                    Log.d("GoogleMap", "Selected map type $it")
-                                    mapProperties = mapProperties.copy(mapType = it)
-                                })
+//                                MapTypeControls(onMapTypeClick = {
+//                                    Log.d("GoogleMap", "Selected map type $it")
+//                                    mapProperties = mapProperties.copy(mapType = it)
+//                                })
                             }
                         })
                     }) {
 
                         if (ActivityCompat.checkSelfPermission(
                                 this,
-                                Manifest.permission.ACCESS_COARSE_LOCATION
+                                Manifest.permission.ACCESS_FINE_LOCATION
                             ) != PackageManager.PERMISSION_GRANTED
                         ) {
                             ActivityCompat.requestPermissions(
-                                this@TripActivity, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), 1
+                                this@TripActivity,
+                                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                                1
                             )
                         } else {
-                            GoogleMap(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(200.dp),
-                                cameraPositionState = cameraPositionState,
-                                properties = mapProperties,
+                            Column(
+                                horizontalAlignment = Alignment.Start,
+                                verticalArrangement = Arrangement.Top,
+                                modifier = Modifier.fillMaxSize()
                             ) {
-                                DrawPolyline()
+                                Button(onClick = {showBigMap = true },
+                                    shape = MaterialTheme.shapes.medium,
+                                    modifier = Modifier.background(Color.Green)
+                                    ) {
+                                    GoogleMap(
+                                        modifier = Modifier
+                                            .height(150.dp)
+                                            .width(150.dp),
+                                        cameraPositionState = cameraPositionState,
+                                        properties = mapProperties
+                                    ) {
+                                        DrawPolyline()
+                                    }
+                                }
                             }
                         }
                     }
 
+                    if(showBigMap){
+                        AlertDialog(
+                            onDismissRequest = { showBigMap = false },
+                            properties = DialogProperties(
+                                dismissOnBackPress = true,
+                                dismissOnClickOutside = true,
+                                usePlatformDefaultWidth = true) // cover the full screen or not
+                            )
+                        {
+                            Column(Modifier.background(Color.Black)) {
+                                IconButton(onClick = { showBigMap = false }) {
+                                    Text("Close")
+                                }
+                                GoogleMap(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(500.dp),
+                                    properties = mapProperties,
+                                ) {
+                                    DrawPolyline()
+                                }
+                                MapTypeControls(onMapTypeClick = {
+                                    Log.d("GoogleMap", "Selected map type $it")
+                                    mapProperties = mapProperties.copy(mapType = it)
+                                })
+                            }
+                            /*Card(
+                                modifier = Modifier
+                                    .height(180.dp),
+                                shape = RoundedCornerShape(8.dp)
+                            ) {
+                                val cameraPositionState = rememberCameraPositionState {
+                                    position = CameraPosition.fromLatLngZoom(LatLng(latitude, longitude), 13f)
+                                }
+                                GoogleMap(
+                                    modifier = Modifier.fillMaxSize(),
+                                    cameraPositionState = cameraPositionState
+                                ) {
 
-                    //TESTING
-//                    ReadTest()
+                                }
+                            }*/
+                        }
+                    }
 
                     if (isConnecting) {
                         Connect(
@@ -577,10 +640,15 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
             horizontalArrangement = Arrangement.Center
         ) {
             MapType.values().forEach {
-                MapTypeButton(type = it) { onMapTypeClick(it) }
+                if (it == MapType.NORMAL || it == MapType.SATELLITE || it == MapType.HYBRID) {
+                    MapTypeButton(type = it) {
+                        onMapTypeClick(it)
+                    }
+                }
             }
         }
     }
+
     @Composable
     private fun MapTypeButton(type: MapType, onClick: () -> Unit) =
         MapButton(text = type.toString(), onClick = onClick)

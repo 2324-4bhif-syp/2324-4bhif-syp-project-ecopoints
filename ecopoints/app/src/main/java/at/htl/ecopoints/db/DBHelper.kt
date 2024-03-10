@@ -319,8 +319,11 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
     @SuppressLint("Range")
     private fun getTripFromCursor(cursor: Cursor): Trip{
+        val tripIdString = cursor.getString(cursor.getColumnIndex(TRIP_ID_COL_PK))
+        val tripId = if (tripIdString != null) UUID.fromString(tripIdString) else UUID.randomUUID()
+
         return Trip(
-            UUID.randomUUID(),
+            tripId,
             cursor.getLong(cursor.getColumnIndex(CAR_ID_COL_FK)),
             cursor.getLong(cursor.getColumnIndex(USER_ID_COL_FK)),
             cursor.getDouble(cursor.getColumnIndex(DISTANCE_COL)),

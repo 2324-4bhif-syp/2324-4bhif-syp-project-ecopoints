@@ -5,7 +5,6 @@ import org.junit.Before
 import org.junit.jupiter.api.Assertions.*
 
 import org.junit.Test
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Order
 import java.util.Date
 import java.util.UUID
@@ -109,7 +108,10 @@ class TripServiceTest {
             avgSpeed = avgSpeed,
             avgEngineRotation = 3000.0,
             rewardedEcoPoints = 10.0,
-            date = Date()
+            startDate = Date(),
+            endDate = Date(),
+            carId = 1L,
+            userId = 1L
         )
     }
 }

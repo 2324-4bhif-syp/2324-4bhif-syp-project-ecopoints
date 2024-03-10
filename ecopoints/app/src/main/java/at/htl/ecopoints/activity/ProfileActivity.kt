@@ -9,17 +9,31 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.CheckCircle
+import androidx.compose.material.icons.rounded.Dashboard
+import androidx.compose.material.icons.rounded.DriveEta
+import androidx.compose.material.icons.rounded.LocationOn
+import androidx.compose.material.icons.rounded.Settings
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -29,13 +43,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.focus.FocusRequester.Companion.createRefs
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintLayout
 import at.htl.ecopoints.R
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
 import at.htl.ecopoints.databinding.ActivityProfileBinding
+import at.htl.ecopoints.navigation.BottomNavBar
+
 
 class ProfileActivity : ComponentActivity() {
 
@@ -49,228 +72,164 @@ class ProfileActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    LoginScreen()
+                    Profile()
+
+                    Box {
+                        BottomNavBar(
+                            currentScreen = currentScreen,
+                            onScreenSelected = { newScreen -> setCurrentScreen(newScreen) },
+                            context = this@ProfileActivity
+                        )
+                    }
                 }
             }
         }
     }
 
     @Composable
-    fun LoginScreen() {
-        val username = remember { mutableStateOf("") }
-        val password = remember { mutableStateOf("") }
-
+    fun Profile(){
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
+            Modifier
+                .fillMaxHeight()
+                .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
         ) {
-            ShowEcoPoints(89)
-            Spacer(modifier = Modifier.height(16.dp))
-            UsernameField(username.value) { username.value = it }
-            Spacer(modifier = Modifier.height(8.dp))
-            PasswordField(password.value) { password.value = it }
-            Spacer(modifier = Modifier.height(16.dp))
-            LoginButton {
-                Toast.makeText(this@ProfileActivity, "Login Attempt", Toast.LENGTH_SHORT).show()
+            ConstraintLayout {
+                val (topImg, profile) = createRefs()
+                Image(
+                    painter = painterResource(id = R.drawable.top_background),
+                    null,
+                    Modifier
+                        .fillMaxWidth()
+                        .constrainAs(topImg) {
+                            top.linkTo(parent.top)
+                            start.linkTo(parent.start)
+                        }
+                )
+
+                Image(
+                    painter = painterResource(id = R.drawable.no_profile_pic),
+                    null,
+                    Modifier
+                        .constrainAs(profile) {
+                            top.linkTo(topImg.bottom)
+                            bottom.linkTo(topImg.bottom)
+                            start.linkTo(parent.start)
+                            end.linkTo(parent.end)
+                        }
+                        .size(200.dp)
+                        .clip(CircleShape)
+                )
             }
-        }
-    }
-
-    @Composable
-    fun UsernameField(username: String, onUsernameChanged: (String) -> Unit) {
-        TextField(
-            value = username,
-            onValueChange = onUsernameChanged,
-            label = { Text("Username") },
-            modifier = Modifier.fillMaxWidth()
-        )
-    }
-
-    @Composable
-    fun PasswordField(password: String, onPasswordChanged: (String) -> Unit) {
-        TextField(
-            value = password,
-            onValueChange = onPasswordChanged,
-            label = { Text("Password") },
-            visualTransformation = PasswordVisualTransformation(),
-            modifier = Modifier.fillMaxWidth()
-        )
-    }
-
-    @Composable
-    fun LoginButton(onLoginClicked: () -> Unit) {
-        Button(
-            onClick = onLoginClicked,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Login")
-        }
-    }
-
-    @Composable
-    fun ShowEcoPoints(points: Int) {
-        Box(
-            contentAlignment = Alignment.TopEnd,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(
-                text = "E.Points: $points",
-                modifier = Modifier
-                    .padding(8.dp)
-                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.5f))
-                    .padding(horizontal = 8.dp, vertical = 4.dp)
+            Text("Laurent Mali",
+            fontSize=25.sp,
+            fontWeight= FontWeight.Bold,
+                modifier = Modifier.padding(top=16.dp),
+            color =Color(android.graphics.Color.parseColor("#747679"))
             )
-        }
-    }
-
-    @Composable
-    fun ShowFields() {
-        var name by remember { mutableStateOf("Abdullah Aldesoky") }
-        var email by remember { mutableStateOf("abdulaldesoky@gmail.com") }
-        var number by remember { mutableStateOf("06649188653") }
-
-        Column(
-            modifier = Modifier,
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            NameTextField(name = name) { newName ->
-                name = newName
-            }
-            EmailTextField(email = email) { newEmail ->
-                email = newEmail
-            }
-            NumberTextField(number = number) { newNumber ->
-                number = newNumber
-            }
-            SaveButton {
-                Toast.makeText(this@ProfileActivity, "Saved", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-    @Composable
-    fun ShowPhoto() {
-        val painter = painterResource(id = R.drawable.no_profile_pic)
-
-        Box(
-            modifier = Modifier
-        ) {
-            Image(
-                painter = painter,
-                contentDescription = null,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.TopCenter)
-                    .scale(0.40f)
+            Text("LauMal",
+                fontSize=25.sp,
+                color =Color(android.graphics.Color.parseColor("#747679"))
             )
-        }
-
-    }
-
-    @Composable
-    fun NameTextField(name: String, onNameChanged: (String) -> Unit) {
-        Column(
-            modifier = Modifier
+            Button(onClick = {},
+            Modifier
                 .fillMaxWidth()
-                .padding(start = 15.dp, end = 15.dp)
-        ) {
-            TextField(
-                value = name,
-                onValueChange = { onNameChanged(it) },
-                label = { Text("Name") },
-                modifier = Modifier
+                .padding(start=32.dp, end=32.dp, top=10.dp, bottom=10.dp)
+                .height(55.dp), colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Color(android.graphics.Color.parseColor("#ffffff"))
+                ), shape = RoundedCornerShape(15)
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxHeight(),
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Rounded.LocationOn,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                }
+                Column(
+                        Modifier
+                            .padding(start = 16.dp)
+                            .weight(1f),
+                    verticalArrangement=Arrangement.Center,
+                    horizontalAlignment = Alignment.Start
+                ) {
+                    Text(
+                        text = "My Rides",
+                        color = Color.Black,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+            Button(onClick = {},
+                Modifier
                     .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.primary, MaterialTheme.shapes.medium)
-            )
-        }
-    }
-
-    @Composable
-    fun EmailTextField(email: String, onEmailChanged: (String) -> Unit) {
-
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 15.dp, end = 15.dp)
-        ) {
-            TextField(
-                value = email,
-                onValueChange = { onEmailChanged(it) },
-                label = { Text("E-Mail") },
-                modifier = Modifier
+                    .padding(start=32.dp, end=32.dp, top=10.dp, bottom=10.dp)
+                    .height(55.dp), colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Color(android.graphics.Color.parseColor("#ffffff"))
+                ), shape = RoundedCornerShape(15)
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxHeight(),
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Rounded.Settings,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                }
+                Column(
+                    Modifier
+                        .padding(start = 16.dp)
+                        .weight(1f),
+                    verticalArrangement=Arrangement.Center,
+                    horizontalAlignment = Alignment.Start
+                ) {
+                    Text(
+                        text = "Account Settings",
+                        color = Color.Black,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+            Button(onClick = {},
+                Modifier
                     .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.primary, MaterialTheme.shapes.medium)
-            )
-        }
-    }
-
-    @Composable
-    fun NumberTextField(number: String, onNumberChanged: (String) -> Unit) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 15.dp, end = 15.dp)
-        ) {
-            TextField(
-                value = number,
-                onValueChange = { onNumberChanged(it) },
-                label = { Text("Number") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.primary, MaterialTheme.shapes.medium)
-            )
-        }
-    }
-
-    @Composable
-    fun ShowPoints(points: Int) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            contentAlignment = Alignment.TopEnd
-        ) {
-            Text(
-                text = "E.Points: $points",
-                modifier = Modifier
-                    .padding(8.dp)
-                    .background(MaterialTheme.colorScheme.primary)
-                    .padding(8.dp)
-            )
-        }
-    }
-
-    @Composable
-    fun SaveButton(onSaveClicked: () -> Unit) {
-        Button(
-            onClick = onSaveClicked,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 100.dp, end = 100.dp, top = 15.dp)
-        ) {
-            Text("Save")
+                    .padding(start=32.dp, end=32.dp, top=10.dp, bottom=10.dp)
+                    .height(55.dp), colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Color(android.graphics.Color.parseColor("#ffffff"))
+                ), shape = RoundedCornerShape(15)
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxHeight(),
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Rounded.DriveEta,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                }
+                Column(
+                    Modifier
+                        .padding(start = 16.dp)
+                        .weight(1f),
+                    verticalArrangement=Arrangement.Center,
+                    horizontalAlignment = Alignment.Start
+                ) {
+                    Text(
+                        text = "My Cars",
+                        color = Color.Black,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
         }
     }
 }
-//class ProfileActivity : ComponentActivity() {
-//    private lateinit var binding: ActivityProfileBinding
-//    lateinit var username : EditText
-//    lateinit var password: EditText
-//    lateinit var loginButton: Button
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        binding = ActivityProfileBinding.inflate(layoutInflater)
-//        setContentView(binding.root)
-//        binding.loginButton.setOnClickListener(View.OnClickListener {
-//            if (binding.username.text.toString() == "user" && binding.password.text.toString() == "1234"){
-//                Toast.makeText(this, "Login Successful!", Toast.LENGTH_SHORT).show()
-//            } else {
-//                Toast.makeText(this, "Login Failed!", Toast.LENGTH_SHORT).show()
-//            }
-//        })
-//    }
-//}

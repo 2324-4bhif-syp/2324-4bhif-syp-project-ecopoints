@@ -103,17 +103,17 @@ class RankingActivity : ComponentActivity() {
 
         // JUST TESTING-DATA
         val users: Array<User> = arrayOf(
-            User(null, "Joe", "123", 547.1),
-            User(null, "Mary", "123", 533.9),
-            User(null, "Chris", "123", 513.4),
-            User(null, "John", "123", 431.3),
-            User(null, "Hary", "123", 347.1),
-            User(null, "Jane", "123", 333.9),
-            User(null, "Max", "123", 313.4),
-            User(null, "Mike", "123", 231.3),
-            User(null, "Chloe", "123", 133.9),
-            User(null, "Courtney", "123", 113.4),
-            User(null, "Lisa", "123", 91.3))
+            User(1, "Joe", "123", 547.1),
+            User(2, "Mary", "123", 533.9),
+            User(3, "Chris", "123", 513.4),
+            User(4, "John", "123", 431.3),
+            User(5, "Hary", "123", 347.1),
+            User(6, "Jane", "123", 333.9),
+            User(7, "Max", "123", 313.4),
+            User(8, "Mike", "123", 231.3),
+            User(9, "Chloe", "123", 133.9),
+            User(10, "Courtney", "123", 113.4),
+            User(11, "Lisa", "123", 91.3))
 
         val ranks = HashMap<User, Painter>();
         ranks.put(users[0], painterResource(id = R.drawable.ranking_place_1))
@@ -194,57 +194,9 @@ class RankingActivity : ComponentActivity() {
         }
 
         if (showDetailedRankPopup.value) {
-            ShowDetailedRankView(selectedUser.value!!, showDetailedRankPopup)
+            startActivity(DetailRankingActivity.newIntent(this, selectedUser.value!!))
         }
 
-    }
-
-    @Composable
-    fun ShowDetailedRankView(user: User, showDetailedRankPopup: MutableState<Boolean>){
-        val onDismiss: () -> Unit = {
-            showDetailedRankPopup.value = false
-        }
-
-        AlertDialog(
-            onDismissRequest = onDismiss,
-            modifier = Modifier.fillMaxWidth(),
-
-            title = {
-                Row {
-                    Text(
-                        text = user.userName,
-                        fontSize = TextUnit(25f, TextUnitType.Sp),
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier
-                            .weight(1f)
-                    )
-
-                    Image(
-                        painter = painterResource(id = R.drawable.no_profile_pic),
-                        contentDescription = "Profile Picture",
-                        modifier = Modifier
-                            .width(80.dp)
-                            .height(80.dp)
-                            .clip(RoundedCornerShape(30.dp))
-                    )
-                }
-                    },
-            text = {
-                Column {
-                    Text(text = "Eco-Points: " + (user.ecoPoints).toString())
-
-                    Text(text = "Driven Distance: ... km")
-                    Text(text = "Fuel Consumption: ... l")
-                    Text(text = "CO₂-Consumption: ... g")
-                    Text(text = "Driven Cars: ...")
-                }
-            },
-            confirmButton = {
-                TextButton(onClick = onDismiss) {
-                    Text(text = "Return")
-                }
-            }
-        )
     }
 
     @OptIn(ExperimentalFoundationApi::class)

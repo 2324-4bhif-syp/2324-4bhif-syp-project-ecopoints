@@ -275,8 +275,6 @@ image:sprint7/ranking.jpg[500,200]
 * Map Button überarbeitet
 * Projekt migration auf neue Architektur angefangen
 
-[.font-xx-large, background-image="background.jpg", background-opacity="0.2"]
-=== Demo
 
 
 

@@ -267,13 +267,15 @@ image:sprint7/ranking.jpg[500,200]
 [.font-xx-large, background-image="traffic.jpg", background-opacity="0.3"]
 == Sprint 7
 
+[.font-xx-large, background-image="background.jpg", background-opacity="0.2"]
 === Was wurde gemacht?
 
 * Ranking detail page
 * Code cleanup für Google Maps
 * Map Button überarbeitet
-* Projekt migration auf neue Architektur
+* Projekt migration auf neue Architektur angefangen
 
+[.font-xx-large, background-image="background.jpg", background-opacity="0.2"]
 === Demo
 
 

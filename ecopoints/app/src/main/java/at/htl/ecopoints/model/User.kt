@@ -1,6 +1,7 @@
 package at.htl.ecopoints.model
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class User(
     val id: Long?,
@@ -12,7 +13,7 @@ data class User(
 
     @SerializedName("eco_points")
     val ecoPoints: Double
-) {
+) : Serializable {
     override fun toString(): String {
         return String.format(
             "User[id=%d, userName=%s, password=%s, ecoPoints=%f]",

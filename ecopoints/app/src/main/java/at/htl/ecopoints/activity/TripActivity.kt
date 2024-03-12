@@ -226,7 +226,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                                     latLngList = latLngList
                                 )
                                 Column {
-                                    OutlinedButton(
+                                    ElevatedButton(
                                         onClick = { showBigMap = false },
                                         modifier = Modifier.size(60.dp).padding(8.dp),
                                         shape = CircleShape,

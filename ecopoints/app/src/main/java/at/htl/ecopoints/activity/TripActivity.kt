@@ -234,7 +234,8 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                                 dismissOnClickOutside = true,
                                 usePlatformDefaultWidth = true) // cover the full screen or not
                         ) {
-                            Card{
+                            Card(border = BorderStroke(1.dp, Color.Black))
+                            {
                                 ShowMap(
                                     cameraPositionState = rememberCameraPositionState {
                                         position = CameraPosition.fromLatLngZoom(currentLocation, 10f)},
@@ -246,9 +247,9 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                                 )
                                 OutlinedIconButton(
                                     onClick = { showBigMap = false },
-                                    border = BorderStroke(1.dp, Color.Black),
-                                    shape = RoundedCornerShape(100),
-                                    modifier = Modifier.padding(8.dp)
+                                    border = BorderStroke(3.dp, Color.Black),
+                                    shape = RoundedCornerShape(50),
+                                    modifier = Modifier.padding(8.dp).background(Color.Black)
                                 ) {
                                     Icon(
                                         imageVector = Icons.Default.Close,

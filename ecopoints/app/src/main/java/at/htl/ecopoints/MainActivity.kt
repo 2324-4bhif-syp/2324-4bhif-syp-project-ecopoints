@@ -366,7 +366,7 @@ class MainActivity : ComponentActivity() {
                         }) {
                             Text("OK")
                         }
-                    },
+                    }
                 )
             }
         }

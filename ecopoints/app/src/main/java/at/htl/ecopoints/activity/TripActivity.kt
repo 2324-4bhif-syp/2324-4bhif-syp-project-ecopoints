@@ -21,6 +21,7 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -29,16 +30,21 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.paddingFrom
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.IconButton
+import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.AlertDialog
@@ -207,30 +213,32 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                             properties = DialogProperties(
                                 dismissOnBackPress = true,
                                 dismissOnClickOutside = true,
-                                usePlatformDefaultWidth = true)
+                                usePlatformDefaultWidth = false)
                         ) {
                             Card(border = BorderStroke(1.dp, Color.Black))
                             {
                                 ShowMap(
-                                    cameraPositionState = rememberCameraPositionState {
-                                        position = CameraPosition.fromLatLngZoom(currentLocation, 10f)},
+                                    cameraPositionState = cameraPositionState,
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .height(500.dp),
+                                        .fillMaxHeight(),
                                     properties = mapProperties,
                                     latLngList = latLngList
                                 )
-                                ElevatedButton(
-                                    onClick = { showBigMap = false },
-                                    border = BorderStroke(3.dp, Color.Black),
-                                    shape = RoundedCornerShape(50),
-                                    modifier = Modifier.padding(8.dp).background(Color.Transparent)
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Default.Close,
-                                        contentDescription = null,
-                                        tint = Color.Red
-                                    )
+                                Column {
+                                    OutlinedButton(
+                                        onClick = { showBigMap = false },
+                                        modifier = Modifier.size(60.dp).padding(8.dp),
+                                        shape = CircleShape,
+                                        border = BorderStroke(3.dp, Color.Black),
+                                        contentPadding = PaddingValues(0.dp),
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Default.Close,
+                                            contentDescription = null,
+                                            tint = Color.Red
+                                        )
+                                    }
                                 }
                             }
                         }

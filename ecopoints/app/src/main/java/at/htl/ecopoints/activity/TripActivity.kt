@@ -27,18 +27,19 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.IconButton
+import androidx.compose.material.ButtonColors
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Scaffold
 import androidx.compose.material.TopAppBar
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -50,13 +51,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.lifecycleScope
 import at.htl.ecopoints.db.DBHelper
 import at.htl.ecopoints.interfaces.OnLocationChangedListener
+import at.htl.ecopoints.model.Car
 import at.htl.ecopoints.model.CarData
 import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.service.BluetoothDeviceListService
@@ -70,8 +74,6 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapType
-import com.google.maps.android.compose.Marker
-import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
 import kotlinx.coroutines.CoroutineScope
@@ -104,7 +106,6 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
     private val latLngList = mutableStateListOf<Pair<Color, Pair<LatLng, Double>>>()
 
 
-    @OptIn(ExperimentalMaterial3Api::class)
     @RequiresApi(Build.VERSION_CODES.S)
     @SuppressLint(
         "UnusedMaterialScaffoldPaddingParameter",
@@ -117,6 +118,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
             val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Trip") }
 
             var showDialog: Boolean by remember { mutableStateOf(false) }
+            var showSelectCarDialog: Boolean by remember { mutableStateOf(false) }
             var showBigMap: Boolean by remember { mutableStateOf(false) }
             var deviceNameText by remember { mutableStateOf("Not Selected") }
             var isConnecting by remember { mutableStateOf(false) }
@@ -129,7 +131,8 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                 mutableStateOf(MapProperties(mapType = MapType.NORMAL, isMyLocationEnabled = true))
             }
             val activity = LocalContext.current as Activity
-
+            var selectedCar: Car? = null
+            var showSelectedCarInformation: Boolean by remember { mutableStateOf(false) }
             testLocationService.setOnLocationChangedListener(this)
 
 
@@ -143,8 +146,13 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                         TopAppBar(backgroundColor = MaterialTheme.colorScheme.background, title = {
                             Column(
                                 modifier = Modifier.fillMaxWidth(),
-                                horizontalAlignment = Alignment.End
+                                horizontalAlignment = Alignment.Start
                             ) {
+                                Button(onClick = { showSelectCarDialog = true }) {
+                                    Text(text = "Select your car")
+
+                                }
+
 //                                MapTypeControls(onMapTypeClick = {
 //                                    Log.d("GoogleMap", "Selected map type $it")
 //                                    mapProperties = mapProperties.copy(mapType = it)
@@ -155,30 +163,31 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
 
                         if (ActivityCompat.checkSelfPermission(
                                 this,
-                                Manifest.permission.ACCESS_FINE_LOCATION
+                                Manifest.permission.ACCESS_COARSE_LOCATION
                             ) != PackageManager.PERMISSION_GRANTED
                         ) {
                             ActivityCompat.requestPermissions(
                                 this@TripActivity,
-                                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                                arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
                                 1
                             )
                         } else {
                             Column(
-                                horizontalAlignment = Alignment.Start,
-                                verticalArrangement = Arrangement.Top,
+                                horizontalAlignment = Alignment.End,
+                                verticalArrangement = Arrangement.Center,
                                 modifier = Modifier.fillMaxSize()
                             ) {
-                                Button(onClick = {showBigMap = true },
+                                Button(
+                                    onClick = { showBigMap = true },
                                     shape = MaterialTheme.shapes.medium,
                                     modifier = Modifier.background(Color.Green)
-                                    ) {
+                                ) {
                                     GoogleMap(
                                         modifier = Modifier
                                             .height(150.dp)
                                             .width(150.dp),
                                         cameraPositionState = cameraPositionState,
-                                        properties = mapProperties
+                                        properties = mapProperties,
                                     ) {
                                         DrawPolyline()
                                     }
@@ -187,47 +196,40 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                         }
                     }
 
-                    if(showBigMap){
-                        AlertDialog(
-                            onDismissRequest = { showBigMap = false },
-                            properties = DialogProperties(
-                                dismissOnBackPress = true,
-                                dismissOnClickOutside = true,
-                                usePlatformDefaultWidth = true) // cover the full screen or not
-                            )
-                        {
-                            Column(Modifier.background(Color.Black)) {
-                                IconButton(onClick = { showBigMap = false }) {
-                                    Text("Close")
-                                }
+
+                    //TESTING
+//                    ReadTest()
+
+                    Column (verticalArrangement = Arrangement.Center){
+                        if (showSelectedCarInformation) {
+                            ShowCurrentCar(car = selectedCar!!)
+                        }
+
+                    }
+
+                    if (showSelectCarDialog) {
+                        SelectCarDialog(
+                            showDialog = showSelectCarDialog,
+                            onDismiss = { showSelectCarDialog = false },
+                            onCarSelected = { car ->
+                                selectedCar = car
+                                showSelectedCarInformation = true;
+                            }
+                        )
+                    }
+
+                    if (showBigMap) {
+                        Dialog(onDismissRequest = { /*TODO*/ }) {
+                            Column(Modifier.background(MaterialTheme.colorScheme.background)) {
                                 GoogleMap(
                                     modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(500.dp),
+                                        .height(200.dp)
+                                        .width(200.dp),
                                     properties = mapProperties,
                                 ) {
                                     DrawPolyline()
                                 }
-                                MapTypeControls(onMapTypeClick = {
-                                    Log.d("GoogleMap", "Selected map type $it")
-                                    mapProperties = mapProperties.copy(mapType = it)
-                                })
                             }
-                            /*Card(
-                                modifier = Modifier
-                                    .height(180.dp),
-                                shape = RoundedCornerShape(8.dp)
-                            ) {
-                                val cameraPositionState = rememberCameraPositionState {
-                                    position = CameraPosition.fromLatLngZoom(LatLng(latitude, longitude), 13f)
-                                }
-                                GoogleMap(
-                                    modifier = Modifier.fillMaxSize(),
-                                    cameraPositionState = cameraPositionState
-                                ) {
-
-                                }
-                            }*/
                         }
                     }
 
@@ -303,6 +305,103 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                         )
                     }
                 }
+            }
+        }
+    }
+
+    @Composable
+    private fun SelectCarDialog(
+        showDialog: Boolean,
+        onDismiss: () -> Unit,
+        onCarSelected: (Car) -> Unit
+    ) {
+        var model by remember { mutableStateOf(TextFieldValue()) }
+        var manufacturer by remember { mutableStateOf(TextFieldValue()) }
+        var year by remember { mutableStateOf("0") }
+        var fuelType by remember { mutableStateOf("nothing") }
+        val years = listOf("2024", "2023", "2022", "2021", "2020") // Example years
+        val fuelTypes = listOf("Gasoline", "Diesel", "Electric", "Hybrid") // Example fuel types
+
+        if (showDialog) {
+            AlertDialog(onDismissRequest = onDismiss,
+                title = { Text("Select your Car") },
+                text = {
+                    Column(
+                        modifier = Modifier.padding(16.dp)
+                    ) {
+                        TextField(
+                            value = model,
+                            onValueChange = { model = it },
+                            label = { Text("Model") },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        TextField(
+                            value = manufacturer,
+                            onValueChange = { manufacturer = it },
+                            label = { Text("Manufacturer") },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        DropdownMenu( //Todo
+                            expanded = false,
+                            onDismissRequest = { },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            years.forEach { y ->
+                                DropdownMenuItem(onClick = {
+                                    year = y
+                                }) {
+                                    Text(y)
+                                }
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(8.dp))
+                        DropdownMenu(
+                            expanded = false,
+                            onDismissRequest = { },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            fuelTypes.forEach { ft ->
+                                DropdownMenuItem(onClick = {
+                                    fuelType = ft
+                                }) {
+                                    Text(ft)
+                                }
+                            }
+                        }
+                    }
+                },
+                confirmButton = {
+                    TextButton(onClick = {
+                        val car = Car(
+                            id = 0,
+                            model = model.text,
+                            brand = manufacturer.text,
+                            year = year,
+                            fuelType = fuelType
+                        )
+                        onCarSelected(car)
+                        onDismiss()
+                    }) {
+                        Text("Select")
+                    }
+                })
+        }
+    }
+
+
+    @Composable
+    private fun ShowCurrentCar(car: Car?) {
+        Log.d(tag, "Car: $car")
+        if (car != null) {
+            Log.d(tag, "Car: $car")
+            Column {
+                Text(text = "Model: ${car.model}")
+                Text(text = "Manufacturer: ${car.brand}")
+                Text(text = "Year: ${car.year}")
+                Text(text = "Fuel Type: ${car.fuelType}")
+
             }
         }
     }
@@ -640,11 +739,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
             horizontalArrangement = Arrangement.Center
         ) {
             MapType.values().forEach {
-                if (it == MapType.NORMAL || it == MapType.SATELLITE || it == MapType.HYBRID) {
-                    MapTypeButton(type = it) {
-                        onMapTypeClick(it)
-                    }
-                }
+                MapTypeButton(type = it) { onMapTypeClick(it) }
             }
         }
     }

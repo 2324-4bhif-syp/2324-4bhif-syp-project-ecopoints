@@ -58,30 +58,37 @@ import androidx.compose.ui.unit.TextUnitType
 fun ProfileScreen(user: User, context: Context) {
     val scrollState = rememberScrollState()
 
-    Column {
-        BoxWithConstraints() {
+    Column(modifier = Modifier.fillMaxSize()) {
+        BoxWithConstraints(modifier = Modifier.weight(1f)) {
             Surface {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
                         .verticalScroll(scrollState),
                 ) {
-                    IconButton(onClick = { 
-                        val intent = Intent(context, RankingActivity::class.java) 
-                        context.startActivity(intent)
-                    }) {
-                        androidx.compose.material3.Icon(
-                            modifier = Modifier.size(40.dp),
-                            imageVector = Icons.Rounded.ArrowBack,
-                            contentDescription = null,
-                            tint = androidx.compose.material3.MaterialTheme.colorScheme.primary
-                        )
-                    }
+                    ShowReturnBtn(context)
 
                     ProfileHeader(user)
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun ShowReturnBtn(context: Context){
+    IconButton(onClick = {
+        val intent = Intent(context, RankingActivity::class.java)
+        context.startActivity(intent)
+    }) {
+        androidx.compose.material3.Icon(
+            modifier = Modifier
+                .size(40.dp)
+                .padding(bottom = 10.dp),
+            imageVector = Icons.Rounded.ArrowBack,
+            contentDescription = null,
+            tint = androidx.compose.material3.MaterialTheme.colorScheme.primary
+        )
     }
 }
 
@@ -103,4 +110,5 @@ private fun ProfileHeader(user: User) {
                 .clip(RoundedCornerShape(80.dp))
         )
     }
+    androidx.compose.material3.Divider(thickness = 1.dp, color = Color.LightGray)
 }

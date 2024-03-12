@@ -1,5 +1,6 @@
 package at.htl.ecopoints.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -54,6 +55,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintLayout
+import at.htl.ecopoints.MainActivity
 import at.htl.ecopoints.R
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
 import at.htl.ecopoints.databinding.ActivityProfileBinding
@@ -131,11 +133,15 @@ class ProfileActivity : ComponentActivity() {
                 fontSize=25.sp,
                 color =Color(android.graphics.Color.parseColor("#747679"))
             )
-            Button(onClick = {},
-            Modifier
-                .fillMaxWidth()
-                .padding(start=32.dp, end=32.dp, top=10.dp, bottom=10.dp)
-                .height(55.dp), colors = ButtonDefaults.buttonColors(
+            Button(onClick = {
+                // Intent to navigate to TripActivity
+                val intentToTripActivity = Intent(this@ProfileActivity, TripActivity::class.java)
+                startActivity(intentToTripActivity)
+            },
+                Modifier
+                    .fillMaxWidth()
+                    .padding(start=32.dp, end=32.dp, top=10.dp, bottom=10.dp)
+                    .height(55.dp), colors = ButtonDefaults.buttonColors(
                     backgroundColor = Color(android.graphics.Color.parseColor("#ffffff"))
                 ), shape = RoundedCornerShape(15)
             ) {
@@ -197,7 +203,10 @@ class ProfileActivity : ComponentActivity() {
                     )
                 }
             }
-            Button(onClick = {},
+            Button(onClick = {
+                val intentToMainActivity = Intent(this@ProfileActivity, MainActivity::class.java)
+                startActivity(intentToMainActivity)
+            },
                 Modifier
                     .fillMaxWidth()
                     .padding(start=32.dp, end=32.dp, top=10.dp, bottom=10.dp)

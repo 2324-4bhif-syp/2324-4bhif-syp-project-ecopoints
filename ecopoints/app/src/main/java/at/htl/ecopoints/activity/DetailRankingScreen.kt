@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -53,14 +54,18 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
+import androidx.compose.material3.MaterialTheme.colorScheme
 
 @Composable
 fun ProfileScreen(user: User, context: Context) {
     val scrollState = rememberScrollState()
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(
+        modifier = Modifier.fillMaxSize()
+            .background(colorScheme.background)
+        ) {
         BoxWithConstraints(modifier = Modifier.weight(1f)) {
-            Surface {
+            Surface(color = colorScheme.background) {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()

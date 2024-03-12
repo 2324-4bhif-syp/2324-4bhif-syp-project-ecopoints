@@ -21,6 +21,7 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -28,21 +29,28 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.paddingFrom
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.IconButton
+import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -156,19 +164,16 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                 ) {
                     Scaffold(backgroundColor = MaterialTheme.colorScheme.background, topBar = {
                         TopAppBar(backgroundColor = MaterialTheme.colorScheme.background, title = {
-                            Column(
+                            Row(
                                 modifier = Modifier.fillMaxWidth(),
-                                horizontalAlignment = Alignment.Start
+                                horizontalArrangement = Arrangement.SpaceBetween
                             ) {
                                 Button(onClick = { showSelectCarDialog = true }) {
                                     Text(text = "Select your car")
-
                                 }
-
-//                                MapTypeControls(onMapTypeClick = {
-//                                    Log.d("GoogleMap", "Selected map type $it")
-//                                    mapProperties = mapProperties.copy(mapType = it)
-//                                })
+                                Button(onClick = { showBigMap = true }) {
+                                    Text("Show Map")
+                                }
                             }
                         })
                     }) {
@@ -183,36 +188,12 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                                 arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
                                 1
                             )
-                        } else {
-                            Column(
-                                horizontalAlignment = Alignment.End,
-                                verticalArrangement = Arrangement.Center,
-                                modifier = Modifier.fillMaxSize()
-                            ) {
-                                Button(
-                                    onClick = { showBigMap = true },
-                                    shape = MaterialTheme.shapes.medium,
-                                    modifier = Modifier.background(Color.Green)
-                                ) {
-                                    ShowMap(cameraPositionState = cameraPositionState,
-                                        modifier = Modifier
-                                            .height(150.dp)
-                                            .width(150.dp),
-                                        properties = mapProperties)
-                                }
-                            }
                         }
                     }
-
-
-                    //TESTING
-//                    ReadTest()
-
                     Column (verticalArrangement = Arrangement.Center){
                         if (showSelectedCarInformation) {
                             ShowCurrentCar(car = selectedCar!!)
                         }
-
                     }
 
                     if (showSelectCarDialog) {
@@ -232,49 +213,35 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                             properties = DialogProperties(
                                 dismissOnBackPress = true,
                                 dismissOnClickOutside = true,
-                                usePlatformDefaultWidth = true) // cover the full screen or not
+                                usePlatformDefaultWidth = false)
                         ) {
                             Card(border = BorderStroke(1.dp, Color.Black))
                             {
                                 ShowMap(
-                                    cameraPositionState = rememberCameraPositionState {
-                                        position = CameraPosition.fromLatLngZoom(currentLocation, 10f)},
+                                    cameraPositionState = cameraPositionState,
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .height(500.dp),
+                                        .fillMaxHeight(),
                                     properties = mapProperties,
                                     latLngList = latLngList
                                 )
-                                OutlinedIconButton(
-                                    onClick = { showBigMap = false },
-                                    border = BorderStroke(3.dp, Color.Black),
-                                    shape = RoundedCornerShape(50),
-                                    modifier = Modifier.padding(8.dp).background(Color.Black)
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Default.Close,
-                                        contentDescription = null,
-                                        tint = Color.Red
-                                    )
+                                Column {
+                                    OutlinedButton(
+                                        onClick = { showBigMap = false },
+                                        modifier = Modifier.size(60.dp).padding(8.dp),
+                                        shape = CircleShape,
+                                        border = BorderStroke(3.dp, Color.Black),
+                                        contentPadding = PaddingValues(0.dp),
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Default.Close,
+                                            contentDescription = null,
+                                            tint = Color.Red
+                                        )
+                                    }
                                 }
                             }
                         }
-
-                        /*Dialog(onDismissRequest = { showBigMap = false },
-                            properties = DialogProperties(
-                                usePlatformDefaultWidth = true,
-                                dismissOnClickOutside = true,
-                                dismissOnBackPress = true
-                            )
-                            ) {
-                            Column(Modifier.background(MaterialTheme.colorScheme.background)) {
-                                ShowMap(cameraPositionState = rememberCameraPositionState {
-                                    position = CameraPosition.fromLatLngZoom(currentLocation, 10f)},
-                                    modifier = Modifier.animateContentSize(),
-                                    properties = mapProperties,
-                                    latLngList = latLngList)
-                            }
-                        }*/
                     }
 
                     if (isConnecting) {
@@ -820,6 +787,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
     }
 
     //for testing purposes, remove if database is set up
+    //TODO: Remove this function if fuel consumption is being read from the OBD
     private fun generateRandomFuelCons(): Double {
         return (3..21).random().toDouble()
     }

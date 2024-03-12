@@ -50,9 +50,9 @@ import androidx.compose.ui.unit.dp
 import at.htl.ecopoints.model.User
 import at.htl.ecopoints.R
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
-
 
 @Composable
 fun ProfileScreen(user: User, context: Context) {

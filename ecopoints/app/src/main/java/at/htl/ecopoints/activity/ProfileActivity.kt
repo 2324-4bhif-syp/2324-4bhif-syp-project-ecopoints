@@ -110,7 +110,7 @@ class ProfileActivity : ComponentActivity() {
                 )
 
                 Image(
-                    painter = painterResource(id = R.drawable.no_profile_pic),
+                    painter = painterResource(id = R.drawable.laurentmali_picture),
                     null,
                     Modifier
                         .constrainAs(profile) {

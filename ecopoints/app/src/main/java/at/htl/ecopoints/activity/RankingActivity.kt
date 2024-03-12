@@ -194,7 +194,7 @@ class RankingActivity : ComponentActivity() {
         }
 
         if (showDetailedRankPopup.value) {
-            startActivity(DetailRankingActivity.newIntent(this, selectedUser.value!!))
+            ProfileScreen(user = selectedUser.value!!, context = this@RankingActivity)
         }
 
     }

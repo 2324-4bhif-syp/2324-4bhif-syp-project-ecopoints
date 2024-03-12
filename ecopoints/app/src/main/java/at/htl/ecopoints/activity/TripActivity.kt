@@ -226,17 +226,20 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                                     latLngList = latLngList
                                 )
                                 Column {
-                                    ElevatedButton(
+                                    OutlinedButton(
                                         onClick = { showBigMap = false },
                                         modifier = Modifier.size(60.dp).padding(8.dp),
                                         shape = CircleShape,
                                         border = BorderStroke(3.dp, Color.Black),
                                         contentPadding = PaddingValues(0.dp),
+                                        colors = ButtonDefaults.outlinedButtonColors(
+                                            backgroundColor = Color.Red
+                                        )
                                     ) {
                                         Icon(
                                             imageVector = Icons.Default.Close,
                                             contentDescription = null,
-                                            tint = Color.Red
+                                            tint = Color.White
                                         )
                                     }
                                 }

@@ -12,14 +12,18 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -27,15 +31,23 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.ButtonColors
-import androidx.compose.material.ButtonDefaults
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
 import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -65,13 +77,12 @@ import at.htl.ecopoints.model.CarData
 import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.service.BluetoothDeviceListService
 import at.htl.ecopoints.service.TestLocationService
-import at.htl.ecopoints.ui.theme.EcoPointsTheme
+import at.htl.ecopoints.ui.theme.*
 import com.github.eltonvs.obd.command.ObdCommand
 import com.github.eltonvs.obd.command.ObdResponse
 import com.github.eltonvs.obd.connection.ObdDeviceConnection
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
-import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapType
 import com.google.maps.android.compose.Polyline
@@ -106,6 +117,7 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
     private val latLngList = mutableStateListOf<Pair<Color, Pair<LatLng, Double>>>()
 
 
+    @OptIn(ExperimentalMaterial3Api::class)
     @RequiresApi(Build.VERSION_CODES.S)
     @SuppressLint(
         "UnusedMaterialScaffoldPaddingParameter",
@@ -182,15 +194,11 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                                     shape = MaterialTheme.shapes.medium,
                                     modifier = Modifier.background(Color.Green)
                                 ) {
-                                    GoogleMap(
+                                    ShowMap(cameraPositionState = cameraPositionState,
                                         modifier = Modifier
                                             .height(150.dp)
                                             .width(150.dp),
-                                        cameraPositionState = cameraPositionState,
-                                        properties = mapProperties,
-                                    ) {
-                                        DrawPolyline()
-                                    }
+                                        properties = mapProperties)
                                 }
                             }
                         }
@@ -219,18 +227,53 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                     }
 
                     if (showBigMap) {
-                        Dialog(onDismissRequest = { /*TODO*/ }) {
-                            Column(Modifier.background(MaterialTheme.colorScheme.background)) {
-                                GoogleMap(
+                        AlertDialog(
+                            onDismissRequest = { showBigMap = false },
+                            properties = DialogProperties(
+                                dismissOnBackPress = true,
+                                dismissOnClickOutside = true,
+                                usePlatformDefaultWidth = true) // cover the full screen or not
+                        ) {
+                            Card{
+                                ShowMap(
+                                    cameraPositionState = rememberCameraPositionState {
+                                        position = CameraPosition.fromLatLngZoom(currentLocation, 10f)},
                                     modifier = Modifier
-                                        .height(200.dp)
-                                        .width(200.dp),
+                                        .fillMaxWidth()
+                                        .height(500.dp),
                                     properties = mapProperties,
+                                    latLngList = latLngList
+                                )
+                                OutlinedIconButton(
+                                    onClick = { showBigMap = false },
+                                    border = BorderStroke(1.dp, Color.Black),
+                                    shape = RoundedCornerShape(100),
+                                    modifier = Modifier.padding(8.dp)
                                 ) {
-                                    DrawPolyline()
+                                    Icon(
+                                        imageVector = Icons.Default.Close,
+                                        contentDescription = null,
+                                        tint = Color.Red
+                                    )
                                 }
                             }
                         }
+
+                        /*Dialog(onDismissRequest = { showBigMap = false },
+                            properties = DialogProperties(
+                                usePlatformDefaultWidth = true,
+                                dismissOnClickOutside = true,
+                                dismissOnBackPress = true
+                            )
+                            ) {
+                            Column(Modifier.background(MaterialTheme.colorScheme.background)) {
+                                ShowMap(cameraPositionState = rememberCameraPositionState {
+                                    position = CameraPosition.fromLatLngZoom(currentLocation, 10f)},
+                                    modifier = Modifier.animateContentSize(),
+                                    properties = mapProperties,
+                                    latLngList = latLngList)
+                            }
+                        }*/
                     }
 
                     if (isConnecting) {
@@ -759,23 +802,6 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
         ) {
             Text(text = text, style = MaterialTheme.typography.bodyMedium)
         }
-    }
-
-    @Composable
-    private fun DrawPolyline() {
-        if (!latLngHasChanged.value) {
-            for (i in 0 until latLngList.size - 1) {
-                Polyline(
-                    points = listOf(
-                        latLngList[i].second.first,
-                        latLngList[i + 1].second.first
-                    ),
-                    color = latLngList[i].first,
-                    width = 10f
-                )
-            }
-        }
-        latLngHasChanged.value = false
     }
 
     private fun addItemToList(newItem: LatLng) {

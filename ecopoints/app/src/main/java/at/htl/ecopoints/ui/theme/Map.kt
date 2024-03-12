@@ -9,17 +9,21 @@ import androidx.compose.ui.unit.dp
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.CameraPositionState
 import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.Polyline
 
 @Composable
-fun ShowMap(cameraPositionState: CameraPositionState, latLngList: List<Pair<Color, Pair<LatLng, Double>>> = listOf()){
+fun ShowMap(cameraPositionState: CameraPositionState = CameraPositionState(),
+            modifier: Modifier = Modifier.fillMaxWidth().height(200.dp),
+            properties: MapProperties = MapProperties(),
+            latLngList: List<Pair<Color, Pair<LatLng, Double>>> = listOf()){
     GoogleMap(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(200.dp),
         cameraPositionState = cameraPositionState,
+        modifier = modifier,
+        properties = properties
     ) {
-        DrawPolyLine(latLngList);
+        if(latLngList.isNotEmpty())
+            DrawPolyLine(latLngList);
     }
 }
 

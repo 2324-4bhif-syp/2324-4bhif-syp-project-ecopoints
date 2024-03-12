@@ -63,13 +63,9 @@ import at.htl.ecopoints.ui.theme.EcoPointsTheme
 import at.htl.ecopoints.ui.theme.ShowMap
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
-import com.google.maps.android.compose.CameraPositionState
-import com.google.maps.android.compose.GoogleMap
-import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.opencsv.CSVParserBuilder
 import com.opencsv.CSVReaderBuilder
-import kotlinx.coroutines.selects.select
 import java.io.IOException
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -209,11 +205,6 @@ class MainActivity : ComponentActivity() {
             Color(0xFF9bd99e)
         )
 
-        //version 1: To read the trip values from the csv and add them to the database (hardcoded)
-        //readTripDataFromCsvAndAddToDB("tripData.csv")
-        //val trips = getTripDataFromDB()
-
-        //version 2: To update the trip values, we need to read the carData.csv and update the trip values after every trip
         val dbHelper = DBHelper(this, null)
         dbHelper.onUpgrade(dbHelper.writableDatabase, 1, 2)
 
@@ -365,7 +356,7 @@ class MainActivity : ComponentActivity() {
                                             getLatLngsFromTripDB(selectedTrip!!.id)
                                                 .first().second.first.longitude), 10f)
                                 },
-                                getLatLngsFromTripDB(selectedTrip!!.id))
+                                latLngList = getLatLngsFromTripDB(selectedTrip!!.id))
                         }
                     },
                     confirmButton = {

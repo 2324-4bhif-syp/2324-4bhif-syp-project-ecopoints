@@ -267,19 +267,12 @@ image:sprint7/ranking.jpg[500,200]
 [.font-xx-large, background-image="traffic.jpg", background-opacity="0.3"]
 == Sprint 7
 
-[background-image="traffic.jpg", background-opacity="0.2"]
-=== Oliver
+=== Was wurde gemacht?
 
-[background-image="sprint7/homepage.jpg", background-opacity="0.2"]
-=== Abdullah
-
-[background-image="sprint7/ranking.jpg", background-opacity="0.2"]
-=== Armin
-
-=== Laurent
-
-[background-image="traffic.jpg", background-opacity="0.2"]
-=== Linus
+* Ranking detail page
+* Code cleanup für Google Maps
+* Map Button überarbeitet
+* Projekt migration auf neue Architektur
 
 
 

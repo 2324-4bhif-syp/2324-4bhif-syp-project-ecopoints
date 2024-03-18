@@ -5,7 +5,9 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothSocket
+import android.content.ContentValues.TAG
 import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -78,6 +80,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.lifecycleScope
+import at.htl.ecopoints.MainActivity
 import at.htl.ecopoints.db.DBHelper
 import at.htl.ecopoints.interfaces.OnLocationChangedListener
 import at.htl.ecopoints.model.Car
@@ -89,6 +92,7 @@ import at.htl.ecopoints.ui.theme.*
 import com.github.eltonvs.obd.command.ObdCommand
 import com.github.eltonvs.obd.command.ObdResponse
 import com.github.eltonvs.obd.connection.ObdDeviceConnection
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.MapProperties
@@ -144,17 +148,41 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
             var isConnecting by remember { mutableStateOf(false) }
             var connection by remember { mutableStateOf("Not Connected") }
             val currentLocation = LatLng(latitude, longitude)
-            val cameraPositionState = rememberCameraPositionState {
+            /*val cameraPositionState = rememberCameraPositionState {
                 position = CameraPosition.fromLatLngZoom(currentLocation, 10f)
-            }
+            }*/
             var mapProperties by remember {
-                mutableStateOf(MapProperties(mapType = MapType.NORMAL, isMyLocationEnabled = true))
+                mutableStateOf(MapProperties(mapType = MapType.HYBRID, isMyLocationEnabled = true))
             }
             val activity = LocalContext.current as Activity
             var selectedCar: Car? = null
             var showSelectedCarInformation: Boolean by remember { mutableStateOf(false) }
             testLocationService.setOnLocationChangedListener(this)
 
+            val fusedLocationProviderClient =
+                remember { LocationServices.getFusedLocationProviderClient(activity) }
+            var lastKnownLocation by remember {
+                mutableStateOf<Location?>(null)
+            }
+            var deviceLatLng by remember {
+                mutableStateOf(LatLng(0.0, 0.0))
+            }
+            val cameraPositionState = rememberCameraPositionState {
+                position = CameraPosition.fromLatLngZoom(deviceLatLng, 18f)
+            }
+
+            val locationResult = fusedLocationProviderClient.lastLocation
+            locationResult.addOnCompleteListener(activity) { task ->
+                if (task.isSuccessful) {
+                    // Set the map's camera position to the current location of the device.
+                    lastKnownLocation = task.result
+                    deviceLatLng = LatLng(lastKnownLocation!!.latitude, lastKnownLocation!!.longitude)
+                    cameraPositionState.position = CameraPosition.fromLatLngZoom(deviceLatLng, 18f)
+                } else {
+                    Log.d(TAG, "Current location is null. Using defaults.")
+                    Log.e(TAG, "Exception: %s", task.exception)
+                }
+            }
 
             EcoPointsTheme {
                 activity.requestedOrientation =
@@ -177,7 +205,6 @@ class TripActivity : ComponentActivity(), OnLocationChangedListener {
                             }
                         })
                     }) {
-
                         if (ActivityCompat.checkSelfPermission(
                                 this,
                                 Manifest.permission.ACCESS_COARSE_LOCATION

@@ -2,17 +2,21 @@ package at.htl.ecopoints.activity
 
 import android.content.Context
 import android.content.Intent
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
@@ -80,6 +84,13 @@ private fun ShowReturnBtn(context: Context){
 
 @Composable
 private fun ShowStatistics(user: User){
+    val cardWidth = 175.dp
+    val cardHeight = 80.dp
+    val cardBorderWidth = 1.dp
+    val cardBorderColor = colorScheme.primary
+    val cardCornerShapeSize = 20.dp
+
+
     Row(modifier = Modifier.padding(start = 16.dp, end = 16.dp)) {
         Column {
             Text(
@@ -88,23 +99,52 @@ private fun ShowStatistics(user: User){
                 fontSize = TextUnit(28f, TextUnitType.Sp),
             )
 
-            Row {
-                Column {
-                    Text(text = "Eco Points")
+            Row(
+                modifier = Modifier.padding(top = 15.dp, bottom = 8.dp),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Card(
+                        border = BorderStroke(cardBorderWidth, cardBorderColor),
+                        shape = RoundedCornerShape(cardCornerShapeSize),
+                        modifier = Modifier
+                            .size(width = cardWidth, height = cardHeight)
+                    ) {
+                        Text(text = "Trips")
+                    }
                 }
 
                 Column {
-                    Text(text = user.ecoPoints.toString())
+                    Card(
+                        border = BorderStroke(cardBorderWidth, cardBorderColor),
+                        shape = RoundedCornerShape(cardCornerShapeSize),
+                        modifier = Modifier.size(width = cardWidth, height = cardHeight)
+                    ) {
+                        Text(text = "Trips")
+                    }
                 }
             }
 
             Row {
-                Column {
-                    Text(text = "Trips")
+                Column(modifier = Modifier.weight(1f)) {
+                    Card(
+                        border = BorderStroke(cardBorderWidth, cardBorderColor),
+                        shape = RoundedCornerShape(cardCornerShapeSize),
+                        modifier = Modifier
+                            .size(width = cardWidth, height = cardHeight)
+                    ) {
+                        Text(text = "Trips")
+                    }
                 }
 
                 Column {
-                    Text(text = user.ecoPoints.toString())
+                    Card(
+                        border = BorderStroke(cardBorderWidth, cardBorderColor),
+                        shape = RoundedCornerShape(cardCornerShapeSize),
+                        modifier = Modifier.size(width = cardWidth, height = cardHeight)
+                    ) {
+                        Text(text = "Trips")
+                    }
                 }
             }
         }

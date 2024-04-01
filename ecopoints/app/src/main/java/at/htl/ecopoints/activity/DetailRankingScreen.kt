@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.ui.Alignment
+import at.htl.ecopoints.model.CardContent
 
 @Composable
 fun ProfileScreen(user: User, context: Context) {
@@ -90,60 +91,101 @@ private fun ShowStatistics(user: User){
     val cardBorderColor = colorScheme.primary
     val cardCornerShapeSize = 20.dp
 
+    val ecoPointsCard: CardContent = CardContent(
+        value = user.ecoPoints.toString(),
+        description = "Eco-Points",
+        icon = R.drawable.ranking_category_ecopoints
+    )
+    val co2ConsumptionCard: CardContent = CardContent(
+        value = "14,2 kg",
+        description = "CO₂-Consumption",
+        icon = R.drawable.ranking_category_co2
+    )
+    val tripsCard: CardContent = CardContent(
+        value = "5",
+        description = "Trips",
+        icon = R.drawable.ranking_category_trips
+    )
+    val distanceCard: CardContent = CardContent(
+        value = "100 km",
+        description = "Distance",
+        icon = R.drawable.ranking_category_distance
+    )
+    val carsCard: CardContent = CardContent(
+        value = "2",
+        description = "Cars",
+        icon = R.drawable.ranking_category_cars
+    )
+    val avgRpmCard: CardContent = CardContent(
+        value = "2000",
+        description = "Avg. RPM",
+        icon = R.drawable.ranking_category_avg_rpm
+    )
+    val avgSpeedCard: CardContent = CardContent(
+        value = "41 km/h",
+        description = "Avg. Speed",
+        icon = R.drawable.ranking_category_avg_speed
+    )
+    val fuelTypeCard: CardContent = CardContent(
+        value = "Diesel",
+        description = "Fuel Type",
+        icon = R.drawable.ranking_category_fuel_type
+    )
 
-    Row(modifier = Modifier.padding(start = 16.dp, end = 16.dp)) {
+    val cardContent = listOf(
+        listOf(ecoPointsCard, co2ConsumptionCard),
+        listOf(tripsCard, distanceCard),
+        listOf(carsCard, fuelTypeCard),
+        listOf(avgSpeedCard, avgRpmCard)
+    )
+
+    Row(modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 15.dp)) {
         Column {
             Text(
                 text = "Statistics",
                 fontWeight = FontWeight.Bold,
                 fontSize = TextUnit(28f, TextUnitType.Sp),
+                modifier = Modifier.align(Alignment.CenterHorizontally).padding(bottom = 10.dp)
             )
 
-            Row(
-                modifier = Modifier.padding(top = 15.dp, bottom = 8.dp),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Column(modifier = Modifier.weight(1f)) {
-                    Card(
-                        border = BorderStroke(cardBorderWidth, cardBorderColor),
-                        shape = RoundedCornerShape(cardCornerShapeSize),
-                        modifier = Modifier
-                            .size(width = cardWidth, height = cardHeight)
-                    ) {
-                        Text(text = "Trips")
-                    }
-                }
+            for(row in cardContent){
+                Row(
+                    modifier = Modifier.padding(bottom = 8.dp),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    for(col in row){
+                        Column(modifier = Modifier.weight(1f)) {
+                            Card(
+                                border = BorderStroke(cardBorderWidth, cardBorderColor),
+                                shape = RoundedCornerShape(cardCornerShapeSize),
+                                modifier = Modifier
+                                    .size(width = cardWidth, height = cardHeight)
+                            ) {
+                                Row {
+                                    Column(modifier = Modifier.padding(10.dp)) {
+                                        Image(
+                                            painter = painterResource(id = col.icon),
+                                            contentDescription = col.description,
+                                            modifier = Modifier.size(30.dp)
+                                        )
+                                    }
 
-                Column {
-                    Card(
-                        border = BorderStroke(cardBorderWidth, cardBorderColor),
-                        shape = RoundedCornerShape(cardCornerShapeSize),
-                        modifier = Modifier.size(width = cardWidth, height = cardHeight)
-                    ) {
-                        Text(text = "Trips")
-                    }
-                }
-            }
+                                    Column(modifier = Modifier.padding(top = 10.dp)) {
+                                        Row {
+                                            Text(
+                                                text = col.value,
+                                                fontWeight = FontWeight.Bold,
+                                                fontSize = TextUnit(20f, TextUnitType.Sp)
+                                            )
+                                        }
 
-            Row {
-                Column(modifier = Modifier.weight(1f)) {
-                    Card(
-                        border = BorderStroke(cardBorderWidth, cardBorderColor),
-                        shape = RoundedCornerShape(cardCornerShapeSize),
-                        modifier = Modifier
-                            .size(width = cardWidth, height = cardHeight)
-                    ) {
-                        Text(text = "Trips")
-                    }
-                }
-
-                Column {
-                    Card(
-                        border = BorderStroke(cardBorderWidth, cardBorderColor),
-                        shape = RoundedCornerShape(cardCornerShapeSize),
-                        modifier = Modifier.size(width = cardWidth, height = cardHeight)
-                    ) {
-                        Text(text = "Trips")
+                                        Row {
+                                            Text(text = col.description)
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }

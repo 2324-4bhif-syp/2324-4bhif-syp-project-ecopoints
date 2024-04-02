@@ -10,8 +10,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import at.htl.ecopoints.model.Store
-import at.htl.ecopoints.model.reading.BtConnectionHandler
-import at.htl.ecopoints.model.reading.ObdReader
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -24,12 +22,6 @@ class MainView {
 
     @Inject
     lateinit var store: Store
-
-    @Inject
-    lateinit var obdReader: ObdReader
-
-    @Inject
-    lateinit var btConnectionHandler: BtConnectionHandler
 
     @Inject
     constructor() {

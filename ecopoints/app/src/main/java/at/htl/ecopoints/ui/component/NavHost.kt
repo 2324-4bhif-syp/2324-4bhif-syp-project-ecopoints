@@ -1,5 +1,6 @@
 import android.content.Context
 import android.content.Intent
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,14 +16,24 @@ import androidx.compose.material.icons.filled.Place
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import at.htl.ecopoints.MainActivity
+import at.htl.ecopoints.ui.layout.MainView
+import at.htl.ecopoints.ui.layout.TripView
+import javax.inject.Inject
 
+@Inject
+lateinit var mainView: MainView
+
+@Inject
+lateinit var tripView: TripView
 
 @Composable
 fun BottomNavBar(
     currentScreen: String,
     onScreenSelected: (String) -> Unit,
-    context: Context
+    activity: ComponentActivity
 ) {
+
+
     val screens = listOf("Home", "Trip", "Ranking", "Profile")
 
 
@@ -53,14 +64,13 @@ fun BottomNavBar(
                     onClick = {
                         if (currentScreen != screen) {
                             onScreenSelected(screen)
-                            val intent = when (screen) {
-                                "Home" -> Intent(context, MainActivity::class.java)
-                                "Trip" -> Intent(context, TripActivity::class.java)
-                                "Ranking" -> Intent(context, RankingActivity::class.java)
-                                "Profile" -> Intent(context, ProfileActivity::class.java)
-                                else -> Intent(context, MainActivity::class.java)
+                            when (screen) {
+                                "Home" -> mainView.compose(activity)
+                                "Trip" -> tripView.compose(activity)
+//                                "Ranking" -> Intent(context, RankingActivity::class.java)
+//                                "Profile" -> Intent(context, ProfileActivity::class.java)
+                                else -> mainView.compose(activity)
                             }
-                            context.startActivity(intent)
                         }
                     }
                 )

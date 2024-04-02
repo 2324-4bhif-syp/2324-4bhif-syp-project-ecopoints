@@ -1,5 +1,6 @@
 package at.htl.ecopoints.ui.layout
 
+import BottomNavBar
 import android.annotation.SuppressLint
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -36,6 +37,7 @@ class MainView {
                     modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
                     Text("Hello World!")
+//                    BottomNavBar(currentScreen = this@MainView, onScreenSelected = {}, activity = this)
                 }
             }
         }

@@ -13,7 +13,7 @@ import androidx.core.app.ActivityCompat;
 import javax.inject.Inject;
 
 import at.htl.ecopoints.model.Store;
-import at.htl.ecopoints.ui.layout.MainView;
+import at.htl.ecopoints.ui.layout.TripView;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
@@ -21,7 +21,7 @@ public class MainActivity extends ComponentActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
 
     @Inject
-    MainView mainView;
+    TripView tripView;
 
     @Inject
     Store store;
@@ -46,6 +46,6 @@ public class MainActivity extends ComponentActivity {
 
         super.onCreate(savedInstanceState);
 
-        mainView.compose(this);
+        tripView.compose(this);
     }
 }

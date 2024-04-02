@@ -280,8 +280,12 @@ image:sprint7/ranking.jpg[500,200]
 === Was wurde gemacht?
 
 * Neue Projektarchitektur
+** TripActivity
+* Ranking
 
 === Demo
+
+
 
 
 

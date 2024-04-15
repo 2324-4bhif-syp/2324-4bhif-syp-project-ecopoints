@@ -53,6 +53,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import at.htl.ecopoints.activity.LastRidesActivity
 import at.htl.ecopoints.activity.TripActivity
 import at.htl.ecopoints.db.DBHelper
 import at.htl.ecopoints.model.CarData
@@ -89,6 +90,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+
 
                     ShowPrices()
 
@@ -197,6 +199,7 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     fun LastTrips() {
+        var showDetailedLastRidesPopup = remember { mutableStateOf(false) }
         var showDialog by remember { mutableStateOf(false) }
         var selectedTripDate by remember { mutableStateOf<Date?>(null) }
         val gradientColors = listOf(
@@ -205,13 +208,7 @@ class MainActivity : ComponentActivity() {
             Color(0xFF9bd99e)
         )
 
-        val dbHelper = DBHelper(this, null)
-        dbHelper.onUpgrade(dbHelper.writableDatabase, 1, 2)
-
-        readTripData2FromCsvAndAddToDB("tripData.csv");
-        readCarDataFromCsvAndAddToDB("carData.csv");
-
-        dbHelper.close()
+        addFakeDataToDB()
 
         val trips = getTripDataFromDB()
 
@@ -276,7 +273,7 @@ class MainActivity : ComponentActivity() {
             ) {
                 Button(
                     onClick = {
-                        // Navigieren zur "View All" Activity
+                        showDetailedLastRidesPopup.value = true
                     },
                     modifier = Modifier
                         .background(
@@ -319,6 +316,10 @@ class MainActivity : ComponentActivity() {
                 }
             }
 
+            if (showDetailedLastRidesPopup.value) {
+                val intent = Intent(this@MainActivity, LastRidesActivity::class.java)
+                startActivity(intent)
+            }
 
             if (showDialog) {
                 AlertDialog(
@@ -415,6 +416,18 @@ class MainActivity : ComponentActivity() {
         dbHelper.close()
         return trips
     }
+
+
+    private fun addFakeDataToDB(){
+        val dbHelper = DBHelper(this, null)
+        dbHelper.onUpgrade(dbHelper.writableDatabase, 1, 2)
+
+        readTripData2FromCsvAndAddToDB("tripData.csv");
+        readCarDataFromCsvAndAddToDB("carData.csv");
+
+        dbHelper.close()
+    }
+
 
     private fun readCarDataFromCsvAndAddToDB(fileName: String) {
         val dbHelper = DBHelper(this, null)

@@ -1,5 +1,6 @@
 package at.htl.ecopoints.ui.component
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import androidx.compose.foundation.BorderStroke
@@ -12,7 +13,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -40,8 +40,9 @@ import androidx.compose.ui.Alignment
 import at.htl.ecopoints.model.DetailRankingCardContent
 import at.htl.ecopoints.ui.layout.RankingView
 
+@SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
-fun ProfileScreen(user: User, context: Context) {
+fun ProfileScreen(user: User, context: Context, cardContent: List<List<DetailRankingCardContent>>) {
     val scrollState = rememberScrollState()
 
     Column(
@@ -60,7 +61,7 @@ fun ProfileScreen(user: User, context: Context) {
 
                     ShowProfileHeader(user)
 
-                    ShowStatistics(user)
+                    ShowStatistics(user, cardContent)
                 }
             }
         }
@@ -85,60 +86,12 @@ private fun ShowReturnBtn(context: Context){
 }
 
 @Composable
-private fun ShowStatistics(user: User){
+private fun ShowStatistics(user: User, cardContent: List<List<DetailRankingCardContent>>){
     val cardWidth = 175.dp
     val cardHeight = 80.dp
     val cardBorderWidth = 1.dp
     val cardBorderColor = colorScheme.primary
     val cardCornerShapeSize = 20.dp
-
-    val ecoPointsCard: DetailRankingCardContent = DetailRankingCardContent(
-        value = user.ecoPoints.toString(),
-        description = "Eco-Points",
-        icon = R.drawable.ranking_category_ecopoints
-    )
-    val co2ConsumptionCard: CardContent = CardContent(
-        value = "14,2 kg",
-        description = "CO₂-Consumption",
-        icon = R.drawable.ranking_category_co2
-    )
-    val tripsCard: CardContent = CardContent(
-        value = "5",
-        description = "Trips",
-        icon = R.drawable.ranking_category_trips
-    )
-    val distanceCard: CardContent = CardContent(
-        value = "100 km",
-        description = "Distance",
-        icon = R.drawable.ranking_category_distance
-    )
-    val carsCard: CardContent = CardContent(
-        value = "2",
-        description = "Cars",
-        icon = R.drawable.ranking_category_cars
-    )
-    val avgRpmCard: CardContent = CardContent(
-        value = "2000",
-        description = "Avg. RPM",
-        icon = R.drawable.ranking_category_avg_rpm
-    )
-    val avgSpeedCard: CardContent = CardContent(
-        value = "41 km/h",
-        description = "Avg. Speed",
-        icon = R.drawable.ranking_category_avg_speed
-    )
-    val fuelTypeCard: CardContent = CardContent(
-        value = "Diesel",
-        description = "Fuel Type",
-        icon = R.drawable.ranking_category_fuel_type
-    )
-
-    val cardContent = listOf(
-        listOf(ecoPointsCard, co2ConsumptionCard),
-        listOf(tripsCard, distanceCard),
-        listOf(carsCard, fuelTypeCard),
-        listOf(avgSpeedCard, avgRpmCard)
-    )
 
     Row(modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 15.dp)) {
         Column {

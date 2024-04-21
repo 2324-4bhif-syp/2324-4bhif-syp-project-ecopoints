@@ -8,6 +8,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -36,6 +37,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rxjava3.subscribeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,6 +46,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
+import at.htl.ecopoints.MainActivity
 import at.htl.ecopoints.model.BtConnectionInfo
 import at.htl.ecopoints.model.CarData
 import at.htl.ecopoints.model.Map
@@ -50,6 +54,7 @@ import at.htl.ecopoints.model.Store
 import at.htl.ecopoints.model.reading.BtConnectionHandler
 import at.htl.ecopoints.model.reading.BtDevice
 import at.htl.ecopoints.model.reading.ObdReader
+import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.ui.component.ShowMap
 import at.htl.ecopoints.ui.component.Speedometer
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
@@ -104,8 +109,22 @@ class TripView {
                             }
                         }
                     }, bottomBar = {
-                        Column {
+                        Column(modifier = Modifier.padding(bottom = 50.dp)) {
                             ConnectionInfo(store, obdReader, btConnectionHandler)
+                        }
+
+                        Column {
+                            val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Home") }
+                            Box(
+                                modifier = Modifier.fillMaxSize()
+                            ){
+
+                                BottomNavBar(
+                                    currentScreen = currentScreen,
+                                    onScreenSelected = { newScreen -> setCurrentScreen(newScreen) },
+                                    context = activity
+                                )
+                            }
                         }
                     }) {
 
@@ -330,7 +349,9 @@ class TripView {
                             store.next { it -> it.map.showMap = false };
                             Log.d("MapCloseButton", "Clicked")
                         },
-                        modifier = Modifier.size(60.dp).padding(8.dp),
+                        modifier = Modifier
+                            .size(60.dp)
+                            .padding(8.dp),
                         shape = CircleShape,
                         border = BorderStroke(3.dp, Color.Black),
                         contentPadding = PaddingValues(0.dp),

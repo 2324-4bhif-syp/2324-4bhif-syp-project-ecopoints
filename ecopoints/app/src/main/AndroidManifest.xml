@@ -33,6 +33,14 @@
             android:name=".RankingActivity"
             android:exported="true"
             android:theme="@style/Theme.EcoPoints" />
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="true"
+            android:theme="@style/Theme.EcoPoints" />
+        <activity
+            android:name=".HomeActivity"
+            android:exported="true"
+            android:theme="@style/Theme.EcoPoints" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

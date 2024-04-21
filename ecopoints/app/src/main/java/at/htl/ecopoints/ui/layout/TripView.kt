@@ -114,7 +114,7 @@ class TripView {
                         }
 
                         Column {
-                            val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Home") }
+                            val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Trip") }
                             Box(
                                 modifier = Modifier.fillMaxSize()
                             ){

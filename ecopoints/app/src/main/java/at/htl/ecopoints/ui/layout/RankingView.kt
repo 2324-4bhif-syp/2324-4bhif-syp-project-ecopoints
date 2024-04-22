@@ -3,10 +3,7 @@ package at.htl.ecopoints.ui.layout
 import android.annotation.SuppressLint
 import android.content.Context
 import androidx.activity.ComponentActivity
-import android.os.Bundle
-import android.util.Log
 import androidx.activity.compose.setContent
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.combinedClickable
@@ -14,48 +11,30 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.IconButton
-import androidx.compose.material.ListItem
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.CheckCircle
-import androidx.compose.material.icons.rounded.DateRange
-import androidx.compose.material.icons.rounded.Person
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -64,7 +43,6 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.rxjava3.subscribeAsState
 import at.htl.ecopoints.model.Store
 import at.htl.ecopoints.navigation.BottomNavBar
@@ -72,10 +50,7 @@ import at.htl.ecopoints.ui.theme.EcoPointsTheme
 import javax.inject.Inject
 import javax.inject.Singleton
 import at.htl.ecopoints.R
-import at.htl.ecopoints.model.BtConnectionInfo
-import at.htl.ecopoints.model.FuelType
 import at.htl.ecopoints.model.RankingInfo
-import at.htl.ecopoints.model.User
 import at.htl.ecopoints.ui.component.ProfileScreen
 
 @Singleton
@@ -115,13 +90,7 @@ class RankingView {
 
     @Composable
     fun DisplayRanking(context: Context){
-        var showDetailedRankPopup = remember { mutableStateOf(false) }
-        var selectedUser = remember { mutableStateOf<User?>(null) }
-
-        // JUST TESTING-DATA
-        val users: Array<User> = arrayOf()
-
-        val ranks = HashMap<User, Painter>();
+        val state = store.subject.map { it.rankingInfo }.subscribeAsState(RankingInfo())
 
         Column(
             modifier = Modifier
@@ -130,11 +99,13 @@ class RankingView {
                 .verticalScroll(rememberScrollState()),
 
             ){
-            users.forEach { user ->
+            state.value.users.forEach { user ->
                 Button(
                     onClick = {
-                        showDetailedRankPopup.value = true
-                        selectedUser.value = user
+                        store.next {
+                            it.rankingInfo.showDetailRankingView = true
+                            it.rankingInfo.selectedUser = user
+                        }
                     },
                     colors = ButtonDefaults.buttonColors(
                         Color.Transparent
@@ -149,18 +120,19 @@ class RankingView {
                             .padding(end = 15.dp)
                             .width(40.dp),
                     ) {
-                        ranks.get(user)?.let {
+                        val rank = state.value.users.indexOf(user) + 1
+
+                        if (rank <= 3) {
                             Image(
-                                painter = it,
+                                painter = painterResource(id = state.value.ranks.get(rank - 1)),
                                 contentDescription = "Rank",
                                 modifier = Modifier
                                     .width(35.dp)
                                     .height(35.dp)
                             )
-                        }
-                        if (ranks.get(user) == null) {
+                        } else {
                             Text(
-                                text = (users.indexOf(user) + 1).toString(),
+                                text = rank.toString(),
                                 fontSize = TextUnit(20f, TextUnitType.Sp),
                                 modifier = Modifier
                                     .padding(8.dp),
@@ -196,30 +168,26 @@ class RankingView {
             }
         }
 
-        if (showDetailedRankPopup.value) {
-            ProfileScreen(user = selectedUser.value!!, context = context, cardContent = listOf())
+        if (state.value.showDetailRankingView) {
+            ProfileScreen(user = state.value.selectedUser, context = context, cardContent = listOf(), store = store)
         }
     }
 
+    @SuppressLint("CheckResult")
     @OptIn(ExperimentalFoundationApi::class)
     @Composable
     fun ShowFuelTypeDropdown() {
-        var expanded = remember { mutableStateOf(false) }
-
-        var diesel: FuelType = FuelType("Diesel")
-        var petrol: FuelType = FuelType("Petrol")
-        val fuelTypes = listOf<FuelType>(diesel, petrol)
-
-        val selectedItems = remember {
-            mutableStateListOf<FuelType>(diesel, petrol)
-        }
+        val state = store.subject.map { it.rankingInfo }.subscribeAsState(RankingInfo())
 
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 5.dp)
         ) {
-            IconButton(onClick = { expanded.value = true }) {
+            IconButton(onClick = {
+                store.next {
+                    it.rankingInfo.showFuelTypeDropdown = true
+                } }) {
                 Icon(
                     painterResource(id = R.drawable.ranking_category_filter),
                     contentDescription = "Localized description",
@@ -228,26 +196,40 @@ class RankingView {
                         .height(25.dp))
             }
 
-            if(expanded.value) {
+            if(state.value.showFuelTypeDropdown) {
                 DropdownMenu(
-                    expanded = expanded.value,
-                    onDismissRequest = { expanded.value = false },
+                    expanded = state.value.showFuelTypeDropdown,
+                    onDismissRequest = {
+                        store.next{
+                            it.rankingInfo.showFuelTypeDropdown = false
+                        }
+                    },
                 ) {
-                    fuelTypes.forEach { fuelType ->
-                        val isSelected = selectedItems.contains(fuelType)
-
+                    state.value.fuelTypes.forEach { fuelType ->
                         androidx.compose.material3.ListItem(
                             modifier = Modifier.combinedClickable(
                                 onClick = {
-                                    if (isSelected) {
-                                        selectedItems.remove(fuelType)
+                                    if (fuelType.isSelected) {
+                                        store.next {
+                                            it.rankingInfo.fuelTypes.forEach { ft ->
+                                                if (ft.name.equals(fuelType.name)) {
+                                                    ft.isSelected = false
+                                                }
+                                            }
+                                        }
                                     } else {
-                                        selectedItems.add(fuelType)
+                                        store.next {
+                                            it.rankingInfo.fuelTypes.forEach { ft ->
+                                                if (ft.name.equals(fuelType.name)) {
+                                                    ft.isSelected = true
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                             ),
                             leadingContent = {
-                                if (isSelected) {
+                                if (fuelType.isSelected) {
                                     Icon(
                                         imageVector = Icons.Rounded.CheckCircle,
                                         contentDescription = null,
@@ -267,8 +249,6 @@ class RankingView {
         }
     }
 
-
-    @SuppressLint("CheckResult")
     @Composable
     fun ShowOptionsForRankType(){
         val state = store.subject.map { it.rankingInfo }.subscribeAsState(RankingInfo())
@@ -300,12 +280,9 @@ class RankingView {
                     ){
                         var size:Dp = 50.dp;
 
-                        store.subject.subscribe{
-                            if(it.rankingInfo.selectedRankTypeOption.equals(option.key)) {
-                                size = 70.dp;
-                            }
+                        if(state.value.selectedRankTypeOption.equals(option.key)) {
+                            size = 70.dp;
                         }
-
 
                         Image(
                             painter = painterResource(id = option.value),
@@ -327,7 +304,7 @@ class RankingView {
                 Text(
                     text = state.value.selectedRankTypeOption,
                     fontSize = TextUnit(25f, TextUnitType.Sp),
-                    fontWeight = androidx.compose.ui.text.font.FontWeight.Bold)
+                    fontWeight = FontWeight.Bold)
             }
 
             Divider(thickness = 1.dp, color = Color.LightGray)

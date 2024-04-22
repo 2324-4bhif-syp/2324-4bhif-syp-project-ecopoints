@@ -3,6 +3,7 @@ package at.htl.ecopoints.ui.component
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -37,12 +38,15 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.ui.Alignment
+import at.htl.ecopoints.RankingActivity
 import at.htl.ecopoints.model.DetailRankingCardContent
+import at.htl.ecopoints.model.Store
 import at.htl.ecopoints.ui.layout.RankingView
+import javax.inject.Inject
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
-fun ProfileScreen(user: User, context: Context, cardContent: List<List<DetailRankingCardContent>>) {
+fun ProfileScreen(user: User, context: Context, cardContent: List<List<DetailRankingCardContent>>, store: Store) {
     val scrollState = rememberScrollState()
 
     Column(
@@ -57,7 +61,7 @@ fun ProfileScreen(user: User, context: Context, cardContent: List<List<DetailRan
                         .fillMaxSize()
                         .verticalScroll(scrollState),
                 ) {
-                    ShowReturnBtn(context)
+                    ShowReturnBtn(context, store)
 
                     ShowProfileHeader(user)
 
@@ -69,10 +73,15 @@ fun ProfileScreen(user: User, context: Context, cardContent: List<List<DetailRan
 }
 
 @Composable
-private fun ShowReturnBtn(context: Context){
+private fun ShowReturnBtn(context: Context, store: Store){
     IconButton(onClick = {
-        val intent = Intent(context, RankingView::class.java)
+        val intent = Intent(context, RankingActivity::class.java)
         context.startActivity(intent)
+
+        store.next{
+            it.rankingInfo.selectedUser = User()
+            it.rankingInfo.showDetailRankingView = false
+        }
     }) {
         androidx.compose.material3.Icon(
             modifier = Modifier
@@ -102,7 +111,7 @@ private fun ShowStatistics(user: User, cardContent: List<List<DetailRankingCardC
                 modifier = Modifier.align(Alignment.CenterHorizontally).padding(bottom = 10.dp)
             )
 
-            for(row in cardContent){
+            for(row in user.detailRankingCardContentList){
                 Row(
                     modifier = Modifier.padding(bottom = 8.dp),
                     horizontalArrangement = Arrangement.Center

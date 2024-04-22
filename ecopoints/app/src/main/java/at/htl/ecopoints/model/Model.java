@@ -6,6 +6,7 @@ public class Model {
     public CarData carData = new CarData();
     public Trip trip = new Trip();
     public Map map = new Map();
+    public RankingInfo rankingInfo = new RankingInfo();
 
     public Model() {
     }

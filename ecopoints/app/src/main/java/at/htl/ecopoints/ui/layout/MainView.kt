@@ -1,6 +1,5 @@
 package at.htl.ecopoints.ui.layout
 
-import BottomNavBar
 import android.annotation.SuppressLint
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent

@@ -10,11 +10,11 @@ ifndef::imagesdir[:imagesdir: images]
 |===
 |anwesend | Abwesend
 
+|
 |Linus Nestler
-|
 
-|Laurent Mali
 |
+|Laurent Mali
 
 |Armin Salkovic
 |
@@ -23,8 +23,8 @@ ifndef::imagesdir[:imagesdir: images]
 |Abdullah Al-Desoky
 |
 
-|Oliver Daxinger
 |
+|Oliver Daxinger
 
 |===
 
@@ -35,14 +35,16 @@ ifndef::imagesdir[:imagesdir: images]
 |Htl-Leonding 4bhif
 
 |von-bis
-| 6. Einheit
+| 5. Einheit
 |Dauer
-| 20 Minuten
+| 30 min
 |===
 
 == Besprochene Themen
 
-* Projekt umbauen auf SSOT (Single Source of Truth)
+* Laufende Daten in der Db speichern vom OBD (Zufallsdaten zum Ausprobieren)
+* Single Source of Truth vervollständigen
+* Idee: Social Media Plattform für Auto Enthusiasten
 
 == Vereinbarungen und Entscheidungen
 
@@ -53,28 +55,30 @@ ifndef::imagesdir[:imagesdir: images]
 
 | Linus
 a|
-Trip migrieren
-| 12.03.2024
+Daten auslesen und laufend in der DB speichern
+| 07.05.2024
 
 | Oliver
 a|
 /
-| 12.03.2024
+| 07.05.2024
 
 | Laurent
 a|
-Profile migrieren
-| 12.03.2024
+/
+| 07.05.2024
 
 | Armin
 a|
-Ranking migrieren
-| 12.03.2024
+* Profile Migrieren
+* Social Media in die App integrieren (Anfangen)
+| 07.05.2024
 
 | Abdullah
 a|
-Home & DB migrieren
-| 12.03.2024
+* DB korrigieren und vervollständigen
+* Home Page migrieren und fertigstellen
+| 07.05.2024
 
 |
 

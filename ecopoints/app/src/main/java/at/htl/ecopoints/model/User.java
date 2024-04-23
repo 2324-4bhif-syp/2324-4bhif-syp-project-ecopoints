@@ -11,7 +11,7 @@ public class User {
     private String password;
     private Double ecoPoints;
 
-    private List<List<DetailRankingCardContent>> detailRankingCardContentList;
+    private List<List<CardContent>> detailRankingCardContentList;
 
     public User() {
     }
@@ -28,26 +28,26 @@ public class User {
             {
                 add(new LinkedList<>(){
                     {
-                        add(new DetailRankingCardContent(ecoPoints.toString(), "Eco-Points", R.drawable.ranking_category_ecopoints));
-                        add(new DetailRankingCardContent("14,2 kg", "CO₂-Consumption", R.drawable.ranking_category_co2));
+                        add(new CardContent(ecoPoints.toString(), "Eco-Points", R.drawable.ranking_category_ecopoints));
+                        add(new CardContent("14,2 kg", "CO₂-Consumption", R.drawable.ranking_category_co2));
                     }
                 });
                 add(new LinkedList<>(){
                     {
-                        add(new DetailRankingCardContent("5", "Trips", R.drawable.ranking_category_trips));
-                        add(new DetailRankingCardContent("100 km", "Distance", R.drawable.ranking_category_distance));
+                        add(new CardContent("5", "Trips", R.drawable.ranking_category_trips));
+                        add(new CardContent("100 km", "Distance", R.drawable.ranking_category_distance));
                     }
                 });
                 add(new LinkedList<>(){
                     {
-                        add(new DetailRankingCardContent("2", "Cars", R.drawable.ranking_category_cars));
-                        add(new DetailRankingCardContent("Diesel", "Fuel Type", R.drawable.ranking_category_fuel_type));
+                        add(new CardContent("2", "Cars", R.drawable.ranking_category_cars));
+                        add(new CardContent("Diesel", "Fuel Type", R.drawable.ranking_category_fuel_type));
                     }
                 });
                 add(new LinkedList<>(){
                     {
-                        add(new DetailRankingCardContent("41 km/h", "Avg. Speed", R.drawable.ranking_category_avg_speed));
-                        add(new DetailRankingCardContent("2000", "Avg. RPM", R.drawable.ranking_category_avg_rpm));
+                        add(new CardContent("41 km/h", "Avg. Speed", R.drawable.ranking_category_avg_speed));
+                        add(new CardContent("2000", "Avg. RPM", R.drawable.ranking_category_avg_rpm));
                     }
                 });
             }
@@ -86,7 +86,7 @@ public class User {
         this.ecoPoints = ecoPoints;
     }
 
-    public List<List<DetailRankingCardContent>> getDetailRankingCardContentList() {
+    public List<List<CardContent>> getDetailRankingCardContentList() {
         return detailRankingCardContentList;
     }
 }

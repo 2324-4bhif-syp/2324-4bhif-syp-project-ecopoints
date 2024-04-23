@@ -3,7 +3,6 @@ package at.htl.ecopoints.ui.component
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -39,14 +38,12 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.ui.Alignment
 import at.htl.ecopoints.RankingActivity
-import at.htl.ecopoints.model.DetailRankingCardContent
+import at.htl.ecopoints.model.CardContent
 import at.htl.ecopoints.model.Store
-import at.htl.ecopoints.ui.layout.RankingView
-import javax.inject.Inject
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
-fun ProfileScreen(user: User, context: Context, cardContent: List<List<DetailRankingCardContent>>, store: Store) {
+fun ProfileScreen(user: User, context: Context, cardContent: List<List<CardContent>>, store: Store) {
     val scrollState = rememberScrollState()
 
     Column(
@@ -95,7 +92,7 @@ private fun ShowReturnBtn(context: Context, store: Store){
 }
 
 @Composable
-private fun ShowStatistics(user: User, cardContent: List<List<DetailRankingCardContent>>){
+private fun ShowStatistics(user: User, cardContent: List<List<CardContent>>){
     val cardWidth = 175.dp
     val cardHeight = 80.dp
     val cardBorderWidth = 1.dp

@@ -4,29 +4,30 @@ import java.sql.Timestamp;
 import java.util.UUID;
 
 public class CarData {
-    private UUID TripId;
     private Long id;
-    private double rpm;
+    private UUID TripId;
+    private double longitude;
+    private double latitude;
+    private double currentEngineRPM;
     private double speed;
-    private double throttlePos;
-    private String lat;
-    private String lng;
-    private String fuelConsumption;
-    private Timestamp timestamp;
+    private double throttlePosition;
+    private String engineRunTime;
+    private Timestamp timeStamp;
+
 
     public CarData() {
     }
 
-    public CarData(UUID tripId, Long id, double rpm, double speed, double throttlePos, String lat, String lng, String fuelConsumption, Timestamp timestamp) {
+    public CarData(Long id, UUID tripId, double longitude, double latitude, double currentEngineRPM, double speed, double throttlePosition, String engineRunTime,  Timestamp timeStamp) {
         TripId = tripId;
         this.id = id;
-        this.rpm = rpm;
+        this.currentEngineRPM = currentEngineRPM;
         this.speed = speed;
-        this.throttlePos = throttlePos;
-        this.lat = lat;
-        this.lng = lng;
-        this.fuelConsumption = fuelConsumption;
-        this.timestamp = timestamp;
+        this.throttlePosition = throttlePosition;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.engineRunTime = engineRunTime;
+        this.timeStamp = timeStamp;
     }
 
     public UUID getTripId() {
@@ -45,12 +46,12 @@ public class CarData {
         this.id = id;
     }
 
-    public double getRpm() {
-        return rpm;
+    public double getCurrentEngineRPM() {
+        return currentEngineRPM;
     }
 
-    public void setRpm(double rpm) {
-        this.rpm = rpm;
+    public void setCurrentEngineRPM(double currentEngineRPM) {
+        this.currentEngineRPM = currentEngineRPM;
     }
 
     public double getSpeed() {
@@ -61,44 +62,44 @@ public class CarData {
         this.speed = speed;
     }
 
-    public double getThrottlePos() {
-        return throttlePos;
+    public double getThrottlePosition() {
+        return throttlePosition;
     }
 
-    public void setThrottlePos(double throttlePos) {
-        this.throttlePos = throttlePos;
+    public void setThrottlePosition(double throttlePosition) {
+        this.throttlePosition = throttlePosition;
     }
 
-    public String getLat() {
-        return lat;
+    public double getLatitude() {
+        return latitude;
     }
 
-    public void setLat(String lat) {
-        this.lat = lat;
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
     }
 
-    public String getLng() {
-        return lng;
+    public double getLongitude() {
+        return longitude;
     }
 
-    public void setLng(String lng) {
-        this.lng = lng;
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
-    public String getFuelConsumption() {
-        return fuelConsumption;
+    public String getEngineRunTime() {
+        return engineRunTime;
     }
 
-    public void setFuelConsumption(String fuelConsumption) {
-        this.fuelConsumption = fuelConsumption;
+    public void setEngineRunTime(String engineRunTime) {
+        this.engineRunTime = engineRunTime;
     }
 
-    public Timestamp getTimestamp() {
-        return timestamp;
+    public Timestamp getTimeStamp() {
+        return timeStamp;
     }
 
-    public void setTimestamp(Timestamp timestamp) {
-        this.timestamp = timestamp;
+    public void setTimeStamp(Timestamp timeStamp) {
+        this.timeStamp = timeStamp;
     }
 }
 

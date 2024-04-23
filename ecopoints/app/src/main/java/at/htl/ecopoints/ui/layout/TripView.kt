@@ -46,7 +46,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
-import at.htl.ecopoints.MainActivity
 import at.htl.ecopoints.model.BtConnectionInfo
 import at.htl.ecopoints.model.CarData
 import at.htl.ecopoints.model.Map
@@ -150,9 +149,9 @@ class TripView {
             )
             Row() {
                 Column {
-                    Text(text = "Rpm: ${state.value.rpm}")
-                    Text(text = "Latitude: ${state.value.lat}")
-                    Text(text = "Longitude: ${state.value.lng}")
+                    Text(text = "Rpm: ${state.value.currentEngineRPM}")
+                    Text(text = "Latitude: ${state.value.latitude}")
+                    Text(text = "Longitude: ${state.value.longitude}")
                 }
             }
         }

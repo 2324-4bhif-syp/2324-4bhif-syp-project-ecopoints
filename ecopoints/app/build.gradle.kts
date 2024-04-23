@@ -110,6 +110,12 @@ dependencies {
 
     // OBD
     implementation ("com.github.eltonvs:kotlin-obd-api:1.3.0")
+
+    implementation ("com.google.code.gson:gson:2.10.1")
+
+    // https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
+    implementation ("com.squareup.okhttp3:okhttp:5.0.0-alpha.14")
+
 }
 
 // Allow references to generated code

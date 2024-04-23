@@ -5,24 +5,29 @@ import java.util.UUID;
 
 public class Trip {
     private UUID id;
+
+    private Long carId;
+    private Long userId;
+    private double distance;
+    private double avgSpeed;
+    private Double avgEngineRotation;
     private Date start;
     private Date end;
-    private double distance;
-    private double avgFuelConsumption;
-    private double avgSpeed;
-    private double avgRpm;
+    private double rewardedEcoPoints;
 
     public Trip() {
     }
 
-    public Trip(UUID id, Date start, Date end, double distance, double avgFuelConsumption, double avgSpeed, double avgRpm) {
+    public Trip(UUID id, Long carId, Long userId, double distance, double avgSpeed, Double avgEngineRotation, Date start, Date end, double rewardedEcoPoints) {
         this.id = id;
+        this.carId = carId;
+        this.userId = userId;
+        this.distance = distance;
+        this.avgSpeed = avgSpeed;
+        this.avgEngineRotation = avgEngineRotation;
         this.start = start;
         this.end = end;
-        this.distance = distance;
-        this.avgFuelConsumption = avgFuelConsumption;
-        this.avgSpeed = avgSpeed;
-        this.avgRpm = avgRpm;
+        this.rewardedEcoPoints = rewardedEcoPoints;
     }
 
     public UUID getId() {
@@ -57,13 +62,6 @@ public class Trip {
         this.distance = distance;
     }
 
-    public double getAvgFuelConsumption() {
-        return avgFuelConsumption;
-    }
-
-    public void setAvgFuelConsumption(double avgFuelConsumption) {
-        this.avgFuelConsumption = avgFuelConsumption;
-    }
 
     public double getAvgSpeed() {
         return avgSpeed;
@@ -73,11 +71,35 @@ public class Trip {
         this.avgSpeed = avgSpeed;
     }
 
-    public double getAvgRpm() {
-        return avgRpm;
+    public Long getCarId() {
+        return carId;
     }
 
-    public void setAvgRpm(double avgRpm) {
-        this.avgRpm = avgRpm;
+    public void setCarId(Long carId) {
+        this.carId = carId;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Double getAvgEngineRotation() {
+        return avgEngineRotation;
+    }
+
+    public void setAvgEngineRotation(Double avgEngineRotation) {
+        this.avgEngineRotation = avgEngineRotation;
+    }
+
+    public double getRewardedEcoPoints() {
+        return rewardedEcoPoints;
+    }
+
+    public void setRewardedEcoPoints(double rewardedEcoPoints) {
+        this.rewardedEcoPoints = rewardedEcoPoints;
     }
 }

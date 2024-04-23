@@ -7,4 +7,5 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_activity_profile">ProfileActivity</string>
+    <string name="title_activity_last_rides">LastRides</string>
 </resources>

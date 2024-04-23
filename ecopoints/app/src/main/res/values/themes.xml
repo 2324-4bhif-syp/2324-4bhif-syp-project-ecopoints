@@ -2,5 +2,6 @@
 <resources>
 
     <style name="Theme.EcoPoints" parent="android:Theme.Material.Light.NoActionBar" />
+
     <item name="colorPrimary" type="color">@color/lavender</item>
 </resources>

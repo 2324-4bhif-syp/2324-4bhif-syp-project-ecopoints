@@ -116,6 +116,7 @@ dependencies {
     // https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
     implementation ("com.squareup.okhttp3:okhttp:5.0.0-alpha.14")
 
+    implementation ("com.opencsv:opencsv:5.9")
 }
 
 // Allow references to generated code

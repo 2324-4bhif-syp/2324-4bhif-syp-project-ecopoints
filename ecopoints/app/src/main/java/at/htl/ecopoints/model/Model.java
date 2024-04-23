@@ -8,6 +8,8 @@ public class Model {
     public Map map = new Map();
     public RankingInfo rankingInfo = new RankingInfo();
 
+    public HomeInfo homeInfo = new HomeInfo();
+
     public Model() {
     }
 }

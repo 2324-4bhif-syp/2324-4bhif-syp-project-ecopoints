@@ -5,20 +5,27 @@ import android.content.Intent
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonColors
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.PersonAddAlt1
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.rounded.Timelapse
 import androidx.compose.material3.MaterialTheme
@@ -88,12 +95,15 @@ class ProfileView {
 
     @Composable
     private fun ProfileSettingsHeader(){
-        Column {
+        Row(modifier = Modifier.padding(end = 16.dp, start = 16.dp)) {
             Text(
                 text = "Profile",
-                fontWeight = FontWeight.Light,
+                fontWeight = FontWeight.Bold,
+                color = Color.Gray,
+                fontSize = TextUnit(20f, TextUnitType.Sp),
+                textAlign = androidx.compose.ui.text.style.TextAlign.Center,
                 modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
+                    .align(Alignment.CenterVertically)
                     .weight(1f)
             )
 
@@ -105,14 +115,15 @@ class ProfileView {
                 )
             }
         }
+
+        androidx.compose.material3.Divider(thickness = 1.dp, color = Color.LightGray)
     }
 
     @Composable
     fun ProfileHeader(){
         val state = store.subject.map { it.profileInfo }.subscribeAsState(ProfileInfo())
-        Log.i("ProfileView", state.value.currentUser.userName)
 
-        Row(modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp)) {
+        Row(modifier = Modifier.padding(top = 10.dp,start = 16.dp, end = 16.dp, bottom = 10.dp)) {
             Column(modifier = Modifier.weight(1f)) {
                 androidx.compose.material.Text(
                     text = state.value.currentUser.userName,
@@ -124,7 +135,7 @@ class ProfileView {
                     Icon(
                         imageVector = Icons.Rounded.Timelapse,
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
+                        tint = Color.Gray,
                         modifier = Modifier
                             .size(15.dp)
                             .align(Alignment.CenterVertically)
@@ -132,8 +143,29 @@ class ProfileView {
 
                     androidx.compose.material.Text(
                         text = "Joined February 2024",
-                        modifier = Modifier.padding(start = 5.dp)
+                        modifier = Modifier.padding(start = 5.dp),
+                        color = Color.Gray
                     )
+                }
+
+                Row(modifier = Modifier.padding(top = 12.dp)) {
+                    Column{
+                        Text(
+                            text = "50 Following",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = TextUnit(15f, TextUnitType.Sp),
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+
+                    Column(modifier = Modifier.padding(start = 12.dp)) {
+                        Text(
+                            text = "100 Followers",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = TextUnit(15f, TextUnitType.Sp),
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
                 }
             }
 
@@ -144,6 +176,32 @@ class ProfileView {
                     modifier = Modifier
                         .size(100.dp)
                         .clip(RoundedCornerShape(80.dp))
+                )
+            }
+        }
+
+        Row {
+            Button(
+                onClick = { /*TODO*/ },
+                colors = ButtonDefaults.outlinedButtonColors(backgroundColor = MaterialTheme.colorScheme.background),
+                modifier = Modifier
+                    .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
+                    .fillMaxWidth(),
+                shape = RoundedCornerShape(30),
+                border = BorderStroke(1.dp, Color.LightGray)
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.PersonAddAlt1,
+                    contentDescription = "Add Friends",
+                    tint = MaterialTheme.colorScheme.primary
+                )
+
+                Text(
+                    text = "ADD FRIENDS",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = TextUnit(20f, TextUnitType.Sp),
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.padding(start = 8.dp, bottom = 8.dp, top = 8.dp)
                 )
             }
         }

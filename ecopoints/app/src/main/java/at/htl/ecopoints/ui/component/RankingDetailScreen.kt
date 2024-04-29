@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -23,6 +24,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.PersonAddAlt1
 import androidx.compose.material.icons.rounded.Timelapse
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -105,7 +107,9 @@ private fun ShowStatistics(user: User, cardContent: List<List<CardContent>>){
                 text = "Statistics",
                 fontWeight = FontWeight.Bold,
                 fontSize = TextUnit(28f, TextUnitType.Sp),
-                modifier = Modifier.align(Alignment.CenterHorizontally).padding(bottom = 10.dp)
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(bottom = 10.dp)
             )
 
             for(row in user.detailRankingCardContentList){
@@ -167,7 +171,7 @@ private fun ShowProfileHeader(user: User) {
                 Icon(
                     imageVector = Icons.Rounded.Timelapse,
                     contentDescription = null,
-                    tint = colorScheme.primary,
+                    tint = Color.Gray,
                     modifier = Modifier
                         .size(15.dp)
                         .align(Alignment.CenterVertically)
@@ -175,7 +179,8 @@ private fun ShowProfileHeader(user: User) {
 
                 Text(
                     text = "Joined February 2024",
-                    modifier = Modifier.padding(start = 5.dp)
+                    modifier = Modifier.padding(start = 5.dp),
+                    color = Color.Gray
                 )
             }
         }

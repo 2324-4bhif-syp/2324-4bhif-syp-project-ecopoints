@@ -7,7 +7,7 @@ public class Model {
     public Trip trip = new Trip();
     public Map map = new Map();
     public RankingInfo rankingInfo = new RankingInfo();
-
+    public ProfileInfo profileInfo = new ProfileInfo();
     public HomeInfo homeInfo = new HomeInfo();
 
     public Model() {

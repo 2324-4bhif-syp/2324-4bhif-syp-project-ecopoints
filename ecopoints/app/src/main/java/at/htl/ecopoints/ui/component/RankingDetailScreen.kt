@@ -45,7 +45,7 @@ import at.htl.ecopoints.model.Store
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
-fun ProfileScreen(user: User, context: Context, cardContent: List<List<CardContent>>, store: Store) {
+fun ProfileScreen(user: User, context: Context, store: Store) {
     val scrollState = rememberScrollState()
 
     Column(
@@ -64,7 +64,7 @@ fun ProfileScreen(user: User, context: Context, cardContent: List<List<CardConte
 
                     ShowProfileHeader(user)
 
-                    ShowStatistics(user, cardContent)
+                    ShowStatistics(user)
                 }
             }
         }
@@ -94,7 +94,7 @@ private fun ShowReturnBtn(context: Context, store: Store){
 }
 
 @Composable
-private fun ShowStatistics(user: User, cardContent: List<List<CardContent>>){
+private fun ShowStatistics(user: User){
     val cardWidth = 175.dp
     val cardHeight = 80.dp
     val cardBorderWidth = 1.dp

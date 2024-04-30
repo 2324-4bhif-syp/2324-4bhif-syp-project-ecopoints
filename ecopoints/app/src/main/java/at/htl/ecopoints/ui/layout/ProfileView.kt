@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -44,6 +45,7 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import at.htl.ecopoints.R
 import at.htl.ecopoints.model.ProfileInfo
+import at.htl.ecopoints.model.RankingInfo
 import at.htl.ecopoints.model.Store
 import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
@@ -93,6 +95,8 @@ class ProfileView {
     
     @Composable
     private fun FriendSuggestions(){
+        val state = store.subject.map { it.rankingInfo }.subscribeAsState(RankingInfo())
+
         Row(
             modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 15.dp)
         ) {
@@ -104,7 +108,7 @@ class ProfileView {
                 )
 
                 LazyRow {
-                    items(5) {
+                    items(state.value.users) {user ->
                         Card(
                             modifier = Modifier
                                 .padding(8.dp)
@@ -126,6 +130,34 @@ class ProfileView {
                                         .clip(RoundedCornerShape(80.dp)),
                                     alignment = Alignment.TopCenter
                                 )
+
+                                Text(
+                                    text = user.userName,
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = TextUnit(18f, TextUnitType.Sp),
+                                    modifier = Modifier.padding(top = 10.dp)
+                                )
+
+                                Text(
+                                    text = "Follows you",
+                                    fontSize = TextUnit(15f, TextUnitType.Sp),
+                                    color = Color.Gray
+                                )
+
+                                Button(
+                                    onClick = { /*TODO*/ },
+                                    colors = ButtonDefaults.outlinedButtonColors(backgroundColor = MaterialTheme.colorScheme.background),
+                                    modifier = Modifier
+                                        .padding(top = 10.dp),
+                                    shape = RoundedCornerShape(30),
+                                    border = BorderStroke(1.dp, Color.LightGray)
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Rounded.PersonAddAlt1,
+                                        contentDescription = "Add Friends",
+                                        tint = MaterialTheme.colorScheme.primary
+                                    )
+                                }
                             }
                         }
                     }

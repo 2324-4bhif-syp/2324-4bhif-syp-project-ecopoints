@@ -5,7 +5,6 @@ import java.util.UUID;
 
 public class Trip {
     private UUID id;
-
     private Long carId;
     private Long userId;
     private double distance;

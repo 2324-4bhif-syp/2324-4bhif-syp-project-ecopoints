@@ -1,11 +1,10 @@
 package at.htl.ecopoints.model;
 
+import at.htl.ecopoints.model.viewmodel.TripViewModel;
+
 public class Model {
-    public String greeting = "1";
-    public BtConnectionInfo btConnection = new BtConnectionInfo();
-    public CarData carData = new CarData();
-    public Trip trip = new Trip();
-    public Map map = new Map();
+
+    public TripViewModel tripViewModel = new TripViewModel();
     public RankingInfo rankingInfo = new RankingInfo();
     public ProfileInfo profileInfo = new ProfileInfo();
     public HomeInfo homeInfo = new HomeInfo();

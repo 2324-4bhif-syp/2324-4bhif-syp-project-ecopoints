@@ -50,7 +50,7 @@ public class BtConnectionHandler {
             Log.d(TAG, "Connecting to Bt-Device: " + btDevice.getAddress());
             store.next(i -> {
                         if (i != null) {
-                            i.btConnection.connectionStateString = "Connecting...";
+                            i.tripViewModel.connectionStateString = "Connecting...";
                         }
                     }
             );
@@ -58,16 +58,16 @@ public class BtConnectionHandler {
                 if (connected) {
                     store.next(i -> {
                                 if (i != null) {
-                                    i.btConnection.isConnected = true;
-                                    i.btConnection.connectionStateString = "Connected";
+                                    i.tripViewModel.isConnected = true;
+                                    i.tripViewModel.connectionStateString = "Connected";
                                 }
                             }
                     );
                 } else {
                     store.next(i -> {
                                 if (i != null) {
-                                    i.btConnection.isConnected = false;
-                                    i.btConnection.connectionStateString = "Could not connect";
+                                    i.tripViewModel.isConnected = false;
+                                    i.tripViewModel.connectionStateString = "Could not connect";
                                 }
                             }
                     );
@@ -76,8 +76,8 @@ public class BtConnectionHandler {
         } else {
             store.next(i -> {
                         if (i != null) {
-                            i.btConnection.isConnected = false;
-                            i.btConnection.connectionStateString = "Device not found";
+                            i.tripViewModel.isConnected = false;
+                            i.tripViewModel.connectionStateString = "Device not found";
                         }
                     }
             );
@@ -98,10 +98,10 @@ public class BtConnectionHandler {
                     store.next(i -> {
                         if (i != null) {
                             try {
-                                i.btConnection.isConnected = true;
-                                i.btConnection.connectionStateString = "Connected";
-                                i.btConnection.inputStream = btSocket.getInputStream();
-                                i.btConnection.outputStream = btSocket.getOutputStream();
+                                i.tripViewModel.isConnected = true;
+                                i.tripViewModel.connectionStateString = "Connected";
+                                i.tripViewModel.inputStream = btSocket.getInputStream();
+                                i.tripViewModel.outputStream = btSocket.getOutputStream();
                             } catch (IOException e) {
                                 Log.e(TAG, "Exception when retriving input and output stream:" + e.getMessage());
                             }

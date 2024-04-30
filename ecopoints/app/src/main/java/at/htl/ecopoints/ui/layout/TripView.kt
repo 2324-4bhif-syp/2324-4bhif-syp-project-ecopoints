@@ -46,13 +46,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
-import at.htl.ecopoints.model.BtConnectionInfo
 import at.htl.ecopoints.model.CarData
 import at.htl.ecopoints.model.Map
 import at.htl.ecopoints.model.Store
 import at.htl.ecopoints.model.reading.BtConnectionHandler
 import at.htl.ecopoints.model.reading.BtDevice
 import at.htl.ecopoints.model.reading.ObdReader
+import at.htl.ecopoints.model.viewmodel.TripViewModel
 import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.ui.component.ShowMap
 import at.htl.ecopoints.ui.component.Speedometer
@@ -97,12 +97,12 @@ class TripView {
                                 Text(text = "Select your car")
                             }
                             Button(onClick = {
-                                obdReader.test()
+                                obdReader.speedometerTest()
                             }) {
                                 Text(text = "SpeedometerTest")
                             }
                             Button(onClick = {
-                                store.next { it.map.showMap = true }
+                                store.next { it.tripViewModel.map.showMap = true }
                             }) {
                                 Text(text = "Map")
                             }
@@ -139,7 +139,7 @@ class TripView {
 
     @Composable
     fun LiveCarData(store: Store) {
-        val state = store.subject.map { it.carData }.subscribeAsState(CarData())
+        val state = store.subject.map { it.tripViewModel.carData }.subscribeAsState(CarData())
         Column {
             Speedometer(
                 currentSpeed = state.value.speed.toFloat(),
@@ -150,6 +150,9 @@ class TripView {
             Row() {
                 Column {
                     Text(text = "Rpm: ${state.value.currentEngineRPM}")
+                    Text(text = "ThrPos: ${state.value.throttlePosition}")
+                    Text(text = "EngineRt: ${state.value.engineRunTime}")
+                    Text(text = "timestamp: ${state.value.timeStamp}")
                     Text(text = "Latitude: ${state.value.latitude}")
                     Text(text = "Longitude: ${state.value.longitude}")
                 }
@@ -162,7 +165,7 @@ class TripView {
     @ExperimentalMaterial3Api
     @Composable
     fun BtDeviceSelectionDialog(store: Store, btConnectionHandler: BtConnectionHandler) {
-        val state = store.subject.map { it.btConnection }.subscribeAsState(BtConnectionInfo())
+        val state = store.subject.map { it.tripViewModel }.subscribeAsState(TripViewModel())
         if (state.value.showDeviceSelectionDialog) {
             BasicAlertDialog(
                 onDismissRequest = { state.value.showDeviceSelectionDialog = false },
@@ -185,7 +188,7 @@ class TripView {
                     ) {
                         Button(onClick = {
                             store.next {
-                                it.btConnection.showDeviceSelectionDialog = false
+                                it.tripViewModel.showDeviceSelectionDialog = false
                             }
                         }) {
                             Text(text = "Close")
@@ -196,26 +199,25 @@ class TripView {
         }
     }
 
-
     @SuppressLint("MissingPermission", "CheckResult")
     @Composable
     fun ConnectionInfo(
         store: Store, obdReader: ObdReader, btConnectionHandler: BtConnectionHandler
     ) {
-        val state = store.subject.map { it.btConnection }.subscribeAsState(BtConnectionInfo())
+        val state = store.subject.map { it.tripViewModel }.subscribeAsState(TripViewModel())
 
         var connectionStateColor = Color.Red;
 
-        store.subject.subscribe {
-            if (it.btConnection.connectionStateString == "Connected") {
+        store.subject.map { it.tripViewModel }.subscribe {
+            if (it.connectionStateString == "Connected") {
                 connectionStateColor = Color.Green
-            } else if (it.btConnection.connectionStateString.contains("Connecting")) {
+            } else if (it.connectionStateString.contains("Connecting")) {
                 connectionStateColor = Color.Yellow
             } else {
                 connectionStateColor = Color.Red
             }
-            if (it.btConnection.isConnected) {
-                obdReader.test(it.btConnection.inputStream, it.btConnection.outputStream)
+            if (it.isConnected) {
+                obdReader.startReading(it.inputStream, it.outputStream)
             }
         }
 
@@ -238,7 +240,7 @@ class TripView {
                 Button(
                     shape = MaterialTheme.shapes.medium, onClick = {
                         Log.d(TAG, "Show Bt-Device selection dialog")
-                        store.next { it.btConnection.showDeviceSelectionDialog = true }
+                        store.next { it.tripViewModel.showDeviceSelectionDialog = true }
                     }, modifier = Modifier
                         .padding(8.dp)
                         .width(150.dp)
@@ -312,8 +314,8 @@ class TripView {
                 )
                 .fillMaxSize(),
             onClick = {
-                store.next { it.btConnection.selectedDevice = device }
-                store.next { it.btConnection.showDeviceSelectionDialog = false }
+                store.next { it.tripViewModel.selectedDevice = device }
+                store.next { it.tripViewModel.showDeviceSelectionDialog = false }
             },
         ) {
             Row() {
@@ -328,10 +330,10 @@ class TripView {
     @ExperimentalMaterial3Api
     @Composable
     fun ShowMapCard(store: Store) {
-        val state = store.subject.map { it.map }.subscribeAsState(Map());
+        val state = store.subject.map { it.tripViewModel.map }.subscribeAsState(Map());
         if (state.value.showMap) {
             BasicAlertDialog(
-                onDismissRequest = { store.next{ it -> it.map.showMap = false } },
+                onDismissRequest = { store.next{ it -> it.tripViewModel.map.showMap = false } },
                 properties = DialogProperties(
                     dismissOnBackPress = true,
                     dismissOnClickOutside = true,
@@ -345,7 +347,7 @@ class TripView {
                 Column {
                     OutlinedButton(
                         onClick = {
-                            store.next { it -> it.map.showMap = false };
+                            store.next { it -> it.tripViewModel.map.showMap = false };
                             Log.d("MapCloseButton", "Clicked")
                         },
                         modifier = Modifier

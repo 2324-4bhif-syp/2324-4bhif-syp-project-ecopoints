@@ -169,7 +169,7 @@ class RankingView {
         }
 
         if (state.value.showDetailRankingView) {
-            ProfileScreen(user = state.value.selectedUser, context = context, cardContent = listOf(), store = store)
+            ProfileScreen(user = state.value.selectedUser, context = context, store = store)
         }
     }
 

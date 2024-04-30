@@ -1,12 +1,10 @@
 package at.htl.ecopoints.ui.layout
 
-import android.content.Context
-import android.content.Intent
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,17 +12,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
-import androidx.compose.material.ButtonColors
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.PersonAddAlt1
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.rounded.Timelapse
@@ -44,11 +39,8 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import at.htl.ecopoints.R
-import at.htl.ecopoints.RankingActivity
 import at.htl.ecopoints.model.ProfileInfo
-import at.htl.ecopoints.model.RankingInfo
 import at.htl.ecopoints.model.Store
-import at.htl.ecopoints.model.User
 import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
 import javax.inject.Inject
@@ -76,6 +68,7 @@ class ProfileView {
                     ) {
                         ProfileSettingsHeader()
                         ProfileHeader()
+                        ShowStatistics()
 
                         val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Profile") }
                         Box(
@@ -86,6 +79,71 @@ class ProfileView {
                                 onScreenSelected = { newScreen -> setCurrentScreen(newScreen) },
                                 context = activity
                             )
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @Composable
+    private fun ShowStatistics(){
+        val state = store.subject.map { it.profileInfo }.subscribeAsState(ProfileInfo())
+
+        val cardWidth = 175.dp
+        val cardHeight = 80.dp
+        val cardBorderWidth = 1.dp
+        val cardBorderColor = MaterialTheme.colorScheme.primary
+        val cardCornerShapeSize = 20.dp
+
+        Row(modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 15.dp)) {
+            Column {
+                androidx.compose.material.Text(
+                    text = "Statistics",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = TextUnit(28f, TextUnitType.Sp),
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(bottom = 10.dp)
+                )
+
+                val row = state.value.currentUser.detailRankingCardContentList[0]
+                Row(
+                    modifier = Modifier.padding(bottom = 8.dp),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    for (col in row) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Card(
+                                border = BorderStroke(cardBorderWidth, cardBorderColor),
+                                shape = RoundedCornerShape(cardCornerShapeSize),
+                                modifier = Modifier
+                                    .size(width = cardWidth, height = cardHeight)
+                            ) {
+                                Row {
+                                    Column(modifier = Modifier.padding(10.dp)) {
+                                        Image(
+                                            painter = painterResource(id = col.icon),
+                                            contentDescription = col.description,
+                                            modifier = Modifier.size(30.dp)
+                                        )
+                                    }
+
+                                    Column(modifier = Modifier.padding(top = 10.dp)) {
+                                        Row {
+                                            androidx.compose.material.Text(
+                                                text = col.value,
+                                                fontWeight = FontWeight.Bold,
+                                                fontSize = TextUnit(20f, TextUnitType.Sp)
+                                            )
+                                        }
+
+                                        Row {
+                                            androidx.compose.material.Text(text = col.description)
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }

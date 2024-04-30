@@ -10,8 +10,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -33,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
@@ -69,6 +73,7 @@ class ProfileView {
                         ProfileSettingsHeader()
                         ProfileHeader()
                         ShowStatistics()
+                        FriendSuggestions()
 
                         val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Profile") }
                         Box(
@@ -81,6 +86,50 @@ class ProfileView {
                             )
                         }
                     }
+                }
+            }
+        }
+    }
+    
+    @Composable
+    private fun FriendSuggestions(){
+        Row(
+            modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 15.dp)
+        ) {
+            Column {
+                Text(
+                    text = "Friend Suggestions",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = TextUnit(25f, TextUnitType.Sp)
+                )
+
+                LazyRow {
+                    items(5) {
+                        Card(
+                            modifier = Modifier
+                                .padding(8.dp)
+                                .width(140.dp)
+                                .height(200.dp),
+                            shape = RoundedCornerShape(20.dp),
+                            backgroundColor = MaterialTheme.colorScheme.background,
+                            border = BorderStroke(1.dp, Color.LightGray)
+                        ) {
+                            Column(
+                                modifier = Modifier.padding(10.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Image(
+                                    painter = painterResource(id = R.drawable.no_profile_pic),
+                                    contentDescription = "Profile Picture",
+                                    modifier = Modifier
+                                        .size(70.dp)
+                                        .clip(RoundedCornerShape(80.dp)),
+                                    alignment = Alignment.TopCenter
+                                )
+                            }
+                        }
+                    }
+
                 }
             }
         }
@@ -101,9 +150,8 @@ class ProfileView {
                 androidx.compose.material.Text(
                     text = "Statistics",
                     fontWeight = FontWeight.Bold,
-                    fontSize = TextUnit(28f, TextUnitType.Sp),
+                    fontSize = TextUnit(25f, TextUnitType.Sp),
                     modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
                         .padding(bottom = 10.dp)
                 )
 

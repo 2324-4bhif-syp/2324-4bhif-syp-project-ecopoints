@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Surface
@@ -104,7 +105,7 @@ class HomeView {
                     ShowPhoto()
                     ShowText()
 
-                    //LastTrips()
+                    LastTrips(activity)
 
                     val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Home") }
                     Box(
@@ -205,16 +206,52 @@ class HomeView {
         )
     }
 
-/*    @Composable
+    @Composable
+    fun LastTripsButton(
+        trip: Trip,
+        onClickAction: () -> Unit
+    ) {
+        val gradientColors = listOf(Gray, Green, DarkGray)
+
+        Button(
+            onClick = onClickAction,
+            modifier = Modifier
+                .padding(8.dp, 4.dp)
+                .fillMaxWidth()
+                .background(
+                    brush = Brush.horizontalGradient(
+                        colors = gradientColors
+                    ),
+                    shape = RoundedCornerShape(20.dp)
+                ),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Transparent,
+                contentColor = Black
+            )
+        ) {
+            val formattedDate = SimpleDateFormat("dd/MM/yyyy, HH:mm", Locale.getDefault()).format(trip.start)
+            Column(
+                modifier = Modifier
+                    .padding(0.dp)
+                    .fillMaxWidth()
+            ) {
+                Row() {
+                    Text(formattedDate + " Uhr")
+                }
+                Row {
+                    Text(trip.rewardedEcoPoints.toString() + " EP")
+                    Spacer(modifier = Modifier.weight(1f))
+                    Text(text = trip.distance.toString() + " km")
+                }
+            }
+        }
+    }
+
+
+    @Composable
     fun LastTrips(context: Context) {
 
         val state = store.subject.map { it.homeInfo }.subscribeAsState(HomeInfo())
-
-        val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Home") }
-
-        //var showDetailedLastRidesPopup = remember { mutableStateOf(false) }
-        //var showDialog by remember { mutableStateOf(false) }
-        //var selectedTripDate by remember { mutableStateOf<Date?>(null) }
 
         val gradientColors = listOf(
             Color(0xFF9bd99e),
@@ -239,45 +276,15 @@ class HomeView {
                     .fillMaxSize()
                     .weight(1f)
             ) {
-                trips.forEach { trip ->
-                    Button(
-                        onClick = {
-
-                            store.next{
-                                it.homeInfo.showDialog = true
-                                it.homeInfo.selectedTripDate = trip.start;
-                            }
-                        },
-                        modifier = Modifier
-                            .padding(8.dp, 4.dp)
-                            .fillMaxWidth()
-                            .background(
-                                brush = Brush.horizontalGradient(
-                                    colors = gradientColors
-                                ),
-                                shape = RoundedCornerShape(20.dp)
-                            ),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Transparent,
-                            contentColor = Black
-                        )
-                    ) {
-                        val formattedDate = SimpleDateFormat("dd/MM/yyyy, HH:mm", Locale.getDefault()).format(trip.start)
-                        Column(
-                            modifier = Modifier
-                                .padding(0.dp)
-                                .fillMaxWidth()
-                        ) {
-                            Row() {
-                                Text(formattedDate + " Uhr")
-                            }
-                            Row {
-                                Text(trip.rewardedEcoPoints.toString() + " EP")
-                                Spacer(modifier = Modifier.weight(1f))
-                                Text(text = trip.distance.toString() + " km")
-                            }
+                items(trips){ trip ->
+                    LastTripsButton(trip = trip) {
+                        store.next {
+                            it.homeInfo.showDialog = true
+                            it.homeInfo.selectedTripDate = trip.start
                         }
                     }
+
+                }
                 }
             }
 
@@ -316,7 +323,7 @@ class HomeView {
                 Button(
                     onClick = {
                               val tripView = TripView()
-                                tripView.compose(activity = HomeView::class.java as ComponentActivity)
+                                tripView.compose(activity = context as ComponentActivity)
                               },
                     modifier = Modifier
                         .background(
@@ -336,10 +343,10 @@ class HomeView {
                 }
             }
 
-            *//*if (state.value.showDetailedLastRidesPopup){
+           /* if (state.value.showDetailedLastRidesPopup){
                 val intent = Intent(this@MainActivity, LastRidesActivity::class.java)
                 startActivity(intent)
-            }*//*
+            }*/
 
             if (state.value.showDialog) {
                 AlertDialog(
@@ -371,7 +378,7 @@ class HomeView {
                                 Text("Trip details not available.")
                             }
                             Spacer(modifier = Modifier.height(16.dp))
-                            *//*ShowMap(
+                            /*ShowMap(
                                 cameraPositionState = rememberCameraPositionState {
                                     position = CameraPosition.fromLatLngZoom(
                                         LatLng(getLatLngsFromTripDB(selectedTrip!!.id)
@@ -379,13 +386,15 @@ class HomeView {
                                             getLatLngsFromTripDB(selectedTrip!!.id)
                                                 .first().second.first.longitude), 10f)
                                 },
-                                latLngList = getLatLngsFromTripDB(selectedTrip!!.id))*//*
+                                latLngList = getLatLngsFromTripDB(selectedTrip!!.id))*/
                         }
                     },
                     confirmButton = {
                         TextButton(onClick = {
-                            state.value.showDialog = false
-                            state.value.selectedTripDate = null
+                            store.next {
+                                it.homeInfo.showDialog = false
+                                it.homeInfo.selectedTripDate = null
+                            }
                         }) {
                             Text("OK")
                         }
@@ -393,7 +402,7 @@ class HomeView {
                 )
             }
         }
-    }*/
+    }
 
 
     private fun readTripDataFromCsvAndAddToDB(fileName: String, context: Context) {
@@ -537,6 +546,3 @@ class HomeView {
 
         dbHelper.close()
     }
-
-
-}

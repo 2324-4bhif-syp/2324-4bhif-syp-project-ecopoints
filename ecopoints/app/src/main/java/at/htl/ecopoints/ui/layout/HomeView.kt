@@ -1,18 +1,32 @@
 package at.htl.ecopoints.ui.layout
 
 import android.content.Context
+import android.content.Intent
 import android.content.res.AssetManager
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Surface
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -21,9 +35,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.Color.Companion.DarkGray
 import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.graphics.Color.Companion.Green
+import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -33,15 +50,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.startActivity
 import at.htl.ecopoints.R
 import at.htl.ecopoints.db.DBHelper
 import at.htl.ecopoints.model.CarData
 import at.htl.ecopoints.model.HomeInfo
+import at.htl.ecopoints.model.RankingInfo
 import at.htl.ecopoints.model.Store
 import at.htl.ecopoints.model.TankerkoenigApiClient
 import at.htl.ecopoints.model.Trip
 import at.htl.ecopoints.navigation.BottomNavBar
+import at.htl.ecopoints.ui.component.ShowMap
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.rememberCameraPositionState
 import com.opencsv.CSVParserBuilder
 import com.opencsv.CSVReaderBuilder
 import java.io.IOException
@@ -50,6 +73,7 @@ import java.io.InputStreamReader
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -180,6 +204,196 @@ class HomeView {
             )
         )
     }
+
+/*    @Composable
+    fun LastTrips(context: Context) {
+
+        val state = store.subject.map { it.homeInfo }.subscribeAsState(HomeInfo())
+
+        val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Home") }
+
+        //var showDetailedLastRidesPopup = remember { mutableStateOf(false) }
+        //var showDialog by remember { mutableStateOf(false) }
+        //var selectedTripDate by remember { mutableStateOf<Date?>(null) }
+
+        val gradientColors = listOf(
+            Color(0xFF9bd99e),
+            Color(0xFF05900a),
+            Color(0xFF9bd99e)
+        )
+
+        addFakeDataToDB(context)
+
+        val trips = getTripDataFromDB(context)
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+                .padding(0.dp, 260.dp, 0.dp, 0.dp)
+        ) {
+            Spacer(modifier = Modifier.height(10.dp))
+
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .weight(1f)
+            ) {
+                trips.forEach { trip ->
+                    Button(
+                        onClick = {
+
+                            store.next{
+                                it.homeInfo.showDialog = true
+                                it.homeInfo.selectedTripDate = trip.start;
+                            }
+                        },
+                        modifier = Modifier
+                            .padding(8.dp, 4.dp)
+                            .fillMaxWidth()
+                            .background(
+                                brush = Brush.horizontalGradient(
+                                    colors = gradientColors
+                                ),
+                                shape = RoundedCornerShape(20.dp)
+                            ),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Transparent,
+                            contentColor = Black
+                        )
+                    ) {
+                        val formattedDate = SimpleDateFormat("dd/MM/yyyy, HH:mm", Locale.getDefault()).format(trip.start)
+                        Column(
+                            modifier = Modifier
+                                .padding(0.dp)
+                                .fillMaxWidth()
+                        ) {
+                            Row() {
+                                Text(formattedDate + " Uhr")
+                            }
+                            Row {
+                                Text(trip.rewardedEcoPoints.toString() + " EP")
+                                Spacer(modifier = Modifier.weight(1f))
+                                Text(text = trip.distance.toString() + " km")
+                            }
+                        }
+                    }
+                }
+            }
+
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(30.dp, 10.dp, 30.dp, 200.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Button(
+                    onClick = {
+                        store.next{
+                            it.homeInfo.showDetailedLastRidesPopup = true
+                        }
+                    },
+                    modifier = Modifier
+                        .background(
+                            brush = Brush.horizontalGradient(
+                                colors = gradientColors
+                            ),
+                            shape = RoundedCornerShape(30.dp)
+                        )
+                        .weight(1f)
+                        .padding(2.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Transparent,
+                        contentColor = Black
+                    )
+                ) {
+                    Text("View All")
+                }
+
+                Spacer(modifier = Modifier.width(30.dp))
+
+                Button(
+                    onClick = {
+                              val tripView = TripView()
+                                tripView.compose(activity = HomeView::class.java as ComponentActivity)
+                              },
+                    modifier = Modifier
+                        .background(
+                            brush = Brush.horizontalGradient(
+                                colors = gradientColors
+                            ),
+                            shape = RoundedCornerShape(30.dp)
+                        )
+                        .weight(1f)
+                        .padding(2.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Transparent,
+                        contentColor = Black
+                    )
+                ) {
+                    Text("New Trip")
+                }
+            }
+
+            *//*if (state.value.showDetailedLastRidesPopup){
+                val intent = Intent(this@MainActivity, LastRidesActivity::class.java)
+                startActivity(intent)
+            }*//*
+
+            if (state.value.showDialog) {
+                AlertDialog(
+                    onDismissRequest = {
+                        store.next{
+                            it.homeInfo.showDialog = false
+                            it.homeInfo.selectedTripDate = null;
+                        }
+                    },
+                    title = {
+                        Text(
+                            "Trip: " + (state.value.selectedTripDate?.let {
+                                SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(it)
+                            } ?: "Unknown Date")
+                        )
+                    },
+                    text = {
+                        Column {
+                            val selectedTrip = trips.find { it.start == state.value.selectedTripDate }
+                            if (selectedTrip != null) {
+                                Text("End Date: ${SimpleDateFormat("dd/MM/yyyy, HH:mm",
+                                    Locale.getDefault()).format(selectedTrip.end)}")
+                                Text("Distance: ${selectedTrip.distance} km")
+                                Text("Average Speed: ${selectedTrip.avgSpeed} km/h")
+                                Text("Average Engine Rotation: " +
+                                        "${selectedTrip.avgEngineRotation} rpm")
+                                Text("Eco Points: ${selectedTrip.rewardedEcoPoints}")
+                            } else {
+                                Text("Trip details not available.")
+                            }
+                            Spacer(modifier = Modifier.height(16.dp))
+                            *//*ShowMap(
+                                cameraPositionState = rememberCameraPositionState {
+                                    position = CameraPosition.fromLatLngZoom(
+                                        LatLng(getLatLngsFromTripDB(selectedTrip!!.id)
+                                            .first().second.first.latitude,
+                                            getLatLngsFromTripDB(selectedTrip!!.id)
+                                                .first().second.first.longitude), 10f)
+                                },
+                                latLngList = getLatLngsFromTripDB(selectedTrip!!.id))*//*
+                        }
+                    },
+                    confirmButton = {
+                        TextButton(onClick = {
+                            state.value.showDialog = false
+                            state.value.selectedTripDate = null
+                        }) {
+                            Text("OK")
+                        }
+                    }
+                )
+            }
+        }
+    }*/
 
 
     private fun readTripDataFromCsvAndAddToDB(fileName: String, context: Context) {

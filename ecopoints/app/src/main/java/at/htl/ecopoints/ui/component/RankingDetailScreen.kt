@@ -11,12 +11,14 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -26,6 +28,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.PersonAddAlt1
 import androidx.compose.material.icons.rounded.Timelapse
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,7 +48,7 @@ import at.htl.ecopoints.model.Store
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
-fun ProfileScreen(user: User, context: Context, store: Store) {
+fun ProfileScreen(user: User, context: Context, store: Store, currentUser: User) {
     val scrollState = rememberScrollState()
 
     Column(
@@ -62,7 +65,7 @@ fun ProfileScreen(user: User, context: Context, store: Store) {
                 ) {
                     ShowReturnBtn(context, store)
 
-                    ShowProfileHeader(user)
+                    ShowProfileHeader(user, currentUser)
 
                     ShowStatistics(user)
                 }
@@ -108,7 +111,6 @@ private fun ShowStatistics(user: User){
                 fontWeight = FontWeight.Bold,
                 fontSize = TextUnit(28f, TextUnitType.Sp),
                 modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
                     .padding(bottom = 10.dp)
             )
 
@@ -158,7 +160,7 @@ private fun ShowStatistics(user: User){
 }
 
 @Composable
-private fun ShowProfileHeader(user: User) {
+private fun ShowProfileHeader(user: User, currentUser: User) {
     Row(modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp)) {
         Column(modifier = Modifier.weight(1f)) {
             Text(
@@ -193,6 +195,34 @@ private fun ShowProfileHeader(user: User) {
                     .size(100.dp)
                     .clip(RoundedCornerShape(80.dp))
             )
+        }
+    }
+
+    if(!currentUser.userName.equals(user.userName)){
+        Row {
+            Button(
+                onClick = { /*TODO*/ },
+                colors = ButtonDefaults.outlinedButtonColors(backgroundColor = MaterialTheme.colorScheme.background),
+                modifier = Modifier
+                    .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
+                    .fillMaxWidth(),
+                shape = RoundedCornerShape(30),
+                border = BorderStroke(1.dp, Color.LightGray)
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.PersonAddAlt1,
+                    contentDescription = "Follow",
+                    tint = MaterialTheme.colorScheme.primary
+                )
+
+                androidx.compose.material3.Text(
+                    text = "FOLLOW",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = TextUnit(20f, TextUnitType.Sp),
+                    color = colorScheme.primary,
+                    modifier = Modifier.padding(start = 8.dp, bottom = 8.dp, top = 8.dp)
+                )
+            }
         }
     }
 

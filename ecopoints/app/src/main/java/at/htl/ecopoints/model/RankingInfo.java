@@ -54,7 +54,8 @@ public class RankingInfo {
     };
     public String selectedRankTypeOption = rankTypeOptions.keySet().stream().findFirst().get();
 
-    public RankingInfo() {
+    public User currentUser = users.get(0);
 
+    public RankingInfo() {
     }
 }

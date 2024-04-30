@@ -109,54 +109,56 @@ class ProfileView {
 
                 LazyRow {
                     items(state.value.users) {user ->
-                        Card(
-                            modifier = Modifier
-                                .padding(8.dp)
-                                .width(140.dp)
-                                .height(200.dp),
-                            shape = RoundedCornerShape(20.dp),
-                            backgroundColor = MaterialTheme.colorScheme.background,
-                            border = BorderStroke(1.dp, Color.LightGray)
-                        ) {
-                            Column(
-                                modifier = Modifier.padding(10.dp),
-                                horizontalAlignment = Alignment.CenterHorizontally
+                        if(!user.userName.equals(state.value.currentUser.userName)) {
+                            Card(
+                                modifier = Modifier
+                                    .padding(8.dp)
+                                    .width(140.dp)
+                                    .height(200.dp),
+                                shape = RoundedCornerShape(20.dp),
+                                backgroundColor = MaterialTheme.colorScheme.background,
+                                border = BorderStroke(1.dp, Color.LightGray)
                             ) {
-                                Image(
-                                    painter = painterResource(id = R.drawable.no_profile_pic),
-                                    contentDescription = "Profile Picture",
-                                    modifier = Modifier
-                                        .size(70.dp)
-                                        .clip(RoundedCornerShape(80.dp)),
-                                    alignment = Alignment.TopCenter
-                                )
-
-                                Text(
-                                    text = user.userName,
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = TextUnit(18f, TextUnitType.Sp),
-                                    modifier = Modifier.padding(top = 10.dp)
-                                )
-
-                                Text(
-                                    text = "Follows you",
-                                    fontSize = TextUnit(15f, TextUnitType.Sp),
-                                    color = Color.Gray
-                                )
-
-                                Button(
-                                    onClick = { /*TODO*/ },
-                                    colors = ButtonDefaults.outlinedButtonColors(backgroundColor = MaterialTheme.colorScheme.background),
-                                    modifier = Modifier
-                                        .padding(top = 10.dp),
-                                    shape = RoundedCornerShape(30),
-                                    border = BorderStroke(1.dp, Color.LightGray)
+                                Column(
+                                    modifier = Modifier.padding(10.dp),
+                                    horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
-                                    Icon(
-                                        imageVector = Icons.Rounded.PersonAddAlt1,
-                                        contentDescription = "Add Friends",
-                                        tint = MaterialTheme.colorScheme.primary
+                                    Image(
+                                        painter = painterResource(id = R.drawable.no_profile_pic),
+                                        contentDescription = "Profile Picture",
+                                        modifier = Modifier
+                                            .size(70.dp)
+                                            .clip(RoundedCornerShape(80.dp)),
+                                        alignment = Alignment.TopCenter
                                     )
+
+                                    Text(
+                                        text = user.userName,
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = TextUnit(18f, TextUnitType.Sp),
+                                        modifier = Modifier.padding(top = 10.dp)
+                                    )
+
+                                    Text(
+                                        text = "Follows you",
+                                        fontSize = TextUnit(15f, TextUnitType.Sp),
+                                        color = Color.Gray
+                                    )
+
+                                    Button(
+                                        onClick = { /*TODO*/ },
+                                        colors = ButtonDefaults.outlinedButtonColors(backgroundColor = MaterialTheme.colorScheme.background),
+                                        modifier = Modifier
+                                            .padding(top = 10.dp),
+                                        shape = RoundedCornerShape(30),
+                                        border = BorderStroke(1.dp, Color.LightGray)
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Rounded.PersonAddAlt1,
+                                            contentDescription = "Add Friends",
+                                            tint = MaterialTheme.colorScheme.primary
+                                        )
+                                    }
                                 }
                             }
                         }

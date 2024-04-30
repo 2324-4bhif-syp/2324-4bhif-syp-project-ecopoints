@@ -2,6 +2,7 @@ package at.htl.ecopoints.model;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 import at.htl.ecopoints.R;
 
@@ -88,5 +89,22 @@ public class User {
 
     public List<List<CardContent>> getDetailRankingCardContentList() {
         return detailRankingCardContentList;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id) &&
+                Objects.equals(userName, user.userName) &&
+                Objects.equals(password, user.password) &&
+                Objects.equals(ecoPoints, user.ecoPoints) &&
+                Objects.equals(detailRankingCardContentList, user.detailRankingCardContentList);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, userName, password, ecoPoints, detailRankingCardContentList);
     }
 }

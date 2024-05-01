@@ -1,5 +1,6 @@
 package at.htl.ecopoints.ui.layout
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -81,6 +82,8 @@ class TripView {
     @OptIn(ExperimentalMaterial3Api::class)
     @SuppressLint("CheckResult", "UnusedMaterial3ScaffoldPaddingParameter")
     fun compose(activity: ComponentActivity) {
+
+
         activity.setContent {
             EcoPointsTheme {
                 Surface(
@@ -116,7 +119,7 @@ class TripView {
                             val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Trip") }
                             Box(
                                 modifier = Modifier.fillMaxSize()
-                            ){
+                            ) {
 
                                 BottomNavBar(
                                     currentScreen = currentScreen,
@@ -333,11 +336,12 @@ class TripView {
         val state = store.subject.map { it.tripViewModel.map }.subscribeAsState(Map());
         if (state.value.showMap) {
             BasicAlertDialog(
-                onDismissRequest = { store.next{ it -> it.tripViewModel.map.showMap = false } },
+                onDismissRequest = { store.next { it -> it.tripViewModel.map.showMap = false } },
                 properties = DialogProperties(
                     dismissOnBackPress = true,
                     dismissOnClickOutside = true,
-                    usePlatformDefaultWidth = false)
+                    usePlatformDefaultWidth = false
+                )
             ) {
                 ShowMap(
                     modifier = Modifier

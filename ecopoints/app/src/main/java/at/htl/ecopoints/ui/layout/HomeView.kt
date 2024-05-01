@@ -267,7 +267,7 @@ class HomeView {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp)
-                .padding(0.dp, 260.dp, 0.dp, 0.dp)
+                .padding(0.dp, 260.dp, 0.dp, 50.dp)
         ) {
             Spacer(modifier = Modifier.height(10.dp))
 
@@ -343,10 +343,10 @@ class HomeView {
                 }
             }
 
-           /* if (state.value.showDetailedLastRidesPopup){
-                val intent = Intent(this@MainActivity, LastRidesActivity::class.java)
-                startActivity(intent)
-            }*/
+           if (state.value.showDetailedLastRidesPopup){
+                val lastRidesView = LastRidesView()
+                lastRidesView.compose(activity = context as ComponentActivity, store)
+           }
 
             if (state.value.showDialog) {
                 AlertDialog(
@@ -394,6 +394,7 @@ class HomeView {
                             store.next {
                                 it.homeInfo.showDialog = false
                                 it.homeInfo.selectedTripDate = null
+                                it.homeInfo.showDetailedLastRidesPopup = false
                             }
                         }) {
                             Text("OK")

@@ -1,7 +1,11 @@
 package at.htl.ecopoints.model;
 
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.UUID;
+
+import at.htl.ecopoints.R;
 
 public class Trip {
     private UUID id;
@@ -13,6 +17,9 @@ public class Trip {
     private Date start;
     private Date end;
     private double rewardedEcoPoints;
+
+    private List<List<CardContent>> detailTripCardContentList;
+
 
     public Trip() {
     }
@@ -27,6 +34,23 @@ public class Trip {
         this.start = start;
         this.end = end;
         this.rewardedEcoPoints = rewardedEcoPoints;
+
+        this.detailTripCardContentList = new LinkedList<>(){
+            {
+                add(new LinkedList<>(){
+                    {
+                        add(new CardContent(String.valueOf(rewardedEcoPoints), "Eco-Points", R.drawable.ranking_category_ecopoints));
+                        add(new CardContent(String.valueOf(distance), "Distance", R.drawable.ranking_category_distance));
+                    }
+                });
+                add(new LinkedList<>(){
+                    {
+                        add(new CardContent(String.valueOf(avgSpeed), "Avg. Speed", R.drawable.ranking_category_avg_speed));
+                        add(new CardContent(String.valueOf(avgEngineRotation), "Avg. RPM", R.drawable.ranking_category_avg_rpm));
+                    }
+                });
+            }
+        };
     }
 
     public UUID getId() {
@@ -100,5 +124,9 @@ public class Trip {
 
     public void setRewardedEcoPoints(double rewardedEcoPoints) {
         this.rewardedEcoPoints = rewardedEcoPoints;
+    }
+
+    public List<List<CardContent>> getDetailTripCardContentList() {
+        return detailTripCardContentList;
     }
 }

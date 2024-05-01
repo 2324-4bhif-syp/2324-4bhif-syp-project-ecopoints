@@ -1,10 +1,15 @@
 package at.htl.ecopoints.model.reading;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.util.Log;
+
+import androidx.core.app.ActivityCompat;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -39,8 +44,11 @@ public class BtConnectionHandler {
 
     }
 
-    @SuppressLint("MissingPermission")
     public void createConnection(BtDevice device) {
+
+        if (pairedBtDevices == null) {
+            getPairedDevices();
+        }
 
         BluetoothDevice btDevice = pairedBtDevices.stream()
                 .filter(i -> Objects.equals(i.getAddress(), device.getAddress()))
@@ -84,13 +92,14 @@ public class BtConnectionHandler {
         }
     }
 
+
     @SuppressLint("MissingPermission")
     private CompletableFuture<Boolean> connect(BluetoothDevice btDevice) {
         CompletableFuture<Boolean> future = new CompletableFuture<>();
 
         executor.execute(() -> {
             try {
-                BluetoothSocket btSocket = btDevice.createRfcommSocketToServiceRecord(RF_COMM_UUID);
+                @SuppressLint("MissingPermission") BluetoothSocket btSocket = btDevice.createRfcommSocketToServiceRecord(RF_COMM_UUID);
                 btSocket.connect();
                 if (btSocket.isConnected()) {
                     Log.d(TAG, "Connected to Bt-Device: " + btDevice.getName());

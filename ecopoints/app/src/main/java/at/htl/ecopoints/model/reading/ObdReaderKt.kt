@@ -1,8 +1,7 @@
-package at.htl.ecopoints.model.reading;
+package at.htl.ecopoints.model.reading
 
 import android.util.Log
 import at.htl.ecopoints.model.Store
-import com.github.eltonvs.obd.command.ObdResponse
 import com.github.eltonvs.obd.command.engine.AbsoluteLoadCommand
 import com.github.eltonvs.obd.command.engine.LoadCommand
 import com.github.eltonvs.obd.command.engine.RPMCommand
@@ -21,12 +20,8 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import java.io.InputStream
 import java.io.OutputStream
-import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.coroutines.Continuation
-import kotlin.coroutines.CoroutineContext
 
 
 @Singleton
@@ -35,6 +30,11 @@ class ObdReaderKt {
 
     @Inject
     lateinit var store: Store
+
+    @Inject
+    constructor(){
+
+    }
 
     val scope = CoroutineScope(Dispatchers.IO)
 

@@ -1,6 +1,5 @@
 package at.htl.ecopoints.ui.layout
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -53,6 +52,7 @@ import at.htl.ecopoints.model.Store
 import at.htl.ecopoints.model.reading.BtConnectionHandler
 import at.htl.ecopoints.model.reading.BtDevice
 import at.htl.ecopoints.model.reading.ObdReader
+import at.htl.ecopoints.model.reading.ObdReaderKt
 import at.htl.ecopoints.model.viewmodel.TripViewModel
 import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.ui.component.ShowMap
@@ -71,6 +71,9 @@ class TripView {
 
     @Inject
     lateinit var obdReader: ObdReader
+
+    @Inject
+    lateinit var obdReaderKt: ObdReaderKt
 
     @Inject
     lateinit var btConnectionHandler: BtConnectionHandler
@@ -112,7 +115,7 @@ class TripView {
                         }
                     }, bottomBar = {
                         Column(modifier = Modifier.padding(bottom = 50.dp)) {
-                            ConnectionInfo(store, obdReader, btConnectionHandler)
+                            ConnectionInfo(store, btConnectionHandler)
                         }
 
                         Column {
@@ -205,22 +208,24 @@ class TripView {
     @SuppressLint("MissingPermission", "CheckResult")
     @Composable
     fun ConnectionInfo(
-        store: Store, obdReader: ObdReader, btConnectionHandler: BtConnectionHandler
+        store: Store, btConnectionHandler: BtConnectionHandler
     ) {
         val state = store.subject.map { it.tripViewModel }.subscribeAsState(TripViewModel())
 
-        var connectionStateColor = Color.Red;
+        var connectionStateColor = Color.Red
 
         store.subject.map { it.tripViewModel }.subscribe {
-            if (it.connectionStateString == "Connected") {
-                connectionStateColor = Color.Green
+            connectionStateColor = if (it.connectionStateString == "Connected") {
+                Color.Green
             } else if (it.connectionStateString.contains("Connecting")) {
-                connectionStateColor = Color.Yellow
+                Color.Yellow
             } else {
-                connectionStateColor = Color.Red
+                Color.Red
             }
             if (it.isConnected) {
-                obdReader.startReading(it.inputStream, it.outputStream)
+//                obdReader.startReading(it.inputStream, it.outputStream)
+                    obdReaderKt.startReading(it.inputStream, it.outputStream)
+
             }
         }
 
@@ -333,7 +338,7 @@ class TripView {
     @ExperimentalMaterial3Api
     @Composable
     fun ShowMapCard(store: Store) {
-        val state = store.subject.map { it.tripViewModel.map }.subscribeAsState(Map());
+        val state = store.subject.map { it.tripViewModel.map }.subscribeAsState(Map())
         if (state.value.showMap) {
             BasicAlertDialog(
                 onDismissRequest = { store.next { it -> it.tripViewModel.map.showMap = false } },
@@ -351,7 +356,7 @@ class TripView {
                 Column {
                     OutlinedButton(
                         onClick = {
-                            store.next { it -> it.tripViewModel.map.showMap = false };
+                            store.next { it -> it.tripViewModel.map.showMap = false }
                             Log.d("MapCloseButton", "Clicked")
                         },
                         modifier = Modifier

@@ -16,14 +16,19 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.IconButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -34,6 +39,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rxjava3.subscribeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -49,6 +55,8 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import at.htl.ecopoints.MainActivity
@@ -97,9 +105,18 @@ class HomeView {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                    ) {
+
+                        HomeHeader()
+
+                    }
+                    ShowPhoto()
                     ShowPrices()
 
-                    ShowPhoto()
                     ShowText()
 
                     LastTrips(activity)
@@ -120,6 +137,71 @@ class HomeView {
         }
     }
 
+    @Composable
+    private fun HomeHeader(){
+        Row(
+            modifier = Modifier
+                .padding(horizontal = 16.dp, vertical = 10.dp)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            Image(
+                painter = painterResource(id = R.drawable.home_austria_flag),
+                contentDescription = "flag",
+                modifier = Modifier
+                    .size(30.dp)
+                    .clip(RoundedCornerShape(10.dp))
+            )
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Image(
+                    painter = painterResource(id = R.drawable.home_crown),
+                    contentDescription = "crown",
+                    modifier = Modifier
+                        .size(35.dp)
+                        .clip(RoundedCornerShape(10.dp))
+                )
+
+                Text(
+                    text = "42",
+                    style = TextStyle(
+                        color = Color(0xFFFFD700),
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Bold
+                    ),
+                    modifier = Modifier.padding(start = 5.dp)
+                )
+            }
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Image(
+                    painter = painterResource(id = R.drawable.home_friends),
+                    contentDescription = "friends",
+                    modifier = Modifier
+                        .size(30.dp)
+                        .clip(RoundedCornerShape(10.dp))
+                )
+
+                Text(
+                    text = "6",
+                    style = TextStyle(
+                        color = Color(0xFF00A5FF),
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Bold
+                    ),
+                    modifier = Modifier.padding(start = 5.dp)
+                )
+            }
+        }
+
+        androidx.compose.material3.Divider(thickness = 1.dp, color = Color.LightGray)
+    }
 
     @Composable
     fun ShowPhoto() {
@@ -136,7 +218,7 @@ class HomeView {
                     .fillMaxWidth()
                     .align(Alignment.TopStart)
                     .scale(2.0f)
-                    .padding(top = 30.dp)
+                    .padding(top = 60.dp)
             )
         }
     }
@@ -169,7 +251,7 @@ class HomeView {
                 }
                 append("  ${String.format("%.2f", dieselPrice)}€")
             },
-            modifier = Modifier.padding(start = 90.dp, top = 150.dp),
+            modifier = Modifier.padding(start = 90.dp, top = 180.dp),
         )
 
         Text(
@@ -179,7 +261,7 @@ class HomeView {
                 }
                 append("  ${String.format("%.2f", e5Price)}€")
             },
-            modifier = Modifier.padding(start = 270.dp, top = 150.dp),
+            modifier = Modifier.padding(start = 270.dp, top = 180.dp),
         )
     }
 
@@ -193,7 +275,7 @@ class HomeView {
             fontSize = 25.sp,
             fontWeight = FontWeight.Bold,
             fontStyle = FontStyle.Italic,
-            modifier = Modifier.padding(10.dp, 240.dp, 0.dp,0.dp),
+            modifier = Modifier.padding(10.dp, 270.dp, 0.dp,0.dp),
 
             style = TextStyle(
                 brush = Brush.linearGradient(
@@ -264,7 +346,7 @@ class HomeView {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp)
-                .padding(0.dp, 260.dp, 0.dp, 50.dp)
+                .padding(0.dp, 290.dp, 0.dp, 50.dp)
         ) {
             Spacer(modifier = Modifier.height(10.dp))
 

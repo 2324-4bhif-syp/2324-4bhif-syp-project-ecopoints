@@ -21,14 +21,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.IconButton
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -55,8 +51,6 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import at.htl.ecopoints.MainActivity
@@ -111,7 +105,7 @@ class HomeView {
                             .fillMaxSize()
                     ) {
 
-                        HomeHeader()
+                        HomeHeader(activity)
 
                     }
                     ShowPhoto()
@@ -138,7 +132,17 @@ class HomeView {
     }
 
     @Composable
-    private fun HomeHeader(){
+    private fun HomeHeader(context: Context){
+
+        val trips = getTripDataFromDB(context)
+        var ecopoints = 0.0;
+
+        trips.forEach{
+                trip ->
+            ecopoints += trip.rewardedEcoPoints
+        }
+
+
         Row(
             modifier = Modifier
                 .padding(horizontal = 16.dp, vertical = 10.dp)
@@ -167,7 +171,7 @@ class HomeView {
                 )
 
                 Text(
-                    text = "42",
+                    text = String.format("%.1f", ecopoints),
                     style = TextStyle(
                         color = Color(0xFFFFD700),
                         fontSize = 15.sp,
@@ -205,23 +209,32 @@ class HomeView {
 
     @Composable
     fun ShowPhoto() {
-
         val painter = painterResource(id = R.drawable.app_icon)
 
         Box(
-            modifier = Modifier
+            modifier = Modifier.fillMaxWidth()
         ) {
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+            )
+
             Image(
                 painter = painter,
                 contentDescription = null,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.TopStart)
+                    .align(Alignment.TopCenter)
                     .scale(2.0f)
                     .padding(top = 60.dp)
             )
+
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+            )
         }
     }
+
 
     @Composable
     fun ShowPrices() {
@@ -428,62 +441,79 @@ class HomeView {
             }
 
             if (state.value.showDialog) {
-                AlertDialog(
-                    onDismissRequest = {
+                ShowTripPopupDialog(
+                    showDialog = state.value.showDialog,
+                    selectedTripDate = state.value.selectedTripDate,
+                    trips = trips,
+                    context = context,
+                    onCloseDialog = {
                         store.next {
                             it.homeInfo.showDialog = false
-                            it.homeInfo.selectedTripDate = null;
-                        }
-                    },
-                    title = {
-                        Text(
-                            "Trip: " + (state.value.selectedTripDate?.let {
-                                SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(it)
-                            } ?: "Unknown Date")
-                        )
-                    },
-                    text = {
-                        Column {
-                            val selectedTrip = trips.find { it.start == state.value.selectedTripDate }
-                            if (selectedTrip != null) {
-                                Text("End Date: ${SimpleDateFormat("dd/MM/yyyy, HH:mm",
-                                    Locale.getDefault()).format(selectedTrip.end)}")
-                                Text("Distance: ${selectedTrip.distance} km")
-                                Text("Average Speed: ${selectedTrip.avgSpeed} km/h")
-                                Text("Average Engine Rotation: " +
-                                        "${selectedTrip.avgEngineRotation} rpm")
-                                Text("Eco Points: ${selectedTrip.rewardedEcoPoints}")
-                            } else {
-                                Text("Trip details not available.")
-                            }
-                            Spacer(modifier = Modifier.height(16.dp))
-                            ShowMap(
-                                cameraPositionState = rememberCameraPositionState {
-                                    position = CameraPosition.fromLatLngZoom(
-                                        LatLng(getLatLngsFromTripDB(context, selectedTrip!!.id)
-                                            .first().second.first.latitude,
-                                            getLatLngsFromTripDB(context, selectedTrip!!.id)
-                                                .first().second.first.longitude), 10f)
-                                },
-                                latLngList = getLatLngsFromTripDB(context, selectedTrip!!.id)
-                            )
-                        }
-                    },
-                    confirmButton = {
-                        TextButton(onClick = {
-                            store.next {
-                                it.homeInfo.showDialog = false
-                                it.homeInfo.selectedTripDate = null
-                                it.homeInfo.showDetailedLastRidesPopup = false
-                            }
-                        }) {
-                            Text("OK")
+                            it.homeInfo.selectedTripDate = null
+                            it.homeInfo.showDetailedLastRidesPopup = false
                         }
                     }
                 )
             }
         }
     }
+
+    @Composable
+    fun ShowTripPopupDialog(
+        showDialog: Boolean,
+        selectedTripDate: Date?,
+        trips: List<Trip>,
+        context: Context,
+        onCloseDialog: () -> Unit
+    ) {
+        if (showDialog) {
+            AlertDialog(
+                onDismissRequest = {
+                    onCloseDialog()
+                },
+                title = {
+                    Text(
+                        "Trip: " + (selectedTripDate?.let {
+                            SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(it)
+                        } ?: "Unknown Date")
+                    )
+                },
+                text = {
+                    Column {
+                        val selectedTrip = trips.find { it.start == selectedTripDate }
+                        if (selectedTrip != null) {
+                            Text("End Date: ${SimpleDateFormat("dd/MM/yyyy, HH:mm", Locale.getDefault()).format(selectedTrip.end)}")
+                            Text("Distance: ${selectedTrip.distance} km")
+                            Text("Average Speed: ${selectedTrip.avgSpeed} km/h")
+                            Text("Average Engine Rotation: ${selectedTrip.avgEngineRotation} rpm")
+                            Text("Eco Points: ${selectedTrip.rewardedEcoPoints}")
+                        } else {
+                            Text("Trip details not available.")
+                        }
+                        Spacer(modifier = Modifier.height(16.dp))
+                        ShowMap(
+                            cameraPositionState = rememberCameraPositionState {
+                                position = CameraPosition.fromLatLngZoom(
+                                    LatLng(getLatLngsFromTripDB(context, selectedTrip!!.id)
+                                        .first().second.first.latitude,
+                                        getLatLngsFromTripDB(context, selectedTrip!!.id)
+                                            .first().second.first.longitude), 10f)
+                            },
+                            latLngList = getLatLngsFromTripDB(context, selectedTrip!!.id)
+                        )
+                    }
+                },
+                confirmButton = {
+                    TextButton(onClick = {
+                        onCloseDialog()
+                    }) {
+                        Text("OK")
+                    }
+                }
+            )
+        }
+    }
+
 
 
     private fun readTripData2FromCsvAndAddToDB(fileName: String, context: Context) {

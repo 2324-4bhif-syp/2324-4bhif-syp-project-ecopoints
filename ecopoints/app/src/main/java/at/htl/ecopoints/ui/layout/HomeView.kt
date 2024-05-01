@@ -2,7 +2,6 @@ package at.htl.ecopoints.ui.layout
 
 import android.content.Context
 import android.content.Intent
-import android.content.res.AssetManager
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -52,16 +51,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat.startActivity
-import at.htl.ecopoints.HomeActivity
 import at.htl.ecopoints.MainActivity
 import at.htl.ecopoints.R
 import at.htl.ecopoints.db.DBHelper
 import at.htl.ecopoints.model.CarData
 import at.htl.ecopoints.model.HomeInfo
-import at.htl.ecopoints.model.RankingInfo
 import at.htl.ecopoints.model.Store
-import at.htl.ecopoints.model.TankerkoenigApiClient
+import at.htl.ecopoints.apis.TankerkoenigApiClient
 import at.htl.ecopoints.model.Trip
 import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.ui.component.ShowMap
@@ -147,8 +143,8 @@ class HomeView {
 
     @Composable
     fun ShowPrices() {
-        var dieselPrice = 0.0;
-        var e5Price = 0.0;
+        var dieselPrice = 0.0
+        var e5Price = 0.0
 
         val tankerkoenigApiClient = TankerkoenigApiClient()
         try {
@@ -158,11 +154,11 @@ class HomeView {
                 e5Price = gasData.e5
             }
 
-            while(dieselPrice == 0.0 && e5Price == 0.0) {
+            while (dieselPrice == 0.0 && e5Price == 0.0) {
                 Thread.sleep(0.1.toLong())
             }
 
-        }catch (e: Exception) {
+        } catch (e: Exception) {
             Log.e("Tankpreis Error", "Error: ${e.message}")
         }
 
@@ -171,9 +167,9 @@ class HomeView {
                 withStyle(style = SpanStyle(fontSize = 25.sp, fontStyle = FontStyle.Italic)) {
                     append("Diesel\n")
                 }
-                append("  ${dieselPrice}€")
+                append("  ${String.format("%.2f", dieselPrice)}€")
             },
-            modifier = Modifier.padding(start = 80.dp, top = 150.dp),
+            modifier = Modifier.padding(start = 90.dp, top = 150.dp),
         )
 
         Text(
@@ -181,12 +177,12 @@ class HomeView {
                 withStyle(style = SpanStyle(fontSize = 25.sp, fontStyle = FontStyle.Italic)) {
                     append("Benzin\n")
                 }
-                append("  ${e5Price}€")
+                append("  ${String.format("%.2f", e5Price)}€")
             },
-            modifier = Modifier.padding(start = 260.dp, top = 150.dp),
+            modifier = Modifier.padding(start = 270.dp, top = 150.dp),
         )
-
     }
+
 
     @Composable
     fun ShowText(){
@@ -277,7 +273,7 @@ class HomeView {
                     .fillMaxSize()
                     .weight(1f)
             ) {
-                items(trips){ trip ->
+                items(trips) { trip ->
                     LastTripsButton(trip = trip) {
                         store.next {
                             it.homeInfo.showDialog = true
@@ -286,9 +282,9 @@ class HomeView {
                     }
 
                 }
-                }
             }
 
+            Spacer(modifier = Modifier.height(16.dp))
 
             Row(
                 modifier = Modifier
@@ -298,7 +294,7 @@ class HomeView {
             ) {
                 Button(
                     onClick = {
-                        store.next{
+                        store.next {
                             it.homeInfo.showDetailedLastRidesPopup = true
                         }
                     },
@@ -323,9 +319,9 @@ class HomeView {
 
                 Button(
                     onClick = {
-                            val intent = Intent(context, MainActivity::class.java)
-                            context.startActivity(intent)
-                              },
+                        val intent = Intent(context, MainActivity::class.java)
+                        context.startActivity(intent)
+                    },
                     modifier = Modifier
                         .background(
                             brush = Brush.horizontalGradient(
@@ -344,15 +340,15 @@ class HomeView {
                 }
             }
 
-           if (state.value.showDetailedLastRidesPopup){
+            if (state.value.showDetailedLastRidesPopup) {
                 val lastRidesView = LastRidesView()
                 lastRidesView.compose(activity = context as ComponentActivity, store)
-           }
+            }
 
             if (state.value.showDialog) {
                 AlertDialog(
                     onDismissRequest = {
-                        store.next{
+                        store.next {
                             it.homeInfo.showDialog = false
                             it.homeInfo.selectedTripDate = null;
                         }
@@ -387,7 +383,8 @@ class HomeView {
                                             getLatLngsFromTripDB(context, selectedTrip!!.id)
                                                 .first().second.first.longitude), 10f)
                                 },
-                                latLngList = getLatLngsFromTripDB(context, selectedTrip!!.id))
+                                latLngList = getLatLngsFromTripDB(context, selectedTrip!!.id)
+                            )
                         }
                     },
                     confirmButton = {
@@ -406,43 +403,6 @@ class HomeView {
         }
     }
 
-
-    private fun readTripDataFromCsvAndAddToDB(fileName: String, context: Context) {
-        val dbHelper = DBHelper(context, null)
-
-        dbHelper.onUpgrade(dbHelper.writableDatabase, 1, 2)
-
-        try {
-            val inputStream: InputStream = context.assets.open(fileName)
-            val reader = CSVReaderBuilder(InputStreamReader(inputStream))
-                .withCSVParser(CSVParserBuilder().withSeparator(';').build())
-                .build()
-
-            val header = reader.readNext()
-
-            var line = reader.readNext()
-            while (line != null) {
-                val id = UUID.fromString(line[0])
-                val carId = line[1].toLong()
-                val userId = line[2].toLong()
-                val distance = line[3].toDouble()
-                val avgSpeed = line[4].toDouble()
-                val avgEngineRotation = line[5].toDouble()
-                val startDate = Date(line[6].toLong())
-                val endDate = Date(line[7].toLong())
-                val rewardedEcoPoints = line[8].toDouble()
-
-                val trip = Trip(id, carId, userId, distance, avgSpeed, avgEngineRotation, startDate, endDate, rewardedEcoPoints)
-                dbHelper.addTrip(trip)
-
-                line = reader.readNext()
-            }
-        } catch (e: IOException) {
-            e.printStackTrace()
-        } finally {
-            dbHelper.close()
-        }
-    }
 
     private fun readTripData2FromCsvAndAddToDB(fileName: String, context: Context) {
         val dbHelper = DBHelper(context, null)
@@ -557,8 +517,8 @@ private fun getLatLngsFromTripDB(context: Context,  tripId : UUID): List<Pair<Co
     //for testing purposes, change to fuel consumption when finished
     //TODO: change to fuel consumption
 
-    for(d in data) {
-        if(d.tripId == tripId) {
+    for (d in data) {
+        if (d.tripId == tripId) {
             if (d.currentEngineRPM <= 1500)
                 latLngs.add(
                     Pair(
@@ -591,7 +551,8 @@ private fun getLatLngsFromTripDB(context: Context,  tripId : UUID): List<Pair<Co
     }
 
     dbHelper.close()
-    if(latLngs.isEmpty())
+    if (latLngs.isEmpty())
         latLngs.add(Pair(Color.Black, Pair(LatLng(0.0, 0.0), 0.0)))
     return latLngs
+}
 }

@@ -1,4 +1,4 @@
-package at.htl.ecopoints.model;
+package at.htl.ecopoints.apis;
 
 import android.os.AsyncTask;
 import android.util.Log;

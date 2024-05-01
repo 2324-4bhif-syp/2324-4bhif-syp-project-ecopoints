@@ -29,6 +29,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rxjava3.subscribeAsState
@@ -52,6 +53,8 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.startActivity
+import at.htl.ecopoints.HomeActivity
+import at.htl.ecopoints.MainActivity
 import at.htl.ecopoints.R
 import at.htl.ecopoints.db.DBHelper
 import at.htl.ecopoints.model.CarData
@@ -98,8 +101,6 @@ class HomeView {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-
-
                     ShowPrices()
 
                     ShowPhoto()
@@ -322,8 +323,8 @@ class HomeView {
 
                 Button(
                     onClick = {
-                              val tripView = TripView()
-                                tripView.compose(activity = context as ComponentActivity)
+                            val intent = Intent(context, MainActivity::class.java)
+                            context.startActivity(intent)
                               },
                     modifier = Modifier
                         .background(
@@ -378,15 +379,15 @@ class HomeView {
                                 Text("Trip details not available.")
                             }
                             Spacer(modifier = Modifier.height(16.dp))
-                            /*ShowMap(
+                            ShowMap(
                                 cameraPositionState = rememberCameraPositionState {
                                     position = CameraPosition.fromLatLngZoom(
-                                        LatLng(getLatLngsFromTripDB(selectedTrip!!.id)
+                                        LatLng(getLatLngsFromTripDB(context, selectedTrip!!.id)
                                             .first().second.first.latitude,
-                                            getLatLngsFromTripDB(selectedTrip!!.id)
+                                            getLatLngsFromTripDB(context, selectedTrip!!.id)
                                                 .first().second.first.longitude), 10f)
                                 },
-                                latLngList = getLatLngsFromTripDB(selectedTrip!!.id))*/
+                                latLngList = getLatLngsFromTripDB(context, selectedTrip!!.id))
                         }
                     },
                     confirmButton = {
@@ -547,3 +548,50 @@ class HomeView {
 
         dbHelper.close()
     }
+
+private fun getLatLngsFromTripDB(context: Context,  tripId : UUID): List<Pair<Color, Pair<LatLng, Double>>> {
+    val dbHelper = DBHelper(context, null)
+    val data = dbHelper.getAllCarData()
+    val latLngs = mutableStateListOf<Pair<Color, Pair<LatLng, Double>>>()
+
+    //for testing purposes, change to fuel consumption when finished
+    //TODO: change to fuel consumption
+
+    for(d in data) {
+        if(d.tripId == tripId) {
+            if (d.currentEngineRPM <= 1500)
+                latLngs.add(
+                    Pair(
+                        Color.Green,
+                        Pair(LatLng(d.latitude, d.longitude), d.currentEngineRPM)
+                    )
+                )
+            else if (d.currentEngineRPM > 1500 && d.currentEngineRPM <= 2500)
+                latLngs.add(
+                    Pair(
+                        Color.Yellow,
+                        Pair(LatLng(d.latitude, d.longitude), d.currentEngineRPM)
+                    )
+                )
+            else if (d.currentEngineRPM > 2500 && d.currentEngineRPM <= 3500)
+                latLngs.add(
+                    Pair(
+                        Color.Red,
+                        Pair(LatLng(d.latitude, d.longitude), d.currentEngineRPM)
+                    )
+                )
+            else
+                latLngs.add(
+                    Pair(
+                        Color.Black,
+                        Pair(LatLng(d.latitude, d.longitude), d.currentEngineRPM)
+                    )
+                )
+        }
+    }
+
+    dbHelper.close()
+    if(latLngs.isEmpty())
+        latLngs.add(Pair(Color.Black, Pair(LatLng(0.0, 0.0), 0.0)))
+    return latLngs
+}

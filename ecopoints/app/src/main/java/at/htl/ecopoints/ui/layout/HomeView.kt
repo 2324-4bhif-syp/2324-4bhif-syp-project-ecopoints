@@ -284,7 +284,7 @@ class HomeView {
         val gradientColors = listOf(Gray, Green, DarkGray)
 
         Text(
-            text = "Last Rides:",
+            text = "Top 3 Rides:",
             fontSize = 25.sp,
             fontWeight = FontWeight.Bold,
             fontStyle = FontStyle.Italic,
@@ -353,7 +353,7 @@ class HomeView {
 
         addFakeDataToDB(context)
 
-        val trips = getTripDataFromDB(context)
+        val trips = getTopThreeTripDataFromDB(context)
 
         Column(
             modifier = Modifier
@@ -384,7 +384,7 @@ class HomeView {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(30.dp, 10.dp, 30.dp, 200.dp),
+                    .padding(30.dp, 10.dp, 30.dp, 220.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Button(
@@ -607,6 +607,13 @@ class HomeView {
     private fun getTripDataFromDB(context: Context): List<Trip> {
         val dbHelper = DBHelper(context, null)
         val trips = dbHelper.getAllTrips()
+        dbHelper.close()
+        return trips
+    }
+
+    private fun getTopThreeTripDataFromDB(context: Context): List<Trip> {
+        val dbHelper = DBHelper(context, null)
+        val trips = dbHelper.getTopThreeTrips()
         dbHelper.close()
         return trips
     }

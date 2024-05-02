@@ -139,6 +139,20 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         return tripList
     }
 
+    fun getTopThreeTrips(): List<Trip> {
+        val db = this.readableDatabase
+        val tripList = mutableListOf<Trip>()
+        val cursor = db.rawQuery("SELECT * FROM $TABLE_TRIP ORDER BY $REWARDEDECOPOINTS_COL DESC LIMIT 3", null)
+
+        if(cursor.moveToFirst()) {
+            do {
+                tripList.add(getTripFromCursor(cursor))
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        return tripList
+    }
+
     fun getAllCarDataForTrip(tripId: UUID): List<CarData> {
 
         var carDatas = getAllCarData();

@@ -250,7 +250,10 @@ class LastRidesView {
         }
 
         if (state.value.showDialog2) {
-            ShowTripPopupDialog(
+
+            val homeView = HomeView()
+
+            homeView.ShowTripPopupDialog(
                 showDialog = state.value.showDialog2,
                 selectedTripDate = state.value.selectedTripDate2,
                 trips = trips,
@@ -264,112 +267,6 @@ class LastRidesView {
                 }
             )
         }
-
     }
-
-    @Composable
-    fun ShowTripPopupDialog(
-        showDialog: Boolean,
-        selectedTripDate: Date?,
-        trips: List<Trip>,
-        context: Context,
-        onCloseDialog: () -> Unit
-    ) {
-        if (showDialog) {
-            AlertDialog(
-                onDismissRequest = {
-                    onCloseDialog()
-                },
-                title = {
-                    Text(
-                        "Trip: " + (selectedTripDate?.let {
-                            SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(it)
-                        } ?: "Unknown Date")
-                    )
-                },
-                text = {
-                    Column {
-                        val selectedTrip = trips.find { it.start == selectedTripDate }
-                        if (selectedTrip != null) {
-                            Text("End Date: ${SimpleDateFormat("dd/MM/yyyy, HH:mm", Locale.getDefault()).format(selectedTrip.end)}")
-                            Text("Distance: ${selectedTrip.distance} km")
-                            Text("Average Speed: ${selectedTrip.avgSpeed} km/h")
-                            Text("Average Engine Rotation: ${selectedTrip.avgEngineRotation} rpm")
-                            Text("Eco Points: ${selectedTrip.rewardedEcoPoints}")
-                        } else {
-                            Text("Trip details not available.")
-                        }
-                        Spacer(modifier = Modifier.height(16.dp))
-                        ShowMap(
-                            cameraPositionState = rememberCameraPositionState {
-                                position = CameraPosition.fromLatLngZoom(
-                                    LatLng(getLatLngsFromTripDB(context, selectedTrip!!.id)
-                                        .first().second.first.latitude,
-                                        getLatLngsFromTripDB(context, selectedTrip!!.id)
-                                            .first().second.first.longitude), 10f)
-                            },
-                            latLngList = getLatLngsFromTripDB(context, selectedTrip!!.id)
-                        )
-                    }
-                },
-                confirmButton = {
-                    TextButton(onClick = {
-                        onCloseDialog()
-                    }) {
-                        Text("OK")
-                    }
-                }
-            )
-        }
-    }
-
-
-    private fun getLatLngsFromTripDB(context: Context,  tripId : UUID): List<Pair<Color, Pair<LatLng, Double>>> {
-        val dbHelper = DBHelper(context, null)
-        val data = dbHelper.getAllCarData()
-        val latLngs = mutableStateListOf<Pair<Color, Pair<LatLng, Double>>>()
-
-        //for testing purposes, change to fuel consumption when finished
-        //TODO: change to fuel consumption
-
-        for (d in data) {
-            if (d.tripId == tripId) {
-                if (d.currentEngineRPM <= 1500)
-                    latLngs.add(
-                        Pair(
-                            Color.Green,
-                            Pair(LatLng(d.latitude, d.longitude), d.currentEngineRPM)
-                        )
-                    )
-                else if (d.currentEngineRPM > 1500 && d.currentEngineRPM <= 2500)
-                    latLngs.add(
-                        Pair(
-                            Color.Yellow,
-                            Pair(LatLng(d.latitude, d.longitude), d.currentEngineRPM)
-                        )
-                    )
-                else if (d.currentEngineRPM > 2500 && d.currentEngineRPM <= 3500)
-                    latLngs.add(
-                        Pair(
-                            Color.Red,
-                            Pair(LatLng(d.latitude, d.longitude), d.currentEngineRPM)
-                        )
-                    )
-                else
-                    latLngs.add(
-                        Pair(
-                            Color.Black,
-                            Pair(LatLng(d.latitude, d.longitude), d.currentEngineRPM)
-                        )
-                    )
-            }
-        }
-
-        dbHelper.close()
-        if (latLngs.isEmpty())
-            latLngs.add(Pair(Color.Black, Pair(LatLng(0.0, 0.0), 0.0)))
-        return latLngs
-    }
-
 
 }

@@ -459,7 +459,7 @@ class HomeView {
     }
 
     @Composable
-    public fun ShowTripPopupDialog(
+    fun ShowTripPopupDialog(
         showDialog: Boolean,
         selectedTripDate: Date?,
         trips: List<Trip>,

@@ -16,4 +16,10 @@ public class HomeInfo {
 
     public Date selectedTripDate = new Date();
 
+    public boolean showDialog2 = false;
+    public Date selectedTripDate2 = new Date();
+
+    public boolean showDetailedLastRidesPopup2 = false;
+
+
 }

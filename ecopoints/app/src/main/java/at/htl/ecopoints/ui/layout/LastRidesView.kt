@@ -6,11 +6,14 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -23,11 +26,16 @@ import androidx.compose.material.Surface
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Timelapse
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rxjava3.subscribeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,23 +48,23 @@ import androidx.compose.ui.unit.dp
 import at.htl.ecopoints.HomeActivity
 import at.htl.ecopoints.R
 import at.htl.ecopoints.db.DBHelper
+import at.htl.ecopoints.model.HomeInfo
 import at.htl.ecopoints.model.Store
+import at.htl.ecopoints.model.Trip
 import at.htl.ecopoints.navigation.BottomNavBar
+import at.htl.ecopoints.ui.component.ShowMap
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.rememberCameraPositionState
 import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
+import java.util.UUID
 import javax.inject.Singleton
 
 @Singleton
 class LastRidesView {
-
-//    @Inject
-//    lateinit var store: Store
-//
-//    @Inject
-//    constructor() {
-//    }
-
     fun compose(activity: ComponentActivity, store: Store) {
         activity.setContent {
             EcoPointsTheme {
@@ -67,7 +75,7 @@ class LastRidesView {
                     Column {
                         ShowReturnBtn(activity, store)
                         ShowHeader(activity)
-                        ShowTripStatistic(activity);
+                        ShowTripStatistic(activity, store);
 
                         val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Home") }
 
@@ -124,7 +132,7 @@ class LastRidesView {
             sum += trip.distance
         }
 
-        Row(modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp, top = 50.dp)) {
+        Row(modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp, top = 10.dp)) {
             Column(modifier = Modifier.weight(1f)) {
                 androidx.compose.material.Text(
                     text = "Last Rides",
@@ -161,7 +169,10 @@ class LastRidesView {
         }
     }
     @Composable
-    private fun ShowTripStatistic(context: Context) {
+    private fun ShowTripStatistic(context: Context, store: Store) {
+
+        val state = store.subject.map { it.homeInfo }.subscribeAsState(HomeInfo())
+
 
         val cardWidth = 175.dp
         val cardHeight = 80.dp
@@ -179,11 +190,16 @@ class LastRidesView {
 
                 Column(modifier = Modifier.padding(vertical = 16.dp, horizontal = 16.dp)) {
 
+
                     Text(
                         text = formattedDate + " Uhr",
                         fontWeight = FontWeight.Bold,
                         fontSize = TextUnit(20f, TextUnitType.Sp),
-                        modifier = Modifier.padding(bottom = 10.dp)
+                        modifier = Modifier.clickable { store.next {
+                            it.homeInfo.selectedTripDate2 = trip.start
+                            it.homeInfo.showDialog2 = true
+                        }}
+                            .padding(bottom = 10.dp)
                     )
 
                     trip.detailTripCardContentList.forEach { row ->
@@ -232,6 +248,127 @@ class LastRidesView {
                 }
             }
         }
+
+        if (state.value.showDialog2) {
+            ShowTripPopupDialog(
+                showDialog = state.value.showDialog2,
+                selectedTripDate = state.value.selectedTripDate2,
+                trips = trips,
+                context = context,
+                onCloseDialog = {
+                    store.next {
+                        it.homeInfo.showDialog2 = false
+                        it.homeInfo.selectedTripDate2 = null
+                        it.homeInfo.showDetailedLastRidesPopup2 = false
+                    }
+                }
+            )
+        }
+
+    }
+
+    @Composable
+    fun ShowTripPopupDialog(
+        showDialog: Boolean,
+        selectedTripDate: Date?,
+        trips: List<Trip>,
+        context: Context,
+        onCloseDialog: () -> Unit
+    ) {
+        if (showDialog) {
+            AlertDialog(
+                onDismissRequest = {
+                    onCloseDialog()
+                },
+                title = {
+                    Text(
+                        "Trip: " + (selectedTripDate?.let {
+                            SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(it)
+                        } ?: "Unknown Date")
+                    )
+                },
+                text = {
+                    Column {
+                        val selectedTrip = trips.find { it.start == selectedTripDate }
+                        if (selectedTrip != null) {
+                            Text("End Date: ${SimpleDateFormat("dd/MM/yyyy, HH:mm", Locale.getDefault()).format(selectedTrip.end)}")
+                            Text("Distance: ${selectedTrip.distance} km")
+                            Text("Average Speed: ${selectedTrip.avgSpeed} km/h")
+                            Text("Average Engine Rotation: ${selectedTrip.avgEngineRotation} rpm")
+                            Text("Eco Points: ${selectedTrip.rewardedEcoPoints}")
+                        } else {
+                            Text("Trip details not available.")
+                        }
+                        Spacer(modifier = Modifier.height(16.dp))
+                        ShowMap(
+                            cameraPositionState = rememberCameraPositionState {
+                                position = CameraPosition.fromLatLngZoom(
+                                    LatLng(getLatLngsFromTripDB(context, selectedTrip!!.id)
+                                        .first().second.first.latitude,
+                                        getLatLngsFromTripDB(context, selectedTrip!!.id)
+                                            .first().second.first.longitude), 10f)
+                            },
+                            latLngList = getLatLngsFromTripDB(context, selectedTrip!!.id)
+                        )
+                    }
+                },
+                confirmButton = {
+                    TextButton(onClick = {
+                        onCloseDialog()
+                    }) {
+                        Text("OK")
+                    }
+                }
+            )
+        }
+    }
+
+
+    private fun getLatLngsFromTripDB(context: Context,  tripId : UUID): List<Pair<Color, Pair<LatLng, Double>>> {
+        val dbHelper = DBHelper(context, null)
+        val data = dbHelper.getAllCarData()
+        val latLngs = mutableStateListOf<Pair<Color, Pair<LatLng, Double>>>()
+
+        //for testing purposes, change to fuel consumption when finished
+        //TODO: change to fuel consumption
+
+        for (d in data) {
+            if (d.tripId == tripId) {
+                if (d.currentEngineRPM <= 1500)
+                    latLngs.add(
+                        Pair(
+                            Color.Green,
+                            Pair(LatLng(d.latitude, d.longitude), d.currentEngineRPM)
+                        )
+                    )
+                else if (d.currentEngineRPM > 1500 && d.currentEngineRPM <= 2500)
+                    latLngs.add(
+                        Pair(
+                            Color.Yellow,
+                            Pair(LatLng(d.latitude, d.longitude), d.currentEngineRPM)
+                        )
+                    )
+                else if (d.currentEngineRPM > 2500 && d.currentEngineRPM <= 3500)
+                    latLngs.add(
+                        Pair(
+                            Color.Red,
+                            Pair(LatLng(d.latitude, d.longitude), d.currentEngineRPM)
+                        )
+                    )
+                else
+                    latLngs.add(
+                        Pair(
+                            Color.Black,
+                            Pair(LatLng(d.latitude, d.longitude), d.currentEngineRPM)
+                        )
+                    )
+            }
+        }
+
+        dbHelper.close()
+        if (latLngs.isEmpty())
+            latLngs.add(Pair(Color.Black, Pair(LatLng(0.0, 0.0), 0.0)))
+        return latLngs
     }
 
 

@@ -60,9 +60,21 @@ class ObdReaderKt {
                     obdCommands.forEach { command ->
                         try {
                             val result = obdConnection.run(command, false, 0, 0)
+                            var sb = StringBuilder()
+
+                            sb.append("${command.name} Result:")
+                            sb.append("PID: $command.pid")
+                            sb.append("Raw command: ${command.rawCommand}")
+                            sb.append("Formatted value value: ${result.formattedValue}")
+                            sb.append("Value: ${result.value}")
+                            sb.append("Raw response: ${result.rawResponse}")
+                            sb.append("Unit: ${result.unit}")
+
+                            val logMsg = sb.toString()
+
                             Log.d(
                                 TAG,
-                                "${command.name}: $result"
+                                logMsg
                             )
 
                             delay(200)

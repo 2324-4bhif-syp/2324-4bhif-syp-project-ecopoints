@@ -2,12 +2,15 @@ package at.htl.ecopoints.io
 
 import android.util.Log
 import at.htl.ecopoints.model.Store
+import com.github.eltonvs.obd.command.ObdCommand
 import com.github.eltonvs.obd.command.ObdProtocols
+import com.github.eltonvs.obd.command.ObdRawResponse
 import com.github.eltonvs.obd.command.Switcher
 import com.github.eltonvs.obd.command.at.ResetAdapterCommand
 import com.github.eltonvs.obd.command.at.SelectProtocolCommand
 import com.github.eltonvs.obd.command.at.SetEchoCommand
 import com.github.eltonvs.obd.command.at.SetSpacesCommand
+import com.github.eltonvs.obd.command.bytesToInt
 import com.github.eltonvs.obd.command.engine.AbsoluteLoadCommand
 import com.github.eltonvs.obd.command.engine.LoadCommand
 import com.github.eltonvs.obd.command.engine.RPMCommand
@@ -42,19 +45,30 @@ class ObdReaderKt {
 
     }
 
+    class RpmCleanedResCommand  : ObdCommand() {
+        override val tag = "ENGINE_RPM_CLEANED_RES"
+        override val name = "Engine RPM_CLEANED_RES"
+        override val mode = "01"
+        override val pid = "0C"
+
+        override val defaultUnit = "RPM"
+        override val handler = { it: ObdRawResponse -> (bytesToInt(it.bufferedValue, bytesToProcess = 2) / 4).toString() }
+    }
+
     val scope = CoroutineScope(Dispatchers.IO)
 
     val obdCommands = listOf(
         RPMCommand(),
-        SpeedCommand(),
-        FuelConsumptionRateCommand(),
-        LoadCommand(),
-        AbsoluteLoadCommand(),
-        ThrottlePositionCommand(),
-        RelativeThrottlePositionCommand(),
-        FuelTypeCommand(),
-        EngineCoolantTemperatureCommand(),
-        OilTemperatureCommand()
+        RpmCleanedResCommand(),
+//        SpeedCommand(),
+//        FuelConsumptionRateCommand(),
+//        LoadCommand(),
+//        AbsoluteLoadCommand(),
+//        ThrottlePositionCommand(),
+//        RelativeThrottlePositionCommand(),
+//        FuelTypeCommand(),
+//        EngineCoolantTemperatureCommand(),
+//        OilTemperatureCommand()
     )
 
     suspend fun setupELM(obdConnection: ObdDeviceConnection) {

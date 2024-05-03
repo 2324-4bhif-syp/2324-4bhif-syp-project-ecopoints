@@ -6,7 +6,7 @@ import java.io.OutputStream;
 import at.htl.ecopoints.model.CarData;
 import at.htl.ecopoints.model.Map;
 import at.htl.ecopoints.model.Trip;
-import at.htl.ecopoints.model.reading.BtDevice;
+import at.htl.ecopoints.model.BtDevice;
 
 public class TripViewModel {
 

@@ -1,18 +1,12 @@
-package at.htl.ecopoints.model.reading;
+package at.htl.ecopoints.io;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.content.Context;
-import android.content.pm.PackageManager;
 import android.util.Log;
 
-import androidx.core.app.ActivityCompat;
-
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.Objects;
@@ -26,6 +20,7 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import at.htl.ecopoints.model.BtDevice;
 import at.htl.ecopoints.model.Store;
 
 @Singleton

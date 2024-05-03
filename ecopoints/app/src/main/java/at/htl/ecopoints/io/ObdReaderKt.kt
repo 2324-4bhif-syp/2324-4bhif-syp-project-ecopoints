@@ -1,4 +1,4 @@
-package at.htl.ecopoints.model.reading
+package at.htl.ecopoints.io
 
 import android.util.Log
 import at.htl.ecopoints.model.Store
@@ -52,7 +52,6 @@ class ObdReaderKt {
     )
 
     fun startReading(inputStream: InputStream?, outputStream: OutputStream?) {
-
         scope.launch {
             try {
                 val obdConnection = ObdDeviceConnection(inputStream!!, outputStream!!)
@@ -68,13 +67,13 @@ class ObdReaderKt {
 
                             delay(200)
                         } catch (e: Exception) {
-                            Log.e(TAG, "Error running OBD2 command ${command.name}", e)
+                            //Log.e(TAG, "Error running OBD2 command ${command.name}", e)
                         }
                     }
                     delay(1000)
                 }
             } catch (e: Exception) {
-                Log.e(TAG, "Error while setting up OBD connection", e)
+                //Log.e(TAG, "Error while setting up OBD connection", e)
             }
         }
 

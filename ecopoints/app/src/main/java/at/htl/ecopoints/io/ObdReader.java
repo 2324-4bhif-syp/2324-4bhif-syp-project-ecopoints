@@ -1,13 +1,10 @@
-package at.htl.ecopoints.model.reading;
+package at.htl.ecopoints.io;
 
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.github.eltonvs.obd.command.ATCommand;
 import com.github.eltonvs.obd.command.ObdResponse;
-import com.github.eltonvs.obd.command.Switcher;
-import com.github.eltonvs.obd.command.at.SetEchoCommand;
 import com.github.eltonvs.obd.command.engine.RPMCommand;
 import com.github.eltonvs.obd.connection.ObdDeviceConnection;
 

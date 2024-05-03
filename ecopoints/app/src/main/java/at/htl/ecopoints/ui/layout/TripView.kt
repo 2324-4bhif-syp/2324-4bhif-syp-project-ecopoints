@@ -49,10 +49,10 @@ import androidx.compose.ui.window.DialogProperties
 import at.htl.ecopoints.model.CarData
 import at.htl.ecopoints.model.Map
 import at.htl.ecopoints.model.Store
-import at.htl.ecopoints.model.reading.BtConnectionHandler
-import at.htl.ecopoints.model.reading.BtDevice
-import at.htl.ecopoints.model.reading.ObdReader
-import at.htl.ecopoints.model.reading.ObdReaderKt
+import at.htl.ecopoints.io.BtConnectionHandler
+import at.htl.ecopoints.model.BtDevice
+import at.htl.ecopoints.io.ObdReader
+import at.htl.ecopoints.io.ObdReaderKt
 import at.htl.ecopoints.model.viewmodel.TripViewModel
 import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.ui.component.ShowMap

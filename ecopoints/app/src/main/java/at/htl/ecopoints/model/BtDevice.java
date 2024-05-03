@@ -1,4 +1,4 @@
-package at.htl.ecopoints.model.reading;
+package at.htl.ecopoints.model;
 
 public class BtDevice {
     private String name = "no device";

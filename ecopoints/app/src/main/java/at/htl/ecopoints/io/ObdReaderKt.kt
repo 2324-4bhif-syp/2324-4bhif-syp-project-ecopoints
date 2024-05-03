@@ -2,6 +2,12 @@ package at.htl.ecopoints.io
 
 import android.util.Log
 import at.htl.ecopoints.model.Store
+import com.github.eltonvs.obd.command.ObdProtocols
+import com.github.eltonvs.obd.command.Switcher
+import com.github.eltonvs.obd.command.at.ResetAdapterCommand
+import com.github.eltonvs.obd.command.at.SelectProtocolCommand
+import com.github.eltonvs.obd.command.at.SetEchoCommand
+import com.github.eltonvs.obd.command.at.SetSpacesCommand
 import com.github.eltonvs.obd.command.engine.AbsoluteLoadCommand
 import com.github.eltonvs.obd.command.engine.LoadCommand
 import com.github.eltonvs.obd.command.engine.RPMCommand
@@ -32,7 +38,7 @@ class ObdReaderKt {
     lateinit var store: Store
 
     @Inject
-    constructor(){
+    constructor() {
 
     }
 
@@ -51,10 +57,27 @@ class ObdReaderKt {
         OilTemperatureCommand()
     )
 
+    suspend fun setupELM(obdConnection: ObdDeviceConnection) {
+        try {
+
+        } catch (e: Exception) {
+            obdConnection.run(ResetAdapterCommand())
+            delay(200)
+            obdConnection.run(SetEchoCommand(Switcher.OFF))
+            delay(200)
+            obdConnection.run(SetSpacesCommand(Switcher.OFF))
+            delay(200)
+            obdConnection.run(SelectProtocolCommand(ObdProtocols.AUTO))
+            delay(200)
+        }
+    }
+
     fun startReading(inputStream: InputStream?, outputStream: OutputStream?) {
         scope.launch {
             try {
                 val obdConnection = ObdDeviceConnection(inputStream!!, outputStream!!)
+
+                setupELM(obdConnection)
 
                 while (isActive) {
                     obdCommands.forEach { command ->

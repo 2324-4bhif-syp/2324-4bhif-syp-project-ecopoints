@@ -128,7 +128,7 @@ public class BtConnectionHandler {
             pairedBtDevices = mBluetoothAdapter.getBondedDevices();
             return pairedBtDevices.stream().map(i -> new BtDevice(i.getName(), i.getAddress()))
                     .sorted(Comparator.comparing(BtDevice::getName))
-//                    .filter(i -> i.getName().toLowerCase().contains("obd"))
+                    .filter(i -> i.getName().toLowerCase().contains("obd"))
                     .collect(Collectors.toCollection(LinkedHashSet::new));
 
         } catch (Exception exception) {

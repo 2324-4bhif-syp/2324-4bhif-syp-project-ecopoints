@@ -99,13 +99,13 @@ class ObdReaderKt {
                             val result = obdConnection.run(command, false, 0, 0)
                             var sb = StringBuilder()
 
-                            sb.append("${command.name} Result:")
-                            sb.append("PID: $command.pid")
-                            sb.append("Raw command: ${command.rawCommand}")
-                            sb.append("Formatted value value: ${result.formattedValue}")
-                            sb.append("Value: ${result.value}")
-                            sb.append("Raw response: ${result.rawResponse}")
-                            sb.append("Unit: ${result.unit}")
+                            sb.appendLine("${command.name} Result:")
+                            sb.appendLine("PID: $command.pid")
+                            sb.appendLine("Raw command: ${command.rawCommand}")
+                            sb.appendLine("Formatted value value: ${result.formattedValue}")
+                            sb.appendLine("Value: ${result.value}")
+                            sb.appendLine("Raw response: ${result.rawResponse}")
+                            sb.appendLine("Unit: ${result.unit}")
 
                             val logMsg = sb.toString()
 
@@ -114,7 +114,7 @@ class ObdReaderKt {
                                 logMsg
                             )
 
-                            delay(200)
+                            delay(250)
                         } catch (e: Exception) {
                             //Log.e(TAG, "Error running OBD2 command ${command.name}", e)
                         }

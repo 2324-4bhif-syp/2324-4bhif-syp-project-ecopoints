@@ -35,14 +35,14 @@ ifndef::imagesdir[:imagesdir: images]
 |Htl-Leonding 4bhif
 
 |von-bis
-|
+| 6. Einheit
 |Dauer
-|
+| 20 Minuten
 |===
 
 == Besprochene Themen
 
-
+* Projekt umbauen auf SSOT (Single Source of Truth)
 
 == Vereinbarungen und Entscheidungen
 
@@ -53,7 +53,7 @@ ifndef::imagesdir[:imagesdir: images]
 
 | Linus
 a|
-/
+Trip migrieren
 | 12.03.2024
 
 | Oliver
@@ -63,17 +63,17 @@ a|
 
 | Laurent
 a|
-/
+Profile migrieren
 | 12.03.2024
 
 | Armin
 a|
-/
+Ranking migrieren
 | 12.03.2024
 
 | Abdullah
 a|
-/
+Home & DB migrieren
 | 12.03.2024
 
 |

@@ -1,12 +1,15 @@
 package at.htl.ecopoints.model;
 
-import androidx.annotation.Nullable;
-
 public class FuelType {
     private String name;
+    private boolean isSelected;
 
-    public FuelType(String name) {
+    public FuelType() {
+    }
+
+    public FuelType(String name, boolean isSelected) {
         this.name = name;
+        this.isSelected = isSelected;
     }
 
     public String getName() {
@@ -17,12 +20,11 @@ public class FuelType {
         this.name = name;
     }
 
-    @Override
-    public boolean equals(@Nullable Object obj) {
-        if (obj instanceof FuelType) {
-            FuelType fuelType = (FuelType) obj;
-            return this.name.equals(fuelType.name);
-        }
-        return false;
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 }

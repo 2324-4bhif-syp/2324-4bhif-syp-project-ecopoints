@@ -6,8 +6,8 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import at.htl.ecopoints.backendService.CarDataService
-import at.htl.ecopoints.backendService.TripService
+import at.htl.ecopoints.db.services.CarDataService
+import at.htl.ecopoints.db.services.TripService
 import at.htl.ecopoints.model.CarData
 import at.htl.ecopoints.model.Trip
 import java.math.BigDecimal
@@ -34,7 +34,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
                 LONGITUDE_COl + " REAL," +
                 LATITUDE_COL + " REAL," +
                 CURRENTENGINERPM_COL + " REAL," +
-                CURRENTVELOCITY_COL + " REAL," +
+                speed_COL + " REAL," +
                 THROTTLEPOSITION_COL + " REAL," +
                 ENGINERUNTIME_COL + " TEXT," +
                 TIMESTAMP_COL + " TEXT" + ")")
@@ -81,7 +81,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         values.put(LONGITUDE_COl, carData.longitude)
         values.put(LATITUDE_COL, carData.latitude)
         values.put(CURRENTENGINERPM_COL, carData.currentEngineRPM)
-        values.put(CURRENTVELOCITY_COL, carData.currentVelocity)
+        values.put(speed_COL, carData.speed)
         values.put(THROTTLEPOSITION_COL, carData.throttlePosition)
         values.put(ENGINERUNTIME_COL, carData.engineRunTime)
         values.put(TIMESTAMP_COL, carData.timeStamp.toString())
@@ -101,8 +101,8 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         values.put(DISTANCE_COL, trip.distance)
         values.put(AVGSPEED_COL, trip.avgSpeed)
         values.put(AVGENGINE_ROTATION_COL, trip.avgEngineRotation)
-        values.put(START_DATE_COL, trip.startDate.toString())
-        values.put(END_DATE_COL, trip.endDate.toString())
+        values.put(START_DATE_COL, trip.start.toString())
+        values.put(END_DATE_COL, trip.end.toString())
         values.put(REWARDEDECOPOINTS_COL, trip.rewardedEcoPoints)
 
         val db = this.writableDatabase
@@ -139,6 +139,20 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         return tripList
     }
 
+    fun getTopThreeTrips(): List<Trip> {
+        val db = this.readableDatabase
+        val tripList = mutableListOf<Trip>()
+        val cursor = db.rawQuery("SELECT * FROM $TABLE_TRIP ORDER BY $REWARDEDECOPOINTS_COL DESC LIMIT 3", null)
+
+        if(cursor.moveToFirst()) {
+            do {
+                tripList.add(getTripFromCursor(cursor))
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        return tripList
+    }
+
     fun getAllCarDataForTrip(tripId: UUID): List<CarData> {
 
         var carDatas = getAllCarData();
@@ -162,7 +176,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         if (carDataList.isNotEmpty()) {
             val tripValues = ContentValues()
 
-            val avgSpeed = carDataList.map { it.currentVelocity }.average()
+            val avgSpeed = carDataList.map { it.speed }.average()
             val avgEngineRotation = carDataList.map { it.currentEngineRPM }.average()
             val totalDistance = calculateTotalDistance(carDataList)
 
@@ -270,12 +284,12 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         val longitude = carData.longitude
         val latitude = carData.latitude
         val currentEngineRPM = carData.currentEngineRPM
-        val currentVelocity = carData.currentVelocity
+        val speed = carData.speed
         val throttlePosition = carData.throttlePosition
         val engineRunTime = carData.engineRunTime
         val timeStamp = Timestamp.valueOf(carData.timeStamp.toString())
 
-        return CarData(id, tripId, longitude, latitude, currentEngineRPM, currentVelocity, throttlePosition, engineRunTime, timeStamp)
+        return CarData(id, tripId, longitude, latitude, currentEngineRPM, speed, throttlePosition, engineRunTime, timeStamp)
     }
 
     private fun createTrip(carDataList: ArrayList<CarData>): Trip {
@@ -285,8 +299,8 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         val distance = 0.0
         val avgSpeed = 0.0
         var avgEngineRotation = 0.0
-        val startDate: Date = Date()
-        val endDate: Date = Date()
+        val start: Date = Date()
+        val end: Date = Date()
         val rewardedEcoPoints = 0.0
 
         for(carData in carDataList) {
@@ -295,7 +309,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
         avgEngineRotation /= carDataList.size
 
-        return Trip(id, carId, userId, distance, avgSpeed, avgEngineRotation, startDate, endDate, rewardedEcoPoints)
+        return Trip(id, carId, userId, distance, avgSpeed, avgEngineRotation, start, end, rewardedEcoPoints)
     }
 
     @SuppressLint("Range")
@@ -309,7 +323,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
             cursor.getDouble(cursor.getColumnIndex(LONGITUDE_COl)),
             cursor.getDouble(cursor.getColumnIndex(LATITUDE_COL)),
             cursor.getDouble(cursor.getColumnIndex(CURRENTENGINERPM_COL)),
-            cursor.getDouble(cursor.getColumnIndex(CURRENTVELOCITY_COL)),
+            cursor.getDouble(cursor.getColumnIndex(speed_COL)),
             cursor.getDouble(cursor.getColumnIndex(THROTTLEPOSITION_COL)),
             cursor.getString(cursor.getColumnIndex(ENGINERUNTIME_COL)),
             Timestamp.valueOf(cursor.getString(cursor.getColumnIndex(TIMESTAMP_COL)))
@@ -347,7 +361,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         val LONGITUDE_COl = "longitude"
         val LATITUDE_COL = "latitude"
         val CURRENTENGINERPM_COL = "current_engine_rpm"
-        val CURRENTVELOCITY_COL = "current_velocity"
+        val speed_COL = "current_velocity"
         val THROTTLEPOSITION_COL = "throttle_position"
         val ENGINERUNTIME_COL = "engine_run_time"
         val TIMESTAMP_COL = "timestamp"

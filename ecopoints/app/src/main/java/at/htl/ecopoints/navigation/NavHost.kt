@@ -16,10 +16,12 @@ import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Place
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import at.htl.ecopoints.HomeActivity
 import at.htl.ecopoints.MainActivity
-import at.htl.ecopoints.activity.ProfileActivity
-import at.htl.ecopoints.activity.RankingActivity
-import at.htl.ecopoints.activity.TripActivity
+import at.htl.ecopoints.ProfileActivity
+import at.htl.ecopoints.RankingActivity
+import at.htl.ecopoints.ui.layout.RankingView
+import at.htl.ecopoints.ui.layout.TripView
 
 @Composable
 fun BottomNavBar(
@@ -27,7 +29,7 @@ fun BottomNavBar(
     onScreenSelected: (String) -> Unit,
     context: Context
 ) {
-    val screens = listOf("Home", "Trip", "Ranking", "Profile")
+    val screens = listOf("Trip", "Home", "Ranking", "Profile")
 
 
     Column(
@@ -49,7 +51,7 @@ fun BottomNavBar(
                             "Trip" -> Icons.Default.Place
                             "Ranking" -> Icons.Default.List
                             "Profile" -> Icons.Default.AccountCircle
-                            else -> Icons.Default.Home
+                            else -> Icons.Default.Place
                         }
                         Icon(icon, contentDescription = null, tint = androidx.compose.material3.MaterialTheme.colorScheme.primary)
                     },
@@ -58,8 +60,8 @@ fun BottomNavBar(
                         if (currentScreen != screen) {
                             onScreenSelected(screen)
                             val intent = when (screen) {
-                                "Home" -> Intent(context, MainActivity::class.java)
-                                "Trip" -> Intent(context, TripActivity::class.java)
+                                "Trip" -> Intent(context, MainActivity::class.java)
+                                "Home" -> Intent(context, HomeActivity::class.java)
                                 "Ranking" -> Intent(context, RankingActivity::class.java)
                                 "Profile" -> Intent(context, ProfileActivity::class.java)
                                 else -> Intent(context, MainActivity::class.java)

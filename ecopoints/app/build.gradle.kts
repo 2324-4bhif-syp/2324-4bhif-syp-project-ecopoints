@@ -5,6 +5,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.dagger.hilt.android")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
@@ -62,7 +63,7 @@ dependencies {
     implementation ("androidx.compose.runtime:runtime")
     implementation ("androidx.compose.foundation:foundation")
     implementation("androidx.core:core-ktx:1.13.1")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.0")
     implementation("androidx.activity:activity-compose:1.9.0")
     implementation(platform("androidx.compose:compose-bom:2024.05.00"))
     implementation("androidx.compose.ui:ui")
@@ -98,7 +99,7 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 
     // Hilt
-    implementation("com.google.dagger:hilt-android:2.51")
+    implementation("com.google.dagger:hilt-android:2.51.1")
     kapt("com.google.dagger:hilt-android-compiler:2.51")
 
     // RxJava
@@ -106,7 +107,7 @@ dependencies {
     implementation("androidx.compose.runtime:runtime-rxjava3:1.6.7")
 
     // Jackson
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.16.1")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.17.1")
 
     // OBD
     implementation ("com.github.eltonvs:kotlin-obd-api:1.3.0")
@@ -117,6 +118,13 @@ dependencies {
     implementation ("com.squareup.okhttp3:okhttp:5.0.0-alpha.14")
 
     implementation ("com.opencsv:opencsv:5.9")
+
+    //Lifecycle
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.0")
+
+    //Accompanist (Permission)
+    implementation("com.google.accompanist:accompanist-permissions:0.31.3-beta")
 }
 
 // Allow references to generated code

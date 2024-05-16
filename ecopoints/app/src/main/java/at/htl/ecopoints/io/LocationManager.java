@@ -16,21 +16,24 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import at.htl.ecopoints.MainActivity;
 import at.htl.ecopoints.model.Store;
+import dagger.hilt.android.qualifiers.ApplicationContext;
 
 @Singleton
 public class LocationManager {
     private static final String TAG = LocationManager.class.getSimpleName();
     private FusedLocationProviderClient fusedLocationClient = null;
-    private Context context = null;
-
     @Inject
     Store store;
 
+    //TODO: Need a context for the location, but the context is not available in the constructor
+
+    @ApplicationContext
+    Context context;
+
     @Inject
-    public LocationManager(Context context, Store store) {
-        this.context = context;
-        this.store = store;
+    public LocationManager() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
     }
 

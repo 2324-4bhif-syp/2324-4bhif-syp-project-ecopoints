@@ -46,26 +46,26 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
+import at.htl.ecopoints.io.BtConnectionHandler
+import at.htl.ecopoints.io.LocationManager
+import at.htl.ecopoints.io.ObdReader
+import at.htl.ecopoints.io.ObdReaderKt
+import at.htl.ecopoints.model.BtDevice
 import at.htl.ecopoints.model.CarData
 import at.htl.ecopoints.model.Map
 import at.htl.ecopoints.model.Store
-import at.htl.ecopoints.io.BtConnectionHandler
-import at.htl.ecopoints.model.BtDevice
-import at.htl.ecopoints.io.ObdReader
-import at.htl.ecopoints.io.ObdReaderKt
 import at.htl.ecopoints.model.viewmodel.TripViewModel
 import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.ui.component.ShowMap
 import at.htl.ecopoints.ui.component.Speedometer
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
+import com.google.android.gms.location.FusedLocationProviderClient
 import javax.inject.Inject
 import javax.inject.Singleton
 
 private val TAG = TripView::class.java.simpleName
-
 @Singleton
-class TripView {
-
+class TripView @Inject constructor() {
     @Inject
     lateinit var store: Store
 
@@ -79,14 +79,11 @@ class TripView {
     lateinit var btConnectionHandler: BtConnectionHandler
 
     @Inject
-    constructor() {
-    }
+    lateinit var locationManager: LocationManager
 
     @OptIn(ExperimentalMaterial3Api::class)
     @SuppressLint("CheckResult", "UnusedMaterial3ScaffoldPaddingParameter")
     fun compose(activity: ComponentActivity) {
-
-
         activity.setContent {
             EcoPointsTheme {
                 Surface(
@@ -99,8 +96,10 @@ class TripView {
                                 .background(MaterialTheme.colorScheme.tertiaryContainer),
                             horizontalArrangement = Arrangement.Start
                         ) {
-                            Button(onClick = {}) {
-                                Text(text = "Select your car")
+                            Button(onClick = {
+                                locationManager.getLastLocation()
+                            }) {
+                                Text(text = "LatLng")
                             }
                             Button(onClick = {
                                 obdReader.speedometerTest()
@@ -155,12 +154,12 @@ class TripView {
             )
             Row() {
                 Column {
+                    Text(text = "Latitude: ${state.value.latitude}")
+                    Text(text = "Longitude: ${state.value.longitude}")
                     Text(text = "Rpm: ${state.value.currentEngineRPM}")
                     Text(text = "ThrPos: ${state.value.throttlePosition}")
                     Text(text = "EngineRt: ${state.value.engineRunTime}")
                     Text(text = "timestamp: ${state.value.timeStamp}")
-                    Text(text = "Latitude: ${state.value.latitude}")
-                    Text(text = "Longitude: ${state.value.longitude}")
                 }
             }
         }

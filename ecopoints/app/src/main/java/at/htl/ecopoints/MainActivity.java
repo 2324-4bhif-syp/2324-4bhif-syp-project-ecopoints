@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import javax.inject.Inject;
 
+import at.htl.ecopoints.io.LocationManager;
 import at.htl.ecopoints.model.Store;
 import at.htl.ecopoints.ui.layout.MainView;
 import at.htl.ecopoints.ui.layout.TripView;
@@ -25,8 +26,6 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class MainActivity extends ComponentActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
-    private FusedLocationProviderClient fusedLocationClient;
-
     @Inject
     TripView tripView;
 
@@ -38,24 +37,13 @@ public class MainActivity extends ComponentActivity {
     public void onCreate(Bundle savedInstanceState) {
         Log.i(TAG, "onCreate()");
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            
+
             return;
         }
-
-        fusedLocationClient.getLastLocation()
-                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        if (location != null) {
-                            Log.d(TAG, "Location: " + location.getLatitude() + " " + location.getLongitude());
-                        }
-                    }
-                });
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_PRIVILEGED}, 1);

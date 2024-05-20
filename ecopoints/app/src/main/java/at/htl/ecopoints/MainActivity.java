@@ -13,7 +13,6 @@ import androidx.core.app.ActivityCompat;
 import javax.inject.Inject;
 
 import at.htl.ecopoints.model.Store;
-import at.htl.ecopoints.ui.layout.MainView;
 import at.htl.ecopoints.ui.layout.TripView;
 import dagger.hilt.android.AndroidEntryPoint;
 

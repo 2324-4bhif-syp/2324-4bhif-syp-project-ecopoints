@@ -14,7 +14,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -77,26 +76,26 @@ public class ObdReader {
         }, 1, 1, TimeUnit.SECONDS);
     }
 
-    public void speedometerTest() {
-
-        if (testActive) {
-            testActive = false;
-            executor.shutdown();
-        } else {
-            testActive = true;
-            executor = Executors.newSingleThreadScheduledExecutor();
-            AtomicReference<Double> speed = new AtomicReference<>((double) 0);
-            executor.scheduleAtFixedRate(() -> {
-                Log.d(TAG, "Executed Read on: " + Thread.currentThread().getName());
-                if (speed.get() == 240) {
-                    speed.set((double) 0);
-                }
-                Log.d(TAG, "Speed: " + speed.get());
-                speed.set(speed.get() + 5);
-                store.next(i -> {
-                    i.tripViewModel.carData.setSpeed(speed.getAndSet(speed.get()));
-                });
-            }, 0, 50, TimeUnit.MILLISECONDS);
-        }
-    }
+//    public void speedometerTest() {
+//
+//        if (testActive) {
+//            testActive = false;
+//            executor.shutdown();
+//        } else {
+//            testActive = true;
+//            executor = Executors.newSingleThreadScheduledExecutor();
+//            AtomicReference<Double> speed = new AtomicReference<>((double) 0);
+//            executor.scheduleAtFixedRate(() -> {
+//                Log.d(TAG, "Executed Read on: " + Thread.currentThread().getName());
+//                if (speed.get() == 240) {
+//                    speed.set((double) 0);
+//                }
+//                Log.d(TAG, "Speed: " + speed.get());
+//                speed.set(speed.get() + 5);
+//                store.next(i -> {
+//                    i.tripViewModel.carData.setSpeed(speed.getAndSet(speed.get()));
+//                });
+//            }, 0, 50, TimeUnit.MILLISECONDS);
+//        }
+//    }
 }

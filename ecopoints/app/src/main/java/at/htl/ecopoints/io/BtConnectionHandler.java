@@ -45,6 +45,16 @@ public class BtConnectionHandler {
             getPairedDevices();
         }
 
+        if(device == null){
+            store.next(i -> {
+                        if (i != null) {
+                            i.tripViewModel.connectionStateString = "No Device Selected";
+                        }
+                    }
+            );
+            return;
+        }
+
         BluetoothDevice btDevice = pairedBtDevices.stream()
                 .filter(i -> Objects.equals(i.getAddress(), device.getAddress()))
                 .findFirst().orElse(null);

@@ -1,6 +1,8 @@
 package at.htl.ecopoints.ui.layout
 
 import android.annotation.SuppressLint
+import android.location.Location
+import android.os.Looper
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -46,18 +48,27 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
+import at.htl.ecopoints.io.BtConnectionHandler
+import at.htl.ecopoints.io.ObdReader
+import at.htl.ecopoints.io.ObdReaderKt
+import at.htl.ecopoints.model.BtDevice
 import at.htl.ecopoints.model.CarData
 import at.htl.ecopoints.model.Map
 import at.htl.ecopoints.model.Store
-import at.htl.ecopoints.io.BtConnectionHandler
-import at.htl.ecopoints.model.BtDevice
-import at.htl.ecopoints.io.ObdReader
-import at.htl.ecopoints.io.ObdReaderKt
 import at.htl.ecopoints.model.viewmodel.TripViewModel
 import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.ui.component.ShowMap
 import at.htl.ecopoints.ui.component.Speedometer
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
+import com.google.android.gms.tasks.CancellationToken
+import com.google.android.gms.tasks.CancellationTokenSource
+import com.google.android.gms.tasks.OnTokenCanceledListener
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -82,12 +93,71 @@ class TripView {
     constructor() {
     }
 
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var locationCallback: LocationCallback
+
+
     @OptIn(ExperimentalMaterial3Api::class)
-    @SuppressLint("CheckResult", "UnusedMaterial3ScaffoldPaddingParameter")
+    @SuppressLint("CheckResult", "UnusedMaterial3ScaffoldPaddingParameter", "MissingPermission")
     fun compose(activity: ComponentActivity) {
-
-
         activity.setContent {
+
+            fusedLocationClient =
+                LocationServices.getFusedLocationProviderClient(activity.applicationContext)
+
+            fusedLocationClient.getCurrentLocation(
+                LocationRequest.PRIORITY_HIGH_ACCURACY,
+                object : CancellationToken() {
+                    override fun onCanceledRequested(p0: OnTokenCanceledListener) =
+                        CancellationTokenSource().token
+
+                    override fun isCancellationRequested() = false
+                })
+                .addOnSuccessListener { location: Location? ->
+                    if (location != null) {
+                        Log.i(TAG, "Location changed: $location")
+                        store.next {
+                            it.tripViewModel.carData.latitude = location.latitude
+                            it.tripViewModel.carData.longitude = location.longitude
+                        }
+                    }
+
+                }
+
+            val locationRequest = LocationRequest.create().apply {
+                interval = 100
+                fastestInterval = 50
+                priority = Priority.PRIORITY_HIGH_ACCURACY
+                maxWaitTime = 100
+            }
+
+            locationCallback = object : LocationCallback() {
+                override fun onLocationResult(p0: LocationResult) {
+                    p0 ?: return
+                    for (location in p0.locations) {
+                        Log.i(TAG, "Location changed: $location")
+                        store.next {
+                            it.tripViewModel.carData.latitude = location.latitude
+                            it.tripViewModel.carData.longitude = location.longitude
+//                            it.tripViewModel.map.latLngList.add(
+//                                ColorLatLngPair(
+//                                    Color.Blue,
+//                                    LatLng(location.latitude, location.longitude),
+//                                    location.time.toDouble()
+//                                )
+//                            ) //geht so nicht
+                        }
+                    }
+                }
+            }
+
+            fusedLocationClient.requestLocationUpdates(
+                locationRequest,
+                locationCallback,
+                Looper.getMainLooper()
+            )
+
+
             EcoPointsTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
@@ -102,11 +172,11 @@ class TripView {
                             Button(onClick = {}) {
                                 Text(text = "Select your car")
                             }
-                            Button(onClick = {
-                                obdReader.speedometerTest()
-                            }) {
-                                Text(text = "SpeedometerTest")
-                            }
+//                            Button(onClick = {
+//                                obdReader.speedometerTest()
+//                            }) {
+//                                Text(text = "SpeedometerTest")
+//                            }
                             Button(onClick = {
                                 store.next { it.tripViewModel.map.showMap = true }
                             }) {
@@ -166,7 +236,7 @@ class TripView {
         }
     }
 
-    //region Bluetooth interaction
+//region Bluetooth interaction
 
     @ExperimentalMaterial3Api
     @Composable
@@ -224,7 +294,7 @@ class TripView {
             }
             if (it.isConnected) {
 //                obdReader.startReading(it.inputStream, it.outputStream)
-                    obdReaderKt.startReading(it.inputStream, it.outputStream)
+                obdReaderKt.startReading(it.inputStream, it.outputStream)
 
             }
         }
@@ -332,7 +402,7 @@ class TripView {
         }
     }
 
-    //endregion
+//endregion
 
     @SuppressLint("MissingPermission")
     @ExperimentalMaterial3Api

@@ -33,7 +33,9 @@ import at.htl.ecopoints.ui.component.ShowMap
 import at.htl.ecopoints.ui.component.Speedometer
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
 import at.htl.ecopoints.io.LocationManager
+import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.CameraPositionState
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -134,6 +136,7 @@ class TripView {
     private fun generateRandomFuelCons(): Double {
         return (3..21).random().toDouble()
     }
+
 
     @Composable
     fun LiveCarData(store: Store) {
@@ -321,11 +324,14 @@ class TripView {
                     usePlatformDefaultWidth = false
                 )
             ) {
-                ShowMap(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight()
-                )
+                store.subject.value?.tripViewModel?.map?.let {
+                    ShowMap(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxHeight(),
+                        latLngList = it.latLngList
+                    )
+                }
                 Column {
                     OutlinedButton(
                         onClick = {

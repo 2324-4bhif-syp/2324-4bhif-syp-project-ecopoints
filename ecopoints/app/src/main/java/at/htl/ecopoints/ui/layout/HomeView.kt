@@ -492,14 +492,14 @@ class HomeView {
                         }
                         Spacer(modifier = Modifier.height(16.dp))
                         ShowMap(
-                            cameraPositionState = rememberCameraPositionState {
-                                position = CameraPosition.fromLatLngZoom(
-                                    LatLng(getLatLngsFromTripDB(context, selectedTrip!!.id)
-                                        .first().second.first.latitude,
-                                        getLatLngsFromTripDB(context, selectedTrip!!.id)
-                                            .first().second.first.longitude), 10f)
-                            },
-                            latLngList = getLatLngsFromTripDB(context, selectedTrip!!.id)
+//                            cameraPositionState = rememberCameraPositionState {
+//                                position = CameraPosition.fromLatLngZoom(
+//                                    LatLng(getLatLngsFromTripDB(context, selectedTrip!!.id)
+//                                        .first().second.first.latitude,
+//                                        getLatLngsFromTripDB(context, selectedTrip!!.id)
+//                                            .first().second.first.longitude), 10f)
+//                            },
+                            //latLngList = getLatLngsFromTripDB(context, selectedTrip!!.id)
                         )
                     }
                 },

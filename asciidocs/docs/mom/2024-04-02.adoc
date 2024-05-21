@@ -1,5 +1,5 @@
-= Neuntes Sprint-Planning
-1.0, 2024-04-02: 9th Sprint
+= Achtes Sprint-Planning
+1.0, 2024-04-02: 8th Sprint
 ifndef::imagesdir[:imagesdir: images]
 :icons: font
 //:sectnums:    // Nummerierung der Überschriften / section numbering

@@ -11,7 +11,7 @@ public class Map {
     public boolean showMap = false;
     public List<PolylineNode> latLngList = new ArrayList<>();
 
-    public void add(Double latitude, Double longitude, Double fuelCons, int color) {
-        latLngList.add(new PolylineNode(color, latitude, longitude, fuelCons));
+    public void add(Double latitude, Double longitude, Double fuelCons) {
+        latLngList.add(new PolylineNode(latitude, longitude, fuelCons));
     }
 }

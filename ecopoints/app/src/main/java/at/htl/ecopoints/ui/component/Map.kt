@@ -40,10 +40,15 @@ fun DrawPolyLine(latLngList: List<PolylineNode> = listOf()) {
                 LatLng(latLngList[i].latitude, latLngList[i].longitude),
                 LatLng(latLngList[i + 1].latitude, latLngList[i + 1].longitude)
             ),
-            color = Color(latLngList[i].color),
+            color =  when {
+                latLngList[i].fuelCons <= 6.0 -> Color.Green
+                latLngList[i].fuelCons > 6.0 && latLngList[i].fuelCons <= 12 -> Color.Yellow
+                latLngList[i].fuelCons > 12 && latLngList[i].fuelCons <= 20 -> Color.Red
+            else -> Color.Black
+            },
             width = 10f
         )
     }
 
-    Log.d("DrawPolyLine", "Keck: ${latLngList.size}, ${Color(latLngList[latLngList.size - 1].color)}")
+    Log.d("DrawPolyLine", "Info: ${latLngList.size}, ${latLngList[0].latitude}, ${latLngList[0].longitude}, ${latLngList[0].fuelCons}")
 }

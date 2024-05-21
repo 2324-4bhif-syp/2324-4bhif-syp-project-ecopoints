@@ -11,19 +11,10 @@ public class PolylineNode {
     public PolylineNode() {
     }
 
-    public PolylineNode(int color, Double latitude, Double longitude, Double fuelCons) {
-        this.color = color;
+    public PolylineNode(Double latitude, Double longitude, Double fuelCons) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.fuelCons = fuelCons;
-    }
-
-    public int getColor() {
-        return color;
-    }
-
-    public void setColor(int color) {
-        this.color = color;
     }
 
     public Double getLatitude() {

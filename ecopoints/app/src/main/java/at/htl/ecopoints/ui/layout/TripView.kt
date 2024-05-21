@@ -69,14 +69,8 @@ class TripView {
                     it.tripViewModel.carData.latitude = location.latitude
                     it.tripViewModel.carData.longitude = location.longitude
                     val fuelCons = generateRandomFuelCons()
-                    val color = when {
-                        fuelCons <= 6.0 -> Color.Green
-                        fuelCons > 6.0 && fuelCons <= 12 -> Color.Green
-                        fuelCons > 12 && fuelCons <= 20 -> Color.Green
-                        else -> Color.Green
-                    }
                     it.tripViewModel.map.add(location.latitude, location.longitude,
-                        fuelCons, color.toArgb())
+                        fuelCons)
 
                     Log.d(TAG, "latitude: ${location.latitude}, longitude: ${location.longitude}, fuelCons: $fuelCons")
                 }

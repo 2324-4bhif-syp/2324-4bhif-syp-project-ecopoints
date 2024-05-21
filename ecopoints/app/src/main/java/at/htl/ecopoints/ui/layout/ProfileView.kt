@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -235,24 +236,48 @@ class ProfileView {
 
     @Composable
     private fun ProfileSettingsHeader(){
-        Row(modifier = Modifier.padding(end = 16.dp, start = 16.dp)) {
-            Text(
-                text = "Profile",
-                fontWeight = FontWeight.Bold,
-                color = Color.Gray,
-                fontSize = TextUnit(20f, TextUnitType.Sp),
-                textAlign = androidx.compose.ui.text.style.TextAlign.Center,
-                modifier = Modifier
-                    .align(Alignment.CenterVertically)
-                    .weight(1f)
-            )
+        Row(
+            modifier = Modifier
+                .padding(end = 16.dp, start = 16.dp)
+                .height(40.dp)
+        ) {
+            Column(
+                modifier = Modifier.width(40.dp)
+            ) {
 
-            IconButton(onClick = { /*TODO*/ }) {
-                androidx.compose.material3.Icon(
-                    imageVector = Icons.Rounded.Settings,
-                    contentDescription = "Profile Settings",
-                    tint = MaterialTheme.colorScheme.primary
-                )
+            }
+
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .weight(1f)
+                    .height(40.dp)
+            ) {
+                Row {
+                    Text(
+                        text = "Profile",
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Gray,
+                        fontSize = TextUnit(20f, TextUnitType.Sp),
+                        textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                        modifier = Modifier
+                            .weight(1f)
+                            .align(Alignment.CenterVertically)
+                    )
+                }
+            }
+
+            Column(
+                modifier = Modifier.width(40.dp)
+            ) {
+                IconButton(onClick = { /*TODO*/ }) {
+                    androidx.compose.material3.Icon(
+                        imageVector = Icons.Rounded.Settings,
+                        contentDescription = "Profile Settings",
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                }
             }
         }
 

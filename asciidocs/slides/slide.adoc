@@ -285,9 +285,14 @@ image:sprint7/ranking.jpg[500,200]
 
 === Demo
 
+[.font-xx-large, background-image="traffic.jpg", background-opacity="0.3"]
+== Sprint 10
 
+=== Was wurde gemacht?
 
+* Home-View
+* Social-Media-Integration
+** Ranking-View
+** Profile-View
 
-
-
-
+=== Demo

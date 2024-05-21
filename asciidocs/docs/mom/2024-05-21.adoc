@@ -1,17 +1,16 @@
-= Neuntes Sprint-Planning
-1.0, 2024-04-23: 9th Sprint
+= Zehntes Sprint-Planning
+1.0, 2024-05-21: 10th Sprint
 ifndef::imagesdir[:imagesdir: images]
 :icons: font
 //:sectnums:    // Nummerierung der Überschriften / section numbering
 //:toc: left
 
-
 .Teilnehmer
 |===
 |anwesend | Abwesend
 
-|
 |Linus Nestler
+|
 
 |
 |Laurent Mali
@@ -20,8 +19,8 @@ ifndef::imagesdir[:imagesdir: images]
 |
 
 
-|Abdullah Al-Desoky
 |
+|Abdullah Al-Desoky
 
 |
 |Oliver Daxinger
@@ -56,29 +55,29 @@ ifndef::imagesdir[:imagesdir: images]
 | Linus
 a|
 Daten auslesen und laufend in der DB speichern
-| 07.05.2024
+| 04.06.2024
 
 | Oliver
 a|
 /
-| 07.05.2024
+| 04.06.2024
 
 | Laurent
 a|
 /
-| 07.05.2024
+| 04.06.2024
 
 | Armin
 a|
 * Profile Migrieren
 * Social Media in die App integrieren (Anfangen)
-| 07.05.2024
+| 04.06.2024
 
 | Abdullah
 a|
 * DB korrigieren und vervollständigen
 * Home Page migrieren und fertigstellen
-| 07.05.2024
+| 04.06.2024
 
 |
 

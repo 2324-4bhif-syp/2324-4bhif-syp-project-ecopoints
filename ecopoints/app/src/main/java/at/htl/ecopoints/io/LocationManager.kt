@@ -1,62 +1,72 @@
-package at.htl.ecopoints.io;
+package at.htl.ecopoints.io
 
-import android.Manifest;
-import android.app.Activity;
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.util.Log;
+import android.annotation.SuppressLint
+import android.content.Context
+import android.location.Location
+import android.os.Looper
+import android.util.Log
+import com.google.android.gms.location.*
+import com.google.android.gms.tasks.CancellationToken
+import com.google.android.gms.tasks.CancellationTokenSource
+import com.google.android.gms.tasks.OnTokenCanceledListener
 
-import androidx.core.app.ActivityCompat;
+class LocationManager(private val context: Context, private val onLocationChanged: (Location) -> Unit) {
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
+private lateinit var fusedLocationClient: FusedLocationProviderClient
+private lateinit var locationCallback: LocationCallback
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
-import at.htl.ecopoints.MainActivity;
-import at.htl.ecopoints.model.Store;
-import dagger.hilt.android.qualifiers.ApplicationContext;
-
-@Singleton
-public class LocationManager {
-    private static final String TAG = LocationManager.class.getSimpleName();
-    private FusedLocationProviderClient fusedLocationClient = null;
-    @Inject
-    Store store;
-
-    //TODO: Need a context for the location, but the context is not available in the constructor
-
-    @ApplicationContext
-    Context context;
-
-    @Inject
-    public LocationManager() {
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
-    }
-
-    public void getLastLocation() {
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context,
-                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            // Request permissions if not granted
-            ActivityCompat.requestPermissions((Activity) context,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
-            return;
-        }
-
-        fusedLocationClient.getLastLocation()
-                .addOnSuccessListener((Activity) context, location -> {
-                    if (location != null) {
-                        Log.d(TAG, "Location: " + location.getLatitude() + " " + location.getLongitude());
-                        store.next(model -> {
-                            model.tripViewModel.carData.setLatitude(location.getLatitude());
-                            model.tripViewModel.carData.setLongitude(location.getLongitude());
-                        });
-                    }
-                });
-    }
+init {
+    initializeLocationClient()
 }
+
+@SuppressLint("MissingPermission")
+private fun initializeLocationClient() {
+    fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
+
+    fusedLocationClient.getCurrentLocation(
+            LocationRequest.PRIORITY_HIGH_ACCURACY,
+            object : CancellationToken() {
+        override fun onCanceledRequested(p0: OnTokenCanceledListener) =
+        CancellationTokenSource().token
+
+        override fun isCancellationRequested() = false
+    }
+        ).addOnSuccessListener { location: Location? ->
+        location?.let {
+            Log.i(TAG, "Initial location: $it")
+            onLocationChanged(it)
+        }
+    }
+
+    val locationRequest = LocationRequest.create().apply {
+        interval = 100
+        fastestInterval = 50
+        priority = Priority.PRIORITY_HIGH_ACCURACY
+        maxWaitTime = 100
+    }
+
+    locationCallback = object : LocationCallback() {
+        override fun onLocationResult(p0: LocationResult) {
+            p0 ?: return
+            for (location in p0.locations) {
+                Log.i(TAG, "Location changed: $location")
+                onLocationChanged(location)
+            }
+        }
+    }
+
+    fusedLocationClient.requestLocationUpdates(
+            locationRequest,
+            locationCallback,
+            Looper.getMainLooper()
+    )
+}
+
+fun stopLocationUpdates() {
+    fusedLocationClient.removeLocationUpdates(locationCallback)
+}
+
+companion object {
+private val TAG = LocationManager::class.java.simpleName
+    }
+            }

@@ -48,10 +48,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
-import at.htl.ecopoints.io.BtConnectionHandler
-import at.htl.ecopoints.io.ObdReader
-import at.htl.ecopoints.io.ObdReaderKt
-import at.htl.ecopoints.model.BtDevice
 import at.htl.ecopoints.model.CarData
 import at.htl.ecopoints.model.Map
 import at.htl.ecopoints.model.Store

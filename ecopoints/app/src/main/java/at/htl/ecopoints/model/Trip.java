@@ -7,7 +7,7 @@ import java.util.UUID;
 
 import at.htl.ecopoints.R;
 
-public class Trip {
+public class    Trip {
     private UUID id;
     private Long carId;
     private Long userId;

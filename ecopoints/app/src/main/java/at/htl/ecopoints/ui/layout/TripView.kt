@@ -7,35 +7,12 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredSize
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.BasicAlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,18 +23,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
-import at.htl.ecopoints.model.CarData
-import at.htl.ecopoints.model.Map
-import at.htl.ecopoints.model.Store
-import at.htl.ecopoints.io.BtConnectionHandler
-import at.htl.ecopoints.model.BtDevice
-import at.htl.ecopoints.io.ObdReader
-import at.htl.ecopoints.io.ObdReaderKt
+import at.htl.ecopoints.model.*
+import at.htl.ecopoints.io.*
 import at.htl.ecopoints.model.viewmodel.TripViewModel
 import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.ui.component.ShowMap
 import at.htl.ecopoints.ui.component.Speedometer
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
+import at.htl.ecopoints.io.LocationManager
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -79,15 +52,20 @@ class TripView {
     lateinit var btConnectionHandler: BtConnectionHandler
 
     @Inject
-    constructor() {
-    }
+    constructor()
 
     @OptIn(ExperimentalMaterial3Api::class)
-    @SuppressLint("CheckResult", "UnusedMaterial3ScaffoldPaddingParameter")
+    @SuppressLint("CheckResult", "UnusedMaterial3ScaffoldPaddingParameter", "MissingPermission")
     fun compose(activity: ComponentActivity) {
-
-
         activity.setContent {
+
+            LocationManager(activity.applicationContext) { location ->
+                store.next {
+                    it.tripViewModel.carData.latitude = location.latitude
+                    it.tripViewModel.carData.longitude = location.longitude
+                }
+            }
+
             EcoPointsTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
@@ -101,11 +79,6 @@ class TripView {
                         ) {
                             Button(onClick = {}) {
                                 Text(text = "Select your car")
-                            }
-                            Button(onClick = {
-                                obdReader.speedometerTest()
-                            }) {
-                                Text(text = "SpeedometerTest")
                             }
                             Button(onClick = {
                                 store.next { it.tripViewModel.map.showMap = true }
@@ -123,7 +96,6 @@ class TripView {
                             Box(
                                 modifier = Modifier.fillMaxSize()
                             ) {
-
                                 BottomNavBar(
                                     currentScreen = currentScreen,
                                     onScreenSelected = { newScreen -> setCurrentScreen(newScreen) },
@@ -153,14 +125,14 @@ class TripView {
                     .padding(90.dp)
                     .requiredSize(250.dp)
             )
-            Row() {
+            Row {
                 Column {
+                    Text(text = "Latitude: ${state.value.latitude}")
+                    Text(text = "Longitude: ${state.value.longitude}")
                     Text(text = "Rpm: ${state.value.currentEngineRPM}")
                     Text(text = "ThrPos: ${state.value.throttlePosition}")
                     Text(text = "EngineRt: ${state.value.engineRunTime}")
                     Text(text = "timestamp: ${state.value.timeStamp}")
-                    Text(text = "Latitude: ${state.value.latitude}")
-                    Text(text = "Longitude: ${state.value.longitude}")
                 }
             }
         }
@@ -176,19 +148,15 @@ class TripView {
             BasicAlertDialog(
                 onDismissRequest = { state.value.showDeviceSelectionDialog = false },
             ) {
-
                 Column(
                     modifier = Modifier.background(
                         MaterialTheme.colorScheme.background, MaterialTheme.shapes.extraLarge
                     ), horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-
                     Row(Modifier.padding(20.dp)) {
                         Text("Select a Bluetooth device")
                     }
-
                     ListPairedBtDevices(store = store, btConnectionHandler)
-
                     Row(
                         horizontalArrangement = Arrangement.Center,
                     ) {
@@ -207,25 +175,18 @@ class TripView {
 
     @SuppressLint("MissingPermission", "CheckResult")
     @Composable
-    fun ConnectionInfo(
-        store: Store, btConnectionHandler: BtConnectionHandler
-    ) {
+    fun ConnectionInfo(store: Store, btConnectionHandler: BtConnectionHandler) {
         val state = store.subject.map { it.tripViewModel }.subscribeAsState(TripViewModel())
-
         var connectionStateColor = Color.Red
 
         store.subject.map { it.tripViewModel }.subscribe {
-            connectionStateColor = if (it.connectionStateString == "Connected") {
-                Color.Green
-            } else if (it.connectionStateString.contains("Connecting")) {
-                Color.Yellow
-            } else {
-                Color.Red
+            connectionStateColor = when {
+                it.connectionStateString == "Connected" -> Color.Green
+                it.connectionStateString.contains("Connecting") -> Color.Yellow
+                else -> Color.Red
             }
             if (it.isConnected) {
-//                obdReader.startReading(it.inputStream, it.outputStream)
-                    obdReaderKt.startReading(it.inputStream, it.outputStream)
-
+                obdReaderKt.startReading(it.inputStream, it.outputStream)
             }
         }
 
@@ -234,8 +195,7 @@ class TripView {
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Row(
-            ) {
+            Row {
                 Button(
                     shape = MaterialTheme.shapes.medium,
                     onClick = { btConnectionHandler.createConnection(state.value.selectedDevice) },
@@ -257,7 +217,6 @@ class TripView {
                 }
             }
             Row {
-
                 Column(
                     modifier = Modifier.weight(1f)
                 ) {
@@ -266,14 +225,12 @@ class TripView {
                         modifier = Modifier.padding(8.dp),
                         fontSize = 12.sp,
                     )
-
                     Text(
                         text = "Device:",
                         modifier = Modifier.padding(8.dp),
                         fontSize = 12.sp,
                     )
                 }
-
                 Column(
                     modifier = Modifier.weight(01f), horizontalAlignment = Alignment.End
                 ) {
@@ -284,11 +241,7 @@ class TripView {
                         color = connectionStateColor
                     )
                     Text(
-                        text = if (state.value.selectedDevice == null) {
-                            "None"
-                        } else {
-                            state.value.selectedDevice.name
-                        },
+                        text = state.value.selectedDevice?.name ?: "None",
                         modifier = Modifier.padding(8.dp),
                         fontSize = 12.sp,
                     )
@@ -326,7 +279,7 @@ class TripView {
                 store.next { it.tripViewModel.showDeviceSelectionDialog = false }
             },
         ) {
-            Row() {
+            Row {
                 Text(text = device.name ?: "Unknown Device")
             }
         }
@@ -341,7 +294,7 @@ class TripView {
         val state = store.subject.map { it.tripViewModel.map }.subscribeAsState(Map())
         if (state.value.showMap) {
             BasicAlertDialog(
-                onDismissRequest = { store.next { it -> it.tripViewModel.map.showMap = false } },
+                onDismissRequest = { store.next { it.tripViewModel.map.showMap = false } },
                 properties = DialogProperties(
                     dismissOnBackPress = true,
                     dismissOnClickOutside = true,
@@ -356,7 +309,7 @@ class TripView {
                 Column {
                     OutlinedButton(
                         onClick = {
-                            store.next { it -> it.tripViewModel.map.showMap = false }
+                            store.next { it.tripViewModel.map.showMap = false }
                             Log.d("MapCloseButton", "Clicked")
                         },
                         modifier = Modifier
@@ -380,5 +333,3 @@ class TripView {
         }
     }
 }
-
-

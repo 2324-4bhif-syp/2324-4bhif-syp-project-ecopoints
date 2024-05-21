@@ -55,6 +55,10 @@ import at.htl.ecopoints.model.BtDevice
 import at.htl.ecopoints.model.CarData
 import at.htl.ecopoints.model.Map
 import at.htl.ecopoints.model.Store
+import at.htl.ecopoints.io.BtConnectionHandler
+import at.htl.ecopoints.model.BtDevice
+import at.htl.ecopoints.io.ObdReader
+import at.htl.ecopoints.io.ObdReaderKt
 import at.htl.ecopoints.model.viewmodel.TripViewModel
 import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.ui.component.ShowMap
@@ -73,7 +77,6 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 private val TAG = TripView::class.java.simpleName
-
 @Singleton
 class TripView {
 
@@ -225,12 +228,12 @@ class TripView {
             )
             Row() {
                 Column {
+                    Text(text = "Latitude: ${state.value.latitude}")
+                    Text(text = "Longitude: ${state.value.longitude}")
                     Text(text = "Rpm: ${state.value.currentEngineRPM}")
                     Text(text = "ThrPos: ${state.value.throttlePosition}")
                     Text(text = "EngineRt: ${state.value.engineRunTime}")
                     Text(text = "timestamp: ${state.value.timeStamp}")
-                    Text(text = "Latitude: ${state.value.latitude}")
-                    Text(text = "Longitude: ${state.value.longitude}")
                 }
             }
         }

@@ -9,5 +9,9 @@ import java.util.List;
 
 public class Map {
     public boolean showMap = false;
-    public List<Pair<Color, Pair<LatLng, Double>>> latLngList = new ArrayList<>();
+    public List<PolylineNode> latLngList = new ArrayList<>();
+
+    public void add(Double latitude, Double longitude, Double fuelCons, int color) {
+        latLngList.add(new PolylineNode(color, latitude, longitude, fuelCons));
+    }
 }

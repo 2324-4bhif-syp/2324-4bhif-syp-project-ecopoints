@@ -2,6 +2,7 @@ package at.htl.ecopoints.ui.layout
 
 import android.annotation.SuppressLint
 import android.util.Log
+import android.util.Pair
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
@@ -20,6 +21,7 @@ import androidx.compose.runtime.rxjava3.subscribeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
@@ -31,6 +33,7 @@ import at.htl.ecopoints.ui.component.ShowMap
 import at.htl.ecopoints.ui.component.Speedometer
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
 import at.htl.ecopoints.io.LocationManager
+import com.google.android.gms.maps.model.LatLng
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -63,6 +66,17 @@ class TripView {
                 store.next {
                     it.tripViewModel.carData.latitude = location.latitude
                     it.tripViewModel.carData.longitude = location.longitude
+                    val fuelCons = generateRandomFuelCons()
+                    val color = when {
+                        fuelCons <= 6.0 -> Color.Green
+                        fuelCons > 6.0 && fuelCons <= 12 -> Color.Green
+                        fuelCons > 12 && fuelCons <= 20 -> Color.Green
+                        else -> Color.Green
+                    }
+                    it.tripViewModel.map.add(location.latitude, location.longitude,
+                        fuelCons, color.toArgb())
+
+                    Log.d(TAG, "latitude: ${location.latitude}, longitude: ${location.longitude}, fuelCons: $fuelCons")
                 }
             }
 
@@ -113,6 +127,12 @@ class TripView {
                 }
             }
         }
+    }
+
+    //for testing purposes, remove if database is set up
+    //TODO: Remove this function if fuel consumption is being read from the OBD
+    private fun generateRandomFuelCons(): Double {
+        return (3..21).random().toDouble()
     }
 
     @Composable

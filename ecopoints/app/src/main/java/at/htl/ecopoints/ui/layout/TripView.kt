@@ -218,6 +218,17 @@ class TripView {
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Row{
+                Button(
+                    shape = MaterialTheme.shapes.medium,
+                    onClick = { startTrip() },
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .weight(1f)
+                ) {
+                    Text(text = "Start Trip")
+                }
+            }
             Row {
                 Button(
                     shape = MaterialTheme.shapes.medium,
@@ -271,6 +282,10 @@ class TripView {
                 }
             }
         }
+    }
+
+    private fun startTrip() {
+        TODO("Not yet implemented")
     }
 
     @SuppressLint("MissingPermission")

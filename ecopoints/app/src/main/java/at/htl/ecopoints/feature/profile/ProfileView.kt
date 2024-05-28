@@ -1,4 +1,4 @@
-package at.htl.ecopoints.ui.layout
+package at.htl.ecopoints.feature.profile
 
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -48,7 +48,6 @@ import at.htl.ecopoints.R
 import at.htl.ecopoints.model.ProfileInfo
 import at.htl.ecopoints.model.RankingInfo
 import at.htl.ecopoints.model.Store
-import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -77,17 +76,6 @@ class ProfileView {
                         ProfileHeader()
                         ShowStatistics()
                         FriendSuggestions()
-
-                        val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Profile") }
-                        Box(
-                            modifier = Modifier.fillMaxSize()
-                        ) {
-                            BottomNavBar(
-                                currentScreen = currentScreen,
-                                onScreenSelected = { newScreen -> setCurrentScreen(newScreen) },
-                                context = activity
-                            )
-                        }
                     }
                 }
             }
@@ -96,7 +84,7 @@ class ProfileView {
     
     @Composable
     private fun FriendSuggestions(){
-        val state = store.subject.map { it.rankingInfo }.subscribeAsState(RankingInfo())
+        val state = store.pipe.map { it.rankingInfo }.subscribeAsState(RankingInfo())
 
         Row(
             modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 15.dp)
@@ -172,7 +160,7 @@ class ProfileView {
 
     @Composable
     private fun ShowStatistics(){
-        val state = store.subject.map { it.profileInfo }.subscribeAsState(ProfileInfo())
+        val state = store.pipe.map { it.profileInfo }.subscribeAsState(ProfileInfo())
 
         val cardWidth = 175.dp
         val cardHeight = 80.dp
@@ -286,7 +274,7 @@ class ProfileView {
 
     @Composable
     fun ProfileHeader(){
-        val state = store.subject.map { it.profileInfo }.subscribeAsState(ProfileInfo())
+        val state = store.pipe.map { it.profileInfo }.subscribeAsState(ProfileInfo())
 
         Row(modifier = Modifier.padding(top = 10.dp,start = 16.dp, end = 16.dp, bottom = 10.dp)) {
             Column(modifier = Modifier.weight(1f)) {

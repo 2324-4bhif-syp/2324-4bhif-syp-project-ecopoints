@@ -1,4 +1,4 @@
-package at.htl.ecopoints.ui.layout
+package at.htl.ecopoints.feature.ranking
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -45,7 +45,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.material.Surface
 import androidx.compose.runtime.rxjava3.subscribeAsState
 import at.htl.ecopoints.model.Store
-import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -72,17 +71,6 @@ class RankingView {
                     ShowOptionsForRankType()
 
                     DisplayRanking(activity)
-
-                    val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Ranking") }
-                    Box(
-                        modifier = Modifier.fillMaxSize()
-                    ){
-                        BottomNavBar(
-                            currentScreen = currentScreen,
-                            onScreenSelected = { newScreen -> setCurrentScreen(newScreen) },
-                            context = activity
-                        )
-                    }
                 }
             }
         }
@@ -90,7 +78,7 @@ class RankingView {
 
     @Composable
     fun DisplayRanking(context: Context){
-        val state = store.subject.map { it.rankingInfo }.subscribeAsState(RankingInfo())
+        val state = store.pipe.map { it.rankingInfo }.subscribeAsState(RankingInfo())
 
         Column(
             modifier = Modifier
@@ -102,7 +90,7 @@ class RankingView {
             state.value.users.forEach { user ->
                 Button(
                     onClick = {
-                        store.next {
+                        store.apply {
                             it.rankingInfo.showDetailRankingView = true
                             it.rankingInfo.selectedUser = user
                         }
@@ -178,7 +166,7 @@ class RankingView {
     @OptIn(ExperimentalFoundationApi::class)
     @Composable
     fun ShowFuelTypeDropdown() {
-        val state = store.subject.map { it.rankingInfo }.subscribeAsState(RankingInfo())
+        val state = store.pipe.map { it.rankingInfo }.subscribeAsState(RankingInfo())
 
         Box(
             modifier = Modifier
@@ -186,7 +174,7 @@ class RankingView {
                 .padding(start = 5.dp)
         ) {
             IconButton(onClick = {
-                store.next {
+                store.apply {
                     it.rankingInfo.showFuelTypeDropdown = true
                 } }) {
                 Icon(
@@ -201,7 +189,7 @@ class RankingView {
                 DropdownMenu(
                     expanded = state.value.showFuelTypeDropdown,
                     onDismissRequest = {
-                        store.next{
+                        store.apply{
                             it.rankingInfo.showFuelTypeDropdown = false
                         }
                     },
@@ -211,7 +199,7 @@ class RankingView {
                             modifier = Modifier.combinedClickable(
                                 onClick = {
                                     if (fuelType.isSelected) {
-                                        store.next {
+                                        store.apply {
                                             it.rankingInfo.fuelTypes.forEach { ft ->
                                                 if (ft.name.equals(fuelType.name)) {
                                                     ft.isSelected = false
@@ -219,7 +207,7 @@ class RankingView {
                                             }
                                         }
                                     } else {
-                                        store.next {
+                                        store.apply {
                                             it.rankingInfo.fuelTypes.forEach { ft ->
                                                 if (ft.name.equals(fuelType.name)) {
                                                     ft.isSelected = true
@@ -252,7 +240,7 @@ class RankingView {
 
     @Composable
     fun ShowOptionsForRankType(){
-        val state = store.subject.map { it.rankingInfo }.subscribeAsState(RankingInfo())
+        val state = store.pipe.map { it.rankingInfo }.subscribeAsState(RankingInfo())
 
         Column(
             modifier = Modifier
@@ -269,7 +257,7 @@ class RankingView {
                 state.value.rankTypeOptions.forEach() { option ->
                     Button(
                         onClick = {
-                            store.next{
+                            store.apply{
                                 it.rankingInfo.selectedRankTypeOption = option.key
                             }
                         },

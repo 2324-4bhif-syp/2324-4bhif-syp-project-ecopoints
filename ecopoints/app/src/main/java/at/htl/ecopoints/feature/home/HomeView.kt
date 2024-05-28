@@ -1,4 +1,4 @@
-package at.htl.ecopoints.ui.layout
+package at.htl.ecopoints.feature.home
 
 import android.content.Context
 import android.content.Intent
@@ -61,12 +61,10 @@ import at.htl.ecopoints.model.HomeInfo
 import at.htl.ecopoints.model.Store
 import at.htl.ecopoints.apis.TankerkoenigApiClient
 import at.htl.ecopoints.model.Trip
-import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.ui.component.ShowMap
+import at.htl.ecopoints.feature.lastRides.LastRidesView
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
-import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
-import com.google.maps.android.compose.rememberCameraPositionState
 import com.opencsv.CSVParserBuilder
 import com.opencsv.CSVReaderBuilder
 import java.io.IOException
@@ -114,18 +112,6 @@ class HomeView {
                     ShowText()
 
                     LastTrips(activity)
-
-                    val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Home") }
-                    Box(
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-
-                        BottomNavBar(
-                            currentScreen = currentScreen,
-                            onScreenSelected = { newScreen -> setCurrentScreen(newScreen) },
-                            context = activity
-                        )
-                    }
                 }
             }
         }
@@ -343,7 +329,7 @@ class HomeView {
     @Composable
     fun LastTrips(context: Context) {
 
-        val state = store.subject.map { it.homeInfo }.subscribeAsState(HomeInfo())
+        val state = store.pipe.map { it.homeInfo }.subscribeAsState(HomeInfo())
 
         val gradientColors = listOf(
             Color(0xFF9bd99e),
@@ -370,7 +356,7 @@ class HomeView {
             ) {
                 items(trips) { trip ->
                     LastTripsButton(trip = trip) {
-                        store.next {
+                        store.apply() {
                             it.homeInfo.showDialog = true
                             it.homeInfo.selectedTripDate = trip.start
                         }
@@ -389,7 +375,7 @@ class HomeView {
             ) {
                 Button(
                     onClick = {
-                        store.next {
+                        store.apply() {
                             it.homeInfo.showDetailedLastRidesPopup = true
                         }
                     },
@@ -447,7 +433,7 @@ class HomeView {
                     trips = trips,
                     context = context,
                     onCloseDialog = {
-                        store.next {
+                        store.apply() {
                             it.homeInfo.showDialog = false
                             it.homeInfo.selectedTripDate = null
                             it.homeInfo.showDetailedLastRidesPopup = false

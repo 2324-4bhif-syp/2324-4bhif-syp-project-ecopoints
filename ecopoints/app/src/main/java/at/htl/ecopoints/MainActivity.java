@@ -29,15 +29,6 @@ public class MainActivity extends ComponentActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.i(TAG, "onCreate()");
-        super.onCreate(savedInstanceState);
-
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            return;
-        }
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_PRIVILEGED}, 1);
@@ -54,6 +45,7 @@ public class MainActivity extends ComponentActivity {
             }
 
 
+        super.onCreate(savedInstanceState);
         tripView.compose(this);
     }
 }

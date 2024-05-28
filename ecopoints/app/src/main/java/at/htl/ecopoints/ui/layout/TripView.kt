@@ -36,6 +36,7 @@ import at.htl.ecopoints.io.LocationManager
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.CameraPositionState
+import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -68,7 +69,7 @@ class TripView {
 
             LocationManager(activity.applicationContext) { location ->
                 store.next {
-                    if(tripActive) {
+                    if (tripActive) {
                         it.tripViewModel.carData.latitude = location.latitude
                         it.tripViewModel.carData.longitude = location.longitude
                         it.tripViewModel.carData.altitude = location.altitude
@@ -141,18 +142,6 @@ class TripView {
     private fun generateRandomFuelCons(): Double {
         return (3..21).random().toDouble()
     }
-
-    private fun startTrip() {
-        store.subject.map { it.tripViewModel.carData }.subscribe {
-            var carData = it
-            store.next{ it.tripViewModel.trip.carDataList.add(carData) }
-        }
-    }
-
-    private fun endTrip() {
-
-    }
-
 
     @Composable
     fun LiveCarData(store: Store) {
@@ -238,7 +227,7 @@ class TripView {
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Row{
+            Row {
                 Button(
                     shape = MaterialTheme.shapes.medium,
                     onClick = { startTrip() },
@@ -321,6 +310,21 @@ class TripView {
     private fun startTrip() {
         Log.d(TAG, "Trip started")
         tripActive = true
+//
+//        val t = store.subject.map { it.tripViewModel }.subscribeOn(Schedulers.io()).doOnError(
+//            {
+//                Log.e(TAG, "Error while starting trip: ${it.message}")
+//            }
+//        )
+//            .subscribe {
+//                var carData = it.carData
+//                store.next { it.tripViewModel.trip.carDataList.add(carData) }
+//                Log.d(
+//                    TAG, "Added Cardata $carData to trip"
+//                )
+//
+//
+//            }
     }
 
     @SuppressLint("MissingPermission")

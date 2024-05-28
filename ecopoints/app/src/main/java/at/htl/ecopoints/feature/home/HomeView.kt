@@ -90,6 +90,28 @@ class HomeView {
     constructor() {
     }
 
+    @Composable
+    fun HomeScreen(){
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
+        ) {
+
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+
+
+            }
+            ShowPhoto()
+            ShowPrices()
+
+            ShowText()
+
+        }
+    }
+
     fun compose(activity: ComponentActivity) {
         activity.setContent {
             EcoPointsTheme {

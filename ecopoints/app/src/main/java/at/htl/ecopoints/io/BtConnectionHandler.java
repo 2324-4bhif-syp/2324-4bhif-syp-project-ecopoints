@@ -46,7 +46,7 @@ public class BtConnectionHandler {
         }
 
         if(device == null){
-            store.next(i -> {
+            store.apply(i -> {
                         if (i != null) {
                             i.tripViewModel.connectionStateString = "No Device Selected";
                         }
@@ -61,7 +61,7 @@ public class BtConnectionHandler {
 
         if (btDevice != null) {
             Log.d(TAG, "Connecting to Bt-Device: " + btDevice.getAddress());
-            store.next(i -> {
+            store.apply(i -> {
                         if (i != null) {
                             i.tripViewModel.connectionStateString = "Connecting...";
                         }
@@ -69,7 +69,7 @@ public class BtConnectionHandler {
             );
             connect(btDevice).thenAccept(connected -> {
                 if (connected) {
-                    store.next(i -> {
+                    store.apply(i -> {
                                 if (i != null) {
                                     i.tripViewModel.isConnected = true;
                                     i.tripViewModel.connectionStateString = "Connected";
@@ -77,7 +77,7 @@ public class BtConnectionHandler {
                             }
                     );
                 } else {
-                    store.next(i -> {
+                    store.apply(i -> {
                                 if (i != null) {
                                     i.tripViewModel.isConnected = false;
                                     i.tripViewModel.connectionStateString = "Could not connect";
@@ -87,7 +87,7 @@ public class BtConnectionHandler {
                 }
             });
         } else {
-            store.next(i -> {
+            store.apply(i -> {
                         if (i != null) {
                             i.tripViewModel.isConnected = false;
                             i.tripViewModel.connectionStateString = "Device not found";
@@ -109,7 +109,7 @@ public class BtConnectionHandler {
                 if (btSocket.isConnected()) {
                     Log.d(TAG, "Connected to Bt-Device: " + btDevice.getName());
 
-                    store.next(i -> {
+                    store.apply(i -> {
                         if (i != null) {
                             try {
                                 i.tripViewModel.isConnected = true;

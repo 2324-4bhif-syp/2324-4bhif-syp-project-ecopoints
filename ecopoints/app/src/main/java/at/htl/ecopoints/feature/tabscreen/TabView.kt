@@ -1,4 +1,4 @@
-package at.htl.leonding.feature.tabscreen
+package at.htl.ecopoints.feature.tabscreen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,14 +8,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
-import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Place
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.Badge
-import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -29,20 +24,29 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import at.htl.leonding.feature.home.HomeView
-import at.htl.leonding.feature.settings.SettingsScreen
-import at.htl.leonding.feature.todo.ToDoView
-import at.htl.leonding.model.Store
-import at.htl.leonding.ui.theme.ToDoTheme
+import at.htl.ecopoints.feature.home.HomeView
+import at.htl.ecopoints.feature.profile.ProfileView
+import at.htl.ecopoints.feature.ranking.RankingView
+import at.htl.ecopoints.feature.trip.TripView
+import at.htl.ecopoints.model.Store
+import at.htl.ecopoints.ui.theme.EcoPointsTheme
 import javax.inject.Inject
 
 class TabView @Inject constructor() {
     @Inject
     lateinit var tabScreenViewModel: TabViewModel
+
     @Inject
-    lateinit var homeScreenView: HomeView
+    lateinit var homeView: HomeView
+
     @Inject
-    lateinit var toDoView: ToDoView
+    lateinit var profileView: ProfileView
+
+    @Inject
+    lateinit var rankingView: RankingView
+
+    @Inject
+    lateinit var tripView: TripView
 
     @Composable
     fun TabViewLayout() {
@@ -81,9 +85,10 @@ class TabView @Inject constructor() {
             PreviewContentArea()
         } else {
             when (selectedTab) {
-                0 -> homeScreenView.HomeScreen()
-                1 -> toDoView.ToDos()
-                2 -> SettingsScreen()
+                0 -> homeView.HomeScreen()
+                1 -> tripView.Trip()
+                2 -> rankingView.Ranking()
+                3 -> profileView.Profile()
             }
         }
     }
@@ -92,7 +97,9 @@ class TabView @Inject constructor() {
         Column(modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center) {
-            Row(modifier = Modifier.align(Alignment.CenterHorizontally).padding(8.dp)) {
+            Row(modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(8.dp)) {
                 Text(text = "Content area of the selected tab", softWrap = true)
             }
         }
@@ -103,7 +110,7 @@ class TabView @Inject constructor() {
     fun TabViewPreview() {
         if (LocalInspectionMode.current) {
             tabScreenViewModel = TabViewModel(Store())
-            ToDoTheme {
+            EcoPointsTheme {
                 TabViewLayout()
             }
         }

@@ -42,8 +42,6 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.ui.Alignment
-import at.htl.ecopoints.RankingActivity
-import at.htl.ecopoints.model.CardContent
 import at.htl.ecopoints.model.Store
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
@@ -76,24 +74,24 @@ fun ProfileScreen(user: User, context: Context, store: Store, currentUser: User)
 
 @Composable
 private fun ShowReturnBtn(context: Context, store: Store){
-    IconButton(onClick = {
-        val intent = Intent(context, RankingActivity::class.java)
-        context.startActivity(intent)
-
-        store.next{
-            it.rankingInfo.selectedUser = User()
-            it.rankingInfo.showDetailRankingView = false
-        }
-    }) {
-        androidx.compose.material3.Icon(
-            modifier = Modifier
-                .size(40.dp)
-                .padding(bottom = 10.dp),
-            imageVector = Icons.Rounded.ArrowBack,
-            contentDescription = null,
-            tint = colorScheme.primary
-        )
-    }
+//    IconButton(onClick = {
+//        val intent = Intent(context, RankingActivity::class.java)
+//        context.startActivity(intent)
+//
+//        store.apply(){
+//            it.rankingInfo.selectedUser = User()
+//            it.rankingInfo.showDetailRankingView = false
+//        }
+//    }) {
+//        androidx.compose.material3.Icon(
+//            modifier = Modifier
+//                .size(40.dp)
+//                .padding(bottom = 10.dp),
+//            imageVector = Icons.Rounded.ArrowBack,
+//            contentDescription = null,
+//            tint = colorScheme.primary
+//        )
+//    }
 }
 
 @Composable

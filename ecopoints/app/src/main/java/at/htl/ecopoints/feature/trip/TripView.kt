@@ -65,7 +65,7 @@ import javax.inject.Singleton
 class TripView {
     private val TAG = this.javaClass.simpleName
 
-    
+
     @Inject
     lateinit var store: Store
 
@@ -82,6 +82,39 @@ class TripView {
 
     @Inject
     constructor()
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    fun Trip(){
+        Scaffold(topBar = {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.tertiaryContainer),
+                horizontalArrangement = Arrangement.Start
+            ) {
+                Button(onClick = {}) {
+                    Text(text = "Select your car")
+                }
+                Button(onClick = {
+                    store.apply { it.tripViewModel.map.showMap = true }
+                }) {
+                    Text(text = "Map")
+                }
+            }
+        }, bottomBar = {
+            Column(modifier = Modifier.padding(bottom = 50.dp)) {
+                ConnectionInfo(store, btConnectionHandler)
+            }
+
+        }) {
+
+            Spacer(modifier = Modifier.height(200.dp))
+            LiveCarData(store)
+            BtDeviceSelectionDialog(store, btConnectionHandler)
+            ShowMapCard(store = store)
+        }
+    }
 
     @OptIn(ExperimentalMaterial3Api::class)
     @SuppressLint("CheckResult", "UnusedMaterial3ScaffoldPaddingParameter", "MissingPermission")

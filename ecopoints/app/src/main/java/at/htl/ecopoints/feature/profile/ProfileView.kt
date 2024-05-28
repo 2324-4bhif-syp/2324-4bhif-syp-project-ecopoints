@@ -62,6 +62,23 @@ class ProfileView {
     constructor() {
     }
 
+    @Composable
+    fun Profile(){
+        Surface(
+            modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+                ProfileSettingsHeader()
+                ProfileHeader()
+                ShowStatistics()
+                FriendSuggestions()
+            }
+        }
+    }
+
     fun compose(activity: ComponentActivity) {
         activity.setContent {
             EcoPointsTheme {

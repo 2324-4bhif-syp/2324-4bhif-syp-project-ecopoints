@@ -62,6 +62,11 @@ class RankingView {
     constructor() {
     }
 
+    @Composable
+    fun Ranking(){
+        Text(text = "Ranking")
+    }
+
     fun compose(activity: ComponentActivity) {
         activity.setContent {
             EcoPointsTheme {

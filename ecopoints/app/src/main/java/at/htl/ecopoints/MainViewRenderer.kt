@@ -13,7 +13,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalConfiguration
 import at.htl.ecopoints.model.Store
 import at.htl.ecopoints.model.UIState
-import at.htl.leonding.feature.tabscreen.TabView
+import at.htl.ecopoints.feature.tabscreen.TabView
 import javax.inject.Inject
 import javax.inject.Singleton
 

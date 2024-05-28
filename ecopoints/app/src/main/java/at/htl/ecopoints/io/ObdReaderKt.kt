@@ -159,7 +159,7 @@ class ObdReaderKt {
     }
 
     fun updateCarData(command: ObdCommand, result: ObdResponse) {
-        store.next {
+        store.apply() {
 
             try {
 

@@ -6,10 +6,10 @@ import android.util.Log;
 import dagger.hilt.android.HiltAndroidApp;
 
 @HiltAndroidApp
-public class MyApplication extends Application {
-    private static final String TAG = MyApplication.class.getSimpleName();
+public class EcoPointsApplication extends Application {
+    private static final String TAG = EcoPointsApplication.class.getSimpleName();
 
-    public MyApplication() {
+    public EcoPointsApplication() {
         Log.i(TAG, "EcoPoints");
     }
 }

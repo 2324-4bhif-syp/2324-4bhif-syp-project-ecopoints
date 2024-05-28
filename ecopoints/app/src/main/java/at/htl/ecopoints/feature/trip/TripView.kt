@@ -1,19 +1,41 @@
-package at.htl.ecopoints.ui.layout
+package at.htl.ecopoints.feature.trip
 
 import android.annotation.SuppressLint
 import android.util.Log
-import android.util.Pair
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredSize
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.*
+import androidx.compose.material3.BasicAlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -21,30 +43,29 @@ import androidx.compose.runtime.rxjava3.subscribeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
-import at.htl.ecopoints.model.*
-import at.htl.ecopoints.io.*
+import at.htl.ecopoints.io.BtConnectionHandler
+import at.htl.ecopoints.io.LocationManager
+import at.htl.ecopoints.io.ObdReader
+import at.htl.ecopoints.io.ObdReaderKt
+import at.htl.ecopoints.model.BtDevice
+import at.htl.ecopoints.model.CarData
+import at.htl.ecopoints.model.Map
+import at.htl.ecopoints.model.Store
 import at.htl.ecopoints.model.viewmodel.TripViewModel
-import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.ui.component.ShowMap
 import at.htl.ecopoints.ui.component.Speedometer
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
-import at.htl.ecopoints.io.LocationManager
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
-import com.google.maps.android.compose.CameraPositionState
-import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 import javax.inject.Singleton
 
-private val TAG = TripView::class.java.simpleName
-
 @Singleton
 class TripView {
+    private val TAG = this.javaClass.simpleName
 
+    
     @Inject
     lateinit var store: Store
 
@@ -68,7 +89,7 @@ class TripView {
         activity.setContent {
 
             LocationManager(activity.applicationContext) { location ->
-                store.next {
+                store.apply {
                     if (tripActive) {
                         it.tripViewModel.carData.latitude = location.latitude
                         it.tripViewModel.carData.longitude = location.longitude
@@ -103,7 +124,7 @@ class TripView {
                                 Text(text = "Select your car")
                             }
                             Button(onClick = {
-                                store.next { it.tripViewModel.map.showMap = true }
+                                store.apply { it.tripViewModel.map.showMap = true }
                             }) {
                                 Text(text = "Map")
                             }
@@ -113,18 +134,6 @@ class TripView {
                             ConnectionInfo(store, btConnectionHandler)
                         }
 
-                        Column {
-                            val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Trip") }
-                            Box(
-                                modifier = Modifier.fillMaxSize()
-                            ) {
-                                BottomNavBar(
-                                    currentScreen = currentScreen,
-                                    onScreenSelected = { newScreen -> setCurrentScreen(newScreen) },
-                                    context = activity
-                                )
-                            }
-                        }
                     }) {
 
                         Spacer(modifier = Modifier.height(200.dp))
@@ -145,7 +154,7 @@ class TripView {
 
     @Composable
     fun LiveCarData(store: Store) {
-        val state = store.subject.map { it.tripViewModel.carData }.subscribeAsState(CarData())
+        val state = store.pipe.map { it.tripViewModel.carData }.subscribeAsState(CarData())
         Column {
             Speedometer(
                 currentSpeed = state.value.speed.toFloat(),
@@ -175,7 +184,7 @@ class TripView {
     @ExperimentalMaterial3Api
     @Composable
     fun BtDeviceSelectionDialog(store: Store, btConnectionHandler: BtConnectionHandler) {
-        val state = store.subject.map { it.tripViewModel }.subscribeAsState(TripViewModel())
+        val state = store.pipe.map { it.tripViewModel }.subscribeAsState(TripViewModel())
         if (state.value.showDeviceSelectionDialog) {
             BasicAlertDialog(
                 onDismissRequest = { state.value.showDeviceSelectionDialog = false },
@@ -193,7 +202,7 @@ class TripView {
                         horizontalArrangement = Arrangement.Center,
                     ) {
                         Button(onClick = {
-                            store.next {
+                            store.apply {
                                 it.tripViewModel.showDeviceSelectionDialog = false
                             }
                         }) {
@@ -208,10 +217,10 @@ class TripView {
     @SuppressLint("MissingPermission", "CheckResult")
     @Composable
     fun ConnectionInfo(store: Store, btConnectionHandler: BtConnectionHandler) {
-        val state = store.subject.map { it.tripViewModel }.subscribeAsState(TripViewModel())
+        val state = store.pipe.map { it.tripViewModel }.subscribeAsState(TripViewModel())
         var connectionStateColor = Color.Red
 
-        store.subject.map { it.tripViewModel }.subscribe {
+        store.pipe.map { it.tripViewModel }.subscribe {
             connectionStateColor = when {
                 it.connectionStateString == "Connected" -> Color.Green
                 it.connectionStateString.contains("Connecting") -> Color.Yellow
@@ -260,7 +269,7 @@ class TripView {
                 Button(
                     shape = MaterialTheme.shapes.medium, onClick = {
                         Log.d(TAG, "Show Bt-Device selection dialog")
-                        store.next { it.tripViewModel.showDeviceSelectionDialog = true }
+                        store.apply { it.tripViewModel.showDeviceSelectionDialog = true }
                     }, modifier = Modifier
                         .padding(8.dp)
                         .width(150.dp)
@@ -311,14 +320,14 @@ class TripView {
         Log.d(TAG, "Trip started")
         tripActive = true
 //
-//        val t = store.subject.map { it.tripViewModel }.subscribeOn(Schedulers.io()).doOnError(
+//        val t = store.pipe.map { it.tripViewModel }.subscribeOn(Schedulers.io()).doOnError(
 //            {
 //                Log.e(TAG, "Error while starting trip: ${it.message}")
 //            }
 //        )
 //            .subscribe {
 //                var carData = it.carData
-//                store.next { it.tripViewModel.trip.carDataList.add(carData) }
+//                store.apply { it.tripViewModel.trip.carDataList.add(carData) }
 //                Log.d(
 //                    TAG, "Added Cardata $carData to trip"
 //                )
@@ -352,8 +361,8 @@ class TripView {
                 )
                 .fillMaxSize(),
             onClick = {
-                store.next { it.tripViewModel.selectedDevice = device }
-                store.next { it.tripViewModel.showDeviceSelectionDialog = false }
+                store.apply { it.tripViewModel.selectedDevice = device }
+                store.apply { it.tripViewModel.showDeviceSelectionDialog = false }
             },
         ) {
             Row {
@@ -368,17 +377,17 @@ class TripView {
     @ExperimentalMaterial3Api
     @Composable
     fun ShowMapCard(store: Store) {
-        val state = store.subject.map { it.tripViewModel.map }.subscribeAsState(Map())
+        val state = store.pipe.map { it.tripViewModel.map }.subscribeAsState(Map())
         if (state.value.showMap) {
             BasicAlertDialog(
-                onDismissRequest = { store.next { it.tripViewModel.map.showMap = false } },
+                onDismissRequest = { store.apply { it.tripViewModel.map.showMap = false } },
                 properties = DialogProperties(
                     dismissOnBackPress = true,
                     dismissOnClickOutside = true,
                     usePlatformDefaultWidth = false
                 )
             ) {
-                store.subject.value?.tripViewModel?.map?.let {
+                store.pipe.value?.tripViewModel?.map?.let {
                     ShowMap(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -389,7 +398,7 @@ class TripView {
                 Column {
                     OutlinedButton(
                         onClick = {
-                            store.next { it.tripViewModel.map.showMap = false }
+                            store.apply { it.tripViewModel.map.showMap = false }
                             Log.d("MapCloseButton", "Clicked")
                         },
                         modifier = Modifier

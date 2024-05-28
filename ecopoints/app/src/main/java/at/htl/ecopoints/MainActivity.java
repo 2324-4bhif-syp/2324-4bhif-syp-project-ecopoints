@@ -4,20 +4,14 @@ package at.htl.ecopoints;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 
 import androidx.activity.ComponentActivity;
 import androidx.core.app.ActivityCompat;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
-
 import javax.inject.Inject;
 
-import at.htl.ecopoints.io.LocationManager;
 import at.htl.ecopoints.model.Store;
 import at.htl.ecopoints.ui.layout.TripView;
 import dagger.hilt.android.AndroidEntryPoint;
@@ -35,6 +29,7 @@ public class MainActivity extends ComponentActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.i(TAG, "onCreate()");
+        super.onCreate(savedInstanceState);
 
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -58,7 +53,6 @@ public class MainActivity extends ComponentActivity {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             }
 
-        super.onCreate(savedInstanceState);
 
         tripView.compose(this);
     }

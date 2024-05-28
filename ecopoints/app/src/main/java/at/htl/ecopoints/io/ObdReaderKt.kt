@@ -72,7 +72,7 @@ class ObdReaderKt {
 //        OilTemperatureCommand()
     )
 
-    suspend fun setupELM(obdConnection: ObdDeviceConnection) {
+    private suspend fun setupELM(obdConnection: ObdDeviceConnection) {
         try {
 
         } catch (e: Exception) {
@@ -98,7 +98,7 @@ class ObdReaderKt {
                     obdCommands.forEach { command ->
                         try {
                             val result = obdConnection.run(command, false, 0, 0)
-                            var sb = StringBuilder()
+                            val sb = StringBuilder()
 
                             sb.appendLine("${command.name} Result:")
                             sb.appendLine("PID: $command.pid")

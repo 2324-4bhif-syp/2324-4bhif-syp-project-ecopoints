@@ -131,6 +131,17 @@ class TripView {
         return (3..21).random().toDouble()
     }
 
+    private fun startTrip() {
+        store.subject.map { it.tripViewModel.carData }.subscribe {
+            var carData = it
+            store.next{ it.tripViewModel.trip.carDataList.add(carData) }
+        }
+    }
+
+    private fun endTrip() {
+
+    }
+
 
     @Composable
     fun LiveCarData(store: Store) {

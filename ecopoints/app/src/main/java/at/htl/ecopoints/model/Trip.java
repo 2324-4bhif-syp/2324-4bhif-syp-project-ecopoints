@@ -17,9 +17,9 @@ public class    Trip {
     private Date start;
     private Date end;
     private double rewardedEcoPoints;
-
     private List<List<CardContent>> detailTripCardContentList;
 
+    private List<CarData> carDataList;
 
     public Trip() {
     }
@@ -128,5 +128,13 @@ public class    Trip {
 
     public List<List<CardContent>> getDetailTripCardContentList() {
         return detailTripCardContentList;
+    }
+
+    public List<CarData> getCarDataList() {
+        return carDataList;
+    }
+
+    public void setCarDataList(List<CarData> carDataList) {
+        this.carDataList = carDataList;
     }
 }

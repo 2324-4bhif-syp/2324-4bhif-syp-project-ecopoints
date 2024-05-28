@@ -141,7 +141,7 @@ class TripView {
             Speedometer(
                 currentSpeed = state.value.speed.toFloat(),
                 modifier = Modifier
-                    .padding(90.dp)
+                    .padding(50.dp)
                     .requiredSize(250.dp)
             )
             Row {
@@ -154,7 +154,7 @@ class TripView {
                 Column {
                     Text(text = "Latitude: ${state.value.latitude}")
                     Text(text = "Longitude: ${state.value.longitude}")
-                    Text(text = "Attitude: ${state.value.altitude}")
+                    Text(text = "Altitude: ${state.value.altitude}")
                     Text(text = "Speed: ${state.value.speed}")
                 }
             }

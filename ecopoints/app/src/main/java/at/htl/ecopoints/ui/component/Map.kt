@@ -22,18 +22,19 @@ fun ShowMap(modifier: Modifier = Modifier
                 .fillMaxWidth()
                 .height(200.dp),
             properties: MapProperties = MapProperties(mapType = MapType.HYBRID, isMyLocationEnabled = true),
-            latLngList: List<PolylineNode> = listOf()){
+            latLngList: List<PolylineNode> = listOf(),
+            draw: Boolean = false){
     GoogleMap(
         modifier = modifier,
         properties = properties
     ) {
         if(latLngList.isNotEmpty())
-            DrawPolyLine(latLngList);
+            DrawPolyLine(latLngList, draw);
     }
 }
 
 @Composable
-fun DrawPolyLine(latLngList: List<PolylineNode> = listOf()) {
+fun DrawPolyLine(latLngList: List<PolylineNode> = listOf(), draw : Boolean){
     for (i in 0 until latLngList.size - 1) {
         Polyline(
             points = listOf(

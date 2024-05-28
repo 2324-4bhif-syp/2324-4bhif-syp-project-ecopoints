@@ -56,6 +56,8 @@ class TripView {
     @Inject
     lateinit var btConnectionHandler: BtConnectionHandler
 
+    private var tripActive = false
+
     @Inject
     constructor()
 
@@ -66,13 +68,22 @@ class TripView {
 
             LocationManager(activity.applicationContext) { location ->
                 store.next {
-                    it.tripViewModel.carData.latitude = location.latitude
-                    it.tripViewModel.carData.longitude = location.longitude
-                    val fuelCons = generateRandomFuelCons()
-                    it.tripViewModel.map.add(location.latitude, location.longitude,
-                        fuelCons)
+                    if(tripActive) {
+                        it.tripViewModel.carData.latitude = location.latitude
+                        it.tripViewModel.carData.longitude = location.longitude
+                        it.tripViewModel.carData.altitude = location.altitude
+                        it.tripViewModel.carData.speed = Math.round(location.speed * 10.0) / 10.0
+                        val fuelCons = generateRandomFuelCons()
+                        it.tripViewModel.map.add(
+                            location.latitude, location.longitude,
+                            fuelCons
+                        )
 
-                    Log.d(TAG, "latitude: ${location.latitude}, longitude: ${location.longitude}, fuelCons: $fuelCons")
+                        Log.d(
+                            TAG,
+                            "latitude: ${location.latitude}, longitude: ${location.longitude}, fuelCons: $fuelCons"
+                        )
+                    }
                 }
             }
 
@@ -150,17 +161,21 @@ class TripView {
             Speedometer(
                 currentSpeed = state.value.speed.toFloat(),
                 modifier = Modifier
-                    .padding(90.dp)
+                    .padding(50.dp)
                     .requiredSize(250.dp)
             )
             Row {
                 Column {
-                    Text(text = "Latitude: ${state.value.latitude}")
-                    Text(text = "Longitude: ${state.value.longitude}")
                     Text(text = "Rpm: ${state.value.currentEngineRPM}")
                     Text(text = "ThrPos: ${state.value.throttlePosition}")
                     Text(text = "EngineRt: ${state.value.engineRunTime}")
                     Text(text = "timestamp: ${state.value.timeStamp}")
+                }
+                Column {
+                    Text(text = "Latitude: ${state.value.latitude}")
+                    Text(text = "Longitude: ${state.value.longitude}")
+                    Text(text = "Altitude: ${state.value.altitude}")
+                    Text(text = "Speed: ${state.value.speed}")
                 }
             }
         }
@@ -223,6 +238,26 @@ class TripView {
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Row{
+                Button(
+                    shape = MaterialTheme.shapes.medium,
+                    onClick = { startTrip() },
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .weight(1f)
+                ) {
+                    Text(text = "Start Trip")
+                }
+                Button(
+                    shape = MaterialTheme.shapes.medium,
+                    onClick = { stopTrip() },
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .weight(1f)
+                ) {
+                    Text(text = "Stop Trip")
+                }
+            }
             Row {
                 Button(
                     shape = MaterialTheme.shapes.medium,
@@ -276,6 +311,16 @@ class TripView {
                 }
             }
         }
+    }
+
+    private fun stopTrip() {
+        Log.d(TAG, "Trip stopped")
+        tripActive = false
+    }
+
+    private fun startTrip() {
+        Log.d(TAG, "Trip started")
+        tripActive = true
     }
 
     @SuppressLint("MissingPermission")

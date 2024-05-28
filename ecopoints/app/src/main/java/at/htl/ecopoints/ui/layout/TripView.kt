@@ -68,6 +68,8 @@ class TripView {
                 store.next {
                     it.tripViewModel.carData.latitude = location.latitude
                     it.tripViewModel.carData.longitude = location.longitude
+                    it.tripViewModel.carData.altitude = location.altitude
+                    it.tripViewModel.carData.speed = location.speed.toDouble()
                     val fuelCons = generateRandomFuelCons()
                     it.tripViewModel.map.add(location.latitude, location.longitude,
                         fuelCons)
@@ -144,12 +146,16 @@ class TripView {
             )
             Row {
                 Column {
-                    Text(text = "Latitude: ${state.value.latitude}")
-                    Text(text = "Longitude: ${state.value.longitude}")
                     Text(text = "Rpm: ${state.value.currentEngineRPM}")
                     Text(text = "ThrPos: ${state.value.throttlePosition}")
                     Text(text = "EngineRt: ${state.value.engineRunTime}")
                     Text(text = "timestamp: ${state.value.timeStamp}")
+                }
+                Column {
+                    Text(text = "Latitude: ${state.value.latitude}")
+                    Text(text = "Longitude: ${state.value.longitude}")
+                    Text(text = "Attitude: ${state.value.altitude}")
+                    Text(text = "Speed: ${Math.round(state.value.speed * 1000.0) / 1000.0}")
                 }
             }
         }

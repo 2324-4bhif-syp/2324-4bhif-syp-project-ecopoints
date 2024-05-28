@@ -56,6 +56,8 @@ class TripView {
     @Inject
     lateinit var btConnectionHandler: BtConnectionHandler
 
+    private var tripActive = false
+
     @Inject
     constructor()
 
@@ -66,15 +68,22 @@ class TripView {
 
             LocationManager(activity.applicationContext) { location ->
                 store.next {
-                    it.tripViewModel.carData.latitude = location.latitude
-                    it.tripViewModel.carData.longitude = location.longitude
-                    it.tripViewModel.carData.altitude = location.altitude
-                    it.tripViewModel.carData.speed = Math.round(location.speed * 10.0) / 10.0
-                    val fuelCons = generateRandomFuelCons()
-                    it.tripViewModel.map.add(location.latitude, location.longitude,
-                        fuelCons)
+                    if(tripActive) {
+                        it.tripViewModel.carData.latitude = location.latitude
+                        it.tripViewModel.carData.longitude = location.longitude
+                        it.tripViewModel.carData.altitude = location.altitude
+                        it.tripViewModel.carData.speed = Math.round(location.speed * 10.0) / 10.0
+                        val fuelCons = generateRandomFuelCons()
+                        it.tripViewModel.map.add(
+                            location.latitude, location.longitude,
+                            fuelCons
+                        )
 
-                    Log.d(TAG, "latitude: ${location.latitude}, longitude: ${location.longitude}, fuelCons: $fuelCons")
+                        Log.d(
+                            TAG,
+                            "latitude: ${location.latitude}, longitude: ${location.longitude}, fuelCons: $fuelCons"
+                        )
+                    }
                 }
             }
 
@@ -228,6 +237,15 @@ class TripView {
                 ) {
                     Text(text = "Start Trip")
                 }
+                Button(
+                    shape = MaterialTheme.shapes.medium,
+                    onClick = { stopTrip() },
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .weight(1f)
+                ) {
+                    Text(text = "Stop Trip")
+                }
             }
             Row {
                 Button(
@@ -284,8 +302,14 @@ class TripView {
         }
     }
 
+    private fun stopTrip() {
+        Log.d(TAG, "Trip stopped")
+        tripActive = false
+    }
+
     private fun startTrip() {
-        TODO("Not yet implemented")
+        Log.d(TAG, "Trip started")
+        tripActive = true
     }
 
     @SuppressLint("MissingPermission")

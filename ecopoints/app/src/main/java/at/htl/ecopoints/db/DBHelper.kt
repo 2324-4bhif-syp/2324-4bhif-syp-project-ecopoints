@@ -267,7 +267,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     fun syncTripsWithBackend(){
         val tripList = getAllTrips()
 
-        if(tripList.size < 1)
+        if(tripList.size < 11)
             return
 
         val tripService = TripService()

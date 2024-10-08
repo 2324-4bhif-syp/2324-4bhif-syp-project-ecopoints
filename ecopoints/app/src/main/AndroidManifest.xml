@@ -19,7 +19,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.EcoPoints"
-        >
+        tools:targetApi="31">
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -42,9 +42,9 @@
             android:name=".HomeActivity"
             android:exported="true"
             android:theme="@style/Theme.EcoPoints" />
-
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="${googleMapsApiKey}" />
+    <meta-data
+        android:name="com.google.android.geo.API_KEY"
+        android:value="AIzaSyAt5SouZW3Qfi4Fc9D08vUyKMMt1DsRa2E" />
+<!--        android:value="${googleMapsApiKey}" />-->
     </application>
 </manifest>

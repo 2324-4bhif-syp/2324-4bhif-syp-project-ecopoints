@@ -1,6 +1,6 @@
 package at.htl.ecopoints.model;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import android.graphics.drawable.Drawable;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -10,7 +10,7 @@ import at.htl.ecopoints.R;
 public class RankingInfo {
     public User selectedUser = new User();
     public boolean showDetailRankingView = false;
-    public List<User> users = new LinkedList<>(){
+    public List<User> users = new LinkedList<User>(){
         {
             add(new User(1L, "Joe", "123", 547.1));
             add(new User(2L, "Mary", "123", 533.9));
@@ -25,13 +25,13 @@ public class RankingInfo {
             add(new User(11L, "Lisa", "123", 91.3));
         }
     };
-    public List<FuelType> fuelTypes = new LinkedList<>(){
+    public List<FuelType> fuelTypes = new LinkedList<FuelType>(){
         {
             add(new FuelType("Diesel", true));
             add(new FuelType("Petrol", true));
         }
     };
-    public List<FuelType> selectedFuelTypes = new LinkedList<>(){
+    public List<FuelType> selectedFuelTypes = new LinkedList<FuelType>(){
         {
             add(fuelTypes.get(0));
             add(fuelTypes.get(1));
@@ -39,20 +39,20 @@ public class RankingInfo {
     };
     public boolean showFuelTypeDropdown = false;
 
-    public List<Integer> ranks = new LinkedList<>(){
+    public List<Integer> ranks = new LinkedList<Integer>(){
         {
             add(R.drawable.ranking_place_1);
             add(R.drawable.ranking_place_2);
             add(R.drawable.ranking_place_3);
         }
     };
-    public HashMap<String, Integer> rankTypeOptions = new HashMap<>(){
+    public HashMap rankTypeOptions = new HashMap<String, Integer>(){
         {
             put("CO₂-Consumption", R.drawable.ranking_category_co2);
             put("Eco-Points", R.drawable.ranking_category_ecopoints);
         }
     };
-    public String selectedRankTypeOption = rankTypeOptions.keySet().stream().findFirst().get();
+    public String selectedRankTypeOption = (String) rankTypeOptions.keySet().stream().findFirst().get();
 
     public User currentUser = users.get(0);
 

@@ -1,33 +1,37 @@
-import org.jetbrains.kotlin.konan.properties.Properties
+import java.util.Properties
+import kotlin.collections.set
 
 plugins {
     kotlin("kapt")
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
     id("com.google.dagger.hilt.android")
+
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
-
 android {
     namespace = "at.htl.ecopoints"
     compileSdk = 34
 
     defaultConfig {
         applicationId = "at.htl.ecopoints"
-        minSdk = 33
-        targetSdk = 33
+        minSdk = 34
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
 
         val properties = Properties()
         properties.load(project.rootProject.file("local.properties").inputStream())
         manifestPlaceholders["googleMapsApiKey"] = properties.getProperty("MAPS_API_KEY")
     }
+
+//    val properties = Properties()
+//    properties.load(project.rootProject.file("local.properties").inputStream())
+//    man["googleMapsApiKey"] = properties.getProperty("MAPS_API_KEY")
+
 
     buildTypes {
         release {
@@ -39,26 +43,45 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = "1.8"
     }
     buildFeatures {
         compose = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.2"
-    }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
 }
 
 dependencies {
+
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.material3)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
+
+    implementation("com.google.dagger:hilt-android:2.52")
+    kapt ("com.google.dagger:hilt-compiler:2.52")
+
+    // For instrumentation tests
+    androidTestImplementation  ("com.google.dagger:hilt-android-testing:2.52")
+    kaptAndroidTest ("com.google.dagger:hilt-compiler:2.52")
+
+    // For local unit tests
+    testImplementation (libs.dagger.hilt.android.testing)
+    kaptTest (libs.com.google.dagger.hilt.compiler2)
 
     implementation ("androidx.compose.runtime:runtime")
     implementation ("androidx.compose.foundation:foundation")
@@ -80,11 +103,8 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
-    //region GoogleMaps
-    implementation("com.google.maps.android:maps-compose:2.11.4")
-    implementation("com.google.android.gms:play-services-maps:18.2.0")
-    implementation("com.google.android.gms:play-services-location:21.2.0")
-    //endregion
+    //csv
+    implementation ("com.opencsv:opencsv:5.9")
 
     // layout
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
@@ -98,36 +118,42 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 
-    // Hilt
-    implementation("com.google.dagger:hilt-android:2.51.1")
-    kapt("com.google.dagger:hilt-android-compiler:2.51")
+
+    //MAPS
+    implementation(libs.maps.compose)
+    implementation(libs.play.services.maps)
+    implementation(libs.play.services.location)
 
     // RxJava
-    implementation("io.reactivex.rxjava3:rxjava:3.1.8")
-    implementation("androidx.compose.runtime:runtime-rxjava3:1.6.7")
+    implementation(libs.rxjava)
+    implementation(libs.androidx.runtime.rxjava3.v167)
+
+
+    //hilt
+    implementation(libs.rxjava)
+    implementation(libs.androidx.runtime.rxjava3)
+    kapt(libs.hilt.android.compiler)
+
 
     // Jackson
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.17.1")
+    implementation(libs.jackson.databind)
 
     // OBD
-    implementation ("com.github.eltonvs:kotlin-obd-api:1.3.0")
+    implementation (libs.kotlin.obd.api)
 
-    implementation ("com.google.code.gson:gson:2.10.1")
+    implementation (libs.gson)
 
     // https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
-    implementation ("com.squareup.okhttp3:okhttp:5.0.0-alpha.14")
-
-    implementation ("com.opencsv:opencsv:5.9")
+    implementation (libs.okhttp)
 
     //Lifecycle
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.0")
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.runtime.compose)
 
     //Accompanist (Permission)
-    implementation("com.google.accompanist:accompanist-permissions:0.31.3-beta")
+    implementation(libs.accompanist.permissions)
 }
 
-// Allow references to generated code
 kapt {
     correctErrorTypes = true
 }

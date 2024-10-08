@@ -62,7 +62,7 @@ class TripView {
     constructor()
 
     @OptIn(ExperimentalMaterial3Api::class)
-    @SuppressLint("CheckResult", "UnusedMaterial3ScaffoldPaddingParameter", "MissingPermission")
+    @SuppressLint("CheckResult", "UnusedMaterial3ScaffoldPaddingParameter")
     fun compose(activity: ComponentActivity) {
         activity.setContent {
 
@@ -205,7 +205,7 @@ class TripView {
         }
     }
 
-    @SuppressLint("MissingPermission", "CheckResult")
+    @SuppressLint("CheckResult")
     @Composable
     fun ConnectionInfo(store: Store, btConnectionHandler: BtConnectionHandler) {
         val state = store.subject.map { it.tripViewModel }.subscribeAsState(TripViewModel())
@@ -312,7 +312,6 @@ class TripView {
         tripActive = true
     }
 
-    @SuppressLint("MissingPermission")
     @Composable
     fun ListPairedBtDevices(store: Store, btConnectionHandler: BtConnectionHandler) {
         LazyColumn(
@@ -326,7 +325,6 @@ class TripView {
         }
     }
 
-    @SuppressLint("MissingPermission")
     @Composable
     fun BluetoothDeviceItem(device: BtDevice, store: Store) {
         Log.d(TAG, "Device: ${device.name}")
@@ -349,7 +347,6 @@ class TripView {
 
     //endregion
 
-    @SuppressLint("MissingPermission")
     @ExperimentalMaterial3Api
     @Composable
     fun ShowMapCard(store: Store) {

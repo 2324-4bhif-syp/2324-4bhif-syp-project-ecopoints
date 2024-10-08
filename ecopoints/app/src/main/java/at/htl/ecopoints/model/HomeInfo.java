@@ -1,9 +1,6 @@
 package at.htl.ecopoints.model;
 
 import java.util.Date;
-import java.util.List;
-
-import at.htl.ecopoints.db.DBHelper;
 
 public class HomeInfo {
 

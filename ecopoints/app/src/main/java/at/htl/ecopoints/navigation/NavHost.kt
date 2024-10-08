@@ -14,14 +14,13 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Place
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import at.htl.ecopoints.HomeActivity
 import at.htl.ecopoints.MainActivity
 import at.htl.ecopoints.ProfileActivity
 import at.htl.ecopoints.RankingActivity
-import at.htl.ecopoints.ui.layout.RankingView
-import at.htl.ecopoints.ui.layout.TripView
 
 @Composable
 fun BottomNavBar(
@@ -41,7 +40,7 @@ fun BottomNavBar(
         BottomNavigation(
             modifier = Modifier
                 .fillMaxWidth(),
-            backgroundColor = androidx.compose.material3.MaterialTheme.colorScheme.background
+            backgroundColor = MaterialTheme.colorScheme.background
         ) {
             screens.forEach { screen ->
                 BottomNavigationItem(
@@ -53,7 +52,7 @@ fun BottomNavBar(
                             "Profile" -> Icons.Default.AccountCircle
                             else -> Icons.Default.Place
                         }
-                        Icon(icon, contentDescription = null, tint = androidx.compose.material3.MaterialTheme.colorScheme.primary)
+                        Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
                     },
                     selected = currentScreen == screen,
                     onClick = {

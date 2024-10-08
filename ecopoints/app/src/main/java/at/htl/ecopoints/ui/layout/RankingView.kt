@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.material.Surface
+import androidx.compose.material3.ListItem
 import androidx.compose.runtime.rxjava3.subscribeAsState
 import at.htl.ecopoints.model.Store
 import at.htl.ecopoints.navigation.BottomNavBar
@@ -207,7 +208,7 @@ class RankingView {
                     },
                 ) {
                     state.value.fuelTypes.forEach { fuelType ->
-                        androidx.compose.material3.ListItem(
+                        ListItem(
                             modifier = Modifier.combinedClickable(
                                 onClick = {
                                     if (fuelType.isSelected) {
@@ -270,7 +271,7 @@ class RankingView {
                     Button(
                         onClick = {
                             store.next{
-                                it.rankingInfo.selectedRankTypeOption = option.key
+                                it.rankingInfo.selectedRankTypeOption = option.key as String?
                             }
                         },
                         colors = ButtonDefaults.buttonColors(
@@ -286,8 +287,8 @@ class RankingView {
                         }
 
                         Image(
-                            painter = painterResource(id = option.value),
-                            contentDescription = option.key,
+                            painter = painterResource(id = option.value as Int),
+                            contentDescription = option.key.toString(),
                             modifier = Modifier
                                 .width(size)
                                 .height(size)

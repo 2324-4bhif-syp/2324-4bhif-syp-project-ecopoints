@@ -2,6 +2,7 @@ package at.htl.ecopoints.ui.layout
 
 import android.annotation.SuppressLint
 import android.util.Log
+import android.util.Pair
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
@@ -20,6 +21,7 @@ import androidx.compose.runtime.rxjava3.subscribeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
@@ -31,6 +33,9 @@ import at.htl.ecopoints.ui.component.ShowMap
 import at.htl.ecopoints.ui.component.Speedometer
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
 import at.htl.ecopoints.io.LocationManager
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.CameraPositionState
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -51,18 +56,34 @@ class TripView {
     @Inject
     lateinit var btConnectionHandler: BtConnectionHandler
 
+    private var tripActive = false
+
     @Inject
     constructor()
 
     @OptIn(ExperimentalMaterial3Api::class)
-    @SuppressLint("CheckResult", "UnusedMaterial3ScaffoldPaddingParameter", "MissingPermission")
+    @SuppressLint("CheckResult", "UnusedMaterial3ScaffoldPaddingParameter")
     fun compose(activity: ComponentActivity) {
         activity.setContent {
 
             LocationManager(activity.applicationContext) { location ->
                 store.next {
-                    it.tripViewModel.carData.latitude = location.latitude
-                    it.tripViewModel.carData.longitude = location.longitude
+                    if(tripActive) {
+                        it.tripViewModel.carData.latitude = location.latitude
+                        it.tripViewModel.carData.longitude = location.longitude
+                        it.tripViewModel.carData.altitude = location.altitude
+                        it.tripViewModel.carData.speed = Math.round(location.speed * 10.0) / 10.0
+                        val fuelCons = generateRandomFuelCons()
+                        it.tripViewModel.map.add(
+                            location.latitude, location.longitude,
+                            fuelCons
+                        )
+
+                        Log.d(
+                            TAG,
+                            "latitude: ${location.latitude}, longitude: ${location.longitude}, fuelCons: $fuelCons"
+                        )
+                    }
                 }
             }
 
@@ -115,6 +136,13 @@ class TripView {
         }
     }
 
+    //for testing purposes, remove if database is set up
+    //TODO: Remove this function if fuel consumption is being read from the OBD
+    private fun generateRandomFuelCons(): Double {
+        return (3..21).random().toDouble()
+    }
+
+
     @Composable
     fun LiveCarData(store: Store) {
         val state = store.subject.map { it.tripViewModel.carData }.subscribeAsState(CarData())
@@ -122,17 +150,21 @@ class TripView {
             Speedometer(
                 currentSpeed = state.value.speed.toFloat(),
                 modifier = Modifier
-                    .padding(90.dp)
+                    .padding(50.dp)
                     .requiredSize(250.dp)
             )
             Row {
                 Column {
-                    Text(text = "Latitude: ${state.value.latitude}")
-                    Text(text = "Longitude: ${state.value.longitude}")
                     Text(text = "Rpm: ${state.value.currentEngineRPM}")
                     Text(text = "ThrPos: ${state.value.throttlePosition}")
                     Text(text = "EngineRt: ${state.value.engineRunTime}")
                     Text(text = "timestamp: ${state.value.timeStamp}")
+                }
+                Column {
+                    Text(text = "Latitude: ${state.value.latitude}")
+                    Text(text = "Longitude: ${state.value.longitude}")
+                    Text(text = "Altitude: ${state.value.altitude}")
+                    Text(text = "Speed: ${state.value.speed}")
                 }
             }
         }
@@ -173,7 +205,7 @@ class TripView {
         }
     }
 
-    @SuppressLint("MissingPermission", "CheckResult")
+    @SuppressLint("CheckResult")
     @Composable
     fun ConnectionInfo(store: Store, btConnectionHandler: BtConnectionHandler) {
         val state = store.subject.map { it.tripViewModel }.subscribeAsState(TripViewModel())
@@ -195,6 +227,26 @@ class TripView {
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Row{
+                Button(
+                    shape = MaterialTheme.shapes.medium,
+                    onClick = { startTrip() },
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .weight(1f)
+                ) {
+                    Text(text = "Start Trip")
+                }
+                Button(
+                    shape = MaterialTheme.shapes.medium,
+                    onClick = { stopTrip() },
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .weight(1f)
+                ) {
+                    Text(text = "Stop Trip")
+                }
+            }
             Row {
                 Button(
                     shape = MaterialTheme.shapes.medium,
@@ -250,7 +302,16 @@ class TripView {
         }
     }
 
-    @SuppressLint("MissingPermission")
+    private fun stopTrip() {
+        Log.d(TAG, "Trip stopped")
+        tripActive = false
+    }
+
+    private fun startTrip() {
+        Log.d(TAG, "Trip started")
+        tripActive = true
+    }
+
     @Composable
     fun ListPairedBtDevices(store: Store, btConnectionHandler: BtConnectionHandler) {
         LazyColumn(
@@ -264,7 +325,6 @@ class TripView {
         }
     }
 
-    @SuppressLint("MissingPermission")
     @Composable
     fun BluetoothDeviceItem(device: BtDevice, store: Store) {
         Log.d(TAG, "Device: ${device.name}")
@@ -287,7 +347,6 @@ class TripView {
 
     //endregion
 
-    @SuppressLint("MissingPermission")
     @ExperimentalMaterial3Api
     @Composable
     fun ShowMapCard(store: Store) {
@@ -301,11 +360,14 @@ class TripView {
                     usePlatformDefaultWidth = false
                 )
             ) {
-                ShowMap(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight()
-                )
+                store.subject.value?.tripViewModel?.map?.let {
+                    ShowMap(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxHeight(),
+                        latLngList = it.latLngList
+                    )
+                }
                 Column {
                     OutlinedButton(
                         onClick = {

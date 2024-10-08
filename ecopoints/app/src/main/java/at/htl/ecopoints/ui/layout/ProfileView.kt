@@ -93,7 +93,7 @@ class ProfileView {
             }
         }
     }
-    
+
     @Composable
     private fun FriendSuggestions(){
         val state = store.subject.map { it.rankingInfo }.subscribeAsState(RankingInfo())

@@ -8,6 +8,7 @@ public class CarData {
     private UUID TripId;
     private double longitude;
     private double latitude;
+    private double altitude;
     private double currentEngineRPM;
     private double speed;
     private double throttlePosition;
@@ -18,7 +19,9 @@ public class CarData {
     public CarData() {
     }
 
-    public CarData(Long id, UUID tripId, double longitude, double latitude, double currentEngineRPM, double speed, double throttlePosition, String engineRunTime,  Timestamp timeStamp) {
+    public CarData(Long id, UUID tripId, double longitude, double latitude, double currentEngineRPM,
+                   double speed, double throttlePosition, String engineRunTime,
+                   Timestamp timeStamp) {
         TripId = tripId;
         this.id = id;
         this.currentEngineRPM = currentEngineRPM;
@@ -101,5 +104,9 @@ public class CarData {
     public void setTimeStamp(Timestamp timeStamp) {
         this.timeStamp = timeStamp;
     }
+
+    public double getAltitude() { return altitude; }
+
+    public void setAltitude(double attitude) { this.altitude = attitude; }
 }
 

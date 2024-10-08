@@ -35,15 +35,15 @@ public class    Trip {
         this.end = end;
         this.rewardedEcoPoints = rewardedEcoPoints;
 
-        this.detailTripCardContentList = new LinkedList<>(){
+        this.detailTripCardContentList = new LinkedList<List<CardContent>>() {
             {
-                add(new LinkedList<>(){
+                add(new LinkedList<CardContent>(){
                     {
                         add(new CardContent(String.valueOf(rewardedEcoPoints), "Eco-Points", R.drawable.ranking_category_ecopoints));
                         add(new CardContent(String.valueOf(distance), "Distance", R.drawable.ranking_category_distance));
                     }
                 });
-                add(new LinkedList<>(){
+                add(new LinkedList<CardContent>(){
                     {
                         add(new CardContent(String.valueOf(avgSpeed), "Avg. Speed", R.drawable.ranking_category_avg_speed));
                         add(new CardContent(String.valueOf(avgEngineRotation), "Avg. RPM", R.drawable.ranking_category_avg_rpm));

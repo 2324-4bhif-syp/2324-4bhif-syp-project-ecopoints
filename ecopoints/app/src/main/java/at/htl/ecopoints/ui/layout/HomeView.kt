@@ -19,12 +19,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -64,14 +66,13 @@ import at.htl.ecopoints.model.Trip
 import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.ui.component.ShowMap
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
-import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
-import com.google.maps.android.compose.rememberCameraPositionState
 import com.opencsv.CSVParserBuilder
 import com.opencsv.CSVReaderBuilder
 import java.io.IOException
 import java.io.InputStream
 import java.io.InputStreamReader
+import java.lang.Iterable
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -136,6 +137,7 @@ class HomeView {
 
         val trips = getTripDataFromDB(context)
         var ecopoints = 0.0;
+
 
         trips.forEach{
                 trip ->
@@ -204,7 +206,7 @@ class HomeView {
             }
         }
 
-        androidx.compose.material3.Divider(thickness = 1.dp, color = Color.LightGray)
+        Divider(thickness = 1.dp, color = Color.LightGray)
     }
 
     @Composable
@@ -492,14 +494,14 @@ class HomeView {
                         }
                         Spacer(modifier = Modifier.height(16.dp))
                         ShowMap(
-                            cameraPositionState = rememberCameraPositionState {
-                                position = CameraPosition.fromLatLngZoom(
-                                    LatLng(getLatLngsFromTripDB(context, selectedTrip!!.id)
-                                        .first().second.first.latitude,
-                                        getLatLngsFromTripDB(context, selectedTrip!!.id)
-                                            .first().second.first.longitude), 10f)
-                            },
-                            latLngList = getLatLngsFromTripDB(context, selectedTrip!!.id)
+//                            cameraPositionState = rememberCameraPositionState {
+//                                position = CameraPosition.fromLatLngZoom(
+//                                    LatLng(getLatLngsFromTripDB(context, selectedTrip!!.id)
+//                                        .first().second.first.latitude,
+//                                        getLatLngsFromTripDB(context, selectedTrip!!.id)
+//                                            .first().second.first.longitude), 10f)
+//                            },
+                            //latLngList = getLatLngsFromTripDB(context, selectedTrip!!.id)
                         )
                     }
                 },
@@ -671,7 +673,7 @@ private fun getLatLngsFromTripDB(context: Context,  tripId : UUID): List<Pair<Co
 
     dbHelper.close()
     if (latLngs.isEmpty())
-        latLngs.add(Pair(Color.Black, Pair(LatLng(0.0, 0.0), 0.0)))
+        latLngs.add(Pair(Black, Pair(LatLng(0.0, 0.0), 0.0)))
     return latLngs
 }
 }

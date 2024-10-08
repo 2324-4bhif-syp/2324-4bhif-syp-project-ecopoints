@@ -20,15 +20,14 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
-import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.PersonAddAlt1
 import androidx.compose.material.icons.rounded.Timelapse
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,9 +40,9 @@ import at.htl.ecopoints.R
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.material3.MaterialTheme.colorScheme
+import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import at.htl.ecopoints.RankingActivity
-import at.htl.ecopoints.model.CardContent
 import at.htl.ecopoints.model.Store
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
@@ -85,7 +84,7 @@ private fun ShowReturnBtn(context: Context, store: Store){
             it.rankingInfo.showDetailRankingView = false
         }
     }) {
-        androidx.compose.material3.Icon(
+        Icon(
             modifier = Modifier
                 .size(40.dp)
                 .padding(bottom = 10.dp),
@@ -202,7 +201,7 @@ private fun ShowProfileHeader(user: User, currentUser: User) {
         Row {
             Button(
                 onClick = { /*TODO*/ },
-                colors = ButtonDefaults.outlinedButtonColors(backgroundColor = MaterialTheme.colorScheme.background),
+                colors = ButtonDefaults.outlinedButtonColors(backgroundColor = colorScheme.background),
                 modifier = Modifier
                     .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
                     .fillMaxWidth(),
@@ -212,10 +211,10 @@ private fun ShowProfileHeader(user: User, currentUser: User) {
                 Icon(
                     imageVector = Icons.Rounded.PersonAddAlt1,
                     contentDescription = "Follow",
-                    tint = MaterialTheme.colorScheme.primary
+                    tint = colorScheme.primary
                 )
 
-                androidx.compose.material3.Text(
+                Text(
                     text = "FOLLOW",
                     fontWeight = FontWeight.Bold,
                     fontSize = TextUnit(20f, TextUnitType.Sp),
@@ -226,5 +225,5 @@ private fun ShowProfileHeader(user: User, currentUser: User) {
         }
     }
 
-    androidx.compose.material3.Divider(thickness = 1.dp, color = Color.LightGray)
+    Divider(thickness = 1.dp, color = Color.LightGray)
 }

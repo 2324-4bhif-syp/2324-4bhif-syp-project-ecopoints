@@ -15,6 +15,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import javax.*;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -68,7 +69,7 @@ public class ObdReader {
                         Log.d(TAG, "Continuation resumeWith: " + o);
                     }
                 };
-                var res = obdConnection.run(new RPMCommand(), false, 0, 0, test);
+                Object res = obdConnection.run(new RPMCommand(), false, 0, 0, test);
                 Log.d(TAG, "RPM: " + res);
             } catch (Exception e) {
                 Log.e(TAG, "Error while setting up OBD connection", e);

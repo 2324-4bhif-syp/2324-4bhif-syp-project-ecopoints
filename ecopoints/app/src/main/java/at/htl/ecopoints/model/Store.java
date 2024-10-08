@@ -3,13 +3,9 @@ package at.htl.ecopoints.model;
 
 import java.util.function.Consumer;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import io.reactivex.rxjava3.subjects.BehaviorSubject;
-
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 
@@ -25,7 +21,7 @@ public class Store {
     }
 
     public void next(Consumer<Model> recipe) {
-        var model = mapper.clone(subject.getValue());
+        Model model = mapper.clone(subject.getValue());
         recipe.accept(model);
         subject.onNext(model);
     }

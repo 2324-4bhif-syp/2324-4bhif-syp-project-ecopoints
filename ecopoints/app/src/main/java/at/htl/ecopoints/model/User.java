@@ -25,27 +25,27 @@ public class User {
 
 
 
-        this.detailRankingCardContentList = new LinkedList<>(){
+        this.detailRankingCardContentList = new LinkedList<List<CardContent>>() {
             {
-                add(new LinkedList<>(){
+                add(new LinkedList<CardContent>(){
                     {
                         add(new CardContent(ecoPoints.toString(), "Eco-Points", R.drawable.ranking_category_ecopoints));
                         add(new CardContent("14,2 kg", "CO₂-Consumption", R.drawable.ranking_category_co2));
                     }
                 });
-                add(new LinkedList<>(){
+                add(new LinkedList<CardContent>(){
                     {
                         add(new CardContent("5", "Trips", R.drawable.ranking_category_trips));
                         add(new CardContent("100 km", "Distance", R.drawable.ranking_category_distance));
                     }
                 });
-                add(new LinkedList<>(){
+                add(new LinkedList<CardContent>(){
                     {
                         add(new CardContent("2", "Cars", R.drawable.ranking_category_cars));
                         add(new CardContent("Diesel", "Fuel Type", R.drawable.ranking_category_fuel_type));
                     }
                 });
-                add(new LinkedList<>(){
+                add(new LinkedList<CardContent>(){
                     {
                         add(new CardContent("41 km/h", "Avg. Speed", R.drawable.ranking_category_avg_speed));
                         add(new CardContent("2000", "Avg. RPM", R.drawable.ranking_category_avg_rpm));

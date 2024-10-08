@@ -306,3 +306,20 @@ image:sprint7/ranking.jpg[500,200]
 ** Profile-View
 
 === Demo
+
+[.font-xx-large, background-image="traffic.jpg", background-opacity="0.3"]
+== 2024
+
+=== Stand
+
+* Android App
+* Auslesen von Fahrdaten
+* Trips speichern
+* Mockup von Ranking und User Page
+
+=== Ziele
+
+* Laufenden Server
+** Oracle cloud hat nie gut funktioniert
+* Benutzerverwaltung mit login in der App
+* Fahrdaten mit server synchronisieren

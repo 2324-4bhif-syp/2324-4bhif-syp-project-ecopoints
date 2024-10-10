@@ -1,0 +1,13 @@
+= Dokumentation
+:toc:
+:sectnums:
+
+== Getting Started
+
+=== Android App
+
+=== Backend
+
+== API
+
+image::img/EcoPoints-Diagram[]

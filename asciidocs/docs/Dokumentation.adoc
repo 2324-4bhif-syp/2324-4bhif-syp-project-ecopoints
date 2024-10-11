@@ -140,5 +140,9 @@ image::img/user-endpoints[]
 
 == Deployment
 
+* Oracle Cloud Server
+** funktioniert nicht mehr
+* Neue Deployment-Strategie
+
 
 

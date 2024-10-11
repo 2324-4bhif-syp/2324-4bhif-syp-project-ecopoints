@@ -11,7 +11,6 @@ Android App:
 ** Live Fahrt auf Google Maps
 ** Anzeige der gefahrenen Strecke mittels Polyline
 * Ranking Mockup
-** Berechnung von Eco-Points für jede Fahrt anhand der Fahrdaten
 ** Anzeige des eigenen Rankings
 ** Anzeige anderer Nutzer (Ranking)
 * Profil Mockup

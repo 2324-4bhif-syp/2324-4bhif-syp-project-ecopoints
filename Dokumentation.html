@@ -447,7 +447,18 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_backend">1.2. Backend</a></li>
 </ul>
 </li>
-<li><a href="#_api">2. API</a></li>
+<li><a href="#_android_app_2">2. Android App</a>
+<ul class="sectlevel2">
+<li><a href="#_features">2.1. Features</a></li>
+</ul>
+</li>
+<li><a href="#_api">3. API</a>
+<ul class="sectlevel2">
+<li><a href="#_communication_with_obd">3.1. Communication with OBD</a></li>
+<li><a href="#_endpoints">3.2. Endpoints</a></li>
+</ul>
+</li>
+<li><a href="#_deployment_des_backends">4. Deployment des Backends</a></li>
 </ul>
 </div>
 </div>
@@ -457,28 +468,146 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_android_app"><a class="anchor" href="#_android_app"></a>1.1. Android App</h3>
-
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Navigate to the ecopoints folder</p>
+<div class="literalblock">
+<div class="content">
+<pre>...cd ecopoints/</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Start the android application</p>
+<div class="literalblock">
+<div class="content">
+<pre>./gradlew clean build --stacktrace</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_backend"><a class="anchor" href="#_backend"></a>1.2. Backend</h3>
-
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Navigate to the backend folder</p>
+<div class="literalblock">
+<div class="content">
+<pre>...cd backend/</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Start the quarkus application</p>
+<div class="literalblock">
+<div class="content">
+<pre>./mvnw clean quarkus:dev</pre>
+</div>
+</div>
+</li>
+<li>
+<p>To run the tests for the application</p>
+<div class="literalblock">
+<div class="content">
+<pre>./mvnw test</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_api"><a class="anchor" href="#_api"></a>2. API</h2>
+<h2 id="_android_app_2"><a class="anchor" href="#_android_app_2"></a>2. Android App</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Target SDK: 34 (Android 14)</p>
+</div>
+<div class="sect2">
+<h3 id="_features"><a class="anchor" href="#_features"></a>2.1. Features</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Auslesen von OBD2-Daten</p>
+</li>
+<li>
+<p>Live Anzeige von Fahrdaten</p>
+</li>
+<li>
+<p>Anzeige von Fahrten</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Mit Karte - Google Maps API</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Ranking</p>
+</li>
+<li>
+<p>Profil</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_api"><a class="anchor" href="#_api"></a>3. API</h2>
 <div class="sectionbody">
 <div class="imageblock">
 <div class="content">
 <img src="images/img/EcoPoints-Diagram" alt="EcoPoints Diagram">
 </div>
 </div>
+<div class="sect2">
+<h3 id="_communication_with_obd"><a class="anchor" href="#_communication_with_obd"></a>3.1. Communication with OBD</h3>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Ein OBD2-Adapter wird für das Auslesen der Daten benötigt.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Die Kommunikation mit dem OBD2-Adapter erfolgt über Bluetooth. Der Adapter wird mit dem Smartphone verbunden und die App kann die Daten auslesen.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_endpoints"><a class="anchor" href="#_endpoints"></a>3.2. Endpoints</h3>
+<div class="sect3">
+<h4 id="_trips"><a class="anchor" href="#_trips"></a>3.2.1. Trips</h4>
+<div class="imageblock">
+<div class="content">
+<img src="images/img/trip-endpoints" alt="trip endpoints">
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_deployment_des_backends"><a class="anchor" href="#_deployment_des_backends"></a>4. Deployment des Backends</h2>
+<div class="sectionbody">
+
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-10-10 16:51:10 UTC
+Last updated 2024-10-11 05:58:08 UTC
 </div>
 </div>
 </body>

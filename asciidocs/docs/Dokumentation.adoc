@@ -8,10 +8,18 @@ Android App:
 
 * Manche OBD2-Daten werden ausgelesen und angezeigt
 * Live Anzeige von Fahrdaten und GPS Daten (Broken)
-** Anzeige der Fahrt Route auf einer Karte
+** Live Fahrt auf Google Maps
+** Speichern der Daten während der Fahrt
 * Ranking Mockup
+** Berechnung von Eco-Points für jede Fahrt anhand der Fahrdaten
+** Anzeige des eigenen Rankings
+** Anzeige anderer Nutzer (Ranking)
 * Profil Mockup
-* Anzeigen von Fahrten Mockup
+** Anzeige der Eco-Points
+* Anzeigen von Fahrten
+** Mit Google Maps Integration
+** Anzeigen der gefahrenen Strecke mittels Polyline
+** Fahrdaten (Durchschnittsgeschwindigkeit, Durchschnittsverbrauch, etc.)
 
 === Problems
 
@@ -22,7 +30,7 @@ Android App:
 === Task
 
 * OBD2-Daten korrekt auslesen
-* Google Maps API lauffähig machen
+* Google Maps API migrieren
 * Backend auf einem Server deployen
 
 === Goals

@@ -53,6 +53,9 @@ Die Kommunikation mit dem OBD2-Adapter erfolgt über Bluetooth. Der Adapter wird
 
 === Endpoints
 
+Die kommunikation mit dem Backend erfolgt über REST-Endpoints.
+
+
 ==== Trips
 
 

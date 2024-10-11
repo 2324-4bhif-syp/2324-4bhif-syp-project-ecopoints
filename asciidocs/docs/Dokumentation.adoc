@@ -23,7 +23,7 @@ Android App:
 === Problems
 
 * OBD2-Daten werden nicht immer korrekt ausgelesen
-* Google Maps API für die Kartenanzeige hatte major changes und ist nicht mehr kompatibel
+* Google Maps API ist ausgelaufen
 * Das Backend läuft auf keinem Server und ist nicht erreichbar
 * Berechnung der Eco-Points ist noch nicht implementiert
 
@@ -31,7 +31,7 @@ Android App:
 
 * OBD2-Daten korrekt auslesen
 * Daten während der Fahrt speichern
-* Google Maps API migrieren (bzw. lauffähig machen)
+* Google Maps API erneuern oder eine andere Karten API verwenden
 * Backend auf einem Server deployen
 ** CI/CD Pipeline für ein automatisches Deployment
 
@@ -49,9 +49,13 @@ Die App soll auch die Möglichkeit bieten, die gefahrenen Strecken auf einer Kar
 
  ...cd ecopoints/
 
-2. Starten der App
+2. Im 'local.properties' muss der API Key für die Google Maps API eingetragen werden
 
-    ./gradlew clean build --stacktrace
+ MAPS_API_KEY=YOUR_API_KEY
+
+3. Starten der App
+
+ ./gradlew clean build --stacktrace
 
 === Backend
 
@@ -69,7 +73,8 @@ Die App soll auch die Möglichkeit bieten, die gefahrenen Strecken auf einer Kar
 
 == Android App
 
-Target SDK: 34 (Android 14)
+* Development Environment: Android Studio Ladybug
+* Target SDK: 34 (Android 14)
 
 === Features
 
@@ -89,8 +94,8 @@ image::img/EcoPoints-Diagram[]
 
 IMPORTANT: Ein OBD2-Adapter wird für das Auslesen der Daten benötigt.
 
-Die Kommunikation mit dem OBD2-Adapter erfolgt über Bluetooth. Der Adapter wird mit dem Smartphone verbunden und die
-App kann die Daten auslesen.
+Die Kommunikation mit dem OBD2-Adapter erfolgt über Bluetooth.
+Der Adapter wird mit dem Smartphone verbunden und die App kann die Daten auslesen.
 
 Wir benutzen die Bibliothek eltonvs / kotlin-obd-api für die Kommunikation mit dem OBD2-Adapter.
 
@@ -101,9 +106,7 @@ Wir benutzen die Bibliothek eltonvs / kotlin-obd-api für die Kommunikation mit 
 Die kommunikation mit dem Backend erfolgt über REST-Endpoints.
 Das Speichern von Trips und Fahrdaten erfolgt beim Beenden einer Fahrt.
 
-
 ==== Trips
-
 
 image::img/trip-endpoints[]
 

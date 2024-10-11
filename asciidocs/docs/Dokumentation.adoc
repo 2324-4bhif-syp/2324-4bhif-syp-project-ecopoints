@@ -52,7 +52,7 @@ Die App soll auch die Möglichkeit bieten, die gefahrenen Strecken auf einer Kar
 
 2. Im 'local.properties' muss der API Key für die Google Maps API eingetragen werden
 
- MAPS_API_KEY=YOUR_API_KEY
+ MAPS_API_KEY="YOUR_API_KEY"
 
 3. Starten der App
 

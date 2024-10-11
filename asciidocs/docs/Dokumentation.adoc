@@ -51,9 +51,14 @@ IMPORTANT: Ein OBD2-Adapter wird für das Auslesen der Daten benötigt.
 
 Die Kommunikation mit dem OBD2-Adapter erfolgt über Bluetooth. Der Adapter wird mit dem Smartphone verbunden und die App kann die Daten auslesen.
 
+Wir benutzen die Bibliothek eltonvs / kotlin-obd-api für die Kommunikation mit dem OBD2-Adapter.
+
+* https://github.com/eltonvs/kotlin-obd-api[github.com/eltonvs/kotlin-obd-api]
+
 === Endpoints
 
 Die kommunikation mit dem Backend erfolgt über REST-Endpoints.
+Das Speichern von Trips und Fahrdaten erfolgt beim Beenden einer Fahrt.
 
 
 ==== Trips
@@ -61,17 +66,44 @@ Die kommunikation mit dem Backend erfolgt über REST-Endpoints.
 
 image::img/trip-endpoints[]
 
-
+[,json]
+----
+{
+  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "distance": 0,
+  "avg_speed": 0,
+  "avg_engine_rotation": 0,
+  "date": "2022-03-10",
+  "rewarded_eco_points": 0
+}
+----
 
 ==== CarData
 
 image::img/cardata-endpoints[]
 
+[,json]
+----
+{
+  "longitude": 0,
+  "latitude": 0,
+  "current_engine_rpm": 0,
+  "current_velocity": 0,
+  "throttle_position": 0,
+  "engine_run_time": "string",
+  "time_stamp": {
+    "nanos": 0,
+    "time": 0
+  },
+  "trip_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+}
+----
+
 ==== User
 
 image::img/user-endpoints[]
 
-== Deployment des Backends
+== Deployment
 
 
 

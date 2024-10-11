@@ -32,6 +32,7 @@ Android App:
 * OBD2-Daten korrekt auslesen
 * Daten während der Fahrt speichern
 * Google Maps API erneuern oder eine andere Karten API verwenden
+** Z.B. OpenStreetMap
 * Backend auf einem Server deployen
 ** CI/CD Pipeline für ein automatisches Deployment
 

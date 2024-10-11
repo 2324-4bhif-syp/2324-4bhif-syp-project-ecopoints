@@ -102,13 +102,14 @@ Wir benutzen die Bibliothek eltonvs / kotlin-obd-api für die Kommunikation mit 
 
 * https://github.com/eltonvs/kotlin-obd-api[github.com/eltonvs/kotlin-obd-api]
 
+=== Klassendiagramm
+plantuml::plantuml/cld.puml[]
+
 === Endpoints
 
 Die kommunikation mit dem Backend erfolgt über REST-Endpoints.
 Das Speichern von Trips und Fahrdaten erfolgt beim Beenden einer Fahrt.
 
-==== Klassendiagramm
-plantuml::plantuml/cld.puml[]
 
 ==== Trips
 Ein Trip setzt sich aus mehreren CarData-Objekten zusammen, die während der Fahrt laufend gesammelt werden.

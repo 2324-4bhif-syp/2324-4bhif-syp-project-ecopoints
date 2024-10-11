@@ -6,8 +6,60 @@
 
 === Android App
 
+1. Navigate to the ecopoints folder
+
+ ...cd ecopoints/
+
+2. Start the android application
+
+    ./gradlew clean build --stacktrace
+
 === Backend
+
+1. Navigate to the backend folder
+
+ ...cd backend/
+
+2. Start the quarkus application
+
+    ./mvnw clean quarkus:dev
+
+3. To run the tests for the application
+
+    ./mvnw test
+
+== Android App
+
+Target SDK: 34 (Android 14)
+
+=== Features
+
+* Auslesen von OBD2-Daten
+* Live Anzeige von Fahrdaten
+* Anzeige von Fahrten
+** Mit Karte - Google Maps API
+* Ranking
+* Profil
 
 == API
 
 image::img/EcoPoints-Diagram[]
+
+=== Communication with OBD
+
+IMPORTANT: Ein OBD2-Adapter wird für das Auslesen der Daten benötigt.
+
+Die Kommunikation mit dem OBD2-Adapter erfolgt über Bluetooth. Der Adapter wird mit dem Smartphone verbunden und die App kann die Daten auslesen.
+
+=== Endpoints
+
+==== Trips
+
+
+
+image::img/trip-endpoints[]
+
+== Deployment des Backends
+
+
+

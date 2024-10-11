@@ -2,6 +2,33 @@
 :toc:
 :sectnums:
 
+== Current-State
+
+Android App:
+
+* Manche OBD2-Daten werden ausgelesen und angezeigt
+* Live Anzeige von Fahrdaten und GPS Daten (Broken)
+** Anzeige der Fahrt Route auf einer Karte
+* Ranking Mockup
+* Profil Mockup
+* Anzeigen von Fahrten Mockup
+
+=== Problems
+
+* OBD2-Daten werden nicht immer korrekt ausgelesen
+* Google Maps API für die Kartenanzeige hatte major changes und ist nicht mehr kompatibel
+* Das Backend läuft auf keinem Server und ist nicht erreichbar
+
+=== Task
+
+* OBD2-Daten korrekt auslesen
+* Google Maps API lauffähig machen
+* Backend auf einem Server deployen
+
+=== Goals
+
+
+
 == Getting Started
 
 === Android App

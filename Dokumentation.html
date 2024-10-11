@@ -657,7 +657,7 @@ pre.rouge .gs {
 <p>OBD2-Daten werden nicht immer korrekt ausgelesen</p>
 </li>
 <li>
-<p>Google Maps API für die Kartenanzeige hatte major changes und ist nicht mehr kompatibel</p>
+<p>Google Maps API ist ausgelaufen</p>
 </li>
 <li>
 <p>Das Backend läuft auf keinem Server und ist nicht erreichbar</p>
@@ -679,7 +679,7 @@ pre.rouge .gs {
 <p>Daten während der Fahrt speichern</p>
 </li>
 <li>
-<p>Google Maps API migrieren (bzw. lauffähig machen)</p>
+<p>Google Maps API erneuern oder eine andere Karten API verwenden</p>
 </li>
 <li>
 <p>Backend auf einem Server deployen</p>
@@ -716,6 +716,14 @@ Die App soll auch die Möglichkeit bieten, die gefahrenen Strecken auf einer Kar
 <div class="literalblock">
 <div class="content">
 <pre>...cd ecopoints/</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Im 'local.properties' muss der API Key für die Google Maps API eingetragen werden</p>
+<div class="literalblock">
+<div class="content">
+<pre>MAPS_API_KEY=YOUR_API_KEY</pre>
 </div>
 </div>
 </li>
@@ -766,8 +774,15 @@ Die App soll auch die Möglichkeit bieten, die gefahrenen Strecken auf einer Kar
 <div class="sect1">
 <h2 id="_android_app_2"><a class="anchor" href="#_android_app_2"></a>3. Android App</h2>
 <div class="sectionbody">
-<div class="paragraph">
+<div class="ulist">
+<ul>
+<li>
+<p>Development Environment: Android Studio Ladybug</p>
+</li>
+<li>
 <p>Target SDK: 34 (Android 14)</p>
+</li>
+</ul>
 </div>
 <div class="sect2">
 <h3 id="_features"><a class="anchor" href="#_features"></a>3.1. Features</h3>
@@ -830,8 +845,8 @@ Ein OBD2-Adapter wird für das Auslesen der Daten benötigt.
 </table>
 </div>
 <div class="paragraph">
-<p>Die Kommunikation mit dem OBD2-Adapter erfolgt über Bluetooth. Der Adapter wird mit dem Smartphone verbunden und die
-App kann die Daten auslesen.</p>
+<p>Die Kommunikation mit dem OBD2-Adapter erfolgt über Bluetooth.
+Der Adapter wird mit dem Smartphone verbunden und die App kann die Daten auslesen.</p>
 </div>
 <div class="paragraph">
 <p>Wir benutzen die Bibliothek eltonvs / kotlin-obd-api für die Kommunikation mit dem OBD2-Adapter.</p>
@@ -948,7 +963,7 @@ Das Speichern von Trips und Fahrdaten erfolgt beim Beenden einer Fahrt.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-10-11 06:49:36 UTC
+Last updated 2024-10-11 07:22:03 UTC
 </div>
 </div>
 </body>

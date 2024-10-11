@@ -555,7 +555,7 @@ pre.rouge .gs {
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_current_state">1. Current-State</a>
+<li><a href="#_current_state_11_10_2024">1. Current-State - 11.10.2024</a>
 <ul class="sectlevel2">
 <li><a href="#_problems">1.1. Problems</a></li>
 <li><a href="#_task">1.2. Task</a></li>
@@ -585,7 +585,7 @@ pre.rouge .gs {
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="_current_state"><a class="anchor" href="#_current_state"></a>1. Current-State</h2>
+<h2 id="_current_state_11_10_2024"><a class="anchor" href="#_current_state_11_10_2024"></a>1. Current-State - 11.10.2024</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Android App:</p>
@@ -665,6 +665,9 @@ pre.rouge .gs {
 <li>
 <p>Das Backend läuft auf keinem Server und ist nicht erreichbar</p>
 </li>
+<li>
+<p>Berechnung der Eco-Points ist noch nicht implementiert</p>
+</li>
 </ul>
 </div>
 </div>
@@ -683,13 +686,24 @@ pre.rouge .gs {
 </li>
 <li>
 <p>Backend auf einem Server deployen</p>
+<div class="ulist">
+<ul>
+<li>
+<p>CI/CD Pipeline für ein automatisches Deployment</p>
+</li>
+</ul>
+</div>
 </li>
 </ul>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_goals"><a class="anchor" href="#_goals"></a>1.3. Goals</h3>
-
+<div class="paragraph">
+<p>Ecopoints app soll es ermöglichen, Fahrdaten auszulesen und anhand dieser Daten Eco-Points zu berechnen.
+Diese Eco-Points sollen in einem Ranking angezeigt werden.
+Die App soll auch die Möglichkeit bieten, die gefahrenen Strecken auf einer Karte anzuzeigen.</p>
+</div>
 </div>
 </div>
 </div>
@@ -701,7 +715,7 @@ pre.rouge .gs {
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Navigate to the ecopoints folder</p>
+<p>In den Ordner der Android App navigieren</p>
 <div class="literalblock">
 <div class="content">
 <pre>...cd ecopoints/</pre>
@@ -709,7 +723,7 @@ pre.rouge .gs {
 </div>
 </li>
 <li>
-<p>Start the android application</p>
+<p>Starten der App</p>
 <div class="literalblock">
 <div class="content">
 <pre>./gradlew clean build --stacktrace</pre>
@@ -920,7 +934,7 @@ Das Speichern von Trips und Fahrdaten erfolgt beim Beenden einer Fahrt.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-10-11 06:38:25 UTC
+Last updated 2024-10-11 06:40:13 UTC
 </div>
 </div>
 </body>

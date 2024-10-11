@@ -2,7 +2,7 @@
 :toc:
 :sectnums:
 
-== Current-State
+== Current-State - 11.10.2024
 
 Android App:
 
@@ -26,26 +26,30 @@ Android App:
 * OBD2-Daten werden nicht immer korrekt ausgelesen
 * Google Maps API für die Kartenanzeige hatte major changes und ist nicht mehr kompatibel
 * Das Backend läuft auf keinem Server und ist nicht erreichbar
+* Berechnung der Eco-Points ist noch nicht implementiert
 
 === Task
 
 * OBD2-Daten korrekt auslesen
 * Google Maps API migrieren
 * Backend auf einem Server deployen
+** CI/CD Pipeline für ein automatisches Deployment
 
 === Goals
 
-
+Ecopoints app soll es ermöglichen, Fahrdaten auszulesen und anhand dieser Daten Eco-Points zu berechnen.
+Diese Eco-Points sollen in einem Ranking angezeigt werden.
+Die App soll auch die Möglichkeit bieten, die gefahrenen Strecken auf einer Karte anzuzeigen.
 
 == Getting Started
 
 === Android App
 
-1. Navigate to the ecopoints folder
+1. In den Ordner der Android App navigieren
 
  ...cd ecopoints/
 
-2. Start the android application
+2. Starten der App
 
     ./gradlew clean build --stacktrace
 

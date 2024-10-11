@@ -129,7 +129,7 @@ image::img/trip-endpoints[]
 ----
 
 ==== CarData
-Liest die OBD2-Daten während der Fahrt aus und sammelt sie periodisch für den Trip.
+Ein CarData-Objekt enthält die Daten, die während der Fahrt gesammelt werden.
 
 image::img/cardata-endpoints[]
 

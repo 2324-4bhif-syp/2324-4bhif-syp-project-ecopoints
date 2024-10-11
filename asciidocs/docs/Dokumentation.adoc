@@ -56,8 +56,17 @@ Die Kommunikation mit dem OBD2-Adapter erfolgt über Bluetooth. Der Adapter wird
 ==== Trips
 
 
-
 image::img/trip-endpoints[]
+
+
+
+==== CarData
+
+image::img/cardata-endpoints[]
+
+==== User
+
+image::img/user-endpoints[]
 
 == Deployment des Backends
 

@@ -1,6 +1,8 @@
 package at.htl.ecopoints.ui.layout
 
+import android.R
 import android.annotation.SuppressLint
+import android.graphics.drawable.shapes.RectShape
 import android.util.Log
 import android.util.Pair
 import androidx.activity.ComponentActivity
@@ -21,6 +23,7 @@ import androidx.compose.runtime.rxjava3.subscribeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -36,6 +39,8 @@ import at.htl.ecopoints.io.LocationManager
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.CameraPositionState
+import java.io.InputStream
+import java.io.OutputStream
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -68,7 +73,7 @@ class TripView {
 
             LocationManager(activity.applicationContext) { location ->
                 store.next {
-                    if(tripActive) {
+                    if (tripActive) {
                         it.tripViewModel.carData.latitude = location.latitude
                         it.tripViewModel.carData.longitude = location.longitude
                         it.tripViewModel.carData.altitude = location.altitude
@@ -98,13 +103,18 @@ class TripView {
                                 .background(MaterialTheme.colorScheme.tertiaryContainer),
                             horizontalArrangement = Arrangement.Start
                         ) {
-                            Button(onClick = {}) {
-                                Text(text = "Select your car")
-                            }
+//                            Button(onClick = {}) {
+//                                Text(text = "Select your car")
+//                            }
                             Button(onClick = {
                                 store.next { it.tripViewModel.map.showMap = true }
                             }) {
                                 Text(text = "Map")
+                            }
+                            Button(onClick = {
+                                store.next { it.tripViewModel.showTestCommandCard = true }
+                            }) {
+                                Text(text = "TestCommands")
                             }
                         }
                     }, bottomBar = {
@@ -130,6 +140,7 @@ class TripView {
                         LiveCarData(store)
                         BtDeviceSelectionDialog(store, btConnectionHandler)
                         ShowMapCard(store = store)
+                        ShowTestObdCommandsCard(store = store)
                     }
                 }
             }
@@ -227,7 +238,7 @@ class TripView {
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Row{
+            Row {
                 Button(
                     shape = MaterialTheme.shapes.medium,
                     onClick = { startTrip() },
@@ -347,51 +358,140 @@ class TripView {
 
     //endregion
 
-    @ExperimentalMaterial3Api
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun ShowMapCard(store: Store) {
-        val state = store.subject.map { it.tripViewModel.map }.subscribeAsState(Map())
-        if (state.value.showMap) {
+    fun ShowTestObdCommandsCard(store: Store) {
+        val state = store.subject.map { it.tripViewModel }.subscribeAsState(TripViewModel())
+        if (state.value.showTestCommandCard) {
+            obdReaderKt.testRelevantCommands() // only for view test
             BasicAlertDialog(
-                onDismissRequest = { store.next { it.tripViewModel.map.showMap = false } },
+                onDismissRequest = {
+                    store.next {
+                        if (it.tripViewModel.obdTestCommandResults.isNotEmpty())
+                            it.tripViewModel.obdTestCommandResults.clear()
+                        it.tripViewModel.showTestCommandCard = false
+                    }
+                },
                 properties = DialogProperties(
                     dismissOnBackPress = true,
                     dismissOnClickOutside = true,
                     usePlatformDefaultWidth = false
                 )
             ) {
-                store.subject.value?.tripViewModel?.map?.let {
-                    ShowMap(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .fillMaxHeight(),
-                        latLngList = it.latLngList
-                    )
-                }
-                Column {
-                    OutlinedButton(
-                        onClick = {
-                            store.next { it.tripViewModel.map.showMap = false }
-                            Log.d("MapCloseButton", "Clicked")
-                        },
-                        modifier = Modifier
-                            .size(60.dp)
-                            .padding(8.dp),
-                        shape = CircleShape,
-                        border = BorderStroke(3.dp, Color.Black),
-                        contentPadding = PaddingValues(0.dp),
-                        colors = ButtonDefaults.outlinedButtonColors(
-                            containerColor = Color.Red
-                        )
+                Column(
+                    modifier = Modifier.background(
+                        MaterialTheme.colorScheme.background, MaterialTheme.shapes.extraLarge
+                    ), horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Row(Modifier.padding(20.dp)) {
+                        Text("Test Command Results")
+                    }
+
+                    LazyColumn(
+                        Modifier
+                            .padding(20.dp)
+                            .height(600.dp)
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.Close,
-                            contentDescription = null,
-                            tint = Color.White
-                        )
+                        items(state.value.obdTestCommandResults.size) { index ->
+                            Surface(
+                                modifier = Modifier
+                                    .padding(5.dp)
+                                    .fillMaxWidth(),
+                                border = BorderStroke(
+                                    1.dp,
+                                    MaterialTheme.colorScheme.onBackground,
+                                ),
+                                shape = androidx.compose.foundation.shape.RoundedCornerShape(4.dp),
+                            ) {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(5.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    if (state.value.obdTestCommandResults.size > index) {
+
+                                        val value =
+                                            state.value.obdTestCommandResults.entries.elementAt(
+                                                index
+                                            )
+                                        Text(
+                                            text = value.key,
+                                            color = MaterialTheme.colorScheme.primary
+                                        )
+                                        Text(
+                                            text = value.value,
+                                            color = MaterialTheme.colorScheme.primary
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                ) {
+                    Button(onClick = {
+                        store.next {
+                            it.tripViewModel.showTestCommandCard = false
+                        }
+                    }) {
+                        Text(text = "Close")
                     }
                 }
             }
         }
     }
 }
+
+
+@ExperimentalMaterial3Api
+@Composable
+fun ShowMapCard(store: Store) {
+    val state = store.subject.map { it.tripViewModel.map }.subscribeAsState(Map())
+    if (state.value.showMap) {
+        BasicAlertDialog(
+            onDismissRequest = { store.next { it.tripViewModel.map.showMap = false } },
+            properties = DialogProperties(
+                dismissOnBackPress = true,
+                dismissOnClickOutside = true,
+                usePlatformDefaultWidth = false
+            )
+        ) {
+            store.subject.value?.tripViewModel?.map?.let {
+                ShowMap(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(),
+                    latLngList = it.latLngList
+                )
+            }
+            Column {
+                OutlinedButton(
+                    onClick = {
+                        store.next { it.tripViewModel.map.showMap = false }
+                        Log.d("MapCloseButton", "Clicked")
+                    },
+                    modifier = Modifier
+                        .size(60.dp)
+                        .padding(8.dp),
+                    shape = CircleShape,
+                    border = BorderStroke(3.dp, Color.Black),
+                    contentPadding = PaddingValues(0.dp),
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        containerColor = Color.Red
+                    )
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Close,
+                        contentDescription = null,
+                        tint = Color.White
+                    )
+                }
+            }
+        }
+    }
+}
+

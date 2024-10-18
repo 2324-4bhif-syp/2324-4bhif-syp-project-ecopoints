@@ -1,6 +1,7 @@
 package at.htl.ecopoints.io
 
 import android.util.Log
+import at.htl.ecopoints.model.FuelType
 import at.htl.ecopoints.model.Store
 import com.github.eltonvs.obd.command.ObdCommand
 import com.github.eltonvs.obd.command.ObdProtocols
@@ -12,21 +13,33 @@ import com.github.eltonvs.obd.command.at.SelectProtocolCommand
 import com.github.eltonvs.obd.command.at.SetEchoCommand
 import com.github.eltonvs.obd.command.at.SetSpacesCommand
 import com.github.eltonvs.obd.command.bytesToInt
+import com.github.eltonvs.obd.command.control.VINCommand
+import com.github.eltonvs.obd.command.engine.AbsoluteLoadCommand
+import com.github.eltonvs.obd.command.engine.LoadCommand
 import com.github.eltonvs.obd.command.engine.RPMCommand
+import com.github.eltonvs.obd.command.engine.RelativeThrottlePositionCommand
 import com.github.eltonvs.obd.command.engine.RuntimeCommand
 import com.github.eltonvs.obd.command.engine.SpeedCommand
 import com.github.eltonvs.obd.command.engine.ThrottlePositionCommand
+import com.github.eltonvs.obd.command.fuel.FuelConsumptionRateCommand
+import com.github.eltonvs.obd.command.fuel.FuelLevelCommand
+import com.github.eltonvs.obd.command.fuel.FuelTypeCommand
+import com.github.eltonvs.obd.command.temperature.EngineCoolantTemperatureCommand
+import com.github.eltonvs.obd.command.temperature.OilTemperatureCommand
 import com.github.eltonvs.obd.connection.ObdDeviceConnection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import java.io.InputStream
 import java.io.OutputStream
 import java.sql.Timestamp
+import java.util.concurrent.Executors
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.random.Random
 
 
 @Singleton
@@ -50,26 +63,32 @@ class ObdReaderKt {
         override val defaultUnit = "RPM"
         override val handler = { it: ObdRawResponse ->
             (bytesToInt(
-                it.bufferedValue,
-                bytesToProcess = 2
+                it.bufferedValue, bytesToProcess = 2
             ) / 4).toString()
         }
     }
 
     val scope = CoroutineScope(Dispatchers.IO)
 
-    val obdCommands = listOf(
+    val testCommandScope = CoroutineScope(Dispatchers.IO)
+
+    val obdCommands = listOf<ObdCommand>(
         RPMCommand(),
-        RpmCleanedResCommand(),
-//        SpeedCommand(),
-//        FuelConsumptionRateCommand(),
-//        LoadCommand(),
-//        AbsoluteLoadCommand(),
-//        ThrottlePositionCommand(),
-//        RelativeThrottlePositionCommand(),
-//        FuelTypeCommand(),
-//        EngineCoolantTemperatureCommand(),
-//        OilTemperatureCommand()
+        SpeedCommand(),
+        FuelConsumptionRateCommand(),
+        LoadCommand(),
+        AbsoluteLoadCommand(),
+        ThrottlePositionCommand(),
+        RelativeThrottlePositionCommand(),
+        FuelTypeCommand(),
+        EngineCoolantTemperatureCommand(),
+        OilTemperatureCommand(),
+        RuntimeCommand(),
+        FuelLevelCommand(),
+        FuelTypeCommand(),
+        OilTemperatureCommand(),
+        LoadCommand(),
+        VINCommand()
     )
 
     suspend fun setupELM(obdConnection: ObdDeviceConnection) {
@@ -84,6 +103,60 @@ class ObdReaderKt {
             delay(200)
             obdConnection.run(SelectProtocolCommand(ObdProtocols.AUTO))
             delay(200)
+        }
+    }
+
+
+    //    fun testRelevantCommands(inputStream: InputStream, outputStream: OutputStream) {
+    fun testRelevantCommands() {
+        val executorService = Executors.newSingleThreadExecutor()
+
+//                        val result = obdConnection.run(command, false, 0, 0)
+//                        var sb = StringBuilder()
+//
+//                        sb.appendLine("${command.name} Result:")
+//                        sb.appendLine("PID: $command.pid")
+//                        sb.appendLine("Raw command: ${command.rawCommand}")
+//                        sb.appendLine("Formatted value value: ${result.formattedValue}")
+//                        sb.appendLine("Value: ${result.value}")
+//                        sb.appendLine("Raw response: ${result.rawResponse}")
+//                        sb.appendLine("Unit: ${result.unit}")
+//
+//                        val logMsg = sb.toString()
+//
+//                        Log.d(
+//                            "TestCommand",
+//                            logMsg
+//                        )
+//                val obdConnection = ObdDeviceConnection(inputStream!!, outputStream!!)
+//                setupELM(obdConnection)
+
+        executorService.submit {
+            try {
+                obdCommands.forEach { command ->
+                    try {
+                        store.next { it ->
+
+                            if (!it.tripViewModel.obdTestCommandResults.containsKey(command.name)) {
+                                it.tripViewModel.obdTestCommandResults.put(
+                                    command.name,
+                                    Random.nextInt(0, 1000).toString()  // Set the value only once
+                                )
+                            }
+                        }
+
+                        Thread.sleep(250)
+                    } catch (e: Exception) {
+                        Log.e(
+                            TAG,
+                            "Error running OBD2 command ${command.name} while testing all commands",
+                            e
+                        )
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error while setting up OBD connection", e)
+            }
         }
     }
 
@@ -111,8 +184,7 @@ class ObdReaderKt {
                             val logMsg = sb.toString()
 
                             Log.d(
-                                TAG,
-                                logMsg
+                                TAG, logMsg
                             )
 
                             delay(250)
@@ -174,8 +246,7 @@ class ObdReaderKt {
                     is RuntimeCommand -> it.tripViewModel.carData.engineRunTime =
                         result.formattedValue
                 }
-            }
-            catch (_: Exception) {
+            } catch (_: Exception) {
             }
             it.tripViewModel.carData.timeStamp = Timestamp(System.currentTimeMillis())
 

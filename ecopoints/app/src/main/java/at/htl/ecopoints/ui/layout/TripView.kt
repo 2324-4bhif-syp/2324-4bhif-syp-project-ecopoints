@@ -1,10 +1,7 @@
 package at.htl.ecopoints.ui.layout
 
-import android.R
 import android.annotation.SuppressLint
-import android.graphics.drawable.shapes.RectShape
 import android.util.Log
-import android.util.Pair
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
@@ -17,14 +14,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rxjava3.subscribeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
@@ -36,11 +32,6 @@ import at.htl.ecopoints.ui.component.ShowMap
 import at.htl.ecopoints.ui.component.Speedometer
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
 import at.htl.ecopoints.io.LocationManager
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
-import com.google.maps.android.compose.CameraPositionState
-import java.io.InputStream
-import java.io.OutputStream
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -67,7 +58,10 @@ class TripView {
     constructor()
 
     @OptIn(ExperimentalMaterial3Api::class)
-    @SuppressLint("CheckResult", "UnusedMaterial3ScaffoldPaddingParameter")
+    @SuppressLint(
+        "CheckResult", "UnusedMaterial3ScaffoldPaddingParameter",
+        "UnrememberedMutableState"
+    )
     fun compose(activity: ComponentActivity) {
         activity.setContent {
 
@@ -112,7 +106,7 @@ class TripView {
                                 Text(text = "Map")
                             }
                             Button(onClick = {
-                                store.next { it.tripViewModel.showTestCommandCard = true }
+                                store.next { it.tripViewModel.showTestCommandDialog = true }
                             }) {
                                 Text(text = "TestCommands")
                             }
@@ -144,6 +138,7 @@ class TripView {
                     }
                 }
             }
+
         }
     }
 
@@ -360,16 +355,51 @@ class TripView {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
+    fun NoDeviceSelectedDialog(
+        onDismiss: () -> Unit, // Callback when the dialog is dismissed
+    ) {
+        AlertDialog(
+            onDismissRequest = onDismiss, // Called when the user tries to dismiss the dialog
+            properties = DialogProperties(
+                dismissOnBackPress = true,
+                dismissOnClickOutside = true,
+                usePlatformDefaultWidth = false
+            ),
+            title = { Text("Alert") }, // Title of the dialog (optional)
+            text = { Text("No device selected!") }, // Main content of the dialog
+            confirmButton = {
+                Button(
+                    onClick = onDismiss // Call the onDismiss callback when the button is clicked
+                ) {
+                    Text("Close")
+                }
+            }
+        )
+    }
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
     fun ShowTestObdCommandsCard(store: Store) {
         val state = store.subject.map { it.tripViewModel }.subscribeAsState(TripViewModel())
-        if (state.value.showTestCommandCard) {
-            obdReaderKt.testRelevantCommands() // only for view test
+        if (state.value.showTestCommandDialog && !state.value.isConnected) {
+            NoDeviceSelectedDialog(onDismiss = {
+                store.next { it.tripViewModel.showTestCommandDialog = false }
+            })
+        }
+        if (state.value.showTestCommandDialog && state.value.isConnected) {
+
+            //only call this on the first composition
+            LaunchedEffect(key1 = state.value.showTestCommandDialog) {
+                if (state.value.showTestCommandDialog) {
+                    store.next { it.tripViewModel.obdTestCommandResults.clear() }
+                    obdReaderKt.testRelevantCommands()
+                }
+            }
+
             BasicAlertDialog(
                 onDismissRequest = {
                     store.next {
-                        if (it.tripViewModel.obdTestCommandResults.isNotEmpty())
-                            it.tripViewModel.obdTestCommandResults.clear()
-                        it.tripViewModel.showTestCommandCard = false
+                        it.tripViewModel.showTestCommandDialog = false
                     }
                 },
                 properties = DialogProperties(
@@ -392,7 +422,7 @@ class TripView {
                             .padding(20.dp)
                             .height(600.dp)
                     ) {
-                        items(state.value.obdTestCommandResults.size) { index ->
+                        items(state.value.obdTestCommandResults.entries.size) { index ->
                             Surface(
                                 modifier = Modifier
                                     .padding(5.dp)
@@ -429,16 +459,16 @@ class TripView {
                             }
                         }
                     }
-                }
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                ) {
-                    Button(onClick = {
-                        store.next {
-                            it.tripViewModel.showTestCommandCard = false
+                    Row(
+                        horizontalArrangement = Arrangement.Center,
+                    ) {
+                        Button(onClick = {
+                            store.next {
+                                it.tripViewModel.showTestCommandDialog = false
+                            }
+                        }) {
+                            Text(text = "Close")
                         }
-                    }) {
-                        Text(text = "Close")
                     }
                 }
             }

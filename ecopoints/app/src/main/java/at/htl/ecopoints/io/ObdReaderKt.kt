@@ -45,6 +45,8 @@ import kotlin.random.Random
 @Singleton
 class ObdReaderKt {
     private val TAG = ObdReader::class.java.getSimpleName()
+    private val TEST_COMMANDS_TAG = "OBD_COMMAND_TEST"
+
 
     @Inject
     lateinit var store: Store
@@ -131,21 +133,16 @@ class ObdReaderKt {
 //                val obdConnection = ObdDeviceConnection(inputStream!!, outputStream!!)
 //                setupELM(obdConnection)
 
-        executorService.submit {
+        scope.launch { // Launch a coroutine in the scope
             try {
                 obdCommands.forEach { command ->
                     try {
                         store.next { it ->
-
-                            if (!it.tripViewModel.obdTestCommandResults.containsKey(command.name)) {
-                                it.tripViewModel.obdTestCommandResults.put(
-                                    command.name,
-                                    Random.nextInt(0, 1000).toString()  // Set the value only once
-                                )
-                            }
+                            it.tripViewModel.obdTestCommandResults[command.name] =
+                                Random.nextInt(0, 1000).toString()
                         }
-
-                        Thread.sleep(250)
+                        Log.d(TEST_COMMANDS_TAG, "Running command ${command.name}")
+                        delay(250) // Use delay() instead of Thread.sleep()
                     } catch (e: Exception) {
                         Log.e(
                             TAG,
@@ -156,7 +153,10 @@ class ObdReaderKt {
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Error while setting up OBD connection", e)
+            } finally {
+
             }
+            Log.d(TEST_COMMANDS_TAG, "OBD command test finished")
         }
     }
 

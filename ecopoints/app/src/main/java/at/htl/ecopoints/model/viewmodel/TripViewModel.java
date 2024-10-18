@@ -2,7 +2,7 @@ package at.htl.ecopoints.model.viewmodel;
 
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import at.htl.ecopoints.model.CarData;
 import at.htl.ecopoints.model.Map;
@@ -20,8 +20,7 @@ public class TripViewModel {
     public InputStream inputStream = null;
     public OutputStream outputStream = null;
     public boolean showDeviceSelectionDialog = false;
-
-    public boolean showTestCommandCard = false;
-
-    public HashMap<String,String> obdTestCommandResults = new HashMap<String, String>();
+    public boolean showTestCommandDialog = false;
+    public boolean showNoDeviceSelectedDialog=false;
+    public ConcurrentHashMap<String,String> obdTestCommandResults = new ConcurrentHashMap<>();
 }

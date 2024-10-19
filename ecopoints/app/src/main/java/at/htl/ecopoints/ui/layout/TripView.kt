@@ -366,7 +366,7 @@ class TripView {
                 usePlatformDefaultWidth = false
             ),
             title = { Text("Alert") }, // Title of the dialog (optional)
-            text = { Text("No device selected!") }, // Main content of the dialog
+            text = { Text("No device coneccted!") }, // Main content of the dialog
             confirmButton = {
                 Button(
                     onClick = onDismiss // Call the onDismiss callback when the button is clicked
@@ -387,7 +387,6 @@ class TripView {
             })
         }
         if (state.value.showTestCommandDialog && state.value.isConnected) {
-
             //only call this on the first composition
             LaunchedEffect(key1 = state.value.showTestCommandDialog) {
                 if (state.value.showTestCommandDialog) {
@@ -433,27 +432,36 @@ class TripView {
                                 ),
                                 shape = androidx.compose.foundation.shape.RoundedCornerShape(4.dp),
                             ) {
-                                Row(
+                                Column(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(5.dp),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.SpaceBetween
+                                        .padding(5.dp)
                                 ) {
                                     if (state.value.obdTestCommandResults.size > index) {
-
                                         val value =
                                             state.value.obdTestCommandResults.entries.elementAt(
                                                 index
                                             )
-                                        Text(
-                                            text = value.key,
-                                            color = MaterialTheme.colorScheme.primary
-                                        )
-                                        Text(
-                                            text = value.value,
-                                            color = MaterialTheme.colorScheme.primary
-                                        )
+
+                                        Row(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            horizontalArrangement = Arrangement.SpaceBetween
+                                        ) {
+                                            Text(
+                                                text = value.key,
+                                                color = MaterialTheme.colorScheme.primary
+                                            )
+                                        }
+                                        Row(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            horizontalArrangement = Arrangement.End
+                                        ) {
+
+                                            Text(
+                                                text = value.value,
+                                                color = MaterialTheme.colorScheme.primary
+                                            )
+                                        }
                                     }
                                 }
                             }

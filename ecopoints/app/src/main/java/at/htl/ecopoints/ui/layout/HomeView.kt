@@ -2,6 +2,7 @@ package at.htl.ecopoints.ui.layout
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -55,6 +56,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.FileProvider
 import at.htl.ecopoints.MainActivity
 import at.htl.ecopoints.R
 import at.htl.ecopoints.db.DBHelper
@@ -62,6 +64,7 @@ import at.htl.ecopoints.model.CarData
 import at.htl.ecopoints.model.HomeInfo
 import at.htl.ecopoints.model.Store
 import at.htl.ecopoints.apis.TankerkoenigApiClient
+import at.htl.ecopoints.io.JsonFileWriter
 import at.htl.ecopoints.model.Trip
 import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.ui.component.ShowMap
@@ -69,6 +72,7 @@ import at.htl.ecopoints.ui.theme.EcoPointsTheme
 import com.google.android.gms.maps.model.LatLng
 import com.opencsv.CSVParserBuilder
 import com.opencsv.CSVReaderBuilder
+import java.io.File
 import java.io.IOException
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -88,6 +92,9 @@ class HomeView {
 
     @Inject
     lateinit var store: Store
+
+    @Inject
+    lateinit var jsonFileWriter: JsonFileWriter
 
     @Inject
     constructor() {
@@ -116,6 +123,14 @@ class HomeView {
 
                     LastTrips(activity)
 
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(bottom = 80.dp), // Abstand zur Navigationsleiste
+                        contentAlignment = Alignment.BottomCenter
+                    ) {
+                        ShareButton(context = activity)
+                    }
                     val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Home") }
                     Box(
                         modifier = Modifier.fillMaxSize()
@@ -130,7 +145,62 @@ class HomeView {
                 }
             }
         }
+
+        writeDataToJsonFile()
     }
+
+    private fun writeDataToJsonFile() {
+        val jsonData = "{\"message\": \"Hello from HomeView\"}"
+        jsonFileWriter.appendJson(jsonData)
+
+        // Pfad der Datei ausgeben
+        val filePath = jsonFileWriter.filePath
+        Log.d("HomeView", "JSON-Datei gespeichert unter: $filePath")
+    }
+
+
+    private fun shareJsonFile(context: Context) {
+        val fileUri: Uri = FileProvider.getUriForFile(
+            context,
+            "${context.packageName}.fileprovider",
+            File(jsonFileWriter.filePath)
+        )
+
+        val shareIntent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_STREAM, fileUri)
+            type = "application/json"
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
+
+        context.startActivity(Intent.createChooser(shareIntent, "Share JSON File"))
+    }
+
+    @Composable
+    fun ShareButton(context: Context) {
+        val gradientColors = listOf(Color(0xFF9bd99e), Color(0xFF05900a), Color(0xFF9bd99e))
+
+        Button(
+            onClick = { shareJsonFile(context) },
+            modifier = Modifier
+                .padding(16.dp)
+                .size(width = 200.dp, height = 50.dp) // Feste Größe setzen
+                .background(
+                    brush = Brush.horizontalGradient(
+                        colors = gradientColors
+                    ),
+                    shape = RoundedCornerShape(30.dp)
+                ),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Transparent,
+                contentColor = Black
+            )
+        ) {
+            Text("Share JSON File")
+        }
+    }
+
+
 
     @Composable
     private fun HomeHeader(context: Context){

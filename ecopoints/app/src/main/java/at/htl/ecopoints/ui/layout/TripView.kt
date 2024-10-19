@@ -8,6 +8,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -24,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
+import androidx.core.graphics.values
 import at.htl.ecopoints.model.*
 import at.htl.ecopoints.io.*
 import at.htl.ecopoints.model.viewmodel.TripViewModel
@@ -32,8 +34,11 @@ import at.htl.ecopoints.ui.component.ShowMap
 import at.htl.ecopoints.ui.component.Speedometer
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
 import at.htl.ecopoints.io.LocationManager
+import com.github.eltonvs.obd.command.engine.SpeedCommand
+import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.text.get
 
 private val TAG = TripView::class.java.simpleName
 
@@ -43,8 +48,8 @@ class TripView {
     @Inject
     lateinit var store: Store
 
-    @Inject
-    lateinit var obdReader: ObdReader
+//    @Inject
+//    lateinit var obdReader: ObdReader
 
     @Inject
     lateinit var obdReaderKt: ObdReaderKt
@@ -148,33 +153,89 @@ class TripView {
         return (3..21).random().toDouble()
     }
 
+    private fun stopTrip() {
+        Log.d(TAG, "Trip stopped")
+        obdReaderKt.stopReading()
+        tripActive = false
+    }
+
+    private fun startTrip() {
+        Log.d(TAG, "Trip started")
+
+        store.next {
+            it.tripViewModel.isConnected = true
+        }
+
+        obdReaderKt.startReading(store.subject.value?.tripViewModel?.inputStream, store.subject.value?.tripViewModel?.outputStream)
+
+        tripActive = true
+    }
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    fun NoDeviceSelectedDialog(
+        onDismiss: () -> Unit, // Callback when the dialog is dismissed
+    ) {
+        AlertDialog(
+            onDismissRequest = onDismiss, // Called when the user tries to dismiss the dialog
+            properties = DialogProperties(
+                dismissOnBackPress = true,
+                dismissOnClickOutside = true,
+                usePlatformDefaultWidth = false
+            ),
+            title = { Text("Alert") }, // Title of the dialog (optional)
+            text = { Text("No device connected!") }, // Main content of the dialog
+            confirmButton = {
+                Button(
+                    onClick = onDismiss // Call the onDismiss callback when the button is clicked
+                ) {
+                    Text("Close")
+                }
+            }
+        )
+    }
+
+    //region LiveData Visual
 
     @Composable
     fun LiveCarData(store: Store) {
-        val state = store.subject.map { it.tripViewModel.carData }.subscribeAsState(CarData())
+        val isConnectedState = store.subject.map { it.tripViewModel.isConnected }.subscribeAsState(false)
+        val state = store.subject.map { it.tripViewModel.commandresults }.subscribeAsState(ConcurrentHashMap<String, String>())
+
+        LaunchedEffect(key1 = isConnectedState) {
+            store.next { store ->
+                obdReaderKt.obdCommands.forEach { store.tripViewModel.commandresults[it.name] = "0" }
+            }
+        }
+
         Column {
-            Speedometer(
-                currentSpeed = state.value.speed.toFloat(),
-                modifier = Modifier
-                    .padding(50.dp)
-                    .requiredSize(250.dp)
-            )
+            val currentSpeed = state.value[SpeedCommand().name]?.toFloatOrNull() ?: 0f
+//            Speedometer(
+//                currentSpeed = currentSpeed,
+//                modifier = Modifier
+//                    .padding(50.dp)
+//                    .requiredSize(250.dp)
+//            )
             Row {
+                val data = state.value;
+                val keys = data.keys.toList()
+                val values = data.values.toList()
+                val halfSize = keys.size / 2
                 Column {
-                    Text(text = "Rpm: ${state.value.currentEngineRPM}")
-                    Text(text = "ThrPos: ${state.value.throttlePosition}")
-                    Text(text = "EngineRt: ${state.value.engineRunTime}")
-                    Text(text = "timestamp: ${state.value.timeStamp}")
+                    for (i in 0 until data.size) {
+                        Text(text = "${keys[i]}: ${values[i]}")
+                    }
                 }
-                Column {
-                    Text(text = "Latitude: ${state.value.latitude}")
-                    Text(text = "Longitude: ${state.value.longitude}")
-                    Text(text = "Altitude: ${state.value.altitude}")
-                    Text(text = "Speed: ${state.value.speed}")
-                }
+//                Column {
+//                    for (i in halfSize until keys.size) {
+//                        Text(text = "${keys[i]}: ${values[i]}")
+//                    }
+//                }
             }
         }
     }
+
+    //endregion
 
     //region Bluetooth interaction
 
@@ -222,9 +283,6 @@ class TripView {
                 it.connectionStateString == "Connected" -> Color.Green
                 it.connectionStateString.contains("Connecting") -> Color.Yellow
                 else -> Color.Red
-            }
-            if (it.isConnected) {
-                obdReaderKt.startReading(it.inputStream, it.outputStream)
             }
         }
 
@@ -308,16 +366,6 @@ class TripView {
         }
     }
 
-    private fun stopTrip() {
-        Log.d(TAG, "Trip stopped")
-        tripActive = false
-    }
-
-    private fun startTrip() {
-        Log.d(TAG, "Trip started")
-        tripActive = true
-    }
-
     @Composable
     fun ListPairedBtDevices(store: Store, btConnectionHandler: BtConnectionHandler) {
         LazyColumn(
@@ -353,29 +401,7 @@ class TripView {
 
     //endregion
 
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    fun NoDeviceSelectedDialog(
-        onDismiss: () -> Unit, // Callback when the dialog is dismissed
-    ) {
-        AlertDialog(
-            onDismissRequest = onDismiss, // Called when the user tries to dismiss the dialog
-            properties = DialogProperties(
-                dismissOnBackPress = true,
-                dismissOnClickOutside = true,
-                usePlatformDefaultWidth = false
-            ),
-            title = { Text("Alert") }, // Title of the dialog (optional)
-            text = { Text("No device coneccted!") }, // Main content of the dialog
-            confirmButton = {
-                Button(
-                    onClick = onDismiss // Call the onDismiss callback when the button is clicked
-                ) {
-                    Text("Close")
-                }
-            }
-        )
-    }
+    //region Testing OBD commands
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
@@ -391,7 +417,7 @@ class TripView {
             LaunchedEffect(key1 = state.value.showTestCommandDialog) {
                 if (state.value.showTestCommandDialog) {
                     store.next { it.tripViewModel.obdTestCommandResults.clear() }
-                    obdReaderKt.testRelevantCommands()
+                    obdReaderKt.testRelevantCommands(state.value.inputStream, state.value.outputStream)
                 }
             }
 
@@ -482,6 +508,8 @@ class TripView {
             }
         }
     }
+
+    //endregion
 }
 
 

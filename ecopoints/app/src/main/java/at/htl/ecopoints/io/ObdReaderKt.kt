@@ -40,21 +40,13 @@ import java.util.concurrent.Executors
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.random.Random
+import kotlin.run
 
 
 @Singleton
 class ObdReaderKt {
     private val TAG = ObdReader::class.java.getSimpleName()
     private val TEST_COMMANDS_TAG = "OBD_COMMAND_TEST"
-
-
-    @Inject
-    lateinit var store: Store
-
-    @Inject
-    constructor() {
-
-    }
 
     class RpmCleanedResCommand : ObdCommand() {
         override val tag = "ENGINE_RPM_CLEANED_RES"
@@ -70,12 +62,18 @@ class ObdReaderKt {
         }
     }
 
-    val scope = CoroutineScope(Dispatchers.IO)
+    var scope = CoroutineScope(Dispatchers.IO)
 
-    val testCommandScope = CoroutineScope(Dispatchers.IO)
+    val obdSetupCommands = listOf<ObdCommand>(
+        ResetAdapterCommand(),
+        SetEchoCommand(Switcher.OFF),
+        SetSpacesCommand(Switcher.OFF),
+        SelectProtocolCommand(ObdProtocols.AUTO)
+    )
 
     val obdCommands = listOf<ObdCommand>(
         RPMCommand(),
+        RpmCleanedResCommand(),
         SpeedCommand(),
         FuelConsumptionRateCommand(),
         LoadCommand(),
@@ -93,142 +91,197 @@ class ObdReaderKt {
         VINCommand()
     )
 
-    suspend fun setupELM(obdConnection: ObdDeviceConnection) {
-        try {
+    @Inject
+    lateinit var store: Store
 
-        } catch (e: Exception) {
-            obdConnection.run(ResetAdapterCommand())
-            delay(200)
-            obdConnection.run(SetEchoCommand(Switcher.OFF))
-            delay(200)
-            obdConnection.run(SetSpacesCommand(Switcher.OFF))
-            delay(200)
-            obdConnection.run(SelectProtocolCommand(ObdProtocols.AUTO))
-            delay(200)
-        }
+    @Inject
+    constructor() {
     }
 
+    suspend fun setupELM(obdConnection: ObdDeviceConnection) {
+        try {
+            obdSetupCommands.forEach { command ->
+                try {
+                    Log.i(TAG, "Running command ${command.name}")
+                    obdConnection.run(command, false, 0, 0)
+                    delay(250)
+                } catch (e: Exception) {
+                    Log.e(
+                        TEST_COMMANDS_TAG,
+                        "Error running OBD2 command ${command.name} setting up OBD-Adapter",
+                        e
+                    )
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error on OBD-Adapter setup", e)
+        } finally {
+            Log.i(TAG, "OBD-Adapter setup finished")
+        }
 
-    //    fun testRelevantCommands(inputStream: InputStream, outputStream: OutputStream) {
-    fun testRelevantCommands() {
-        val executorService = Executors.newSingleThreadExecutor()
+    }
 
-//                        val result = obdConnection.run(command, false, 0, 0)
-//                        var sb = StringBuilder()
-//
-//                        sb.appendLine("${command.name} Result:")
-//                        sb.appendLine("PID: $command.pid")
-//                        sb.appendLine("Raw command: ${command.rawCommand}")
-//                        sb.appendLine("Formatted value value: ${result.formattedValue}")
-//                        sb.appendLine("Value: ${result.value}")
-//                        sb.appendLine("Raw response: ${result.rawResponse}")
-//                        sb.appendLine("Unit: ${result.unit}")
-//
-//                        val logMsg = sb.toString()
-//
-//                        Log.d(
-//                            "TestCommand",
-//                            logMsg
-//                        )
-//                val obdConnection = ObdDeviceConnection(inputStream!!, outputStream!!)
-//                setupELM(obdConnection)
-
+    fun testRelevantCommands(inputStream: InputStream?, outputStream: OutputStream?) {
         scope.launch { // Launch a coroutine in the scope
             try {
+                val obdConnection = ObdDeviceConnection(inputStream!!, outputStream!!)
+                setupELM(obdConnection)
+
                 obdCommands.forEach { command ->
                     try {
+                        Log.i(TEST_COMMANDS_TAG, "Running command ${command.name}")
+
+                        val result = obdConnection.run(command, false, 0, 0)
+
+                        Log.d(TEST_COMMANDS_TAG, buildObdResultLog(result))
+
+
                         store.next { it ->
                             it.tripViewModel.obdTestCommandResults[command.name] =
-                                Random.nextInt(0, 1000).toString()
+                                result.formattedValue
                         }
-                        Log.d(TEST_COMMANDS_TAG, "Running command ${command.name}")
-                        delay(250) // Use delay() instead of Thread.sleep()
+
+                        delay(250)
                     } catch (e: Exception) {
                         Log.e(
-                            TAG,
+                            TEST_COMMANDS_TAG,
                             "Error running OBD2 command ${command.name} while testing all commands",
                             e
                         )
                     }
                 }
             } catch (e: Exception) {
-                Log.e(TAG, "Error while setting up OBD connection", e)
+                Log.e(TEST_COMMANDS_TAG, "Error while setting up OBD connection", e)
             } finally {
-
+                Log.i(TEST_COMMANDS_TAG, "OBD command test finished")
             }
-            Log.d(TEST_COMMANDS_TAG, "OBD command test finished")
         }
     }
 
-    fun startReading(inputStream: InputStream?, outputStream: OutputStream?) {
-        scope.launch {
-            try {
-                val obdConnection = ObdDeviceConnection(inputStream!!, outputStream!!)
+    fun stopReading() {
+        scope.cancel()
+        scope = CoroutineScope(Dispatchers.IO)
+    }
 
-                setupELM(obdConnection)
+    fun startReading(
+        inputStream: InputStream?,
+        outputStream: OutputStream?,
+    ) {
+        scope.launch() {
+            try {
+//                val obdConnection = ObdDeviceConnection(inputStream!!, outputStream!!)
+//                setupELM(obdConnection)
 
                 while (isActive) {
                     obdCommands.forEach { command ->
                         try {
-                            val result = obdConnection.run(command, false, 0, 0)
-                            var sb = StringBuilder()
+                            Log.i(TAG, "Running command ${command.name}")
 
-                            sb.appendLine("${command.name} Result:")
-                            sb.appendLine("PID: $command.pid")
-                            sb.appendLine("Raw command: ${command.rawCommand}")
-                            sb.appendLine("Formatted value value: ${result.formattedValue}")
-                            sb.appendLine("Value: ${result.value}")
-                            sb.appendLine("Raw response: ${result.rawResponse}")
-                            sb.appendLine("Unit: ${result.unit}")
+//                            val result = obdConnection.run(command, false, 0, 0)
 
-                            val logMsg = sb.toString()
+//                            Log.d(TAG, buildObdResultLog(result))
 
-                            Log.d(
-                                TAG, logMsg
-                            )
-
+                            store.next { it ->
+                                it.tripViewModel.commandresults[command.name] =
+//                                    result.formattedValue
+                                    Random.nextInt(100).toString()
+                            }
                             delay(250)
                         } catch (e: Exception) {
-                            //Log.e(TAG, "Error running OBD2 command ${command.name}", e)
+                            Log.e(TAG, "Error running OBD2 command ${command.name}", e)
                         }
                     }
-                    delay(1000)
+
+                    // Take a snapshot and convert to JSON
+                    val snapshot =
+                        store.subject.value!!.tripViewModel.commandresults.map { (key, value) ->
+                            "\"$key\": \"$value\""
+                        }.joinToString(", ", "{", "}")
+
+                    val timestamp = System.currentTimeMillis()
+                    val jsonSnapshot = "{\n\"timestamp\": $timestamp,\n\"data\": $snapshot\n}"
+
+                    writeDataSnapshotToFile(jsonSnapshot)
                 }
             } catch (e: Exception) {
-                //Log.e(TAG, "Error while setting up OBD connection", e)
+                Log.e(TAG, "Error while setting up OBD connection", e)
             }
         }
+    }
 
+    fun writeDataSnapshotToFile(data: String) {
+        //TODO: Implement file writing
+    }
 
-//        //Setup
-//        singleThreadExecutor.execute {
+//    fun startReading(inputStream: InputStream?, outputStream: OutputStream?) {
+//        scope.launch {
 //            try {
-//                val obdConnection = ObdDeviceConnection(
-//                    inputStream!!,
-//                    outputStream!!
-//                )
+//                val obdConnection = ObdDeviceConnection(inputStream!!, outputStream!!)
 //
+//                setupELM(obdConnection)
 //
+//                while (isActive) {
+//                    obdCommands.forEach { command ->
+//                        try {
+//                            val result = obdConnection.run(command, false, 0, 0)
+//                            var sb = StringBuilder()
+//
+//                            sb.appendLine("${command.name} Result:")
+//                            sb.appendLine("PID: $command.pid")
+//                            sb.appendLine("Raw command: ${command.rawCommand}")
+//                            sb.appendLine("Formatted value value: ${result.formattedValue}")
+//                            sb.appendLine("Value: ${result.value}")
+//                            sb.appendLine("Raw response: ${result.rawResponse}")
+//                            sb.appendLine("Unit: ${result.unit}")
+//
+//                            val logMsg = sb.toString()
+//
+//                            Log.d(
+//                                TAG, logMsg
+//                            )
+//
+//                            delay(250)
+//                        } catch (e: Exception) {
+//                            //Log.e(TAG, "Error running OBD2 command ${command.name}", e)
+//                        }
+//                    }
+//                    delay(1000)
+//                }
 //            } catch (e: Exception) {
-//                Log.e(TAG, "Error while setting up OBD connection", e)
+//                //Log.e(TAG, "Error while setting up OBD connection", e)
 //            }
 //        }
 //
 //
-//        executor.scheduleAtFixedRate({
-//            try {
-//                val obdConnection = ObdDeviceConnection(
-//                    inputStream!!,
-//                    outputStream!!
-//                )
-//
-//                val res: Any = obdConnection.run(RPMCommand(), false, 0, 0)
-//                Log.d(TAG, "RPM: $res")
-//            } catch (e: Exception) {
-//                Log.e(TAG, "Error while setting up OBD connection", e)
-//            }
-//        }, 1, 300, TimeUnit.MILLISECONDS)
-    }
+////        //Setup
+////        singleThreadExecutor.execute {
+////            try {
+////                val obdConnection = ObdDeviceConnection(
+////                    inputStream!!,
+////                    outputStream!!
+////                )
+////
+////
+////            } catch (e: Exception) {
+////                Log.e(TAG, "Error while setting up OBD connection", e)
+////            }
+////        }
+////
+////
+////        executor.scheduleAtFixedRate({
+////            try {
+////                val obdConnection = ObdDeviceConnection(
+////                    inputStream!!,
+////                    outputStream!!
+////                )
+////
+////                val res: Any = obdConnection.run(RPMCommand(), false, 0, 0)
+////                Log.d(TAG, "RPM: $res")
+////            } catch (e: Exception) {
+////                Log.e(TAG, "Error while setting up OBD connection", e)
+////            }
+////        }, 1, 300, TimeUnit.MILLISECONDS)
+//    }
 
     fun updateCarData(command: ObdCommand, result: ObdResponse) {
         store.next {
@@ -251,5 +304,15 @@ class ObdReaderKt {
             it.tripViewModel.carData.timeStamp = Timestamp(System.currentTimeMillis())
 
         }
+    }
+
+    fun buildObdResultLog(result: ObdResponse): String {
+        var sb = StringBuilder()
+
+        sb.appendLine("${result.command.name}[${result.command.pid}] Result:")
+        sb.appendLine("Formatted value : ${result.formattedValue}" + "Value: ${result.value}" + "Raw response: ${result.rawResponse}")
+        sb.appendLine("Unit: ${result.unit}")
+
+        return sb.toString()
     }
 }

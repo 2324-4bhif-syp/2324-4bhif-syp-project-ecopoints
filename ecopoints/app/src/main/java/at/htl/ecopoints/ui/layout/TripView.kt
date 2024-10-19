@@ -217,7 +217,7 @@ class TripView {
 
         LaunchedEffect(key1 = isConnectedState) {
             store.next { store ->
-                obdReaderKt.obdCommands.forEach {
+                obdReaderKt.carDataCommands.forEach {
                     store.tripViewModel.carData[it.name] = "0"
                 }
             }

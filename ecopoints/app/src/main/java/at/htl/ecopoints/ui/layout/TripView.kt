@@ -25,20 +25,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
-import androidx.core.graphics.values
 import at.htl.ecopoints.model.*
 import at.htl.ecopoints.io.*
 import at.htl.ecopoints.model.viewmodel.TripViewModel
 import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.ui.component.ShowMap
-import at.htl.ecopoints.ui.component.Speedometer
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
 import at.htl.ecopoints.io.LocationManager
-import com.github.eltonvs.obd.command.engine.SpeedCommand
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.text.get
 
 private val TAG = TripView::class.java.simpleName
 
@@ -200,16 +196,16 @@ class TripView {
     @Composable
     fun LiveCarData(store: Store) {
         val isConnectedState = store.subject.map { it.tripViewModel.isConnected }.subscribeAsState(false)
-        val state = store.subject.map { it.tripViewModel.commandresults }.subscribeAsState(ConcurrentHashMap<String, String>())
+        val state = store.subject.map { it.tripViewModel.commandResults }.subscribeAsState(ConcurrentHashMap<String, String>())
 
         LaunchedEffect(key1 = isConnectedState) {
             store.next { store ->
-                obdReaderKt.obdCommands.forEach { store.tripViewModel.commandresults[it.name] = "0" }
+                obdReaderKt.obdCommands.forEach { store.tripViewModel.commandResults[it.name] = "0" }
             }
         }
 
         Column {
-            val currentSpeed = state.value[SpeedCommand().name]?.toFloatOrNull() ?: 0f
+//            val currentSpeed = state.value[SpeedCommand().name]?.toFloatOrNull() ?: 0f
 //            Speedometer(
 //                currentSpeed = currentSpeed,
 //                modifier = Modifier
@@ -220,7 +216,7 @@ class TripView {
                 val data = state.value;
                 val keys = data.keys.toList()
                 val values = data.values.toList()
-                val halfSize = keys.size / 2
+//                val halfSize = keys.size / 2
                 Column {
                     for (i in 0 until data.size) {
                         Text(text = "${keys[i]}: ${values[i]}")

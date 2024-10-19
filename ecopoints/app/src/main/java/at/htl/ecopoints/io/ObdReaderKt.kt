@@ -1,7 +1,6 @@
 package at.htl.ecopoints.io
 
 import android.util.Log
-import at.htl.ecopoints.model.FuelType
 import at.htl.ecopoints.model.Store
 import com.github.eltonvs.obd.command.ObdCommand
 import com.github.eltonvs.obd.command.ObdProtocols
@@ -35,12 +34,9 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import java.io.InputStream
 import java.io.OutputStream
-import java.sql.Timestamp
-import java.util.concurrent.Executors
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.random.Random
-import kotlin.run
 
 
 @Singleton
@@ -182,7 +178,7 @@ class ObdReaderKt {
 //                            Log.d(TAG, buildObdResultLog(result))
 
                             store.next { it ->
-                                it.tripViewModel.commandresults[command.name] =
+                                it.tripViewModel.commandResults[command.name] =
 //                                    result.formattedValue
                                     Random.nextInt(100).toString()
                             }
@@ -194,7 +190,7 @@ class ObdReaderKt {
 
                     // Take a snapshot and convert to JSON
                     val snapshot =
-                        store.subject.value!!.tripViewModel.commandresults.map { (key, value) ->
+                        store.subject.value!!.tripViewModel.commandResults.map { (key, value) ->
                             "\"$key\": \"$value\""
                         }.joinToString(", ", "{", "}")
 
@@ -210,6 +206,7 @@ class ObdReaderKt {
     }
 
     fun writeDataSnapshotToFile(data: String) {
+        Log.d(TAG, "Writing data snapshot to file: $data")
         //TODO: Implement file writing
     }
 
@@ -283,28 +280,28 @@ class ObdReaderKt {
 ////        }, 1, 300, TimeUnit.MILLISECONDS)
 //    }
 
-    fun updateCarData(command: ObdCommand, result: ObdResponse) {
-        store.next {
-
-            try {
-
-                when (command) {
-                    is RPMCommand -> it.tripViewModel.carData.currentEngineRPM =
-                        result.value.toDouble()
-
-                    is SpeedCommand -> it.tripViewModel.carData.speed = result.value.toDouble()
-                    is ThrottlePositionCommand -> it.tripViewModel.carData.throttlePosition =
-                        result.value.toDouble()
-
-                    is RuntimeCommand -> it.tripViewModel.carData.engineRunTime =
-                        result.formattedValue
-                }
-            } catch (_: Exception) {
-            }
-            it.tripViewModel.carData.timeStamp = Timestamp(System.currentTimeMillis())
-
-        }
-    }
+//    fun updateCarData(command: ObdCommand, result: ObdResponse) {
+//        store.next {
+//
+//            try {
+//
+//                when (command) {
+//                    is RPMCommand -> it.tripViewModel.carData.currentEngineRPM =
+//                        result.value.toDouble()
+//
+//                    is SpeedCommand -> it.tripViewModel.carData.speed = result.value.toDouble()
+//                    is ThrottlePositionCommand -> it.tripViewModel.carData.throttlePosition =
+//                        result.value.toDouble()
+//
+//                    is RuntimeCommand -> it.tripViewModel.carData.engineRunTime =
+//                        result.formattedValue
+//                }
+//            } catch (_: Exception) {
+//            }
+//            it.tripViewModel.carData.timeStamp = Timestamp(System.currentTimeMillis())
+//
+//        }
+//    }
 
     fun buildObdResultLog(result: ObdResponse): String {
         var sb = StringBuilder()

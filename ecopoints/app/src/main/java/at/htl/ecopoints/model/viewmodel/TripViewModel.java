@@ -2,9 +2,7 @@ package at.htl.ecopoints.model.viewmodel;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-import at.htl.ecopoints.model.CarData;
 import at.htl.ecopoints.model.Map;
-import at.htl.ecopoints.model.Trip;
 import at.htl.ecopoints.model.BtDevice;
 
 public class TripViewModel {

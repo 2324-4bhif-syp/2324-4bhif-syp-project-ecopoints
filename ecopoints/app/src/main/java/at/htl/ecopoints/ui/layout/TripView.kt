@@ -152,9 +152,9 @@ class TripView {
 
     //for testing purposes, remove if database is set up
 //TODO: Remove this function if fuel consumption is being read from the OBD
-    private fun generateRandomFuelCons(): Double {
-        return (3..21).random().toDouble()
-    }
+//    private fun generateRandomFuelCons(): Double {
+//        return (3..21).random().toDouble()
+//    }
 
     private fun stopTrip() {
         if (tripActive) {
@@ -232,7 +232,7 @@ class TripView {
 //                    .requiredSize(250.dp)
 //            )
             Row {
-                val data = state.value;
+                val data = state.value
                 val keys = data.keys.toList()
                 val values = data.values.toList()
 //                val halfSize = keys.size / 2

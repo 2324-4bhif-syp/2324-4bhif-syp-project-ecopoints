@@ -91,6 +91,9 @@ class ObdReaderKt {
     lateinit var store: Store
 
     @Inject
+    lateinit var writer: JsonFileWriter
+
+    @Inject
     constructor() {
     }
 
@@ -165,22 +168,22 @@ class ObdReaderKt {
     ) {
         scope.launch() {
             try {
-                val obdConnection = ObdDeviceConnection(inputStream!!, outputStream!!)
-                setupELM(obdConnection)
+//                val obdConnection = ObdDeviceConnection(inputStream!!, outputStream!!)
+//                setupELM(obdConnection)
 
                 while (isActive) {
                     obdCommands.forEach { command ->
                         try {
                             Log.i(TAG, "Running command ${command.name}")
 
-                            val result = obdConnection.run(command, false, 0, 0)
+//                            val result = obdConnection.run(command, false, 0, 0)
 
-                            Log.d(TAG, buildObdResultLog(result))
+//                            Log.d(TAG, buildObdResultLog(result))
 
                             store.next { it ->
-                                it.tripViewModel.commandResults[command.name] =
-                                    result.formattedValue
-//                                    Random.nextInt(100).toString()
+                                it.tripViewModel.carData[command.name] =
+//                                    result.formattedValue
+                                    Random.nextInt(100).toString()
                             }
                             delay(250)
                         } catch (e: Exception) {
@@ -190,7 +193,7 @@ class ObdReaderKt {
 
                     // Take a snapshot and convert to JSON
                     val snapshot =
-                        store.subject.value!!.tripViewModel.commandResults.map { (key, value) ->
+                        store.subject.value!!.tripViewModel.carData.map { (key, value) ->
                             "\"$key\": \"$value\""
                         }.joinToString(", ", "{", "}")
 
@@ -207,7 +210,7 @@ class ObdReaderKt {
 
     fun writeDataSnapshotToFile(data: String) {
         Log.d(TAG, "Writing data snapshot to file: $data")
-        //TODO: Implement file writing
+        writer.appendJson(data)
     }
 
 //    fun startReading(inputStream: InputStream?, outputStream: OutputStream?) {

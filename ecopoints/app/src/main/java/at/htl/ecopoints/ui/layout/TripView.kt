@@ -68,24 +68,31 @@ class TripView {
 
             LocationManager(activity.applicationContext) { location ->
                 store.next {
-                    if (tripActive) {
-                        it.tripViewModel.carData.latitude = location.latitude
-                        it.tripViewModel.carData.longitude = location.longitude
-                        it.tripViewModel.carData.altitude = location.altitude
-                        it.tripViewModel.carData.speed = Math.round(location.speed * 10.0) / 10.0
-                        val fuelCons = generateRandomFuelCons()
-                        it.tripViewModel.map.add(
-                            location.latitude, location.longitude,
-                            fuelCons
-                        )
-
-                        Log.d(
-                            TAG,
-                            "latitude: ${location.latitude}, longitude: ${location.longitude}, fuelCons: $fuelCons"
-                        )
-                    }
+                    it.tripViewModel.carData["Latitude"] = location.latitude.toString()
+                    it.tripViewModel.carData["Longitude"] = location.longitude.toString()
+                    it.tripViewModel.carData["Altitude"] = location.altitude.toString()
+                    it.tripViewModel.carData["Gps-Speed"] = location.speed.toString()
                 }
             }
+//                store.next {
+//                    if (tripActive) {
+//                        it.tripViewModel.carData.latitude = location.latitude
+//                        it.tripViewModel.carData.longitude = location.longitude
+//                        it.tripViewModel.carData.altitude = location.altitude
+//                        it.tripViewModel.carData.speed = Math.round(location.speed * 10.0) / 10.0
+//                        val fuelCons = generateRandomFuelCons()
+//                        it.tripViewModel.map.add(
+//                            location.latitude, location.longitude,
+//                            fuelCons
+//                        )
+//
+//                        Log.d(
+//                            TAG,
+//                            "latitude: ${location.latitude}, longitude: ${location.longitude}, fuelCons: $fuelCons"
+//                        )
+//                    }
+//                }
+//        }
 
             EcoPointsTheme {
                 Surface(
@@ -144,28 +151,30 @@ class TripView {
     }
 
     //for testing purposes, remove if database is set up
-    //TODO: Remove this function if fuel consumption is being read from the OBD
-    private fun generateRandomFuelCons(): Double {
-        return (3..21).random().toDouble()
-    }
+//TODO: Remove this function if fuel consumption is being read from the OBD
+//    private fun generateRandomFuelCons(): Double {
+//        return (3..21).random().toDouble()
+//    }
 
     private fun stopTrip() {
         if (tripActive) {
             Log.i(TAG, "Trip stopped")
             obdReaderKt.stopReading()
             tripActive = false
-        }
-        else {
+        } else {
             Log.w(TAG, "Tried to stop a trip without starting one")
         }
     }
 
     private fun startTrip() {
+
+        store.next{it.tripViewModel.isConnected=true}
+
         if (store.subject.value?.tripViewModel?.isConnected == true) {
             Log.i(TAG, "Trip started")
             obdReaderKt.startReading(
-                store.subject.value?.tripViewModel?.inputStream,
-                store.subject.value?.tripViewModel?.outputStream
+                btConnectionHandler.inputStream,
+                btConnectionHandler.outputStream
             )
             tripActive = true
         } else {
@@ -200,19 +209,19 @@ class TripView {
         )
     }
 
-    //region LiveData Visual
+//region LiveData Visual
 
     @Composable
     fun LiveCarData(store: Store) {
         val isConnectedState =
             store.subject.map { it.tripViewModel.isConnected }.subscribeAsState(false)
-        val state = store.subject.map { it.tripViewModel.commandResults }
+        val state = store.subject.map { it.tripViewModel.carData }
             .subscribeAsState(ConcurrentHashMap<String, String>())
 
         LaunchedEffect(key1 = isConnectedState) {
             store.next { store ->
                 obdReaderKt.obdCommands.forEach {
-                    store.tripViewModel.commandResults[it.name] = "0"
+                    store.tripViewModel.carData[it.name] = "0"
                 }
             }
         }
@@ -226,7 +235,7 @@ class TripView {
 //                    .requiredSize(250.dp)
 //            )
             Row {
-                val data = state.value;
+                val data = state.value
                 val keys = data.keys.toList()
                 val values = data.values.toList()
 //                val halfSize = keys.size / 2
@@ -244,9 +253,9 @@ class TripView {
         }
     }
 
-    //endregion
+//endregion
 
-    //region Bluetooth interaction
+//region Bluetooth interaction
 
     @ExperimentalMaterial3Api
     @Composable
@@ -408,9 +417,9 @@ class TripView {
         }
     }
 
-    //endregion
+//endregion
 
-    //region Testing OBD commands
+//region Testing OBD commands
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
@@ -441,8 +450,8 @@ class TripView {
                 if (state.value.showTestCommandDialog) {
                     store.next { it.tripViewModel.obdTestCommandResults.clear() }
                     obdReaderKt.testRelevantCommands(
-                        state.value.inputStream,
-                        state.value.outputStream
+                        btConnectionHandler.inputStream,
+                        btConnectionHandler.outputStream
                     )
                 }
             }
@@ -535,7 +544,7 @@ class TripView {
         }
     }
 
-    //endregion
+//endregion
 }
 
 

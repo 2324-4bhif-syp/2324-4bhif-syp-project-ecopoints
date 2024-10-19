@@ -7,7 +7,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id("com.google.dagger.hilt.android")
-    id ("dagger.hilt.android.plugin")
+
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 android {
@@ -16,7 +16,7 @@ android {
 
     defaultConfig {
         applicationId = "at.htl.ecopoints"
-        minSdk = 33
+        minSdk = 34
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -154,9 +154,8 @@ dependencies {
     //Accompanist (Permission)
     implementation(libs.accompanist.permissions)
 
-    implementation(libs.hilt.android.v244)
-    kapt(libs.hilt.android.compiler.v244)
-
+    // Mockito
+    testImplementation (libs.mockito.core)
 }
 
 kapt {

@@ -1,6 +1,8 @@
 package at.htl.ecopoints.io;
 
 import android.content.Context;
+import android.util.Log;
+
 import dagger.hilt.android.qualifiers.ApplicationContext;
 
 import javax.inject.Inject;
@@ -14,14 +16,16 @@ import java.io.IOException;
 @Singleton
 public class JsonFileWriter {
 
-    private final String fileName = "data.json";
-    private File file;
+    private final String TAG = this.getClass().getSimpleName();
+
+    private static final String FILE_NAME = "data.json";
+    private final File file;
 
     @Inject
     public JsonFileWriter(@ApplicationContext Context context) {
         File externalFilesDir = context.getExternalFilesDir(null);
         if (externalFilesDir != null) {
-            file = new File(externalFilesDir, fileName);
+            file = new File(externalFilesDir, FILE_NAME);
             if (!file.exists()) {
                 try {
                     boolean created = file.createNewFile();
@@ -29,7 +33,7 @@ public class JsonFileWriter {
                         throw new RuntimeException("The file could not be created.");
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Log.e(TAG, "Error creating the file", e);;
                     throw new RuntimeException("Error creating the file", e);
                 }
             }
@@ -43,7 +47,7 @@ public class JsonFileWriter {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, false))) {
             writer.write(json);
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Error writing to the file", e);
             throw new RuntimeException("Error writing to the file", e);
         }
     }
@@ -53,7 +57,7 @@ public class JsonFileWriter {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
             writer.append(json);
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.d(TAG, "Error appending to the file", e);
             throw new RuntimeException("Error appending to the file", e);
         }
     }
@@ -63,7 +67,7 @@ public class JsonFileWriter {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, false))) {
             writer.write("");
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Error clearing the file", e);
             throw new RuntimeException("Error clearing the file", e);
         }
     }

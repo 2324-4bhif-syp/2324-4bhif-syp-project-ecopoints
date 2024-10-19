@@ -16,5 +16,5 @@ public class TripViewModel {
     public boolean showDeviceSelectionDialog = false;
     public boolean showTestCommandDialog = false;
     public ConcurrentHashMap<String,String> obdTestCommandResults = new ConcurrentHashMap<>();
-    public ConcurrentHashMap<String,String> commandResults = new ConcurrentHashMap<>();
+    public ConcurrentHashMap<String,String> carData = new ConcurrentHashMap<>();
 }

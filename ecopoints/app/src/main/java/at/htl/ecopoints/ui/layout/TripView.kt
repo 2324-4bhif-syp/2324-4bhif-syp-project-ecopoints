@@ -68,10 +68,10 @@ class TripView {
 
             LocationManager(activity.applicationContext) { location ->
                 store.next {
-                    it.tripViewModel.commandResults["Latitude"] = location.latitude.toString()
-                    it.tripViewModel.commandResults["Longitude"] = location.longitude.toString()
-                    it.tripViewModel.commandResults["Altitude"] = location.altitude.toString()
-                    it.tripViewModel.commandResults["Gps-Speed"] = location.speed.toString()
+                    it.tripViewModel.carData["Latitude"] = location.latitude.toString()
+                    it.tripViewModel.carData["Longitude"] = location.longitude.toString()
+                    it.tripViewModel.carData["Altitude"] = location.altitude.toString()
+                    it.tripViewModel.carData["Gps-Speed"] = location.speed.toString()
                 }
             }
 //                store.next {
@@ -167,6 +167,9 @@ class TripView {
     }
 
     private fun startTrip() {
+
+        store.next{it.tripViewModel.isConnected=true}
+
         if (store.subject.value?.tripViewModel?.isConnected == true) {
             Log.i(TAG, "Trip started")
             obdReaderKt.startReading(
@@ -212,13 +215,13 @@ class TripView {
     fun LiveCarData(store: Store) {
         val isConnectedState =
             store.subject.map { it.tripViewModel.isConnected }.subscribeAsState(false)
-        val state = store.subject.map { it.tripViewModel.commandResults }
+        val state = store.subject.map { it.tripViewModel.carData }
             .subscribeAsState(ConcurrentHashMap<String, String>())
 
         LaunchedEffect(key1 = isConnectedState) {
             store.next { store ->
                 obdReaderKt.obdCommands.forEach {
-                    store.tripViewModel.commandResults[it.name] = "0"
+                    store.tripViewModel.carData[it.name] = "0"
                 }
             }
         }

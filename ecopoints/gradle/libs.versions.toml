@@ -9,7 +9,9 @@ constraintlayoutCompose = "1.0.1"
 espressoCoreVersion = "3.5.1"
 foundation = "1.7.3"
 gson = "2.10.1"
+hiltAndroid = "2.44"
 hiltAndroidCompiler = "2.51"
+hiltAndroidCompilerVersion = "2.44"
 hiltAndroidTestingVersion = "2.52"
 jacksonDatabind = "2.17.1"
 kotlin = "2.0.0"
@@ -65,6 +67,8 @@ foundation = { module = "androidx.compose.foundation:foundation", version.ref = 
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroidTestingVersion" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompiler" }
+hilt-android-compiler-v244 = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompilerVersion" }
+hilt-android-v244 = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jacksonDatabind" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }

@@ -153,6 +153,9 @@ dependencies {
 
     //Accompanist (Permission)
     implementation(libs.accompanist.permissions)
+
+    // Mockito
+    testImplementation (libs.mockito.core)
 }
 
 kapt {

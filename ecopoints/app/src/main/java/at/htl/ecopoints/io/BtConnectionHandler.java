@@ -6,7 +6,10 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.util.Log;
 
+
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.Objects;
@@ -29,6 +32,9 @@ public class BtConnectionHandler {
     private static final UUID RF_COMM_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
+    public InputStream inputStream;
+    public OutputStream outputStream;
+
     @Inject
     Store store;
     public Set<BluetoothDevice> pairedBtDevices;
@@ -45,7 +51,7 @@ public class BtConnectionHandler {
             getPairedDevices();
         }
 
-        if(device == null){
+        if (device == null) {
             store.next(i -> {
                         if (i != null) {
                             i.tripViewModel.connectionStateString = "No Device Selected";
@@ -97,10 +103,10 @@ public class BtConnectionHandler {
         }
     }
 
-
     @SuppressLint("MissingPermission")
     private CompletableFuture<Boolean> connect(BluetoothDevice btDevice) {
         CompletableFuture<Boolean> future = new CompletableFuture<>();
+
 
         executor.execute(() -> {
             try {
@@ -109,16 +115,16 @@ public class BtConnectionHandler {
                 if (btSocket.isConnected()) {
                     Log.d(TAG, "Connected to Bt-Device: " + btDevice.getName());
 
+                    try {
+                        inputStream = btSocket.getInputStream();
+                        outputStream = btSocket.getOutputStream();
+                    } catch (IOException e) {
+                        Log.e(TAG, "Exception when retrieving input and output stream:" + e.getMessage());
+                    }
                     store.next(i -> {
                         if (i != null) {
-                            try {
-                                i.tripViewModel.isConnected = true;
-                                i.tripViewModel.connectionStateString = "Connected";
-                                i.tripViewModel.inputStream = btSocket.getInputStream();
-                                i.tripViewModel.outputStream = btSocket.getOutputStream();
-                            } catch (IOException e) {
-                                Log.e(TAG, "Exception when retriving input and output stream:" + e.getMessage());
-                            }
+                            i.tripViewModel.isConnected = true;
+                            i.tripViewModel.connectionStateString = "Connected";
                         }
                     });
                     future.complete(true);
@@ -138,7 +144,7 @@ public class BtConnectionHandler {
             pairedBtDevices = mBluetoothAdapter.getBondedDevices();
             return pairedBtDevices.stream().map(i -> new BtDevice(i.getName(), i.getAddress()))
                     .sorted(Comparator.comparing(BtDevice::getName))
-                    .filter(i -> i.getName().toLowerCase().contains("obd"))
+                    .filter(i -> i.getName().toLowerCase().contains("obd") || i.getName().toLowerCase().contains("evo"))
                     .collect(Collectors.toCollection(LinkedHashSet::new));
 
         } catch (Exception exception) {

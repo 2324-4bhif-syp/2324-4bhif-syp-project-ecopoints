@@ -26,6 +26,7 @@ mapsCompose = "2.11.4"
 material = "1.7.3"
 materialIconsCore = "1.7.3"
 materialIconsExtended = "1.7.3"
+mockitoCore = "4.11.0"
 okhttp = "5.0.0-alpha.14"
 opencsv = "5.9"
 osmdroidAndroid = "latest"
@@ -82,6 +83,7 @@ kotlin-obd-api = { module = "com.github.eltonvs:kotlin-obd-api", version.ref = "
 maps-compose = { module = "com.google.maps.android:maps-compose", version.ref = "mapsCompose" }
 material = { module = "androidx.compose.material:material", version.ref = "material" }
 material3 = { module = "androidx.compose.material3:material3" }
+mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitoCore" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 opencsv = { module = "com.opencsv:opencsv", version.ref = "opencsv" }
 osm-androd-compose = { module = "tech.utsmankece:osm-androd-compose" }

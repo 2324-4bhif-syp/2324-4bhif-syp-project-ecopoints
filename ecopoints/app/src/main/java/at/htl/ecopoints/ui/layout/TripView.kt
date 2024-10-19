@@ -167,9 +167,6 @@ class TripView {
     }
 
     private fun startTrip() {
-
-        store.next{it.tripViewModel.isConnected=true}
-
         if (store.subject.value?.tripViewModel?.isConnected == true) {
             Log.i(TAG, "Trip started")
             obdReaderKt.startReading(

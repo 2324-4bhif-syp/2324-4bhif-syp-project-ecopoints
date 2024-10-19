@@ -82,9 +82,22 @@ class ObdReaderKt {
         RuntimeCommand(),
         FuelLevelCommand(),
         FuelTypeCommand(),
-        OilTemperatureCommand(),
         LoadCommand(),
         VINCommand()
+    )
+
+    val carDataCommands = listOf<ObdCommand>(
+        RPMCommand(),
+        RpmCleanedResCommand(),
+        SpeedCommand(),
+        FuelConsumptionRateCommand(),
+        LoadCommand(),
+        AbsoluteLoadCommand(),
+        ThrottlePositionCommand(),
+        RelativeThrottlePositionCommand(),
+        EngineCoolantTemperatureCommand(),
+        OilTemperatureCommand(),
+        LoadCommand(),
     )
 
     @Inject
@@ -140,7 +153,7 @@ class ObdReaderKt {
                                 result.formattedValue
                         }
 
-                        delay(250)
+                        delay(500)
                     } catch (e: Exception) {
                         Log.e(
                             TEST_COMMANDS_TAG,
@@ -172,7 +185,7 @@ class ObdReaderKt {
                 setupELM(obdConnection)
 
                 while (isActive) {
-                    obdCommands.forEach { command ->
+                    carDataCommands.forEach { command ->
                         try {
                             Log.i(TAG, "Running command ${command.name}")
 

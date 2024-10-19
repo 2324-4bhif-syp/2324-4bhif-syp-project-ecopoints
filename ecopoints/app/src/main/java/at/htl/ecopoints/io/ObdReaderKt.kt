@@ -168,22 +168,22 @@ class ObdReaderKt {
     ) {
         scope.launch() {
             try {
-//                val obdConnection = ObdDeviceConnection(inputStream!!, outputStream!!)
-//                setupELM(obdConnection)
+                val obdConnection = ObdDeviceConnection(inputStream!!, outputStream!!)
+                setupELM(obdConnection)
 
                 while (isActive) {
                     obdCommands.forEach { command ->
                         try {
                             Log.i(TAG, "Running command ${command.name}")
 
-//                            val result = obdConnection.run(command, false, 0, 0)
+                            val result = obdConnection.run(command, false, 0, 0)
 
-//                            Log.d(TAG, buildObdResultLog(result))
+                            Log.d(TAG, buildObdResultLog(result))
 
                             store.next { it ->
                                 it.tripViewModel.carData[command.name] =
-//                                    result.formattedValue
-                                    Random.nextInt(100).toString()
+                                    result.formattedValue
+//                                    Random.nextInt(100).toString()
                             }
                             delay(250)
                         } catch (e: Exception) {

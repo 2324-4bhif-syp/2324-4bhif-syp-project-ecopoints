@@ -116,7 +116,7 @@ class ObdReaderKt {
                 try {
                     Log.i(TAG, "Running command ${command.name}")
                     obdConnection.run(command, false, 0, 0)
-                    delay(250)
+                    delay(500)
                 } catch (e: Exception) {
                     Log.e(
                         TEST_COMMANDS_TAG,
@@ -160,6 +160,10 @@ class ObdReaderKt {
                             "Error running OBD2 command ${command.name} while testing all commands",
                             e
                         )
+                        store.next { it ->
+                            it.tripViewModel.obdTestCommandResults[command.name] =
+                                "Error running command"
+                        }
                     }
                 }
             } catch (e: Exception) {
@@ -323,7 +327,7 @@ class ObdReaderKt {
         var sb = StringBuilder()
 
         sb.appendLine("${result.command.name}[${result.command.pid}] Result:")
-        sb.appendLine("Formatted value : ${result.formattedValue}" + "Value: ${result.value}" + "Raw response: ${result.rawResponse}")
+        sb.appendLine("Formatted value : ${result.formattedValue}" + " Value: ${result.value}" + " Raw response: ${result.rawResponse}")
         sb.appendLine("Unit: ${result.unit}")
 
         return sb.toString()

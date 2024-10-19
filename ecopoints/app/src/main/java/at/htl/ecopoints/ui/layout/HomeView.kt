@@ -423,7 +423,7 @@ class HomeView {
             Color(0xFF9bd99e)
         )
 
-        addFakeDataToDB(context)
+//        addFakeDataToDB(context) infinite call loop
 
         val trips = getTopThreeTripDataFromDB(context)
 

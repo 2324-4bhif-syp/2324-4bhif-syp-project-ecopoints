@@ -150,26 +150,35 @@ class TripView {
     }
 
     private fun stopTrip() {
-        Log.d(TAG, "Trip stopped")
-        obdReaderKt.stopReading()
-        tripActive = false
+        if (tripActive) {
+            Log.i(TAG, "Trip stopped")
+            obdReaderKt.stopReading()
+            tripActive = false
+        }
+        else {
+            Log.w(TAG, "Tried to stop a trip without starting one")
+        }
     }
 
     private fun startTrip() {
-        Log.d(TAG, "Trip started")
-
-        store.next {
-            it.tripViewModel.isConnected = true
+        if (store.subject.value?.tripViewModel?.isConnected == true) {
+            Log.i(TAG, "Trip started")
+            obdReaderKt.startReading(
+                store.subject.value?.tripViewModel?.inputStream,
+                store.subject.value?.tripViewModel?.outputStream
+            )
+            tripActive = true
+        } else {
+            Log.w(TAG, "Tried to start a trip without a connection to a device")
         }
 
-        obdReaderKt.startReading(store.subject.value?.tripViewModel?.inputStream, store.subject.value?.tripViewModel?.outputStream)
-
-        tripActive = true
     }
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun NoDeviceSelectedDialog(
+    fun ShowAlert(
+        title: String = "Alert",
+        text: String = "Alert",
         onDismiss: () -> Unit, // Callback when the dialog is dismissed
     ) {
         AlertDialog(
@@ -179,8 +188,8 @@ class TripView {
                 dismissOnClickOutside = true,
                 usePlatformDefaultWidth = false
             ),
-            title = { Text("Alert") }, // Title of the dialog (optional)
-            text = { Text("No device connected!") }, // Main content of the dialog
+            title = { Text(title) }, // Title of the dialog (optional)
+            text = { Text(text) }, // Main content of the dialog
             confirmButton = {
                 Button(
                     onClick = onDismiss // Call the onDismiss callback when the button is clicked
@@ -195,12 +204,16 @@ class TripView {
 
     @Composable
     fun LiveCarData(store: Store) {
-        val isConnectedState = store.subject.map { it.tripViewModel.isConnected }.subscribeAsState(false)
-        val state = store.subject.map { it.tripViewModel.commandResults }.subscribeAsState(ConcurrentHashMap<String, String>())
+        val isConnectedState =
+            store.subject.map { it.tripViewModel.isConnected }.subscribeAsState(false)
+        val state = store.subject.map { it.tripViewModel.commandResults }
+            .subscribeAsState(ConcurrentHashMap<String, String>())
 
         LaunchedEffect(key1 = isConnectedState) {
             store.next { store ->
-                obdReaderKt.obdCommands.forEach { store.tripViewModel.commandResults[it.name] = "0" }
+                obdReaderKt.obdCommands.forEach {
+                    store.tripViewModel.commandResults[it.name] = "0"
+                }
             }
         }
 
@@ -403,17 +416,34 @@ class TripView {
     @Composable
     fun ShowTestObdCommandsCard(store: Store) {
         val state = store.subject.map { it.tripViewModel }.subscribeAsState(TripViewModel())
+
+        //Don't show the dialog if the device is not connected
         if (state.value.showTestCommandDialog && !state.value.isConnected) {
-            NoDeviceSelectedDialog(onDismiss = {
-                store.next { it.tripViewModel.showTestCommandDialog = false }
-            })
+            ShowAlert(
+                title = "Not connected",
+                text = "Please connect to a device first",
+                onDismiss = {
+                    store.next { it.tripViewModel.showTestCommandDialog = false }
+                })
         }
-        if (state.value.showTestCommandDialog && state.value.isConnected) {
+        //If the device is connected, but a trip has been started testing the commands is not available
+        if (state.value.showTestCommandDialog && tripActive) {
+            ShowAlert(
+                title = "Trip active",
+                text = "Please stop the trip first",
+                onDismiss = {
+                    store.next { it.tripViewModel.showTestCommandDialog = false }
+                })
+        }
+        if (state.value.showTestCommandDialog && state.value.isConnected && !tripActive) {
             //only call this on the first composition
             LaunchedEffect(key1 = state.value.showTestCommandDialog) {
                 if (state.value.showTestCommandDialog) {
                     store.next { it.tripViewModel.obdTestCommandResults.clear() }
-                    obdReaderKt.testRelevantCommands(state.value.inputStream, state.value.outputStream)
+                    obdReaderKt.testRelevantCommands(
+                        state.value.inputStream,
+                        state.value.outputStream
+                    )
                 }
             }
 

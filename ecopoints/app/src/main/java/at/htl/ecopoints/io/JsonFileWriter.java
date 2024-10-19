@@ -26,33 +26,45 @@ public class JsonFileWriter {
                 try {
                     boolean created = file.createNewFile();
                     if (!created) {
-                        throw new RuntimeException("Die Datei konnte nicht erstellt werden.");
+                        throw new RuntimeException("The file could not be created.");
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
-                    throw new RuntimeException("Fehler beim Erstellen der Datei", e);
+                    throw new RuntimeException("Error creating the file", e);
                 }
             }
         } else {
-            throw new RuntimeException("Externes Speicherverzeichnis ist nicht verfügbar.");
+            throw new RuntimeException("External storage directory is not available.");
         }
     }
 
+
     public synchronized void writeJson(String json) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, false))) {
             writer.write(json);
         } catch (IOException e) {
-            // Angemessene Fehlerbehandlung hier
             e.printStackTrace();
+            throw new RuntimeException("Error writing to the file", e);
         }
     }
+
 
     public synchronized void appendJson(String json) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
             writer.append(json);
         } catch (IOException e) {
-            // Angemessene Fehlerbehandlung hier
             e.printStackTrace();
+            throw new RuntimeException("Error appending to the file", e);
+        }
+    }
+
+
+    public synchronized void clearFile() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, false))) {
+            writer.write("");
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error clearing the file", e);
         }
     }
 

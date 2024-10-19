@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -11,6 +12,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -126,11 +128,36 @@ class HomeView {
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(bottom = 80.dp), // Abstand zur Navigationsleiste
+                            .padding(bottom = 80.dp),
                         contentAlignment = Alignment.BottomCenter
                     ) {
-                        ShareButton(context = activity)
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
+                            horizontalArrangement = Arrangement.SpaceEvenly,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            GradientButton(
+                                onClick = { shareJsonFile(activity) },
+                                text = "Share JSON File",
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .padding(8.dp)
+                            )
+                            GradientButton(
+                                onClick = {
+                                    jsonFileWriter.clearFile()
+                                    Toast.makeText(activity, "File cleared", Toast.LENGTH_SHORT).show()
+                                },
+                                text = "Clear File",
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .padding(8.dp)
+                            )
+                        }
                     }
+
                     val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Home") }
                     Box(
                         modifier = Modifier.fillMaxSize()
@@ -153,7 +180,6 @@ class HomeView {
         val jsonData = "{\"message\": \"Hello from HomeView\"}"
         jsonFileWriter.appendJson(jsonData)
 
-        // Pfad der Datei ausgeben
         val filePath = jsonFileWriter.filePath
         Log.d("HomeView", "JSON-Datei gespeichert unter: $filePath")
     }
@@ -177,28 +203,35 @@ class HomeView {
     }
 
     @Composable
-    fun ShareButton(context: Context) {
+    fun GradientButton(
+        onClick: () -> Unit,
+        text: String,
+        modifier: Modifier = Modifier
+    ) {
         val gradientColors = listOf(Color(0xFF9bd99e), Color(0xFF05900a), Color(0xFF9bd99e))
-
-        Button(
-            onClick = { shareJsonFile(context) },
-            modifier = Modifier
-                .padding(16.dp)
-                .size(width = 200.dp, height = 50.dp) // Feste Größe setzen
+        Box(
+            modifier = modifier
+                .height(50.dp)
                 .background(
-                    brush = Brush.horizontalGradient(
-                        colors = gradientColors
-                    ),
+                    brush = Brush.horizontalGradient(colors = gradientColors),
                     shape = RoundedCornerShape(30.dp)
-                ),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Transparent,
-                contentColor = Black
-            )
+                )
         ) {
-            Text("Share JSON File")
+            Button(
+                onClick = onClick,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.Transparent,
+                    contentColor = Black
+                ),
+                contentPadding = PaddingValues(),
+                modifier = Modifier.fillMaxSize(),
+                shape = RoundedCornerShape(30.dp)
+            ) {
+                Text(text)
+            }
         }
     }
+
 
 
 

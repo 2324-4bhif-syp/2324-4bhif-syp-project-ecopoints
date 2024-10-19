@@ -27,7 +27,7 @@ class LocationManager(
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
 
         fusedLocationClient.getCurrentLocation(
-            LocationRequest.PRIORITY_HIGH_ACCURACY,
+            Priority. PRIORITY_HIGH_ACCURACY,
             object : CancellationToken() {
                 override fun onCanceledRequested(p0: OnTokenCanceledListener) =
                     CancellationTokenSource().token
@@ -41,16 +41,18 @@ class LocationManager(
             }
         }
 
-        val locationRequest = LocationRequest.create().apply {
-            interval = 100
-            fastestInterval = 50
-            priority = Priority.PRIORITY_HIGH_ACCURACY
-            maxWaitTime = 100
-        }
+        val locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 100).build()
+
+//        val locationRequest = LocationRequest.create().apply {
+//            interval = 100
+//            fastestInterval = 50
+//            priority = Priority.PRIORITY_HIGH_ACCURACY
+//            maxWaitTime = 100
+//        }
 
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(p0: LocationResult) {
-                p0 ?: return
+                p0
                 for (location in p0.locations) {
                     Log.i(TAG, "Location changed: $location")
                     onLocationChanged(location)

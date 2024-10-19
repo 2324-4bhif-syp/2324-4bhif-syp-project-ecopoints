@@ -10,8 +10,8 @@ import at.htl.ecopoints.model.BtDevice;
 public class TripViewModel {
 
     public Map map = new Map();
-    public Trip trip = new Trip();
-    public CarData carData = new CarData();
+//    public Trip trip = new Trip();
+//    public CarData carData = new CarData();
     public BtDevice selectedDevice = null;
     public volatile Boolean isConnected = false;
     public volatile String connectionStateString = "Not Connected";

@@ -10,10 +10,13 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
+import androidx.compose.material3.CardElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -21,7 +24,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rxjava3.subscribeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
@@ -72,89 +77,88 @@ class TripView {
                     it.tripViewModel.carData["Longitude"] = location.longitude.toString()
                     it.tripViewModel.carData["Altitude"] = location.altitude.toString()
                     it.tripViewModel.carData["Gps-Speed"] = location.speed.toString()
-                }
-            }
-//                store.next {
-//                    if (tripActive) {
-//                        it.tripViewModel.carData.latitude = location.latitude
-//                        it.tripViewModel.carData.longitude = location.longitude
-//                        it.tripViewModel.carData.altitude = location.altitude
 //                        it.tripViewModel.carData.speed = Math.round(location.speed * 10.0) / 10.0
 //                        val fuelCons = generateRandomFuelCons()
 //                        it.tripViewModel.map.add(
 //                            location.latitude, location.longitude,
 //                            fuelCons
 //                        )
-//
-//                        Log.d(
-//                            TAG,
-//                            "latitude: ${location.latitude}, longitude: ${location.longitude}, fuelCons: $fuelCons"
-//                        )
-//                    }
-//                }
-//        }
-
-            EcoPointsTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
-                ) {
-                    Scaffold(topBar = {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .background(MaterialTheme.colorScheme.tertiaryContainer),
-                            horizontalArrangement = Arrangement.Start
-                        ) {
-//                            Button(onClick = {}) {
-//                                Text(text = "Select your car")
-//                            }
-                            Button(onClick = {
-                                store.next { it.tripViewModel.map.showMap = true }
-                            }) {
-                                Text(text = "Map")
-                            }
-                            Button(onClick = {
-                                store.next { it.tripViewModel.showTestCommandDialog = true }
-                            }) {
-                                Text(text = "TestCommands")
-                            }
-                        }
-                    }, bottomBar = {
-                        Column(modifier = Modifier.padding(bottom = 50.dp)) {
-                            ConnectionInfo(store, btConnectionHandler)
-                        }
-
-                        Column {
-                            val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Trip") }
-                            Box(
-                                modifier = Modifier.fillMaxSize()
-                            ) {
-                                BottomNavBar(
-                                    currentScreen = currentScreen,
-                                    onScreenSelected = { newScreen -> setCurrentScreen(newScreen) },
-                                    context = activity
-                                )
-                            }
-                        }
-                    }) {
-
-                        Spacer(modifier = Modifier.height(200.dp))
-                        LiveCarData(store)
-                        BtDeviceSelectionDialog(store, btConnectionHandler)
-                        ShowMapCard(store = store)
-                        ShowTestObdCommandsCard(store = store)
-                    }
                 }
             }
 
+            EcoPointsTheme {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    Scaffold(
+                        topBar = {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(MaterialTheme.colorScheme.tertiaryContainer),
+                                horizontalArrangement = Arrangement.Start
+                            ) {
+                                Button(onClick = {
+                                    store.next { it.tripViewModel.map.showMap = true }
+                                }) {
+                                    Text(text = "Map")
+                                }
+                                Button(onClick = {
+                                    store.next { it.tripViewModel.showTestCommandDialog = true }
+                                }) {
+                                    Text(text = "TestCommands")
+                                }
+                            }
+                        },
+                        bottomBar = {
+                            Column(modifier = Modifier.padding(bottom = 50.dp)) {
+                                ConnectionInfo(store, btConnectionHandler)
+                            }
+
+                            Column {
+                                val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Trip") }
+                                Box(
+                                    modifier = Modifier.fillMaxSize()
+                                ) {
+                                    BottomNavBar(
+                                        currentScreen = currentScreen,
+                                        onScreenSelected = { newScreen -> setCurrentScreen(newScreen) },
+                                        context = activity
+                                    )
+                                }
+                            }
+                        }
+                    ) {
+                        // Content that can scroll if necessary
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .verticalScroll(rememberScrollState())  // Makes the content scrollable
+                                .padding(it)
+                        ) {
+                            // Remove large spacer for now to test layout
+                            Spacer(modifier = Modifier.height(16.dp))  // Small dynamic spacer
+
+                            // Ensure that LiveCarData is inside a container that allows it to render
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(8.dp)  // Add some padding for visibility
+                            ) {
+                                LiveCarData(store)  // Display your car data here
+                            }
+
+                            // Other composables below
+                            BtDeviceSelectionDialog(store, btConnectionHandler)
+                            ShowMapCard(store = store)
+                            ShowTestObdCommandsCard(store = store)
+                        }
+                    }
+                }
+            }
         }
     }
-
-    //for testing purposes, remove if database is set up
-//TODO: Remove this function if fuel consumption is being read from the OBD
-//    private fun generateRandomFuelCons(): Double {
-//        return (3..21).random().toDouble()
-//    }
 
     private fun stopTrip() {
         if (tripActive) {
@@ -223,32 +227,151 @@ class TripView {
             }
         }
 
-        Column {
-//            val currentSpeed = state.value[SpeedCommand().name]?.toFloatOrNull() ?: 0f
-//            Speedometer(
-//                currentSpeed = currentSpeed,
-//                modifier = Modifier
-//                    .padding(50.dp)
-//                    .requiredSize(250.dp)
-//            )
-            Row {
-                val data = state.value
-                val keys = data.keys.toList()
-                val values = data.values.toList()
-//                val halfSize = keys.size / 2
-                Column {
-                    for (i in 0 until data.size) {
-                        Text(text = "${keys[i]}: ${values[i]}")
-                    }
-                }
-//                Column {
-//                    for (i in halfSize until keys.size) {
-//                        Text(text = "${keys[i]}: ${values[i]}")
-//                    }
-//                }
+        // Main Column for the dashboard layout
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+                .background(MaterialTheme.colorScheme.background)
+        ) {
+            val data = state.value
+
+            // Row for Speed and RPM
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Gauge(title = "Speed", value = data["Vehicle Speed"] ?: "0", unit = "km/h")
+//                Gauge(title = "GPS-Speed", value = data["Gps-Speed"] ?: "0", unit = "km/h")
+                Gauge(title = "RPM", value = data["Engine RPM"] ?: "0", unit = "rpm")
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Row for Coolant Temp and Intake Temp
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Gauge(title = "Coolant Temp", value = data["Engine Coolant Temperature"] ?: "0", unit = "°C")
+                Gauge(title = "Coolant Temp", value = data["Engine Coolant Temperature"] ?: "0", unit = "°C")
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Row for Engine Load and MAF
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Gauge(title = "Engine Load", value = data["Engine Absolute Load"] ?: "0", unit = "%")
+                Gauge(title = "Throttle Position", value = data["Throttle Position"] ?: "0", unit = "%")
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Row for Distance, Driving Time, and Avg Speed
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                InfoCard(title = "Fuel Consumption Rate.", value = data["Fuel Consumption Rate"] ?: "0", unit = "L/H")
+                InfoCard(title = "Fuel Consumption Rate", value = data["Fuel Consumption Rate"] ?: "0", unit = "ms")
+                InfoCard(title = "Fuel Consumption Rate", value = data["Fuel Consumption Rate"] ?: "0", unit = "km/h")
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Row for Fuel Efficiency
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                InfoCard(title = "Latitude", value = data["Latitude"] ?: "0", unit = "")
+                InfoCard(title = "Longitude", value = data["Longitude"] ?: "0", unit = "")
+                InfoCard(title = "Altitude", value = data["Altitude"] ?: "0", unit = "")
             }
         }
     }
+
+    // Components for the custom UI elements with size adjustments
+    @Composable
+    fun Gauge(title: String, value: String, unit: String, modifier: Modifier = Modifier) {
+        Card(
+            modifier = modifier
+                .padding(start = 20.dp, end = 20.dp, top = 3.dp, bottom = 3.dp)
+                .height(70.dp)  // Height of the card
+                .width(100.dp)  // Width of the card (make it longer)
+                .clip(MaterialTheme.shapes.large) // Apply rounded corners
+                .background(MaterialTheme.colorScheme.secondaryContainer),
+            elevation = CardDefaults.cardElevation(
+                defaultElevation = 10.dp
+            ), // Shadow effect
+        ) {
+            Box(
+                modifier = Modifier.fillMaxSize(), // Fill the entire card
+                contentAlignment = Alignment.Center // Center content both vertically and horizontally
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center // Center content vertically
+                ) {
+                    Text(
+                        text = title,
+                        style = MaterialTheme.typography.bodySmall,
+                        fontSize = 12.sp,
+                        textAlign = TextAlign.Center // Center the title text
+                    )
+                    // Simulate a circular gauge here
+                    Text(
+                        text = "$value $unit",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontSize = 18.sp,
+                        textAlign = TextAlign.Center // Center the value text
+                    )
+                }
+            }
+        }
+    }
+
+
+    @Composable
+    fun HorizontalBar(title: String, value: String, unit: String, modifier: Modifier = Modifier) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = modifier
+                .padding(4.dp)
+                .size(100.dp)
+                .background(MaterialTheme.colorScheme.secondaryContainer)
+        ) {
+            Text(text = title, style = MaterialTheme.typography.bodySmall, fontSize = 12.sp)
+            // Simulate a horizontal bar here (you can use a ProgressBar or a custom Canvas)
+            Text(
+                text = "$value $unit",
+                style = MaterialTheme.typography.titleMedium,
+                fontSize = 18.sp
+            )
+        }
+    }
+
+    @Composable
+    fun InfoCard(title: String, value: String, unit: String, modifier: Modifier = Modifier) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = modifier
+                .padding(4.dp)
+                .size(100.dp)
+                .background(MaterialTheme.colorScheme.secondaryContainer)
+        ) {
+            Text(text = title, style = MaterialTheme.typography.bodySmall, fontSize = 12.sp)
+            Text(
+                text = "$value $unit",
+                style = MaterialTheme.typography.titleMedium,
+                fontSize = 18.sp
+            )
+        }
+    }
+
 
 //endregion
 
@@ -542,54 +665,60 @@ class TripView {
     }
 
 //endregion
-}
 
+//region map
 
-@ExperimentalMaterial3Api
-@Composable
-fun ShowMapCard(store: Store) {
-    val state = store.subject.map { it.tripViewModel.map }.subscribeAsState(Map())
-    if (state.value.showMap) {
-        BasicAlertDialog(
-            onDismissRequest = { store.next { it.tripViewModel.map.showMap = false } },
-            properties = DialogProperties(
-                dismissOnBackPress = true,
-                dismissOnClickOutside = true,
-                usePlatformDefaultWidth = false
-            )
-        ) {
-            store.subject.value?.tripViewModel?.map?.let {
-                ShowMap(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight(),
-                    latLngList = it.latLngList
+    @ExperimentalMaterial3Api
+    @Composable
+    fun ShowMapCard(store: Store) {
+        val state = store.subject.map { it.tripViewModel.map }.subscribeAsState(Map())
+        if (state.value.showMap) {
+            BasicAlertDialog(
+                onDismissRequest = { store.next { it.tripViewModel.map.showMap = false } },
+                properties = DialogProperties(
+                    dismissOnBackPress = true,
+                    dismissOnClickOutside = true,
+                    usePlatformDefaultWidth = false
                 )
-            }
-            Column {
-                OutlinedButton(
-                    onClick = {
-                        store.next { it.tripViewModel.map.showMap = false }
-                        Log.d("MapCloseButton", "Clicked")
-                    },
-                    modifier = Modifier
-                        .size(60.dp)
-                        .padding(8.dp),
-                    shape = CircleShape,
-                    border = BorderStroke(3.dp, Color.Black),
-                    contentPadding = PaddingValues(0.dp),
-                    colors = ButtonDefaults.outlinedButtonColors(
-                        containerColor = Color.Red
+            ) {
+                store.subject.value?.tripViewModel?.map?.let {
+                    ShowMap(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxHeight(),
+                        latLngList = it.latLngList
                     )
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Close,
-                        contentDescription = null,
-                        tint = Color.White
-                    )
+                }
+                Column {
+                    OutlinedButton(
+                        onClick = {
+                            store.next { it.tripViewModel.map.showMap = false }
+                            Log.d("MapCloseButton", "Clicked")
+                        },
+                        modifier = Modifier
+                            .size(60.dp)
+                            .padding(8.dp),
+                        shape = CircleShape,
+                        border = BorderStroke(3.dp, Color.Black),
+                        contentPadding = PaddingValues(0.dp),
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            containerColor = Color.Red
+                        )
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
                 }
             }
         }
     }
+
+//endregion
 }
+
+
+
 

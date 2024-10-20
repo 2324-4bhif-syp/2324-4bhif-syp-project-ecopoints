@@ -1,6 +1,6 @@
 [versions]
 accompanistPermissions = "0.31.3-beta"
-agp = "8.7.0"
+agp = "8.7.1"
 androidxComposeBom = "2024.09.03"
 androidxJunit = "1.1.5"
 composeBomVersion = "2024.05.00"

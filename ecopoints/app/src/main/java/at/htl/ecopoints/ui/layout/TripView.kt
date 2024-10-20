@@ -37,6 +37,7 @@ import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.ui.component.ShowMap
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
 import at.htl.ecopoints.io.LocationManager
+import java.util.Date
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -58,6 +59,9 @@ class TripView {
     @Inject
     lateinit var btConnectionHandler: BtConnectionHandler
 
+    @Inject
+    lateinit var speedCalculator: GpsSpeedCalculator
+
     private var tripActive = false
 
     @Inject
@@ -72,6 +76,10 @@ class TripView {
         activity.setContent {
 
             LocationManager(activity.applicationContext) { location ->
+
+                val loc: Location = Location(location.latitude, location.longitude, Date())
+                Log.i(TAG, "SPEED: " + speedCalculator.calculateSpeed(loc).toString() + " km/h")
+
                 store.next {
                     it.tripViewModel.carData["Latitude"] = location.latitude.toString()
                     it.tripViewModel.carData["Longitude"] = location.longitude.toString()

@@ -41,6 +41,7 @@ import java.util.Date
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.math.roundToInt
 
 private val TAG = TripView::class.java.simpleName
 
@@ -78,14 +79,14 @@ class TripView {
             LocationManager(activity.applicationContext) { location ->
 
                 val loc: Location = Location(location.latitude, location.longitude, Date())
-                Log.i(TAG, "SPEED: " + speedCalculator.calculateSpeed(loc).toString() + " km/h")
+//                Log.i(TAG, "SPEED: " + speedCalculator.calculateSpeed(loc).toString() + " km/h")
 
                 store.next {
                     it.tripViewModel.carData["Latitude"] = location.latitude.toString()
                     it.tripViewModel.carData["Longitude"] = location.longitude.toString()
                     it.tripViewModel.carData["Altitude"] = location.altitude.toString()
-                    it.tripViewModel.carData["Gps-Speed"] = location.speed.toString()
-//                        it.tripViewModel.carData.speed = Math.round(location.speed * 10.0) / 10.0
+                    it.tripViewModel.carData["Gps-Speed"] = ((location.speed * 10.0).roundToInt() / 10).toString()
+                    it.tripViewModel.carData["Armin-Speed"] =  ((speedCalculator.calculateSpeed(loc)*10.0).roundToInt() / 10).toString()
 //                        val fuelCons = generateRandomFuelCons()
 //                        it.tripViewModel.map.add(
 //                            location.latitude, location.longitude,
@@ -179,6 +180,10 @@ class TripView {
     }
 
     private fun startTrip() {
+
+        //View Testing
+        store.next{it.tripViewModel.isConnected = true}
+
         if (store.subject.value?.tripViewModel?.isConnected == true) {
             Log.i(TAG, "Trip started")
             obdReaderKt.startReading(
@@ -239,7 +244,7 @@ class TripView {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
+                .padding(2.dp)
                 .background(MaterialTheme.colorScheme.background)
         ) {
             val data = state.value
@@ -250,8 +255,8 @@ class TripView {
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 Gauge(title = "Speed", value = data["Vehicle Speed"] ?: "0", unit = "km/h")
-//                Gauge(title = "GPS-Speed", value = data["Gps-Speed"] ?: "0", unit = "km/h")
-                Gauge(title = "RPM", value = data["Engine RPM"] ?: "0", unit = "rpm")
+                Gauge(title = "GPS-Speed", value = data["Gps-Speed"] ?: "0", unit = "km/h")
+                Gauge(title = "Armin-Speed", value = data["Armin-Speed"] ?: "0", unit = "km/h")
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -261,8 +266,8 @@ class TripView {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                Gauge(title = "Coolant Temp", value = data["Engine Coolant Temperature"] ?: "0", unit = "°C")
-                Gauge(title = "Coolant Temp", value = data["Engine Coolant Temperature"] ?: "0", unit = "°C")
+                Gauge(title = "RPM2", value = data["Engine RPM_CLEANED_RES"] ?: "0", unit = "rpm")
+                Gauge(title = "RPM", value = data["Engine RPM"] ?: "0", unit = "rpm")
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -283,9 +288,9 @@ class TripView {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                InfoCard(title = "Fuel Consumption Rate.", value = data["Fuel Consumption Rate"] ?: "0", unit = "L/H")
-                InfoCard(title = "Fuel Consumption Rate", value = data["Fuel Consumption Rate"] ?: "0", unit = "ms")
-                InfoCard(title = "Fuel Consumption Rate", value = data["Fuel Consumption Rate"] ?: "0", unit = "km/h")
+                InfoCard(title = "Engine Coolant Temperature", value = data["Engine Coolant Temperature"] ?: "0", unit = "°C")
+                InfoCard(title = "Fuel Consumption Rate", value = data["Fuel Consumption Rate"] ?: "0", unit = "L/H")
+                InfoCard(title = "Engine Oil Temperature", value = data["Engine Oil Temperature"] ?: "0", unit = "°C")
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -307,9 +312,9 @@ class TripView {
     fun Gauge(title: String, value: String, unit: String, modifier: Modifier = Modifier) {
         Card(
             modifier = modifier
-                .padding(start = 20.dp, end = 20.dp, top = 3.dp, bottom = 3.dp)
+//                .padding(start = 20.dp, end = 20.dp, top = 3.dp, bottom = 3.dp)
                 .height(70.dp)  // Height of the card
-                .width(100.dp)  // Width of the card (make it longer)
+                .width(110.dp)  // Width of the card (make it longer)
                 .clip(MaterialTheme.shapes.large) // Apply rounded corners
                 .background(MaterialTheme.colorScheme.secondaryContainer),
             elevation = CardDefaults.cardElevation(

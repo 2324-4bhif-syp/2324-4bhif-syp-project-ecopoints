@@ -16,7 +16,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
-import androidx.compose.material3.CardElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -30,13 +29,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
-import at.htl.ecopoints.model.*
 import at.htl.ecopoints.io.*
+import at.htl.ecopoints.io.LocationManager
+import at.htl.ecopoints.model.*
 import at.htl.ecopoints.model.viewmodel.TripViewModel
 import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.ui.component.ShowMap
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
-import at.htl.ecopoints.io.LocationManager
 import java.util.Date
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
@@ -184,7 +183,7 @@ class TripView {
 
     private fun startTrip() {
         //View Testing
-        store.next{it.tripViewModel.isConnected = true}
+//        store.next{it.tripViewModel.isConnected = true}
 
         if (store.subject.value?.tripViewModel?.isConnected == true) {
             Log.i(TAG, "Trip started")

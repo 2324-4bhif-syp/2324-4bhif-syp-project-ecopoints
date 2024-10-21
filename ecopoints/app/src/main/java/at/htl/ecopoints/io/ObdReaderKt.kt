@@ -37,7 +37,6 @@ import java.io.OutputStream
 import java.lang.Thread.sleep
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.random.Random
 
 
 @Singleton
@@ -188,22 +187,22 @@ class ObdReaderKt {
         writer.startJsonFile()
         scope.launch() {
             try {
-//                val obdConnection = ObdDeviceConnection(inputStream!!, outputStream!!)
-//                setupELM(obdConnection)
+                val obdConnection = ObdDeviceConnection(inputStream!!, outputStream!!)
+                setupELM(obdConnection)
 
                 while (isActive) {
                     carDataCommands.forEach { command ->
                         try {
                             Log.i(TAG, "Running command ${command.name}")
 
-//                            val result = obdConnection.run(command, false, 0, 0)
+                            val result = obdConnection.run(command, false, 0, 0)
 
-//                            Log.d(TAG, buildObdResultLog(result))
+                            Log.d(TAG, buildObdResultLog(result))
 
                             store.next { it ->
                                 it.tripViewModel.carData[command.name] =
-//                                    result.formattedValue
-                                    Random.nextInt(2000).toString()
+                                    result.formattedValue
+//                                    Random.nextInt(2000).toString()
                             }
                             delay(250)
                         } catch (e: Exception) {

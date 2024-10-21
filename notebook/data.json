@@ -1,55 +1,34 @@
-{
-    "data": [
-      {"time": 1000, "gpsSpeed": 0.0, "obdSpeed": 0.0, "rpm": 800},   
-      {"time": 2000, "gpsSpeed": 5.0, "obdSpeed": 4.8, "rpm": 1200},  
-      {"time": 3000, "gpsSpeed": 15.0, "obdSpeed": 14.5, "rpm": 1500},
-      {"time": 4000, "gpsSpeed": 25.0, "obdSpeed": 24.2, "rpm": 1800},
-      {"time": 5000, "gpsSpeed": 40.0, "obdSpeed": 38.5, "rpm": 2100},
-      {"time": 6000, "gpsSpeed": 55.0, "obdSpeed": 53.8, "rpm": 2400},
-      {"time": 7000, "gpsSpeed": 70.0, "obdSpeed": 68.2, "rpm": 2700},
-      {"time": 8000, "gpsSpeed": 80.0, "obdSpeed": 78.0, "rpm": 2900},
-      {"time": 9000, "gpsSpeed": 90.0, "obdSpeed": 87.5, "rpm": 3100},
-      {"time": 10000, "gpsSpeed": 100.0, "obdSpeed": 97.0, "rpm": 3300},
-      {"time": 11000, "gpsSpeed": 100.0, "obdSpeed": 97.0, "rpm": 3300},
-      {"time": 12000, "gpsSpeed": 100.0, "obdSpeed": 97.0, "rpm": 3300},
-      {"time": 13000, "gpsSpeed": 80.0, "obdSpeed": 78.0, "rpm": 3000}, 
-      {"time": 14000, "gpsSpeed": 60.0, "obdSpeed": 58.0, "rpm": 2600}, 
-      {"time": 15000, "gpsSpeed": 40.0, "obdSpeed": 38.5, "rpm": 2200},
-      {"time": 16000, "gpsSpeed": 20.0, "obdSpeed": 19.0, "rpm": 1500}, 
-      {"time": 17000, "gpsSpeed": 0.0, "obdSpeed": 0.0, "rpm": 800},   
-      {"time": 18000, "gpsSpeed": 0.0, "obdSpeed": 0.0, "rpm": 800},   
-      {"time": 19000, "gpsSpeed": 5.0, "obdSpeed": 4.8, "rpm": 1200},  
-      {"time": 20000, "gpsSpeed": 15.0, "obdSpeed": 14.2, "rpm": 1600},
-      {"time": 21000, "gpsSpeed": 30.0, "obdSpeed": 28.8, "rpm": 1800},
-      {"time": 22000, "gpsSpeed": 45.0, "obdSpeed": 43.5, "rpm": 2100},
-      {"time": 23000, "gpsSpeed": 60.0, "obdSpeed": 58.0, "rpm": 2500},
-      {"time": 24000, "gpsSpeed": 80.0, "obdSpeed": 77.8, "rpm": 2900},
-      {"time": 25000, "gpsSpeed": 100.0, "obdSpeed": 98.0, "rpm": 3400},
-      {"time": 26000, "gpsSpeed": 120.0, "obdSpeed": 117.0, "rpm": 4000}, 
-      {"time": 27000, "gpsSpeed": 120.0, "obdSpeed": 117.0, "rpm": 4000},
-      {"time": 28000, "gpsSpeed": 110.0, "obdSpeed": 107.0, "rpm": 3700}, 
-      {"time": 29000, "gpsSpeed": 90.0, "obdSpeed": 88.0, "rpm": 3200},
-      {"time": 30000, "gpsSpeed": 60.0, "obdSpeed": 58.0, "rpm": 2500},
-      {"time": 31000, "gpsSpeed": 30.0, "obdSpeed": 28.5, "rpm": 1800},
-      {"time": 32000, "gpsSpeed": 10.0, "obdSpeed": 9.5, "rpm": 1200},
-      {"time": 33000, "gpsSpeed": 0.0, "obdSpeed": 0.0, "rpm": 800},   
-      {"time": 34000, "gpsSpeed": 0.0, "obdSpeed": 0.0, "rpm": 800},   
-      {"time": 35000, "gpsSpeed": 0.0, "obdSpeed": 0.0, "rpm": 800},
-      {"time": 36000, "gpsSpeed": 10.0, "obdSpeed": 9.5, "rpm": 1200},  
-      {"time": 37000, "gpsSpeed": 25.0, "obdSpeed": 24.0, "rpm": 1600},
-      {"time": 38000, "gpsSpeed": 45.0, "obdSpeed": 43.0, "rpm": 2100},
-      {"time": 39000, "gpsSpeed": 70.0, "obdSpeed": 67.5, "rpm": 2600},
-      {"time": 40000, "gpsSpeed": 90.0, "obdSpeed": 88.0, "rpm": 3200}, 
-      {"time": 41000, "gpsSpeed": 110.0, "obdSpeed": 107.5, "rpm": 3700},
-      {"time": 42000, "gpsSpeed": 120.0, "obdSpeed": 117.0, "rpm": 4000},
-      {"time": 43000, "gpsSpeed": 120.0, "obdSpeed": 117.0, "rpm": 4000}, 
-      {"time": 44000, "gpsSpeed": 120.0, "obdSpeed": 117.0, "rpm": 4000},
-      {"time": 45000, "gpsSpeed": 100.0, "obdSpeed": 98.0, "rpm": 3400},  
-      {"time": 46000, "gpsSpeed": 80.0, "obdSpeed": 77.5, "rpm": 2900},
-      {"time": 47000, "gpsSpeed": 60.0, "obdSpeed": 58.0, "rpm": 2500},
-      {"time": 48000, "gpsSpeed": 40.0, "obdSpeed": 38.0, "rpm": 2100},  
-      {"time": 49000, "gpsSpeed": 20.0, "obdSpeed": 19.0, "rpm": 1500},
-      {"time": 50000, "gpsSpeed": 0.0, "obdSpeed": 0.0, "rpm": 800}  
-    ]
-  }
-  
+[
+    {
+      "timestamp": 1729348145532,
+      "data": {"Engine Load": "39", "Engine Runtime": "13", "Relative Throttle Position": "90", "Latitude": "48.3559983", "Fuel Consumption Rate": "25", "Longitude": "14.187878", "Engine RPM_CLEANED_RES": "69", "Engine Coolant Temperature": "7", "Fuel Type": "66", "Engine Absolute Load": "81", "Throttle Position": "61", "Fuel Level": "73", "Engine Oil Temperature": "56", "Vehicle Identification Number (VIN)": "67", "Vehicle Speed": "55", "Engine RPM": "92", "Altitude": "493.2760593438774", "Gps-Speed": "0.08463333"}
+    },
+    {
+      "timestamp": 1729348410443,
+      "data": {"Engine Load": "47", "Engine Runtime": "89", "Relative Throttle Position": "68", "Latitude": "48.3559992", "Fuel Consumption Rate": "77", "Longitude": "14.1878708", "Engine RPM_CLEANED_RES": "51", "Engine Coolant Temperature": "78", "Fuel Type": "52", "Engine Absolute Load": "84", "Throttle Position": "28", "Fuel Level": "94", "Engine Oil Temperature": "50", "Vehicle Identification Number (VIN)": "93", "Vehicle Speed": "9", "Engine RPM": "30", "Altitude": "492.5650101308519", "Gps-Speed": "0.009936241"}
+    },
+    {
+      "timestamp": 1729348415057,
+      "data": {"Engine Load": "38", "Engine Runtime": "4", "Relative Throttle Position": "29", "Latitude": "48.3559986", "Fuel Consumption Rate": "63", "Longitude": "14.1878718", "Engine RPM_CLEANED_RES": "90", "Engine Coolant Temperature": "0", "Fuel Type": "87", "Engine Absolute Load": "25", "Throttle Position": "45", "Fuel Level": "81", "Engine Oil Temperature": "28", "Vehicle Identification Number (VIN)": "1", "Vehicle Speed": "4", "Engine RPM": "22", "Altitude": "492.48480400089517", "Gps-Speed": "0.015506831"}
+    },
+    {
+      "timestamp": 1729348419658,
+      "data": {"Engine Load": "62", "Engine Runtime": "95", "Relative Throttle Position": "70", "Latitude": "48.355999", "Fuel Consumption Rate": "49", "Longitude": "14.1878719", "Engine RPM_CLEANED_RES": "42", "Engine Coolant Temperature": "16", "Fuel Type": "33", "Engine Absolute Load": "19", "Throttle Position": "68", "Fuel Level": "74", "Engine Oil Temperature": "89", "Vehicle Identification Number (VIN)": "68", "Vehicle Speed": "8", "Engine RPM": "83", "Altitude": "492.48263627803516", "Gps-Speed": "0.0075156023"}
+    },
+    {
+      "timestamp": 1729348424253,
+      "data": {"Engine Load": "23", "Engine Runtime": "30", "Relative Throttle Position": "74", "Latitude": "48.3559975", "Fuel Consumption Rate": "70", "Longitude": "14.1878773", "Engine RPM_CLEANED_RES": "32", "Engine Coolant Temperature": "9", "Fuel Type": "59", "Engine Absolute Load": "8", "Throttle Position": "83", "Fuel Level": "82", "Engine Oil Temperature": "67", "Vehicle Identification Number (VIN)": "38", "Vehicle Speed": "75", "Engine RPM": "57", "Altitude": "492.3374000910667", "Gps-Speed": "0.074997894"}
+    },
+    {
+      "timestamp": 1729348428843,
+      "data": {"Engine Load": "87", "Engine Runtime": "21", "Relative Throttle Position": "41", "Latitude": "48.3559987", "Fuel Consumption Rate": "52", "Longitude": "14.1878733", "Engine RPM_CLEANED_RES": "74", "Engine Coolant Temperature": "78", "Fuel Type": "74", "Engine Absolute Load": "73", "Throttle Position": "96", "Fuel Level": "73", "Engine Oil Temperature": "38", "Vehicle Identification Number (VIN)": "9", "Vehicle Speed": "27", "Engine RPM": "17", "Altitude": "492.54116498705343", "Gps-Speed": "0.041693103"}
+    },
+    {
+      "timestamp": 1729348433438,
+      "data": {"Engine Load": "83", "Engine Runtime": "73", "Relative Throttle Position": "60", "Latitude": "48.3559978", "Fuel Consumption Rate": "80", "Longitude": "14.1878776", "Engine RPM_CLEANED_RES": "46", "Engine Coolant Temperature": "13", "Fuel Type": "78", "Engine Absolute Load": "7", "Throttle Position": "12", "Fuel Level": "43", "Engine Oil Temperature": "99", "Vehicle Identification Number (VIN)": "56", "Vehicle Speed": "47", "Engine RPM": "72", "Altitude": "492.4241079673413", "Gps-Speed": "0.050713226"}
+    },
+    {
+      "timestamp": 1729348438029,
+      "data": {"Engine Load": "86", "Engine Runtime": "77", "Relative Throttle Position": "47", "Latitude": "48.3559982", "Fuel Consumption Rate": "63", "Longitude": "14.1878713", "Engine RPM_CLEANED_RES": "42", "Engine Coolant Temperature": "38", "Fuel Type": "0", "Engine Absolute Load": "92", "Throttle Position": "39", "Fuel Level": "15", "Engine Oil Temperature": "97", "Vehicle Identification Number (VIN)": "88", "Vehicle Speed": "77", "Engine RPM": "26", "Altitude": "492.39592781165993", "Gps-Speed": "0.07126123"}
+    }
+  ]

@@ -34,6 +34,7 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import java.io.InputStream
 import java.io.OutputStream
+import java.lang.Thread.sleep
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.random.Random
@@ -175,12 +176,16 @@ class ObdReaderKt {
     fun stopReading() {
         scope.cancel()
         scope = CoroutineScope(Dispatchers.IO)
+        sleep(1000)
+        writer.endJsonFile()
     }
 
     fun startReading(
         inputStream: InputStream?,
         outputStream: OutputStream?,
     ) {
+        writer.clearFile()
+        writer.startJsonFile()
         scope.launch() {
             try {
 //                val obdConnection = ObdDeviceConnection(inputStream!!, outputStream!!)
@@ -213,9 +218,10 @@ class ObdReaderKt {
                         }.joinToString(", ", "{", "}")
 
                     val timestamp = System.currentTimeMillis()
-                    val jsonSnapshot = "{\n\"timestamp\": $timestamp,\n\"data\": $snapshot\n}"
+                    val jsonSnapshot = "{\n\"timestamp\": $timestamp,\n\"data\": $snapshot\n},"
 
-                    writeDataSnapshotToFile(jsonSnapshot)
+                    if (scope.isActive)
+                        writeDataSnapshotToFile(jsonSnapshot)
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Error while setting up OBD connection", e)

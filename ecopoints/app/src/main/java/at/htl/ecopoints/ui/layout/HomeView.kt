@@ -173,7 +173,7 @@ class HomeView {
             }
         }
 
-        writeDataToJsonFile()
+//        writeDataToJsonFile()
     }
 
     private fun writeDataToJsonFile() {
@@ -349,9 +349,9 @@ class HomeView {
         val tankerkoenigApiClient = TankerkoenigApiClient()
         try {
             thread {
-                val gasData = tankerkoenigApiClient.getApiData()
-                dieselPrice = gasData.diesel
-                e5Price = gasData.e5
+//                val gasData = //tankerkoenigApiClient.getApiData()
+//                dieselPrice = gasData.diesel
+                e5Price = 3.5// gasData.e5
             }
 
             while (dieselPrice == 0.0 && e5Price == 0.0) {

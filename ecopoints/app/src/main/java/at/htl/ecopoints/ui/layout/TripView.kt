@@ -63,6 +63,9 @@ class TripView {
     @Inject
     lateinit var speedCalculator: GpsSpeedCalculator
 
+    @Inject
+    lateinit var writer: JsonFileWriter
+
     private var tripActive = false
 
     @Inject
@@ -180,7 +183,6 @@ class TripView {
     }
 
     private fun startTrip() {
-
         //View Testing
         store.next{it.tripViewModel.isConnected = true}
 

@@ -22,13 +22,29 @@ public class JsonFileWriter {
     private final String TAG = this.getClass().getSimpleName();
 
     private static final String FILE_NAME = "data.json";
+    private static final String LOG_FILE_NAME = "ecopoints-log.txt";
     private final File file;
+    private final File logFile;
 
     @Inject
     public JsonFileWriter(@ApplicationContext Context context) {
         File externalFilesDir = context.getExternalFilesDir(null);
         if (externalFilesDir != null) {
+            logFile = new File(externalFilesDir, LOG_FILE_NAME);
             file = new File(externalFilesDir, FILE_NAME);
+
+            if (!logFile.exists()) {
+                try {
+                    boolean created = logFile.createNewFile();
+                    if (!created) {
+                        throw new RuntimeException("The log file could not be created.");
+                    }
+                } catch (IOException e) {
+                    Log.e(TAG, "Error creating the log file", e);
+                    throw new RuntimeException("Error creating the log file", e);
+                }
+            }
+
             if (!file.exists()) {
                 try {
                     boolean created = file.createNewFile();
@@ -37,7 +53,6 @@ public class JsonFileWriter {
                     }
                 } catch (IOException e) {
                     Log.e(TAG, "Error creating the file", e);
-                    ;
                     throw new RuntimeException("Error creating the file", e);
                 }
             }
@@ -54,6 +69,23 @@ public class JsonFileWriter {
         appendJson("{}]");
     }
 
+    public synchronized void log(String message) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(logFile, true))) {
+            writer.append(message + "\n");
+        } catch (IOException e) {
+            Log.d(TAG, "Error appending to the file", e);
+            throw new RuntimeException("Error appending to the file", e);
+        }
+    }
+
+    public synchronized void clearLog() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(logFile, false))) {
+            writer.write("");
+        } catch (IOException e) {
+            Log.e(TAG, "Error clearing the log file", e);
+            throw new RuntimeException("Error clearing the log file", e);
+        }
+    }
 
     public synchronized void writeJson(String json) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, false))) {
@@ -91,6 +123,10 @@ public class JsonFileWriter {
             Log.e(TAG, "Error clearing the file", e);
             throw new RuntimeException("Error clearing the file", e);
         }
+    }
+
+    public String getLogFilePath(){
+        return logFile.getAbsolutePath();
     }
 
     public String getFilePath() {

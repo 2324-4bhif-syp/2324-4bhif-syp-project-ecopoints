@@ -183,7 +183,7 @@ class TripView {
 
     private fun startTrip() {
         //View Testing
-//        store.next{it.tripViewModel.isConnected = true}
+        store.next{it.tripViewModel.isConnected = true}
 
         if (store.subject.value?.tripViewModel?.isConnected == true) {
             Log.i(TAG, "Trip started")

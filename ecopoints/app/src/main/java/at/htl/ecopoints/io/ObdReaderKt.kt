@@ -37,6 +37,7 @@ import java.io.OutputStream
 import java.lang.Thread.sleep
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.random.Random
 
 
 @Singleton
@@ -141,6 +142,7 @@ class ObdReaderKt {
                     try {
                         Log.i(TEST_COMMANDS_TAG, "Running command ${command.name}")
 
+
                         val result = obdConnection.run(command, false, 0, 0)
 
                         Log.d(TEST_COMMANDS_TAG, buildObdResultLog(result))
@@ -195,18 +197,22 @@ class ObdReaderKt {
                         try {
                             Log.i(TAG, "Running command ${command.name}")
 
-                            val result = obdConnection.run(command, false, 0, 0)
+                            writer.log(TAG  + ": " + "Running command ${command.name}")
+
+                            val result = obdConnection.run(command, true, 0, 0)
 
                             Log.d(TAG, buildObdResultLog(result))
+                            writer.log(TAG + ": " + buildObdResultLog(result))
 
                             store.next { it ->
                                 it.tripViewModel.carData[command.name] =
-                                    result.formattedValue
+                                    result.value
 //                                    Random.nextInt(2000).toString()
                             }
                             delay(250)
                         } catch (e: Exception) {
                             Log.e(TAG, "Error running OBD2 command ${command.name}", e)
+                            writer.log(TAG+  ": " + "Error running OBD2 command ${command.name}" + e.message);
                         }
                     }
 

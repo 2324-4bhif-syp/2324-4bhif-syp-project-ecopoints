@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
@@ -78,7 +77,6 @@ import java.io.File
 import java.io.IOException
 import java.io.InputStream
 import java.io.InputStreamReader
-import java.lang.Iterable
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -146,6 +144,13 @@ class HomeView {
                                     .padding(8.dp)
                             )
                             GradientButton(
+                                onClick = { shareLogFile(activity) },
+                                text = "Share Log File",
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .padding(8.dp)
+                            )
+                            GradientButton(
                                 onClick = {
                                     jsonFileWriter.clearFile()
                                     Toast.makeText(activity, "File cleared", Toast.LENGTH_SHORT).show()
@@ -200,6 +205,23 @@ class HomeView {
         }
 
         context.startActivity(Intent.createChooser(shareIntent, "Share JSON File"))
+    }
+
+    private fun shareLogFile(context: Context) {
+        val fileUri: Uri = FileProvider.getUriForFile(
+            context,
+            "${context.packageName}.fileprovider",
+            File(jsonFileWriter.logFilePath)
+        )
+
+        val shareIntent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_STREAM, fileUri)
+            type = "application/json"
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
+
+        context.startActivity(Intent.createChooser(shareIntent, "Share Log File"))
     }
 
     @Composable

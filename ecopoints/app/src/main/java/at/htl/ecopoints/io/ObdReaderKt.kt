@@ -212,7 +212,7 @@ class ObdReaderKt {
                             delay(250)
                         } catch (e: Exception) {
                             Log.e(TAG, "Error running OBD2 command ${command.name}", e)
-                            writer.log(TAG+  ": " + "Error running OBD2 command ${command.name}" + e.message);
+                            writer.log(TAG+  ": " + "Error running OBD2 command ${command.name}" + e);
                         }
                     }
 

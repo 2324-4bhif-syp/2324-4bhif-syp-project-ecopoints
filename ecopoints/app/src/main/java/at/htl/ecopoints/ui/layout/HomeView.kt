@@ -1,12 +1,18 @@
 package at.htl.ecopoints.ui.layout
 
 import android.content.Context
+import android.content.Context.SENSOR_SERVICE
 import android.content.Intent
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -25,14 +31,17 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,6 +50,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
@@ -60,12 +70,12 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.FileProvider
 import at.htl.ecopoints.MainActivity
 import at.htl.ecopoints.R
+import at.htl.ecopoints.apis.TankerkoenigApiClient
 import at.htl.ecopoints.db.DBHelper
+import at.htl.ecopoints.io.JsonFileWriter
 import at.htl.ecopoints.model.CarData
 import at.htl.ecopoints.model.HomeInfo
 import at.htl.ecopoints.model.Store
-import at.htl.ecopoints.apis.TankerkoenigApiClient
-import at.htl.ecopoints.io.JsonFileWriter
 import at.htl.ecopoints.model.Trip
 import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.ui.component.ShowMap
@@ -122,7 +132,7 @@ class HomeView {
                     ShowText()
 
                     LastTrips(activity)
-
+//                    GForceMonitor(activity)
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
@@ -154,7 +164,8 @@ class HomeView {
                                 onClick = {
                                     jsonFileWriter.clearFile()
                                     jsonFileWriter.clearLog()
-                                    Toast.makeText(activity, "File cleared", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(activity, "File cleared", Toast.LENGTH_SHORT)
+                                        .show()
                                 },
                                 text = "Clear File",
                                 modifier = Modifier
@@ -182,12 +193,65 @@ class HomeView {
 //        writeDataToJsonFile()
     }
 
-    private fun writeDataToJsonFile() {
-        val jsonData = "{\"message\": \"Hello from HomeView\"}"
-        jsonFileWriter.appendJson(jsonData)
 
-        val filePath = jsonFileWriter.filePath
-        Log.d("HomeView", "JSON-Datei gespeichert unter: $filePath")
+    @Composable
+    fun GForceMonitor(context: Context) {
+        val sensorManager = context.getSystemService(SENSOR_SERVICE) as SensorManager
+        val accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+
+        var xForce = remember { mutableStateOf(0f) }
+        var yForce = remember { mutableStateOf(0f) }
+        var zForce = remember { mutableStateOf(0f) }
+
+        val sensorEventListener = object : SensorEventListener {
+            override fun onSensorChanged(event: SensorEvent) {
+                // Capture x, y, z forces (g-forces)
+                xForce.value = event.values[0]
+                yForce.value = event.values[1]
+                zForce.value = event.values[2]
+            }
+
+            override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+                // Handle accuracy changes if necessary
+            }
+        }
+
+        DisposableEffect(Unit) {
+            sensorManager.registerListener(
+                sensorEventListener,
+                accelerometer,
+                SensorManager.SENSOR_DELAY_UI
+            )
+            onDispose {
+                sensorManager.unregisterListener(sensorEventListener)
+            }
+        }
+
+        // Pass forces to the UI for visualization
+        GForceDisplay(xForce.value, yForce.value, zForce.value)
+    }
+
+    @Composable
+    fun GForceDisplay(xForce: Float, yForce: Float, zForce: Float) {
+        val maxForce = 10f  // Arbitrary max force for scaling (adjust as needed)
+
+        Box(modifier = Modifier.fillMaxSize()) {
+            Canvas(modifier = Modifier.size(300.dp)) {
+                val canvasSize = size.minDimension
+                val radius = canvasSize / 2
+                val center = Offset(radius, radius)
+
+                // Draw outer circle
+                drawCircle(color = Color.LightGray, radius = radius)
+
+                // Map the g-forces to the screen space (adjust scaling as needed)
+                val dotX = (xForce / maxForce) * radius
+                val dotY = (yForce / maxForce) * radius
+
+                // Draw the dot representing the g-force
+                drawCircle(color = Color.Red, radius = 10f, center = center + Offset(dotX, -dotY))
+            }
+        }
     }
 
 
@@ -256,17 +320,14 @@ class HomeView {
     }
 
 
-
-
     @Composable
-    private fun HomeHeader(context: Context){
+    private fun HomeHeader(context: Context) {
 
         val trips = getTripDataFromDB(context)
         var ecopoints = 0.0;
 
 
-        trips.forEach{
-                trip ->
+        trips.forEach { trip ->
             ecopoints += trip.rewardedEcoPoints
         }
 
@@ -408,7 +469,7 @@ class HomeView {
 
 
     @Composable
-    fun ShowText(){
+    fun ShowText() {
         val gradientColors = listOf(Gray, Green, DarkGray)
 
         Text(
@@ -416,7 +477,7 @@ class HomeView {
             fontSize = 25.sp,
             fontWeight = FontWeight.Bold,
             fontStyle = FontStyle.Italic,
-            modifier = Modifier.padding(10.dp, 270.dp, 0.dp,0.dp),
+            modifier = Modifier.padding(10.dp, 270.dp, 0.dp, 0.dp),
 
             style = TextStyle(
                 brush = Brush.linearGradient(
@@ -449,7 +510,8 @@ class HomeView {
                 contentColor = Black
             )
         ) {
-            val formattedDate = SimpleDateFormat("dd/MM/yyyy, HH:mm", Locale.getDefault()).format(trip.start)
+            val formattedDate =
+                SimpleDateFormat("dd/MM/yyyy, HH:mm", Locale.getDefault()).format(trip.start)
             Column(
                 modifier = Modifier
                     .padding(0.dp)
@@ -610,7 +672,14 @@ class HomeView {
                     Column {
                         val selectedTrip = trips.find { it.start == selectedTripDate }
                         if (selectedTrip != null) {
-                            Text("End Date: ${SimpleDateFormat("dd/MM/yyyy, HH:mm", Locale.getDefault()).format(selectedTrip.end)}")
+                            Text(
+                                "End Date: ${
+                                    SimpleDateFormat(
+                                        "dd/MM/yyyy, HH:mm",
+                                        Locale.getDefault()
+                                    ).format(selectedTrip.end)
+                                }"
+                            )
                             Text("Distance: ${selectedTrip.distance} km")
                             Text("Average Speed: ${selectedTrip.avgSpeed} km/h")
                             Text("Average Engine Rotation: ${selectedTrip.avgEngineRotation} rpm")
@@ -643,7 +712,6 @@ class HomeView {
     }
 
 
-
     private fun readTripData2FromCsvAndAddToDB(fileName: String, context: Context) {
         val dbHelper = DBHelper(context, null)
 
@@ -667,7 +735,17 @@ class HomeView {
                 val endDate = Date(line[7].toLong())
                 val rewardedEcoPoints = line[8].toDouble()
 
-                val trip = Trip(id, carId, userId, distance, avgSpeed, avgEngineRotation, startDate, endDate, rewardedEcoPoints)
+                val trip = Trip(
+                    id,
+                    carId,
+                    userId,
+                    distance,
+                    avgSpeed,
+                    avgEngineRotation,
+                    startDate,
+                    endDate,
+                    rewardedEcoPoints
+                )
                 dbHelper.addTrip(trip)
 
                 line = reader.readNext()
@@ -701,23 +779,31 @@ class HomeView {
                 val timeStamp = Timestamp(date.time)
 
                 val id = line[0].toLong()
-                val tripId =  UUID.fromString(line[1])
-                val longitude =  line[2].toDouble()
-                val latitude =  line[3].toDouble()
-                val currentEngineRPM =  line[4].toDouble()
-                val currentVelocity =  line[5].toDouble()
-                val throttlePosition =  line[6].toDouble()
-                val engineRunTime =  line[7]
+                val tripId = UUID.fromString(line[1])
+                val longitude = line[2].toDouble()
+                val latitude = line[3].toDouble()
+                val currentEngineRPM = line[4].toDouble()
+                val currentVelocity = line[5].toDouble()
+                val throttlePosition = line[6].toDouble()
+                val engineRunTime = line[7]
 
                 val carData = CarData(
-                    id, tripId, longitude, latitude, currentEngineRPM, currentVelocity, throttlePosition, engineRunTime, timeStamp
+                    id,
+                    tripId,
+                    longitude,
+                    latitude,
+                    currentEngineRPM,
+                    currentVelocity,
+                    throttlePosition,
+                    engineRunTime,
+                    timeStamp
                 )
 
                 dbHelper.addCarData(carData)
 
                 counter++;
 
-                if(counter == 4) {
+                if (counter == 4) {
                     dbHelper.updateTripValues(UUID.fromString(line[1]))
                     counter = 0;
                 }
@@ -746,7 +832,7 @@ class HomeView {
         return trips
     }
 
-    private fun addFakeDataToDB(context: Context){
+    private fun addFakeDataToDB(context: Context) {
         val dbHelper = DBHelper(context, null)
         dbHelper.onUpgrade(dbHelper.writableDatabase, 1, 2)
 
@@ -756,50 +842,53 @@ class HomeView {
         dbHelper.close()
     }
 
-private fun getLatLngsFromTripDB(context: Context,  tripId : UUID): List<Pair<Color, Pair<LatLng, Double>>> {
-    val dbHelper = DBHelper(context, null)
-    val data = dbHelper.getAllCarData()
-    val latLngs = mutableStateListOf<Pair<Color, Pair<LatLng, Double>>>()
+    private fun getLatLngsFromTripDB(
+        context: Context,
+        tripId: UUID
+    ): List<Pair<Color, Pair<LatLng, Double>>> {
+        val dbHelper = DBHelper(context, null)
+        val data = dbHelper.getAllCarData()
+        val latLngs = mutableStateListOf<Pair<Color, Pair<LatLng, Double>>>()
 
-    //for testing purposes, change to fuel consumption when finished
-    //TODO: change to fuel consumption
+        //for testing purposes, change to fuel consumption when finished
+        //TODO: change to fuel consumption
 
-    for (d in data) {
-        if (d.tripId == tripId) {
-            if (d.currentEngineRPM <= 1500)
-                latLngs.add(
-                    Pair(
-                        Color.Green,
-                        Pair(LatLng(d.latitude, d.longitude), d.currentEngineRPM)
+        for (d in data) {
+            if (d.tripId == tripId) {
+                if (d.currentEngineRPM <= 1500)
+                    latLngs.add(
+                        Pair(
+                            Color.Green,
+                            Pair(LatLng(d.latitude, d.longitude), d.currentEngineRPM)
+                        )
                     )
-                )
-            else if (d.currentEngineRPM > 1500 && d.currentEngineRPM <= 2500)
-                latLngs.add(
-                    Pair(
-                        Color.Yellow,
-                        Pair(LatLng(d.latitude, d.longitude), d.currentEngineRPM)
+                else if (d.currentEngineRPM > 1500 && d.currentEngineRPM <= 2500)
+                    latLngs.add(
+                        Pair(
+                            Color.Yellow,
+                            Pair(LatLng(d.latitude, d.longitude), d.currentEngineRPM)
+                        )
                     )
-                )
-            else if (d.currentEngineRPM > 2500 && d.currentEngineRPM <= 3500)
-                latLngs.add(
-                    Pair(
-                        Color.Red,
-                        Pair(LatLng(d.latitude, d.longitude), d.currentEngineRPM)
+                else if (d.currentEngineRPM > 2500 && d.currentEngineRPM <= 3500)
+                    latLngs.add(
+                        Pair(
+                            Color.Red,
+                            Pair(LatLng(d.latitude, d.longitude), d.currentEngineRPM)
+                        )
                     )
-                )
-            else
-                latLngs.add(
-                    Pair(
-                        Color.Black,
-                        Pair(LatLng(d.latitude, d.longitude), d.currentEngineRPM)
+                else
+                    latLngs.add(
+                        Pair(
+                            Color.Black,
+                            Pair(LatLng(d.latitude, d.longitude), d.currentEngineRPM)
+                        )
                     )
-                )
+            }
         }
-    }
 
-    dbHelper.close()
-    if (latLngs.isEmpty())
-        latLngs.add(Pair(Black, Pair(LatLng(0.0, 0.0), 0.0)))
-    return latLngs
-}
+        dbHelper.close()
+        if (latLngs.isEmpty())
+            latLngs.add(Pair(Black, Pair(LatLng(0.0, 0.0), 0.0)))
+        return latLngs
+    }
 }

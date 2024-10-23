@@ -10,8 +10,11 @@ import com.github.eltonvs.obd.command.Switcher
 import com.github.eltonvs.obd.command.at.ResetAdapterCommand
 import com.github.eltonvs.obd.command.at.SelectProtocolCommand
 import com.github.eltonvs.obd.command.at.SetEchoCommand
+import com.github.eltonvs.obd.command.at.SetHeadersCommand
+import com.github.eltonvs.obd.command.at.SetLineFeedCommand
 import com.github.eltonvs.obd.command.at.SetSpacesCommand
 import com.github.eltonvs.obd.command.bytesToInt
+import com.github.eltonvs.obd.command.control.AvailablePIDsCommand
 import com.github.eltonvs.obd.command.control.VINCommand
 import com.github.eltonvs.obd.command.engine.AbsoluteLoadCommand
 import com.github.eltonvs.obd.command.engine.LoadCommand
@@ -64,8 +67,15 @@ class ObdReaderKt {
     val obdSetupCommands = listOf<ObdCommand>(
         ResetAdapterCommand(),
         SetEchoCommand(Switcher.OFF),
+        SetLineFeedCommand(Switcher.OFF),
         SetSpacesCommand(Switcher.OFF),
-        SelectProtocolCommand(ObdProtocols.AUTO)
+        SetHeadersCommand(Switcher.OFF),
+        SelectProtocolCommand(ObdProtocols.AUTO),
+        AvailablePIDsCommand(AvailablePIDsCommand.AvailablePIDsRanges.PIDS_01_TO_20),
+        AvailablePIDsCommand(AvailablePIDsCommand.AvailablePIDsRanges.PIDS_21_TO_40),
+        AvailablePIDsCommand(AvailablePIDsCommand.AvailablePIDsRanges.PIDS_41_TO_60),
+        AvailablePIDsCommand(AvailablePIDsCommand.AvailablePIDsRanges.PIDS_61_TO_80),
+        AvailablePIDsCommand(AvailablePIDsCommand.AvailablePIDsRanges.PIDS_81_TO_A0),
     )
 
     val obdCommands = listOf<ObdCommand>(
@@ -114,7 +124,9 @@ class ObdReaderKt {
             obdSetupCommands.forEach { command ->
                 try {
                     Log.i(TAG, "Running command ${command.name}")
-                    obdConnection.run(command, false, 0, 0)
+                    var result = obdConnection.run(command, false, 500)
+                    Log.d(TAG, buildObdResultLog(result))
+
                     delay(500)
                 } catch (e: Exception) {
                     Log.e(
@@ -197,9 +209,9 @@ class ObdReaderKt {
                         try {
                             Log.i(TAG, "Running command ${command.name}")
 
-                            writer.log(TAG  + ": " + "Running command ${command.name}")
+                            writer.log(TAG + ": " + "Running command ${command.name}")
 
-                            val result = obdConnection.run(command, true, 0, 0)
+                            val result = obdConnection.run(command, false, 250, 5)
 
                             Log.d(TAG, buildObdResultLog(result))
                             writer.log(TAG + ": " + buildObdResultLog(result))
@@ -209,11 +221,12 @@ class ObdReaderKt {
                                     result.value
 //                                    Random.nextInt(2000).toString()
                             }
-                            delay(250)
+//                            delay(250)
                         } catch (e: Exception) {
                             Log.e(TAG, "Error running OBD2 command ${command.name}", e)
-                            writer.log(TAG+  ": " + "Error running OBD2 command ${command.name}" + e);
+                            writer.log(TAG + ": " + "Error running OBD2 command ${command.name}" + e);
                         }
+                        delay(1000)
                     }
 
                     // Take a snapshot and convert to JSON

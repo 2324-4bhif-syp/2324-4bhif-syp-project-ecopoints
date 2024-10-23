@@ -153,6 +153,7 @@ class HomeView {
                             GradientButton(
                                 onClick = {
                                     jsonFileWriter.clearFile()
+                                    jsonFileWriter.clearLog()
                                     Toast.makeText(activity, "File cleared", Toast.LENGTH_SHORT).show()
                                 },
                                 text = "Clear File",

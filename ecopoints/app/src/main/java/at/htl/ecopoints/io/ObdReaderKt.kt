@@ -26,6 +26,9 @@ import com.github.eltonvs.obd.command.engine.ThrottlePositionCommand
 import com.github.eltonvs.obd.command.fuel.FuelConsumptionRateCommand
 import com.github.eltonvs.obd.command.fuel.FuelLevelCommand
 import com.github.eltonvs.obd.command.fuel.FuelTypeCommand
+import com.github.eltonvs.obd.command.pressure.FuelPressureCommand
+import com.github.eltonvs.obd.command.pressure.FuelRailPressureCommand
+import com.github.eltonvs.obd.command.temperature.AirIntakeTemperatureCommand
 import com.github.eltonvs.obd.command.temperature.EngineCoolantTemperatureCommand
 import com.github.eltonvs.obd.command.temperature.OilTemperatureCommand
 import com.github.eltonvs.obd.connection.ObdDeviceConnection
@@ -80,7 +83,7 @@ class ObdReaderKt {
 
     val obdCommands = listOf<ObdCommand>(
         RPMCommand(),
-        RpmCleanedResCommand(),
+//        RpmCleanedResCommand(),
         SpeedCommand(),
         FuelConsumptionRateCommand(),
         LoadCommand(),
@@ -98,15 +101,17 @@ class ObdReaderKt {
 
     val carDataCommands = listOf<ObdCommand>(
         RPMCommand(),
-        RpmCleanedResCommand(),
+//        RpmCleanedResCommand(),
         SpeedCommand(),
-        FuelConsumptionRateCommand(),
+//        FuelConsumptionRateCommand(),
 //        LoadCommand(),
-        AbsoluteLoadCommand(),
-        ThrottlePositionCommand(),
+//        AbsoluteLoadCommand(),
+//        ThrottlePositionCommand(),
 //        RelativeThrottlePositionCommand(),
         EngineCoolantTemperatureCommand(),
-        OilTemperatureCommand(),
+        AirIntakeTemperatureCommand(),
+        LoadCommand(),
+//        OilTemperatureCommand(),
     )
 
     @Inject
@@ -141,7 +146,6 @@ class ObdReaderKt {
         } finally {
             Log.i(TAG, "OBD-Adapter setup finished")
         }
-
     }
 
     fun testRelevantCommands(inputStream: InputStream?, outputStream: OutputStream?) {
@@ -211,7 +215,7 @@ class ObdReaderKt {
 
                             writer.log(TAG + ": " + "Running command ${command.name}")
 
-                            val result = obdConnection.run(command, false, 250, 5)
+                            val result = obdConnection.run(command, false, 100, 5)
 
                             Log.d(TAG, buildObdResultLog(result))
                             writer.log(TAG + ": " + buildObdResultLog(result))
@@ -226,7 +230,7 @@ class ObdReaderKt {
                             Log.e(TAG, "Error running OBD2 command ${command.name}", e)
                             writer.log(TAG + ": " + "Error running OBD2 command ${command.name}" + e);
                         }
-                        delay(1000)
+                        delay(100)
                     }
 
                     // Take a snapshot and convert to JSON

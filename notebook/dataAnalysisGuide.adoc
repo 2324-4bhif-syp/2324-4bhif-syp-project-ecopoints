@@ -7,8 +7,7 @@
 == Requirements
 * Jupyter Notebook should be up and running
 * The latest version of Ecopoints pulled
-* data.json file should be present in the same directory as this notebook
-
+* data.json file should be present in the data/ directory 
 
 == Installation of missing libraries
 

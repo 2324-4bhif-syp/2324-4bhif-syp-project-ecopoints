@@ -25,10 +25,7 @@ import androidx.compose.material.icons.filled.Air
 import androidx.compose.material.icons.filled.Brightness4
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.DirectionsCar
-import androidx.compose.material.icons.filled.LocalGasStation
 import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material.icons.filled.OilBarrel
 import androidx.compose.material.icons.filled.RotateRight
 import androidx.compose.material.icons.filled.Speed
 import androidx.compose.material.icons.filled.Terrain
@@ -120,7 +117,11 @@ class TripView {
                 }
             }
 
-            EcoPointsTheme {
+            val state = store.subject.map { it }.subscribeAsState(Model())
+
+            EcoPointsTheme(
+                darkTheme = state.value.isDarkMode
+            ) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background

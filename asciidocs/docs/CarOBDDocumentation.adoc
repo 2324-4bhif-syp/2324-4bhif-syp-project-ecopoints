@@ -1,7 +1,7 @@
 = Dokumentation zur OBD-Funktionalität bei diversen Fahrzeugen
 :icons: font    
 
-== Fahrzeugdaten
+== Tabelle der OBD-Funktionalität
 
 [options="header",cols="1,1,1,1,1,1,1"]
 |===

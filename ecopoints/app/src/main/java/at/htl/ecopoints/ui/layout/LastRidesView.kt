@@ -49,6 +49,7 @@ import at.htl.ecopoints.HomeActivity
 import at.htl.ecopoints.R
 import at.htl.ecopoints.db.DBHelper
 import at.htl.ecopoints.model.HomeInfo
+import at.htl.ecopoints.model.Model
 import at.htl.ecopoints.model.Store
 import at.htl.ecopoints.model.Trip
 import at.htl.ecopoints.navigation.BottomNavBar
@@ -67,7 +68,11 @@ import javax.inject.Singleton
 class LastRidesView {
     fun compose(activity: ComponentActivity, store: Store) {
         activity.setContent {
-            EcoPointsTheme {
+            val state = store.subject.map { it }.subscribeAsState(Model())
+
+            EcoPointsTheme(
+                darkTheme = state.value.isDarkMode
+            ) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background

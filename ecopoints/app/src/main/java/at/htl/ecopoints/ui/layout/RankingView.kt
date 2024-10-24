@@ -51,6 +51,7 @@ import at.htl.ecopoints.ui.theme.EcoPointsTheme
 import javax.inject.Inject
 import javax.inject.Singleton
 import at.htl.ecopoints.R
+import at.htl.ecopoints.model.Model
 import at.htl.ecopoints.model.RankingInfo
 import at.htl.ecopoints.ui.component.ProfileScreen
 
@@ -66,7 +67,11 @@ class RankingView {
 
     fun compose(activity: ComponentActivity) {
         activity.setContent {
-            EcoPointsTheme {
+            val state = store.subject.map { it }.subscribeAsState(Model())
+
+            EcoPointsTheme(
+                darkTheme = state.value.isDarkMode
+            ) {
                 Surface(
                     modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {

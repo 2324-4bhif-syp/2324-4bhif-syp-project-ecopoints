@@ -103,10 +103,10 @@ class HomeView {
 
     fun compose(activity: ComponentActivity) {
         activity.setContent {
-            val state = store.subject.map { it }.subscribeAsState(Model())
+            val isDarkMode = store.subject.map { it.isDarkMode }.subscribeAsState(false)
 
             EcoPointsTheme(
-                darkTheme = state.value.isDarkMode
+                darkTheme = isDarkMode.value
             ) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),

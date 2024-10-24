@@ -22,6 +22,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Air
+import androidx.compose.material.icons.filled.Brightness4
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.DirectionsCar
@@ -47,6 +48,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
@@ -138,7 +140,7 @@ class TripView {
                                         .padding(horizontal = 16.dp, vertical = 12.dp),
                                     horizontalArrangement = Arrangement.SpaceBetween
                                 ) {
-                                    Button(
+                                    /*Button(
                                         onClick = {
                                             store.next { it.tripViewModel.map.showMap = true }
                                         },
@@ -153,15 +155,13 @@ class TripView {
                                         elevation = ButtonDefaults.buttonElevation(4.dp)
                                     ) {
                                         Text(text = "Map", style = MaterialTheme.typography.bodyLarge)
-                                    }
+                                    }*/
 
                                     Button(
                                         onClick = {
                                             store.next { it.tripViewModel.showTestCommandDialog = true }
                                         },
-                                        modifier = Modifier
-                                            .weight(1f)
-                                            .padding(start = 8.dp),
+                                        modifier = Modifier.padding(end = 8.dp),
                                         colors = ButtonDefaults.buttonColors(
                                             containerColor = MaterialTheme.colorScheme.secondaryContainer,
                                             contentColor = MaterialTheme.colorScheme.onSecondaryContainer
@@ -170,6 +170,19 @@ class TripView {
                                         elevation = ButtonDefaults.buttonElevation(4.dp)
                                     ) {
                                         Text(text = "Test Commands", style = MaterialTheme.typography.bodyLarge)
+                                    }
+
+                                    IconButton(
+                                        onClick = {
+                                            // TODO
+                                        },
+                                        modifier = Modifier.padding(start = 8.dp)
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Default.Brightness4,
+                                            contentDescription = "Change Theme",
+                                            tint = MaterialTheme.colorScheme.primary
+                                        )
                                     }
                                 }
                             }
@@ -302,7 +315,12 @@ class TripView {
         ) {
             val data = state.value
 
-            SectionHeader(title = "Vehicle Data")
+            SectionHeader(
+                title = "Vehicle Data",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 1.dp)  // Reduced padding for less top space
+            )
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -374,7 +392,12 @@ class TripView {
             }
 
 
-            SectionHeader(title = "GPS Data")
+            SectionHeader(
+                title = "GPS Data",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 5.dp)
+            )
 
             Row(
                 modifier = Modifier
@@ -382,22 +405,28 @@ class TripView {
                     .padding(horizontal = 16.dp, vertical = 8.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                InfoCard(
+                InfoCard2(
                     title = "Latitude",
-                    value = "${data["Latitude"] ?: "0"}",
-                    icon = Icons.Default.LocationOn
+                    value = "${(data["Latitude"]?.toFloatOrNull() ?: 0f).let { String.format("%.1f", it) }}",
+                    icon = Icons.Default.LocationOn,
+                    modifier = Modifier.weight(1f) // Ensure equal width
                 )
-                InfoCard(
+
+                InfoCard2(
                     title = "Longitude",
-                    value = "${data["Longitude"] ?: "0"}",
-                    icon = Icons.Default.LocationOn
+                    value = "${(data["Longitude"]?.toFloatOrNull() ?: 0f).let { String.format("%.1f", it) }}",
+                    icon = Icons.Default.LocationOn,
+                    modifier = Modifier.weight(1f) // Ensure equal width
                 )
-                InfoCard(
+
+                InfoCard2(
                     title = "Altitude",
-                    value = "${data["Altitude"] ?: "0"} m",
-                    icon = Icons.Default.Terrain
+                    value = "${(data["Altitude"]?.toFloatOrNull() ?: 0f).let { String.format("%.1f", it) }} m",
+                    icon = Icons.Default.Terrain,
+                    modifier = Modifier.weight(1f) // Ensure equal width
                 )
             }
+
 
             GForceMonitor(context)
         }
@@ -444,17 +473,67 @@ class TripView {
         }
     }
 
+    @Composable
+    fun InfoCard2(title: String, value: String, icon: ImageVector, modifier: Modifier = Modifier) {
+        Card(
+            modifier = modifier
+                .padding(8.dp)
+                .height(120.dp),  // Adjust height
+            elevation = CardDefaults.cardElevation(6.dp),
+            shape = MaterialTheme.shapes.medium,
+            colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surfaceVariant)
+        ) {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(12.dp)
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(8.dp)
+                ) {
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp),
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = title,
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 1,  // Limit to 1 line
+                        overflow = TextOverflow.Ellipsis,  // Ellipsis if text is too long
+                    )
+                    Text(
+                        text = value,
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        textAlign = TextAlign.Center,
+                        maxLines = 1,  // Limit to 1 line for the value
+                        overflow = TextOverflow.Ellipsis // Ellipsis if text is too long
+                    )
+                }
+            }
+        }
+    }
+
+
 
     @Composable
-    fun SectionHeader(title: String){
+    fun SectionHeader(title: String, modifier: Modifier = Modifier) {
         Text(
-            text= title,
+            text = title,
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 12.dp, horizontal = 16.dp),
-            textAlign = TextAlign.Start
+            modifier = modifier
+                .padding(vertical = 5.dp, horizontal = 5.dp),
+            textAlign = TextAlign.Center
         )
     }
 
@@ -707,7 +786,7 @@ class TripView {
         }
     }
 
-        @SuppressLint("CheckResult")
+    @SuppressLint("CheckResult")
     @Composable
     fun ConnectionInfo(store: Store, btConnectionHandler: BtConnectionHandler) {
         val state = store.subject.map { it.tripViewModel }.subscribeAsState(TripViewModel())
@@ -722,7 +801,9 @@ class TripView {
         }
 
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -731,19 +812,21 @@ class TripView {
                     shape = MaterialTheme.shapes.medium,
                     onClick = { startTrip() },
                     modifier = Modifier
-                        .padding(8.dp)
+                        .padding(4.dp)
                         .weight(1f)
+                        .height(40.dp),
                 ) {
-                    Text(text = "Start Trip")
+                    Text(text = "Start Trip", fontSize = 14.sp)
                 }
                 Button(
                     shape = MaterialTheme.shapes.medium,
                     onClick = { stopTrip() },
                     modifier = Modifier
-                        .padding(8.dp)
+                        .padding(4.dp)
                         .weight(1f)
+                        .height(40.dp),
                 ) {
-                    Text(text = "Stop Trip")
+                    Text(text = "Stop Trip", fontSize = 14.sp)
                 }
             }
             Row(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
@@ -751,20 +834,24 @@ class TripView {
                     shape = MaterialTheme.shapes.medium,
                     onClick = { btConnectionHandler.createConnection(state.value.selectedDevice) },
                     modifier = Modifier
-                        .padding(8.dp)
+                        .padding(4.dp)
                         .weight(1f)
+                        .height(40.dp),
                 ) {
-                    Text(text = "Connect")
+                    Text(text = "Connect", fontSize = 14.sp)
                 }
                 Button(
-                    shape = MaterialTheme.shapes.medium, onClick = {
+                    shape = MaterialTheme.shapes.medium,
+                    onClick = {
                         Log.d(TAG, "Show Bt-Device selection dialog")
                         store.next { it.tripViewModel.showDeviceSelectionDialog = true }
-                    }, modifier = Modifier
-                        .padding(8.dp)
-                        .width(150.dp)
+                    },
+                    modifier = Modifier
+                        .padding(4.dp)
+                        .weight(1f)
+                        .height(40.dp),
                 ) {
-                    Text(text = "Select Device")
+                    Text(text = "Select Device", fontSize = 14.sp)
                 }
             }
             Row(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
@@ -773,33 +860,35 @@ class TripView {
                 ) {
                     Text(
                         text = "Connection:",
-                        modifier = Modifier.padding(8.dp),
+                        modifier = Modifier.padding(1.dp),
                         fontSize = 12.sp,
                     )
                     Text(
                         text = "Device:",
-                        modifier = Modifier.padding(8.dp),
+                        modifier = Modifier.padding(1.dp),
                         fontSize = 12.sp,
                     )
                 }
                 Column(
-                    modifier = Modifier.weight(01f), horizontalAlignment = Alignment.End
+                    modifier = Modifier.weight(1f),
+                    horizontalAlignment = Alignment.End
                 ) {
                     Text(
                         text = state.value.connectionStateString,
-                        modifier = Modifier.padding(8.dp),
+                        modifier = Modifier.padding(1.dp),
                         fontSize = 12.sp,
                         color = connectionStateColor
                     )
                     Text(
                         text = state.value.selectedDevice?.name ?: "None",
-                        modifier = Modifier.padding(8.dp),
+                        modifier = Modifier.padding(5.dp),
                         fontSize = 12.sp,
                     )
                 }
             }
         }
     }
+
 
     @Composable
     fun ListPairedBtDevices(store: Store, btConnectionHandler: BtConnectionHandler) {

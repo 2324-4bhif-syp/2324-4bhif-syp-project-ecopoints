@@ -58,6 +58,7 @@ class ObdReaderKt {
     private val TEST_COMMANDS_TAG = "OBD_COMMAND_TEST"
 
     var scope = CoroutineScope(Dispatchers.IO)
+    var testCommandScope = CoroutineScope(Dispatchers.IO)
 
     val obdSetupCommands = listOf<ObdCommand>(
         ResetAdapterCommand(),
@@ -137,7 +138,6 @@ class ObdReaderKt {
                     var result = obdConnection.run(command, false, 500)
                     Log.d(TAG, buildObdResultLog(result))
 
-                    delay(500)
                 } catch (e: Exception) {
                     Log.e(
                         TEST_COMMANDS_TAG,
@@ -145,6 +145,7 @@ class ObdReaderKt {
                         e
                     )
                 }
+                delay(500)
             }
         } catch (e: Exception) {
             Log.e(TAG, "Error on OBD-Adapter setup", e)
@@ -154,45 +155,51 @@ class ObdReaderKt {
     }
 
     fun testRelevantCommands(inputStream: InputStream?, outputStream: OutputStream?) {
-        scope.launch { // Launch a coroutine in the scope
+        testCommandScope.launch { // Launch a coroutine in the scope
             try {
                 val obdConnection = ObdDeviceConnection(inputStream!!, outputStream!!)
                 setupELM(obdConnection)
 
-                obdCommands.forEach { command ->
-                    try {
-                        Log.i(TEST_COMMANDS_TAG, "Running command ${command.name}")
+                while (isActive)
+                    obdCommands.forEach { command ->
+                        try {
+                            Log.i(TEST_COMMANDS_TAG, "Running command ${command.name}")
 
 
-                        val result = obdConnection.run(command, false, 250, 0)
+                            val result = obdConnection.run(command, false, 250, 0)
 
-                        Log.d(TEST_COMMANDS_TAG, buildObdResultLog(result))
+                            Log.d(TEST_COMMANDS_TAG, buildObdResultLog(result))
 
 
-                        store.next { it ->
-                            it.tripViewModel.obdTestCommandResults[command.name] =
-                                result.formattedValue
-                        }
+                            store.next { it ->
+                                it.tripViewModel.obdTestCommandResults[command.name] =
+                                    result.formattedValue
+                            }
 
-                    } catch (e: Exception) {
-                        Log.e(
-                            TEST_COMMANDS_TAG,
-                            "Error running OBD2 command ${command.name} while testing all commands",
-                            e
-                        )
-                        store.next { it ->
-                            it.tripViewModel.obdTestCommandResults[command.name] =
-                                "Error running command"
+                        } catch (e: Exception) {
+                            Log.e(
+                                TEST_COMMANDS_TAG,
+                                "Error running OBD2 command ${command.name} while testing all commands",
+                                e
+                            )
+                            store.next { it ->
+                                it.tripViewModel.obdTestCommandResults[command.name] =
+                                    "Error running command"
+                            }
                         }
                         delay(500)
                     }
-                }
             } catch (e: Exception) {
                 Log.e(TEST_COMMANDS_TAG, "Error while setting up OBD connection", e)
             } finally {
                 Log.i(TEST_COMMANDS_TAG, "OBD command test finished")
             }
         }
+    }
+
+    fun cancelTest() {
+        testCommandScope.cancel()
+        testCommandScope = CoroutineScope(Dispatchers.IO)
     }
 
     fun stopReading() {
@@ -226,8 +233,7 @@ class ObdReaderKt {
                             writer.log(TAG + ": " + buildObdResultLog(result))
 
                             store.next { it ->
-                                it.tripViewModel.carData[command.name] =
-                                    result.value
+                                it.tripViewModel.carData[command.name] = result.value
 //                                    Random.nextInt(2000).toString()
                             }
 //                            delay(250)
@@ -239,16 +245,14 @@ class ObdReaderKt {
                     }
 
                     // Take a snapshot and convert to JSON
-                    val snapshot =
-                        store.subject.value!!.tripViewModel.carData.map { (key, value) ->
-                            "\"$key\": \"$value\""
-                        }.joinToString(", ", "{", "}")
+                    val snapshot = store.subject.value!!.tripViewModel.carData.map { (key, value) ->
+                        "\"$key\": \"$value\""
+                    }.joinToString(", ", "{", "}")
 
                     val timestamp = System.currentTimeMillis()
                     val jsonSnapshot = "{\n\"timestamp\": $timestamp,\n\"data\": $snapshot\n},"
 
-                    if (scope.isActive)
-                        writeDataSnapshotToFile(jsonSnapshot)
+                    if (scope.isActive) writeDataSnapshotToFile(jsonSnapshot)
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Error while setting up OBD connection", e)

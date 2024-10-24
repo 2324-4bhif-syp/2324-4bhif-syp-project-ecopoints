@@ -1,46 +1,35 @@
 = Dokumentation
 :toc:
 :sectnums:
+:icons: font
 
-== Current-State - 11.10.2024
+== OBD Compatibility
 
-Android App:
+https://2324-4bhif-syp.github.io/2324-4bhif-syp-project-ecopoints/CarOBDDocumentation[Compatibility]
 
-* Manche OBD2-Daten werden ausgelesen und angezeigt
-* Live Anzeige von Fahrdaten und GPS Daten (Broken)
-** Live Fahrt auf Google Maps
-** Anzeige der gefahrenen Strecke mittels Polyline
-* Ranking Mockup
-** Anzeige des eigenen Rankings
-** Anzeige anderer Nutzer (Ranking)
-* Profil Mockup
-** Anzeige der Eco-Points
-* Anzeigen von Fahrten
-** Mit Google Maps Integration
-** Anzeigen der gefahrenen Strecke mittels Polyline
-** Fahrdaten (Durchschnittsgeschwindigkeit, Durchschnittsverbrauch, etc.)
+== Android App
 
-=== Problems
+* Development Environment: Android Studio Ladybug
+* Target SDK: 34 (Android 14)
 
-* OBD2-Daten werden nicht immer korrekt ausgelesen
-* Google Maps API ist ausgelaufen
-* Das Backend läuft auf keinem Server und ist nicht erreichbar
-* Berechnung der Eco-Points ist noch nicht implementiert
+=== Features
 
-=== Task
+* Auslesen von OBD2-Daten
+* Live Anzeige von Fahrdaten
+** Speichern der Daten während der Fahrt
+* Ranking
+* Profil
 
-* OBD2-Daten korrekt auslesen
-* Daten während der Fahrt speichern
-* Google Maps API erneuern oder eine andere Karten API verwenden
-** Z.B. OpenStreetMap
-* Backend auf einem Server deployen
-** CI/CD Pipeline für ein automatisches Deployment
+=== Communication with OBD
 
-=== Goals
+IMPORTANT: Ein OBD2-Adapter wird für das Auslesen der Daten benötigt.
 
-Ecopoints app soll es ermöglichen, Fahrdaten auszulesen und anhand dieser Daten Eco-Points zu berechnen.
-Diese Eco-Points sollen in einem Ranking angezeigt werden.
-Die App soll auch die Möglichkeit bieten, die gefahrenen Strecken auf einer Karte anzuzeigen.
+Die Kommunikation mit dem OBD2-Adapter erfolgt über Bluetooth.
+Der Adapter wird mit dem Smartphone verbunden und die App kann die Daten auslesen.
+
+Wir benutzen die Bibliothek eltonvs / kotlin-obd-api für die Kommunikation mit dem OBD2-Adapter.
+
+* https://github.com/eltonvs/kotlin-obd-api[github.com/eltonvs/kotlin-obd-api]
 
 == Getting Started
 
@@ -72,40 +61,10 @@ Die App soll auch die Möglichkeit bieten, die gefahrenen Strecken auf einer Kar
 
     ./mvnw test
 
-== Android App
-
-* Development Environment: Android Studio Ladybug
-* Target SDK: 34 (Android 14)
-
-=== Features
-
-* Auslesen von OBD2-Daten
-* Live Anzeige von Fahrdaten
-** Speichern der Daten während der Fahrt
-* Anzeige von Fahrten
-** Mit Karte - Google Maps API
-* Ranking
-* Profil
-
-== API
-
-image::img/EcoPoints-Diagram[]
-
-=== Communication with OBD
-
-IMPORTANT: Ein OBD2-Adapter wird für das Auslesen der Daten benötigt.
-
-Die Kommunikation mit dem OBD2-Adapter erfolgt über Bluetooth.
-Der Adapter wird mit dem Smartphone verbunden und die App kann die Daten auslesen.
-
-Wir benutzen die Bibliothek eltonvs / kotlin-obd-api für die Kommunikation mit dem OBD2-Adapter.
-
-* https://github.com/eltonvs/kotlin-obd-api[github.com/eltonvs/kotlin-obd-api]
-
-=== Klassendiagramm
+== Klassendiagramm
 plantuml::plantuml/cld.puml[]
 
-=== Endpoints
+== Endpoints
 
 Die kommunikation mit dem Backend erfolgt über REST-Endpoints.
 Das Speichern von Trips und Fahrdaten erfolgt beim Beenden einer Fahrt.
@@ -160,7 +119,7 @@ image::img/user-endpoints[]
 
 * Oracle Cloud Server
 ** funktioniert nicht mehr
-* Neue Deployment-Strategie
+* Neue Deployment-Strategie to be done
 
 
 

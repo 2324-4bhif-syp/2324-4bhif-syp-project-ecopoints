@@ -5,7 +5,7 @@
 
 == OBD Compatibility
 
-https://2324-4bhif-syp.github.io/2324-4bhif-syp-project-ecopoints/CarOBDDeocumentation[Compatibility]
+https://2324-4bhif-syp.github.io/2324-4bhif-syp-project-ecopoints/CarOBDDocumentation[Compatibility]
 
 == Android App
 

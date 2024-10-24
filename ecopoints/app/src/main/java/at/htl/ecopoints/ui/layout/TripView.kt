@@ -21,7 +21,18 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Air
+import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.DirectionsCar
+import androidx.compose.material.icons.filled.LocalGasStation
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.OilBarrel
+import androidx.compose.material.icons.filled.RotateRight
+import androidx.compose.material.icons.filled.Speed
+import androidx.compose.material.icons.filled.Terrain
+import androidx.compose.material.icons.filled.Thermostat
+import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -34,6 +45,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -113,21 +125,52 @@ class TripView {
                 ) {
                     Scaffold(
                         topBar = {
-                            Row(
+                            Surface(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .background(MaterialTheme.colorScheme.tertiaryContainer),
-                                horizontalArrangement = Arrangement.Start
+                                    .background(MaterialTheme.colorScheme.surface),
+                                color = MaterialTheme.colorScheme.surface,
+                                shadowElevation = 4.dp,
                             ) {
-                                Button(onClick = {
-                                    store.next { it.tripViewModel.map.showMap = true }
-                                }) {
-                                    Text(text = "Map")
-                                }
-                                Button(onClick = {
-                                    store.next { it.tripViewModel.showTestCommandDialog = true }
-                                }) {
-                                    Text(text = "TestCommands")
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 16.dp, vertical = 12.dp),
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Button(
+                                        onClick = {
+                                            store.next { it.tripViewModel.map.showMap = true }
+                                        },
+                                        modifier = Modifier
+                                            .weight(1f)
+                                            .padding(end = 8.dp),
+                                        colors = ButtonDefaults.buttonColors(
+                                            containerColor = MaterialTheme.colorScheme.primaryContainer,
+                                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                                        ),
+                                        shape = MaterialTheme.shapes.medium,
+                                        elevation = ButtonDefaults.buttonElevation(4.dp)
+                                    ) {
+                                        Text(text = "Map", style = MaterialTheme.typography.bodyLarge)
+                                    }
+
+                                    Button(
+                                        onClick = {
+                                            store.next { it.tripViewModel.showTestCommandDialog = true }
+                                        },
+                                        modifier = Modifier
+                                            .weight(1f)
+                                            .padding(start = 8.dp),
+                                        colors = ButtonDefaults.buttonColors(
+                                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                                            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                                        ),
+                                        shape = MaterialTheme.shapes.medium,
+                                        elevation = ButtonDefaults.buttonElevation(4.dp)
+                                    ) {
+                                        Text(text = "Test Commands", style = MaterialTheme.typography.bodyLarge)
+                                    }
                                 }
                             }
                         },
@@ -259,65 +302,163 @@ class TripView {
         ) {
             val data = state.value
 
-            // Row for Speed and RPM
+            SectionHeader(title = "Vehicle Data")
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                Gauge(title = "GPS-Speed", value = data["Gps-Speed"] ?: "0", unit = "km/h")
-                Gauge(title = "Armin-Speed", value = data["Armin-Speed"] ?: "0", unit = "km/h")
+
+                InfoCard(
+                    title = "GPS-Speed",
+                    value = "${data["Gps-Speed"] ?: "0"} km/h",
+                    icon = Icons.Default.LocationOn
+                )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Row for Coolant Temp and Intake Temp
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-//                Gauge(title = "RPM2", value = data["Engine RPM_CLEANED_RES"] ?: "0", unit = "rpm")
-                Gauge(title = "Obd-Speed", value = data["Vehicle Speed"] ?: "0", unit = "km/h")
-                Gauge(title = "RPM", value = data["Engine RPM"] ?: "0", unit = "rpm")
+                InfoCard(
+                    title = "Obd-Speed",
+                    value = "${data["Vehicle Speed"] ?: "0"} km/h",
+                    icon = Icons.Default.Speed
+                )
+                InfoCard(
+                    title = "RPM",
+                    value = "${data["Engine RPM"] ?: "0"} rpm",
+                    icon = Icons.Default.RotateRight
+                )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Row for Engine Load and MAF
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                Gauge(title = "Engine Load", value = data["Engine Load"] ?: "0", unit = "%")
-                Gauge(title = "Throttle Position", value = data["Throttle Position"] ?: "0", unit = "%")
+                InfoCard(
+                    title = "Engine Load",
+                    value = "${data["Engine Load"] ?: "0"}%",
+                    icon = Icons.Default.Build
+                )
+                InfoCard(
+                    title = "Throttle Position",
+                    value = "${data["Throttle Position"] ?: "0"}%",
+                    icon = Icons.Default.Tune
+                )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
 
             // Row for Distance, Driving Time, and Avg Speed
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                InfoCard(title = "Engine Coolant Temperature", value = data["Engine Coolant Temperature"] ?: "0", unit = "°C")
-                InfoCard(title = "Fuel Consumption Rate", value = data["Fuel Consumption Rate"] ?: "0", unit = "L/H")
-                InfoCard(title = "Engine Oil Temperature", value = data["Engine Oil Temperature"] ?: "0", unit = "°C")
+                InfoCard(
+                    title = "Coolant Temp",
+                    value = "${data["Engine Coolant Temperature"] ?: "0"} °C",
+                    icon = Icons.Default.Thermostat
+                )
+                InfoCard(
+                    title = "Air intake Temp",
+                    value = "${data["Ambient Air Temperature"] ?: "0"} °C",
+                    icon = Icons.Default.Air
+                )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
 
-            // Row for Fuel Efficiency
+            SectionHeader(title = "GPS Data")
+
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                InfoCard(title = "Latitude", value = data["Latitude"] ?: "0", unit = "")
-                InfoCard(title = "Longitude", value = data["Longitude"] ?: "0", unit = "")
-                InfoCard(title = "Altitude", value = data["Altitude"] ?: "0", unit = "")
+                InfoCard(
+                    title = "Latitude",
+                    value = "${data["Latitude"] ?: "0"}",
+                    icon = Icons.Default.LocationOn
+                )
+                InfoCard(
+                    title = "Longitude",
+                    value = "${data["Longitude"] ?: "0"}",
+                    icon = Icons.Default.LocationOn
+                )
+                InfoCard(
+                    title = "Altitude",
+                    value = "${data["Altitude"] ?: "0"} m",
+                    icon = Icons.Default.Terrain
+                )
             }
 
             GForceMonitor(context)
         }
     }
+
+
+    @Composable
+    fun InfoCard(title: String, value: String, icon: ImageVector) {
+        Card(
+            modifier = Modifier
+                .padding(8.dp)
+                .width(120.dp)
+                .height(100.dp),
+            elevation = CardDefaults.cardElevation(6.dp),
+            shape = MaterialTheme.shapes.medium,
+            colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surfaceVariant)
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(12.dp)
+            ) {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp),
+                    tint = MaterialTheme.colorScheme.primary
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Text(
+                    text = value,
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    textAlign = TextAlign.Center
+                )
+            }
+        }
+    }
+
+
+    @Composable
+    fun SectionHeader(title: String){
+        Text(
+            text= title,
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 12.dp, horizontal = 16.dp),
+            textAlign = TextAlign.Start
+        )
+    }
+
+
 
     // Components for the custom UI elements with size adjustments
     @Composable
@@ -325,39 +466,39 @@ class TripView {
         Card(
             modifier = modifier
 //                .padding(start = 20.dp, end = 20.dp, top = 3.dp, bottom = 3.dp)
-                .height(70.dp)  // Height of the card
-                .width(110.dp)  // Width of the card (make it longer)
-                .clip(MaterialTheme.shapes.large) // Apply rounded corners
+                .height(70.dp)
+                .width(110.dp)
+                .clip(MaterialTheme.shapes.large)
                 .background(MaterialTheme.colorScheme.secondaryContainer),
             elevation = CardDefaults.cardElevation(
                 defaultElevation = 10.dp
-            ), // Shadow effect
+            ),
         ) {
             Box(
-                modifier = Modifier.fillMaxSize(), // Fill the entire card
-                contentAlignment = Alignment.Center // Center content both vertically and horizontally
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center // Center content vertically
+                    verticalArrangement = Arrangement.Center
                 ) {
                     Text(
                         text = title,
                         style = MaterialTheme.typography.bodySmall,
                         fontSize = 12.sp,
-                        textAlign = TextAlign.Center // Center the title text
+                        textAlign = TextAlign.Center
                     )
-                    // Simulate a circular gauge here
                     Text(
                         text = "$value $unit",
                         style = MaterialTheme.typography.titleMedium,
                         fontSize = 18.sp,
-                        textAlign = TextAlign.Center // Center the value text
+                        textAlign = TextAlign.Center
                     )
                 }
             }
         }
     }
+
 
 
     @Composable
@@ -379,23 +520,7 @@ class TripView {
         }
     }
 
-    @Composable
-    fun InfoCard(title: String, value: String, unit: String, modifier: Modifier = Modifier) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = modifier
-                .padding(4.dp)
-                .size(100.dp)
-                .background(MaterialTheme.colorScheme.secondaryContainer)
-        ) {
-            Text(text = title, style = MaterialTheme.typography.bodySmall, fontSize = 12.sp)
-            Text(
-                text = "$value $unit",
-                style = MaterialTheme.typography.titleMedium,
-                fontSize = 18.sp
-            )
-        }
-    }
+
 
     @Composable
     fun GForceMonitor(context: Context) {
@@ -601,7 +726,7 @@ class TripView {
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Row {
+            Row(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
                 Button(
                     shape = MaterialTheme.shapes.medium,
                     onClick = { startTrip() },
@@ -621,7 +746,7 @@ class TripView {
                     Text(text = "Stop Trip")
                 }
             }
-            Row {
+            Row(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
                 Button(
                     shape = MaterialTheme.shapes.medium,
                     onClick = { btConnectionHandler.createConnection(state.value.selectedDevice) },
@@ -642,7 +767,7 @@ class TripView {
                     Text(text = "Select Device")
                 }
             }
-            Row {
+            Row(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
                 Column(
                     modifier = Modifier.weight(1f)
                 ) {

@@ -1,10 +1,17 @@
 package at.htl.ecopoints.ui.layout
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Context.SENSOR_SERVICE
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -17,6 +24,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,6 +32,7 @@ import androidx.compose.runtime.rxjava3.subscribeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -157,7 +166,7 @@ class TripView {
                                     .fillMaxWidth()
                                     .padding(8.dp)  // Add some padding for visibility
                             ) {
-                                LiveCarData(store)  // Display your car data here
+                                LiveCarData(store, context = activity.applicationContext)  // Display your car data here
                             }
 
                             // Other composables below
@@ -227,7 +236,7 @@ class TripView {
 //region LiveData Visual
 
     @Composable
-    fun LiveCarData(store: Store) {
+    fun LiveCarData(store: Store, context : Context) {
         val isConnectedState =
             store.subject.map { it.tripViewModel.isConnected }.subscribeAsState(false)
         val state = store.subject.map { it.tripViewModel.carData }
@@ -305,6 +314,8 @@ class TripView {
                 InfoCard(title = "Longitude", value = data["Longitude"] ?: "0", unit = "")
                 InfoCard(title = "Altitude", value = data["Altitude"] ?: "0", unit = "")
             }
+
+            GForceMonitor(context)
         }
     }
 
@@ -386,6 +397,91 @@ class TripView {
         }
     }
 
+    @Composable
+    fun GForceMonitor(context: Context) {
+        val sensorManager = context.getSystemService(SENSOR_SERVICE) as SensorManager
+        val accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+
+        var xForce = remember { mutableStateOf(0f) }
+        var yForce = remember { mutableStateOf(0f) }
+        var zForce = remember { mutableStateOf(0f) }
+
+        var xOffset = remember { mutableStateOf(0f) }
+        var yOffset = remember { mutableStateOf(0f) }
+        var zOffset = remember { mutableStateOf(0f) }
+
+        var isCalibrated = remember { mutableStateOf(false) }
+
+        val sensorEventListener = object : SensorEventListener {
+            override fun onSensorChanged(event: SensorEvent) {
+                val rawX = event.values[0]
+                val rawY = event.values[1]
+                val rawZ = event.values[2]
+
+                // Apply calibration offsets after calibration
+                if (isCalibrated.value) {
+                    xForce.value = rawX - xOffset.value
+                    yForce.value = rawY - yOffset.value
+                    zForce.value = rawZ - zOffset.value
+                } else {
+                    xForce.value = rawX
+                    yForce.value = rawY
+                    zForce.value = rawZ
+                }
+            }
+
+            override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
+        }
+
+        DisposableEffect(Unit) {
+            sensorManager.registerListener(
+                sensorEventListener,
+                accelerometer,
+                SensorManager.SENSOR_DELAY_UI
+            )
+            onDispose {
+                sensorManager.unregisterListener(sensorEventListener)
+            }
+        }
+
+        // UI with Calibration Button
+        Column {
+            GForceDisplay(xForce.value, yForce.value, zForce.value)
+
+            Button(onClick = {
+                // Set the current g-forces as the offsets (calibration)
+                xOffset = xForce
+                yOffset = yForce
+                zOffset = zForce
+                isCalibrated.value = true
+            }) {
+                Text("Calibrate")
+            }
+        }
+    }
+
+    @Composable
+    fun GForceDisplay(xForce: Float, yForce: Float, zForce: Float) {
+        val maxForce = 10f  // Arbitrary max force for scaling (adjust as needed)
+
+        Box(modifier = Modifier.fillMaxSize()) {
+            Canvas(modifier = Modifier.size(300.dp)) {
+                val canvasSize = size.minDimension
+                val radius = canvasSize / 2
+                val center = Offset(radius, radius)
+
+                // Draw outer circle
+                drawCircle(color = Color.LightGray, radius = radius)
+
+                // Map the g-forces to the screen space (adjust scaling as needed)
+                val dotX = (xForce / maxForce) * radius
+                val dotY = (yForce / maxForce) * radius
+
+                // Draw the dot representing the g-force
+                drawCircle(color = Color.Red, radius = 10f, center = center + Offset(dotX, -dotY))
+            }
+        }
+    }
 
 //endregion
 

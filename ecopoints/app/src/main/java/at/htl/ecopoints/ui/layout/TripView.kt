@@ -696,7 +696,7 @@ class TripView {
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Row {
+            Row(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
                 Button(
                     shape = MaterialTheme.shapes.medium,
                     onClick = { startTrip() },
@@ -716,7 +716,7 @@ class TripView {
                     Text(text = "Stop Trip")
                 }
             }
-            Row {
+            Row(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
                 Button(
                     shape = MaterialTheme.shapes.medium,
                     onClick = { btConnectionHandler.createConnection(state.value.selectedDevice) },
@@ -737,7 +737,7 @@ class TripView {
                     Text(text = "Select Device")
                 }
             }
-            Row {
+            Row(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
                 Column(
                     modifier = Modifier.weight(1f)
                 ) {

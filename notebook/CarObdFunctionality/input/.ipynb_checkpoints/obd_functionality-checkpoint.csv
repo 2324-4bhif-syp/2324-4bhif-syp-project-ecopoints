@@ -1,0 +1,20 @@
+Funktionalität;BMW 3 Benzin 2004;Renault Laguna Diesel 2004;BMW 3 Diesel 2011;VW Passat Diesel 2013;VW Polo Diesel 2019;Audi A4 Diesel 2019
+Intake Manifold Pressure;1;1;0;0;0;0
+Ambient Air Temperature;1;1;0;0;0;0
+Barometric Pressure;1;1;0;0;0;0
+Engine Runtime;1;1;1;0;0;0
+Engine Coolant Temperature;0;0;2;0;0;0
+Engine RPM;1;1;0;0;0;2
+Engine Load;1;1;1;2;2;2
+Relative Throttle Position;2;2;2;2;2;2
+Throttle Position;0;2;2;2;2;2
+Fuel Rail Gauge Pressure;1;1;1;2;2;0
+Fuel Level;1;1;2;1;1;0
+Engine Oil Temperature;0;1;0;1;1;1
+VIN;0;2;1;1;0;0
+Vehicle Speed;2;0;1;0;0;0
+Air Intake Temperature;1;0;1;0;0;0
+Engine Absolute Load;1;1;2;1;1;1
+Fuel Rail Pressure;1;1;1;1;1;1
+Fuel Consumption Rate;1;1;1;1;1;1
+Fuel Pressure;1;1;1;1;1;1

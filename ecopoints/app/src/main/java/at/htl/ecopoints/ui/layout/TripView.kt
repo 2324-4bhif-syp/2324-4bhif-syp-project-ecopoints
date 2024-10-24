@@ -21,6 +21,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Air
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.DirectionsCar
@@ -283,12 +284,6 @@ class TripView {
                     value = "${data["Gps-Speed"] ?: "0"} km/h",
                     icon = Icons.Default.LocationOn
                 )
-                InfoCard(
-                    title = "Armin-Speed",
-                    value = "${data["Armin-Speed"] ?: "0"} km/h",
-                    icon = Icons.Default.DirectionsCar
-                )
-
             }
 
             Row(
@@ -343,14 +338,9 @@ class TripView {
                     icon = Icons.Default.Thermostat
                 )
                 InfoCard(
-                    title = "Fuel Rate",
-                    value = "${data["Fuel Consumption Rate"] ?: "0"} L/H",
-                    icon = Icons.Default.LocalGasStation
-                )
-                InfoCard(
-                    title = "Oil Temp",
-                    value = "${data["Engine Oil Temperature"] ?: "0"} °C",
-                    icon = Icons.Default.OilBarrel
+                    title = "Air intake Temp",
+                    value = "${data["Ambient Air Temperature"] ?: "0"} °C",
+                    icon = Icons.Default.Air
                 )
             }
 

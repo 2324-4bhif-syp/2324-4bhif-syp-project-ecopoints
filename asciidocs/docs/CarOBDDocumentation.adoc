@@ -7,9 +7,27 @@
 === Audi A4 Diesel 2019
 
 |===
-| Fahrzeugdaten | Status
+| Fahrzeugdaten | Resultat | Status
 
-| Engine Load | &#x2714;
+| Engine Load | 14,5% | &#x2714;
+| Intake Manifold Pressure | 99 kPa | &#x2714;
+| Engine Runtime | 00:01:03 | &#x2714;
+| Relative Throttle Position | 19.6% | &#x003F;
+| Air Intake Temperature | 23.0 °C | &#x2714;
+| Fuel Rail Pressure | Error | &#x2716;
+| Fuel Consumption Rate | Error | &#x2716;
+| Engine Coolant Temperature | 38 °C | &#x2714;
+| Fuel Type | Error | &#x2716;
+| Barometric Pressure | 99 kPa | &#x2714;
+| Ambient Air Temperature | 21 °C | &#x2714;
+| Throttle Position | 27.8% | &#x003F;
+| Fuel Rail Gauge Pressure | 30020 kPa | &#x003F;
+| Fuel Level | 9.0% | &#x2714;
+| Engine Oil Temperature | Error | &#x2716;
+| VIN | | &#x2714;
+| Vehicle Speed | 0 Km/h | &#x2714;
+| Engine RPM | 3760516694891 RPM | &#x003F;
+| Fuel Pressure | Error | &#x2716;
 |===
 
 === BMW 3 Diesel 2011
@@ -20,4 +38,4 @@
 
 === BMW 3 Benzin 2004
 
-=== Renault Laguna Diesel 2005
+=== Renault Laguna Diesel 2004

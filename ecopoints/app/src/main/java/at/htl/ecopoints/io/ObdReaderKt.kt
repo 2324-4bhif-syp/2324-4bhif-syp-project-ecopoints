@@ -23,12 +23,18 @@ import com.github.eltonvs.obd.command.engine.RelativeThrottlePositionCommand
 import com.github.eltonvs.obd.command.engine.RuntimeCommand
 import com.github.eltonvs.obd.command.engine.SpeedCommand
 import com.github.eltonvs.obd.command.engine.ThrottlePositionCommand
+import com.github.eltonvs.obd.command.fuel.FuelAirEquivalenceRatioCommand
 import com.github.eltonvs.obd.command.fuel.FuelConsumptionRateCommand
 import com.github.eltonvs.obd.command.fuel.FuelLevelCommand
+import com.github.eltonvs.obd.command.fuel.FuelTrimCommand
 import com.github.eltonvs.obd.command.fuel.FuelTypeCommand
+import com.github.eltonvs.obd.command.pressure.BarometricPressureCommand
 import com.github.eltonvs.obd.command.pressure.FuelPressureCommand
+import com.github.eltonvs.obd.command.pressure.FuelRailGaugePressureCommand
 import com.github.eltonvs.obd.command.pressure.FuelRailPressureCommand
+import com.github.eltonvs.obd.command.pressure.IntakeManifoldPressureCommand
 import com.github.eltonvs.obd.command.temperature.AirIntakeTemperatureCommand
+import com.github.eltonvs.obd.command.temperature.AmbientAirTemperatureCommand
 import com.github.eltonvs.obd.command.temperature.EngineCoolantTemperatureCommand
 import com.github.eltonvs.obd.command.temperature.OilTemperatureCommand
 import com.github.eltonvs.obd.connection.ObdDeviceConnection
@@ -51,20 +57,6 @@ class ObdReaderKt {
     private val TAG = ObdReader::class.java.getSimpleName()
     private val TEST_COMMANDS_TAG = "OBD_COMMAND_TEST"
 
-    class RpmCleanedResCommand : ObdCommand() {
-        override val tag = "ENGINE_RPM_CLEANED_RES"
-        override val name = "Engine RPM_CLEANED_RES"
-        override val mode = "01"
-        override val pid = "0C"
-
-        override val defaultUnit = "RPM"
-        override val handler = { it: ObdRawResponse ->
-            (bytesToInt(
-                it.bufferedValue, bytesToProcess = 2
-            ) / 4).toString()
-        }
-    }
-
     var scope = CoroutineScope(Dispatchers.IO)
 
     val obdSetupCommands = listOf<ObdCommand>(
@@ -83,21 +75,34 @@ class ObdReaderKt {
 
     val obdCommands = listOf<ObdCommand>(
         RPMCommand(),
-//        RpmCleanedResCommand(),
         SpeedCommand(),
-        FuelConsumptionRateCommand(),
-        LoadCommand(),
+
         AbsoluteLoadCommand(),
+        LoadCommand(),
+
         ThrottlePositionCommand(),
         RelativeThrottlePositionCommand(),
-        FuelTypeCommand(),
+
         EngineCoolantTemperatureCommand(),
         OilTemperatureCommand(),
+        AirIntakeTemperatureCommand(),
+        AmbientAirTemperatureCommand(),
+
         RuntimeCommand(),
+
+        VINCommand(),
+
         FuelLevelCommand(),
         FuelTypeCommand(),
-        VINCommand()
-    )
+        FuelConsumptionRateCommand(),
+        FuelRailPressureCommand(),
+        FuelPressureCommand(),
+        FuelRailGaugePressureCommand(),
+
+        IntakeManifoldPressureCommand(),
+        BarometricPressureCommand(),
+
+        )
 
     val carDataCommands = listOf<ObdCommand>(
         RPMCommand(),
@@ -159,7 +164,7 @@ class ObdReaderKt {
                         Log.i(TEST_COMMANDS_TAG, "Running command ${command.name}")
 
 
-                        val result = obdConnection.run(command, false, 0, 0)
+                        val result = obdConnection.run(command, false, 250, 0)
 
                         Log.d(TEST_COMMANDS_TAG, buildObdResultLog(result))
 
@@ -169,7 +174,6 @@ class ObdReaderKt {
                                 result.formattedValue
                         }
 
-                        delay(500)
                     } catch (e: Exception) {
                         Log.e(
                             TEST_COMMANDS_TAG,
@@ -180,6 +184,7 @@ class ObdReaderKt {
                             it.tripViewModel.obdTestCommandResults[command.name] =
                                 "Error running command"
                         }
+                        delay(500)
                     }
                 }
             } catch (e: Exception) {

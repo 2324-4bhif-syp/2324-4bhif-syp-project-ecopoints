@@ -211,7 +211,7 @@ class ObdReaderKt {
 
                             writer.log(TAG + ": " + "Running command ${command.name}")
 
-                            val result = obdConnection.run(command, false, 250, 5)
+                            val result = obdConnection.run(command, false, 100, 5)
 
                             Log.d(TAG, buildObdResultLog(result))
                             writer.log(TAG + ": " + buildObdResultLog(result))
@@ -226,7 +226,7 @@ class ObdReaderKt {
                             Log.e(TAG, "Error running OBD2 command ${command.name}", e)
                             writer.log(TAG + ": " + "Error running OBD2 command ${command.name}" + e);
                         }
-                        delay(1000)
+                        delay(100)
                     }
 
                     // Take a snapshot and convert to JSON

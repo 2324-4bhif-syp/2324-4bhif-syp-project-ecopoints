@@ -555,168 +555,115 @@ pre.rouge .gs {
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_current_state_11_10_2024">1. Current-State - 11.10.2024</a>
+<li><a href="#_obd_compatibility">1. OBD Compatibility</a></li>
+<li><a href="#_android_app">2. Android App</a>
 <ul class="sectlevel2">
-<li><a href="#_problems">1.1. Problems</a></li>
-<li><a href="#_task">1.2. Task</a></li>
-<li><a href="#_goals">1.3. Goals</a></li>
+<li><a href="#_features">2.1. Features</a></li>
+<li><a href="#_communication_with_obd">2.2. Communication with OBD</a></li>
 </ul>
 </li>
-<li><a href="#_getting_started">2. Getting Started</a>
+<li><a href="#_getting_started">3. Getting Started</a>
 <ul class="sectlevel2">
-<li><a href="#_android_app">2.1. Android App</a></li>
-<li><a href="#_backend">2.2. Backend</a></li>
+<li><a href="#_android_app_2">3.1. Android App</a></li>
+<li><a href="#_backend">3.2. Backend</a></li>
 </ul>
 </li>
-<li><a href="#_android_app_2">3. Android App</a>
-<ul class="sectlevel2">
-<li><a href="#_features">3.1. Features</a></li>
+<li><a href="#_klassendiagramm">4. Klassendiagramm</a></li>
+<li><a href="#_endpoints">5. Endpoints</a>
+<ul class="sectlevel3">
+<li><a href="#_trips">5.1. Trips</a></li>
+<li><a href="#_cardata">5.2. CarData</a></li>
+<li><a href="#_user">5.3. User</a></li>
 </ul>
 </li>
-<li><a href="#_api">4. API</a>
-<ul class="sectlevel2">
-<li><a href="#_communication_with_obd">4.1. Communication with OBD</a></li>
-<li><a href="#_klassendiagramm">4.2. Klassendiagramm</a></li>
-<li><a href="#_endpoints">4.3. Endpoints</a></li>
-</ul>
-</li>
-<li><a href="#_deployment">5. Deployment</a></li>
+<li><a href="#_deployment">6. Deployment</a></li>
 </ul>
 </div>
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="_current_state_11_10_2024"><a class="anchor" href="#_current_state_11_10_2024"></a>1. Current-State - 11.10.2024</h2>
+<h2 id="_obd_compatibility"><a class="anchor" href="#_obd_compatibility"></a>1. OBD Compatibility</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Android App:</p>
+<p><a href="https://2324-4bhif-syp.github.io/2324-4bhif-syp-project-ecopoints/CarOBDDeocumentation">Compatibility</a></p>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_android_app"><a class="anchor" href="#_android_app"></a>2. Android App</h2>
+<div class="sectionbody">
 <div class="ulist">
 <ul>
 <li>
-<p>Manche OBD2-Daten werden ausgelesen und angezeigt</p>
+<p>Development Environment: Android Studio Ladybug</p>
 </li>
 <li>
-<p>Live Anzeige von Fahrdaten und GPS Daten (Broken)</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Live Fahrt auf Google Maps</p>
-</li>
-<li>
-<p>Anzeige der gefahrenen Strecke mittels Polyline</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Ranking Mockup</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Anzeige des eigenen Rankings</p>
-</li>
-<li>
-<p>Anzeige anderer Nutzer (Ranking)</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Profil Mockup</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Anzeige der Eco-Points</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Anzeigen von Fahrten</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Mit Google Maps Integration</p>
-</li>
-<li>
-<p>Anzeigen der gefahrenen Strecke mittels Polyline</p>
-</li>
-<li>
-<p>Fahrdaten (Durchschnittsgeschwindigkeit, Durchschnittsverbrauch, etc.)</p>
-</li>
-</ul>
-</div>
+<p>Target SDK: 34 (Android 14)</p>
 </li>
 </ul>
 </div>
 <div class="sect2">
-<h3 id="_problems"><a class="anchor" href="#_problems"></a>1.1. Problems</h3>
+<h3 id="_features"><a class="anchor" href="#_features"></a>2.1. Features</h3>
 <div class="ulist">
 <ul>
 <li>
-<p>OBD2-Daten werden nicht immer korrekt ausgelesen</p>
+<p>Auslesen von OBD2-Daten</p>
 </li>
 <li>
-<p>Google Maps API ist ausgelaufen</p>
+<p>Live Anzeige von Fahrdaten</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Speichern der Daten während der Fahrt</p>
+</li>
+</ul>
+</div>
 </li>
 <li>
-<p>Das Backend läuft auf keinem Server und ist nicht erreichbar</p>
+<p>Ranking</p>
 </li>
 <li>
-<p>Berechnung der Eco-Points ist noch nicht implementiert</p>
+<p>Profil</p>
 </li>
 </ul>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_task"><a class="anchor" href="#_task"></a>1.2. Task</h3>
-<div class="ulist">
-<ul>
-<li>
-<p>OBD2-Daten korrekt auslesen</p>
-</li>
-<li>
-<p>Daten während der Fahrt speichern</p>
-</li>
-<li>
-<p>Google Maps API erneuern oder eine andere Karten API verwenden</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Z.B. OpenStreetMap</p>
-</li>
-</ul>
+<h3 id="_communication_with_obd"><a class="anchor" href="#_communication_with_obd"></a>2.2. Communication with OBD</h3>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Ein OBD2-Adapter wird für das Auslesen der Daten benötigt.
+</td>
+</tr>
+</table>
 </div>
-</li>
-<li>
-<p>Backend auf einem Server deployen</p>
-<div class="ulist">
-<ul>
-<li>
-<p>CI/CD Pipeline für ein automatisches Deployment</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_goals"><a class="anchor" href="#_goals"></a>1.3. Goals</h3>
 <div class="paragraph">
-<p>Ecopoints app soll es ermöglichen, Fahrdaten auszulesen und anhand dieser Daten Eco-Points zu berechnen.
-Diese Eco-Points sollen in einem Ranking angezeigt werden.
-Die App soll auch die Möglichkeit bieten, die gefahrenen Strecken auf einer Karte anzuzeigen.</p>
+<p>Die Kommunikation mit dem OBD2-Adapter erfolgt über Bluetooth.
+Der Adapter wird mit dem Smartphone verbunden und die App kann die Daten auslesen.</p>
+</div>
+<div class="paragraph">
+<p>Wir benutzen die Bibliothek eltonvs / kotlin-obd-api für die Kommunikation mit dem OBD2-Adapter.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://github.com/eltonvs/kotlin-obd-api">github.com/eltonvs/kotlin-obd-api</a></p>
+</li>
+</ul>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_getting_started"><a class="anchor" href="#_getting_started"></a>2. Getting Started</h2>
+<h2 id="_getting_started"><a class="anchor" href="#_getting_started"></a>3. Getting Started</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_android_app"><a class="anchor" href="#_android_app"></a>2.1. Android App</h3>
+<h3 id="_android_app_2"><a class="anchor" href="#_android_app_2"></a>3.1. Android App</h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -747,7 +694,7 @@ Die App soll auch die Möglichkeit bieten, die gefahrenen Strecken auf einer Kar
 </div>
 </div>
 <div class="sect2">
-<h3 id="_backend"><a class="anchor" href="#_backend"></a>2.2. Backend</h3>
+<h3 id="_backend"><a class="anchor" href="#_backend"></a>3.2. Backend</h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -780,109 +727,24 @@ Die App soll auch die Möglichkeit bieten, die gefahrenen Strecken auf einer Kar
 </div>
 </div>
 <div class="sect1">
-<h2 id="_android_app_2"><a class="anchor" href="#_android_app_2"></a>3. Android App</h2>
+<h2 id="_klassendiagramm"><a class="anchor" href="#_klassendiagramm"></a>4. Klassendiagramm</h2>
 <div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p>Development Environment: Android Studio Ladybug</p>
-</li>
-<li>
-<p>Target SDK: 34 (Android 14)</p>
-</li>
-</ul>
-</div>
-<div class="sect2">
-<h3 id="_features"><a class="anchor" href="#_features"></a>3.1. Features</h3>
-<div class="ulist">
-<ul>
-<li>
-<p>Auslesen von OBD2-Daten</p>
-</li>
-<li>
-<p>Live Anzeige von Fahrdaten</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Speichern der Daten während der Fahrt</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Anzeige von Fahrten</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Mit Karte - Google Maps API</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Ranking</p>
-</li>
-<li>
-<p>Profil</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_api"><a class="anchor" href="#_api"></a>4. API</h2>
-<div class="sectionbody">
-<div class="imageblock">
-<div class="content">
-<img src="images/img/EcoPoints-Diagram" alt="EcoPoints Diagram">
-</div>
-</div>
-<div class="sect2">
-<h3 id="_communication_with_obd"><a class="anchor" href="#_communication_with_obd"></a>4.1. Communication with OBD</h3>
-<div class="admonitionblock important">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-important" title="Important"></i>
-</td>
-<td class="content">
-Ein OBD2-Adapter wird für das Auslesen der Daten benötigt.
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>Die Kommunikation mit dem OBD2-Adapter erfolgt über Bluetooth.
-Der Adapter wird mit dem Smartphone verbunden und die App kann die Daten auslesen.</p>
-</div>
-<div class="paragraph">
-<p>Wir benutzen die Bibliothek eltonvs / kotlin-obd-api für die Kommunikation mit dem OBD2-Adapter.</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="https://github.com/eltonvs/kotlin-obd-api">github.com/eltonvs/kotlin-obd-api</a></p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_klassendiagramm"><a class="anchor" href="#_klassendiagramm"></a>4.2. Klassendiagramm</h3>
 <div class="imageblock">
 <div class="content">
 <img src="images/cld.png" alt="Diagram" width="972" height="404">
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_endpoints"><a class="anchor" href="#_endpoints"></a>4.3. Endpoints</h3>
+</div>
+<div class="sect1">
+<h2 id="_endpoints"><a class="anchor" href="#_endpoints"></a>5. Endpoints</h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>Die kommunikation mit dem Backend erfolgt über REST-Endpoints.
 Das Speichern von Trips und Fahrdaten erfolgt beim Beenden einer Fahrt.</p>
 </div>
 <div class="sect3">
-<h4 id="_trips"><a class="anchor" href="#_trips"></a>4.3.1. Trips</h4>
+<h4 id="_trips"><a class="anchor" href="#_trips"></a>5.1. Trips</h4>
 <div class="paragraph">
 <p>Ein Trip setzt sich aus mehreren CarData-Objekten zusammen, die während der Fahrt laufend gesammelt werden.</p>
 </div>
@@ -905,7 +767,7 @@ Das Speichern von Trips und Fahrdaten erfolgt beim Beenden einer Fahrt.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_cardata"><a class="anchor" href="#_cardata"></a>4.3.2. CarData</h4>
+<h4 id="_cardata"><a class="anchor" href="#_cardata"></a>5.2. CarData</h4>
 <div class="paragraph">
 <p>Ein CarData-Objekt enthält die Daten, die während der Fahrt gesammelt werden.</p>
 </div>
@@ -933,7 +795,7 @@ Das Speichern von Trips und Fahrdaten erfolgt beim Beenden einer Fahrt.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_user"><a class="anchor" href="#_user"></a>4.3.3. User</h4>
+<h4 id="_user"><a class="anchor" href="#_user"></a>5.3. User</h4>
 <div class="paragraph">
 <p>Der User hat die Möglichkeit, sich einzuloggen, seine Fahrten zu tracken und seine Eco-Points zu sehen.</p>
 </div>
@@ -945,9 +807,8 @@ Das Speichern von Trips und Fahrdaten erfolgt beim Beenden einer Fahrt.</p>
 </div>
 </div>
 </div>
-</div>
 <div class="sect1">
-<h2 id="_deployment"><a class="anchor" href="#_deployment"></a>5. Deployment</h2>
+<h2 id="_deployment"><a class="anchor" href="#_deployment"></a>6. Deployment</h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
@@ -962,7 +823,7 @@ Das Speichern von Trips und Fahrdaten erfolgt beim Beenden einer Fahrt.</p>
 </div>
 </li>
 <li>
-<p>Neue Deployment-Strategie</p>
+<p>Neue Deployment-Strategie to be done</p>
 </li>
 </ul>
 </div>
@@ -971,7 +832,7 @@ Das Speichern von Trips und Fahrdaten erfolgt beim Beenden einer Fahrt.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-10-24 18:48:45 UTC
+Last updated 2024-10-24 20:04:17 UTC
 </div>
 </div>
 </body>

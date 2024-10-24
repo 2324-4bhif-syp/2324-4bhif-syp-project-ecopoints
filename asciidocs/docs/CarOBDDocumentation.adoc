@@ -27,3 +27,11 @@
 | Fuel Consumption Rate ^.^| [red]#&#x2716;#  ^.^| [red]#&#x2716;#  ^.^| [red]#&#x2716;#  ^.^| [red]#&#x2716;#  ^.^| [red]#&#x2716;#  ^.^| [red]#&#x2716;# 
 | Fuel Pressure ^.^| [red]#&#x2716;#  ^.^| [red]#&#x2716;#  ^.^| [red]#&#x2716;#  ^.^| [red]#&#x2716;#  ^.^| [red]#&#x2716;#  ^.^| [red]#&#x2716;# 
 |===
+
+== OBD-Funktionalität bei verschiedenen Fahrzeugen
+
+image::img/carobdfunctionality.png[OBD-Funktionalität bei verschiedenen Fahrzeugen]
+
+== OBD-Funktionsfähigkeit
+
+image::img/obdfunctionality.png[OBD-Funktionsfähigkeit]

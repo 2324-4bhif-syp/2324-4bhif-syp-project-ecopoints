@@ -430,9 +430,12 @@ class TripView {
                 val linearAccelerationY = event.values[1] - gravity[1]
                 val linearAccelerationZ = event.values[2] - gravity[2]
 
-                val calibratedX = if (isCalibrated.value) linearAccelerationX - xOffset.value else linearAccelerationX
-                val calibratedY = if (isCalibrated.value) linearAccelerationY - yOffset.value else linearAccelerationY
-                val calibratedZ = if (isCalibrated.value) linearAccelerationZ - zOffset.value else linearAccelerationZ
+                val calibratedX =
+                    if (isCalibrated.value) linearAccelerationX - xOffset.value else linearAccelerationX
+                val calibratedY =
+                    if (isCalibrated.value) linearAccelerationY - yOffset.value else linearAccelerationY
+                val calibratedZ =
+                    if (isCalibrated.value) linearAccelerationZ - zOffset.value else linearAccelerationZ
 
                 xForce.value = calibratedX
                 yForce.value = calibratedY
@@ -445,7 +448,8 @@ class TripView {
                 val newTotalGForce = kotlin.math.sqrt(gX * gX + gY * gY + gZ * gZ)
 
                 if (previousGForces.size > 0) {
-                    totalGForce.value = (previousGForces.last() * (1 - smoothingFactor)) + (newTotalGForce * smoothingFactor)
+                    totalGForce.value =
+                        (previousGForces.last() * (1 - smoothingFactor)) + (newTotalGForce * smoothingFactor)
                 } else {
                     totalGForce.value = newTotalGForce
                 }
@@ -471,50 +475,79 @@ class TripView {
             }
         }
 
-        Column {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            // Display total G-Force value
+            Text(
+                text = "Total G-Force: ${totalGForce.value} g",
+                fontSize = 20.sp,
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
 
-            Text(text = "Total G-Force: ${totalGForce.value} g", fontSize = 18.sp)
+            // Display G-Force visualization
+            GForceDisplay(
+                xForce = xForce.value,
+                yForce = yForce.value,
+                zForce = zForce.value,
+                modifier = Modifier.padding(16.dp)
+            )
 
-            GForceDisplay(xForce.value, yForce.value, zForce.value)
-
-            Button(onClick = {
-                // Set the current g-forces as the offsets (calibration)
-                xOffset.value = xForce.value
-                yOffset.value = yForce.value
-                zOffset.value = zForce.value
-                isCalibrated.value = true
-            }) {
+            // Calibration button
+            Button(
+                onClick = {
+                    // Set the current g-forces as the offsets (calibration)
+                    xOffset.value = xForce.value
+                    yOffset.value = yForce.value
+                    zOffset.value = zForce.value
+                    isCalibrated.value = true
+                },
+                modifier = Modifier.padding(top = 16.dp)
+            ) {
                 Text("Calibrate")
             }
         }
     }
 
-    @Composable
-    fun GForceDisplay(xForce: Float, yForce: Float, zForce: Float) {
-        val maxForce = 10f  // Arbitrary max force for scaling (adjust as needed)
+        @Composable
+        fun GForceDisplay(xForce: Float, yForce: Float, zForce: Float, modifier: Modifier = Modifier) {
+            val maxForce = 10f  // Arbitrary max force for scaling (adjust as needed)
 
-        Box(modifier = Modifier.fillMaxSize()) {
-            Canvas(modifier = Modifier.size(300.dp)) {
-                val canvasSize = size.minDimension
-                val radius = canvasSize / 2
-                val center = Offset(radius, radius)
+            Box(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .aspectRatio(1f),
+                contentAlignment = Alignment.Center
+            ) {
+                Canvas(modifier = Modifier.size(300.dp)) {
+                    val canvasSize = size.minDimension
+                    val radius = canvasSize / 2
+                    val center = Offset(radius, radius)
 
-                // Draw outer circle
-                drawCircle(color = Color.LightGray, radius = radius)
+                    // Draw outer circle
+                    drawCircle(color = Color.LightGray, radius = radius)
 
-                // Map the g-forces to the screen space (adjust scaling as needed)
-                val dotX = (xForce / maxForce) * radius
-                val dotY = (yForce / maxForce) * radius
+                    // Map the g-forces to the screen space (adjust scaling as needed)
+                    val dotX = (xForce / maxForce) * radius
+                    val dotY = (yForce / maxForce) * radius
 
-                // Draw the dot representing the g-force
-                drawCircle(color = Color.Red, radius = 10f, center = center + Offset(dotX, -dotY))
+                    // Draw the dot representing the g-force
+                    drawCircle(
+                        color = Color.Red,
+                        radius = 10f,
+                        center = center + Offset(dotX, -dotY)
+                    )
+                }
             }
         }
-    }
 
-//endregion
+        //endregion
 
-//region Bluetooth interaction
+    //region Bluetooth interaction
 
     @ExperimentalMaterial3Api
     @Composable
@@ -549,7 +582,7 @@ class TripView {
         }
     }
 
-    @SuppressLint("CheckResult")
+        @SuppressLint("CheckResult")
     @Composable
     fun ConnectionInfo(store: Store, btConnectionHandler: BtConnectionHandler) {
         val state = store.subject.map { it.tripViewModel }.subscribeAsState(TripViewModel())

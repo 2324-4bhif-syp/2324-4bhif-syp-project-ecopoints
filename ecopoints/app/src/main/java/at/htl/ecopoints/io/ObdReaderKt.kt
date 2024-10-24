@@ -228,12 +228,12 @@ class ObdReaderKt {
                             writer.log(TAG + ": " + "Running command ${command.name}")
 
                             val result = obdConnection.run(command, false, 100, 5)
-
                             Log.d(TAG, buildObdResultLog(result))
                             writer.log(TAG + ": " + buildObdResultLog(result))
 
                             store.next { it ->
-                                it.tripViewModel.carData[command.name] = result.value
+                                it.tripViewModel.carData[command.name] =
+                                    result.value
 //                                    Random.nextInt(2000).toString()
                             }
 //                            delay(250)

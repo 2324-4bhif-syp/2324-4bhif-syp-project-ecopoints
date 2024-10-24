@@ -8,6 +8,7 @@ public class Model {
     public RankingInfo rankingInfo = new RankingInfo();
     public ProfileInfo profileInfo = new ProfileInfo();
     public HomeInfo homeInfo = new HomeInfo();
+    public boolean isDarkMode = true;
     public Model() {
     }
 }

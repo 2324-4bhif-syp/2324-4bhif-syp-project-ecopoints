@@ -691,6 +691,7 @@ class TripView {
                 title = "Not connected",
                 text = "Please connect to a device first",
                 onDismiss = {
+                    obdReaderKt.cancelTest()
                     store.next { it.tripViewModel.showTestCommandDialog = false }
                 })
         }

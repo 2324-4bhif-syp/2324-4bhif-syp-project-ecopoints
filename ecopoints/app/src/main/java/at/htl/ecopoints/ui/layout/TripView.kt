@@ -405,6 +405,7 @@ class TripView {
         val xForce = remember { mutableStateOf(0f) }
         val yForce = remember { mutableStateOf(0f) }
         val zForce = remember { mutableStateOf(0f) }
+        val totalGForce = remember { mutableStateOf(0f) }
 
         val xOffset = remember { mutableStateOf(0f) }
         val yOffset = remember { mutableStateOf(0f) }
@@ -412,22 +413,44 @@ class TripView {
 
         val isCalibrated = remember { mutableStateOf(false) }
 
+        val previousGForces = remember { mutableListOf<Float>() }
+        val smoothingFactor = 0.1f
+
         val sensorEventListener = object : SensorEventListener {
             override fun onSensorChanged(event: SensorEvent) {
                 val rawX = event.values[0]
                 val rawY = event.values[1]
                 val rawZ = event.values[2]
 
-                // Apply calibration offsets after calibration
-                if (isCalibrated.value) {
-                    xForce.value = rawX - xOffset.value
-                    yForce.value = rawY - yOffset.value
-                    zForce.value = rawZ - zOffset.value
-                } else {
-                    xForce.value = rawX
-                    yForce.value = rawY
-                    zForce.value = rawZ
+                val calibratedX = if (isCalibrated.value) rawX - xOffset.value else rawX
+                val calibratedY = if (isCalibrated.value) rawY - yOffset.value else rawY
+                val calibratedZ = if (isCalibrated.value) rawZ - zOffset.value else rawZ
+
+
+                xForce.value = calibratedX
+                yForce.value = calibratedY
+                zForce.value = calibratedZ
+
+
+                val gX = calibratedX / SensorManager.GRAVITY_EARTH
+                val gY = calibratedY / SensorManager.GRAVITY_EARTH
+                val gZ = calibratedZ / SensorManager.GRAVITY_EARTH
+
+                val newTotalGForce = kotlin.math.sqrt(gX * gX + gY * gY + gZ * gZ)
+
+                // Smoothing
+                if(previousGForces.size > 0) {
+                    totalGForce.value = (previousGForces.last() * (1 - smoothingFactor)) + (newTotalGForce * smoothingFactor)
+                }else{
+                    totalGForce.value = newTotalGForce
                 }
+
+                previousGForces.add(totalGForce.value)
+
+                if(previousGForces.size > 100){
+                    previousGForces.removeAt(0)
+                }
+
             }
 
             override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
@@ -446,6 +469,9 @@ class TripView {
 
         // UI with Calibration Button
         Column {
+
+            Text(text = "Total G-Force: ${totalGForce.value} g", fontSize = 18.sp)
+
             GForceDisplay(xForce.value, yForce.value, zForce.value)
 
             Button(onClick = {

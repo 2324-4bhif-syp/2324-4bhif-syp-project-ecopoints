@@ -40,7 +40,18 @@ image::plotly.png[]
 pip install plotly
 ----
 
+=== dash
+
+image::dash.png[]
+
+[source,shell]
+----
+pip install jupyter-dash
+----
+
 == Running
+
+IMPORTANT: You need to restart your notebook first before running the notebook!
 
 If all the requirements are met, you can run the notebook by executing the cells below. (Run->Run All Cells)
 

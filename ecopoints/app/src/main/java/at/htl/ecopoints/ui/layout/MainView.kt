@@ -10,14 +10,13 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.rxjava3.subscribeAsState
 import androidx.compose.ui.Modifier
-import at.htl.ecopoints.model.Model
 import at.htl.ecopoints.model.Store
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
 import javax.inject.Inject
 import javax.inject.Singleton
 
 
-private val TAG = MainView::class.java.simpleName
+//private val TAG = MainView::class.java.simpleName
 
 @Singleton
 class MainView {

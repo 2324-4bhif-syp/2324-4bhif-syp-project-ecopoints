@@ -108,8 +108,10 @@ class TripView {
                     it.tripViewModel.carData["Latitude"] = location.latitude.toString()
                     it.tripViewModel.carData["Longitude"] = location.longitude.toString()
                     it.tripViewModel.carData["Altitude"] = location.altitude.toString()
-                    it.tripViewModel.carData["Gps-Speed"] = ((location.speed * 10.0 * 3.6).roundToInt() / 10).toString()
-                    it.tripViewModel.carData["Armin-Speed"] =  ((speedCalculator.calculateSpeed(loc)*10.0).roundToInt() / 10).toString()
+                    it.tripViewModel.carData["Gps-Speed"] =
+                        ((location.speed * 10.0 * 3.6).roundToInt() / 10).toString()
+                    it.tripViewModel.carData["Armin-Speed"] =
+                        ((speedCalculator.calculateSpeed(loc) * 10.0).roundToInt() / 10).toString()
 //                        val fuelCons = generateRandomFuelCons()
 //                        it.tripViewModel.map.add(
 //                            location.latitude, location.longitude,
@@ -161,7 +163,9 @@ class TripView {
 
                                     Button(
                                         onClick = {
-                                            store.next { it.tripViewModel.showTestCommandDialog = true }
+                                            store.next {
+                                                it.tripViewModel.showTestCommandDialog = true
+                                            }
                                         },
                                         modifier = Modifier.padding(end = 8.dp),
                                         colors = ButtonDefaults.buttonColors(
@@ -171,7 +175,10 @@ class TripView {
                                         shape = MaterialTheme.shapes.medium,
                                         elevation = ButtonDefaults.buttonElevation(4.dp)
                                     ) {
-                                        Text(text = "Test Commands", style = MaterialTheme.typography.bodyLarge)
+                                        Text(
+                                            text = "Test Commands",
+                                            style = MaterialTheme.typography.bodyLarge
+                                        )
                                     }
 
                                     IconButton(
@@ -224,7 +231,10 @@ class TripView {
                                     .fillMaxWidth()
                                     .padding(8.dp)  // Add some padding for visibility
                             ) {
-                                LiveCarData(store, context = activity.applicationContext)  // Display your car data here
+                                LiveCarData(
+                                    store,
+                                    context = activity.applicationContext
+                                )  // Display your car data here
                             }
 
                             // Other composables below
@@ -294,7 +304,7 @@ class TripView {
 //region LiveData Visual
 
     @Composable
-    fun LiveCarData(store: Store, context : Context) {
+    fun LiveCarData(store: Store, context: Context) {
         val isConnectedState =
             store.subject.map { it.tripViewModel.isConnected }.subscribeAsState(false)
         val state = store.subject.map { it.tripViewModel.carData }
@@ -419,21 +429,42 @@ class TripView {
             ) {
                 InfoCard2(
                     title = "Latitude",
-                    value = "${(data["Latitude"]?.toFloatOrNull() ?: 0f).let { String.format("%.1f", it) }}",
+                    value = "${
+                        (data["Latitude"]?.toFloatOrNull() ?: 0f).let {
+                            String.format(
+                                "%.1f",
+                                it
+                            )
+                        }
+                    }",
                     icon = Icons.Default.LocationOn,
                     modifier = Modifier.weight(1f) // Ensure equal width
                 )
 
                 InfoCard2(
                     title = "Longitude",
-                    value = "${(data["Longitude"]?.toFloatOrNull() ?: 0f).let { String.format("%.1f", it) }}",
+                    value = "${
+                        (data["Longitude"]?.toFloatOrNull() ?: 0f).let {
+                            String.format(
+                                "%.1f",
+                                it
+                            )
+                        }
+                    }",
                     icon = Icons.Default.LocationOn,
                     modifier = Modifier.weight(1f) // Ensure equal width
                 )
 
                 InfoCard2(
                     title = "Altitude",
-                    value = "${(data["Altitude"]?.toFloatOrNull() ?: 0f).let { String.format("%.1f", it) }} m",
+                    value = "${
+                        (data["Altitude"]?.toFloatOrNull() ?: 0f).let {
+                            String.format(
+                                "%.1f",
+                                it
+                            )
+                        }
+                    } m",
                     icon = Icons.Default.Terrain,
                     modifier = Modifier.weight(1f) // Ensure equal width
                 )
@@ -536,7 +567,6 @@ class TripView {
     }
 
 
-
     @Composable
     fun SectionHeader(title: String, modifier: Modifier = Modifier) {
         Text(
@@ -548,7 +578,6 @@ class TripView {
             textAlign = TextAlign.Center
         )
     }
-
 
 
     // Components for the custom UI elements with size adjustments
@@ -591,7 +620,6 @@ class TripView {
     }
 
 
-
     @Composable
     fun HorizontalBar(title: String, value: String, unit: String, modifier: Modifier = Modifier) {
         Column(
@@ -610,7 +638,6 @@ class TripView {
             )
         }
     }
-
 
 
     @Composable
@@ -729,39 +756,39 @@ class TripView {
         }
     }
 
-        @Composable
-        fun GForceDisplay(xForce: Float, yForce: Float, zForce: Float, modifier: Modifier = Modifier) {
-            val maxForce = 10f  // Arbitrary max force for scaling (adjust as needed)
+    @Composable
+    fun GForceDisplay(xForce: Float, yForce: Float, zForce: Float, modifier: Modifier = Modifier) {
+        val maxForce = 10f  // Arbitrary max force for scaling (adjust as needed)
 
-            Box(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .aspectRatio(1f),
-                contentAlignment = Alignment.Center
-            ) {
-                Canvas(modifier = Modifier.size(300.dp)) {
-                    val canvasSize = size.minDimension
-                    val radius = canvasSize / 2
-                    val center = Offset(radius, radius)
+        Box(
+            modifier = modifier
+                .fillMaxWidth()
+                .aspectRatio(1f),
+            contentAlignment = Alignment.Center
+        ) {
+            Canvas(modifier = Modifier.size(300.dp)) {
+                val canvasSize = size.minDimension
+                val radius = canvasSize / 2
+                val center = Offset(radius, radius)
 
-                    // Draw outer circle
-                    drawCircle(color = Color.LightGray, radius = radius)
+                // Draw outer circle
+                drawCircle(color = Color.LightGray, radius = radius)
 
-                    // Map the g-forces to the screen space (adjust scaling as needed)
-                    val dotX = (xForce / maxForce) * radius
-                    val dotY = (yForce / maxForce) * radius
+                // Map the g-forces to the screen space (adjust scaling as needed)
+                val dotX = (xForce / maxForce) * radius
+                val dotY = (yForce / maxForce) * radius
 
-                    // Draw the dot representing the g-force
-                    drawCircle(
-                        color = Color.Red,
-                        radius = 10f,
-                        center = center + Offset(dotX, -dotY)
-                    )
-                }
+                // Draw the dot representing the g-force
+                drawCircle(
+                    color = Color.Red,
+                    radius = 10f,
+                    center = center + Offset(dotX, -dotY)
+                )
             }
         }
+    }
 
-        //endregion
+    //endregion
 
     //region Bluetooth interaction
 

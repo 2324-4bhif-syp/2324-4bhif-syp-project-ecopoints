@@ -19,19 +19,22 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material.IconButton
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rxjava3.subscribeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -42,18 +45,14 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
-import androidx.compose.material.Surface
-import androidx.compose.material3.ListItem
-import androidx.compose.runtime.rxjava3.subscribeAsState
+import at.htl.ecopoints.R
+import at.htl.ecopoints.model.RankingInfo
 import at.htl.ecopoints.model.Store
 import at.htl.ecopoints.navigation.BottomNavBar
+import at.htl.ecopoints.ui.component.ProfileScreen
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
 import javax.inject.Inject
 import javax.inject.Singleton
-import at.htl.ecopoints.R
-import at.htl.ecopoints.model.Model
-import at.htl.ecopoints.model.RankingInfo
-import at.htl.ecopoints.ui.component.ProfileScreen
 
 @Singleton
 class RankingView {
@@ -82,7 +81,7 @@ class RankingView {
                     val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Ranking") }
                     Box(
                         modifier = Modifier.fillMaxSize()
-                    ){
+                    ) {
                         BottomNavBar(
                             currentScreen = currentScreen,
                             onScreenSelected = { newScreen -> setCurrentScreen(newScreen) },
@@ -95,7 +94,7 @@ class RankingView {
     }
 
     @Composable
-    fun DisplayRanking(context: Context){
+    fun DisplayRanking(context: Context) {
         val state = store.subject.map { it.rankingInfo }.subscribeAsState(RankingInfo())
 
         Column(
@@ -104,7 +103,7 @@ class RankingView {
                 .padding(0.dp, 200.dp, 0.dp, 0.dp)
                 .verticalScroll(rememberScrollState()),
 
-            ){
+            ) {
             state.value.users.forEach { user ->
                 Button(
                     onClick = {
@@ -119,7 +118,7 @@ class RankingView {
                     modifier = Modifier
                         .padding(8.dp)
                         .fillMaxWidth()
-                ){
+                ) {
 
                     Box(
                         modifier = Modifier
@@ -175,8 +174,10 @@ class RankingView {
         }
 
         if (state.value.showDetailRankingView) {
-            ProfileScreen(user = state.value.selectedUser, context = context,
-                store = store, currentUser = state.value.currentUser)
+            ProfileScreen(
+                user = state.value.selectedUser, context = context,
+                store = store, currentUser = state.value.currentUser
+            )
         }
     }
 
@@ -194,20 +195,22 @@ class RankingView {
             IconButton(onClick = {
                 store.next {
                     it.rankingInfo.showFuelTypeDropdown = true
-                } }) {
+                }
+            }) {
                 Icon(
                     painterResource(id = R.drawable.ranking_category_filter),
                     contentDescription = "Localized description",
                     modifier = Modifier
                         .width(25.dp)
-                        .height(25.dp))
+                        .height(25.dp)
+                )
             }
 
-            if(state.value.showFuelTypeDropdown) {
+            if (state.value.showFuelTypeDropdown) {
                 DropdownMenu(
                     expanded = state.value.showFuelTypeDropdown,
                     onDismissRequest = {
-                        store.next{
+                        store.next {
                             it.rankingInfo.showFuelTypeDropdown = false
                         }
                     },
@@ -257,7 +260,7 @@ class RankingView {
     }
 
     @Composable
-    fun ShowOptionsForRankType(){
+    fun ShowOptionsForRankType() {
         val state = store.subject.map { it.rankingInfo }.subscribeAsState(RankingInfo())
 
         Column(
@@ -275,7 +278,7 @@ class RankingView {
                 state.value.rankTypeOptions.forEach() { option ->
                     Button(
                         onClick = {
-                            store.next{
+                            store.next {
                                 it.rankingInfo.selectedRankTypeOption = option.key as String?
                             }
                         },
@@ -284,11 +287,11 @@ class RankingView {
                         ),
                         modifier = Modifier
                             .padding(8.dp)
-                    ){
-                        var size:Dp = 50.dp;
+                    ) {
+                        var size: Dp = 50.dp
 
-                        if(state.value.selectedRankTypeOption.equals(option.key)) {
-                            size = 70.dp;
+                        if (state.value.selectedRankTypeOption.equals(option.key)) {
+                            size = 70.dp
                         }
 
                         Image(
@@ -311,7 +314,8 @@ class RankingView {
                 Text(
                     text = state.value.selectedRankTypeOption,
                     fontSize = TextUnit(25f, TextUnitType.Sp),
-                    fontWeight = FontWeight.Bold)
+                    fontWeight = FontWeight.Bold
+                )
             }
 
             Divider(thickness = 1.dp, color = Color.LightGray)

@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -38,14 +37,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import at.htl.ecopoints.R
-import at.htl.ecopoints.model.Model
 import at.htl.ecopoints.model.ProfileInfo
 import at.htl.ecopoints.model.RankingInfo
 import at.htl.ecopoints.model.Store
@@ -100,7 +97,7 @@ class ProfileView {
     }
 
     @Composable
-    private fun FriendSuggestions(){
+    private fun FriendSuggestions() {
         val state = store.subject.map { it.rankingInfo }.subscribeAsState(RankingInfo())
 
         Row(
@@ -114,8 +111,8 @@ class ProfileView {
                 )
 
                 LazyRow {
-                    items(state.value.users) {user ->
-                        if(!user.userName.equals(state.value.currentUser.userName)) {
+                    items(state.value.users) { user ->
+                        if (!user.userName.equals(state.value.currentUser.userName)) {
                             Card(
                                 modifier = Modifier
                                     .padding(8.dp)
@@ -176,7 +173,7 @@ class ProfileView {
     }
 
     @Composable
-    private fun ShowStatistics(){
+    private fun ShowStatistics() {
         val state = store.subject.map { it.profileInfo }.subscribeAsState(ProfileInfo())
 
         val cardWidth = 175.dp
@@ -240,7 +237,7 @@ class ProfileView {
     }
 
     @Composable
-    private fun ProfileSettingsHeader(){
+    private fun ProfileSettingsHeader() {
         Row(
             modifier = Modifier
                 .padding(end = 16.dp, start = 16.dp)
@@ -290,10 +287,10 @@ class ProfileView {
     }
 
     @Composable
-    fun ProfileHeader(){
+    fun ProfileHeader() {
         val state = store.subject.map { it.profileInfo }.subscribeAsState(ProfileInfo())
 
-        Row(modifier = Modifier.padding(top = 10.dp,start = 16.dp, end = 16.dp, bottom = 10.dp)) {
+        Row(modifier = Modifier.padding(top = 10.dp, start = 16.dp, end = 16.dp, bottom = 10.dp)) {
             Column(modifier = Modifier.weight(1f)) {
                 androidx.compose.material.Text(
                     text = state.value.currentUser.userName,
@@ -319,7 +316,7 @@ class ProfileView {
                 }
 
                 Row(modifier = Modifier.padding(top = 12.dp)) {
-                    Column{
+                    Column {
                         Text(
                             text = "50 Following",
                             fontWeight = FontWeight.Bold,

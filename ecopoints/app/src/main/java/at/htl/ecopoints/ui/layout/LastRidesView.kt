@@ -11,9 +11,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -26,13 +24,9 @@ import androidx.compose.material.Surface
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Timelapse
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rxjava3.subscribeAsState
@@ -49,19 +43,11 @@ import at.htl.ecopoints.HomeActivity
 import at.htl.ecopoints.R
 import at.htl.ecopoints.db.DBHelper
 import at.htl.ecopoints.model.HomeInfo
-import at.htl.ecopoints.model.Model
 import at.htl.ecopoints.model.Store
-import at.htl.ecopoints.model.Trip
 import at.htl.ecopoints.navigation.BottomNavBar
-import at.htl.ecopoints.ui.component.ShowMap
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
-import com.google.maps.android.compose.rememberCameraPositionState
 import java.text.SimpleDateFormat
-import java.util.Date
 import java.util.Locale
-import java.util.UUID
 import javax.inject.Singleton
 
 @Singleton
@@ -80,7 +66,7 @@ class LastRidesView {
                     Column {
                         ShowReturnBtn(activity, store)
                         ShowHeader(activity)
-                        ShowTripStatistic(activity, store);
+                        ShowTripStatistic(activity, store)
 
                         val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Home") }
 
@@ -98,7 +84,7 @@ class LastRidesView {
     }
 
     @Composable
-    private fun ShowReturnBtn(context: Context, store: Store){
+    private fun ShowReturnBtn(context: Context, store: Store) {
 
         IconButton(onClick = {
 
@@ -130,10 +116,9 @@ class LastRidesView {
         val trips = dbHelper.getAllTrips()
         dbHelper.close()
 
-        var sum = 0.0;
+        var sum = 0.0
 
-        trips.forEach{
-                trip ->
+        trips.forEach { trip ->
             sum += trip.distance
         }
 
@@ -173,6 +158,7 @@ class LastRidesView {
             }
         }
     }
+
     @Composable
     private fun ShowTripStatistic(context: Context, store: Store) {
 
@@ -191,7 +177,8 @@ class LastRidesView {
 
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
             trips.forEach { trip ->
-                val formattedDate = SimpleDateFormat("dd/MM/yyyy, HH:mm", Locale.getDefault()).format(trip.start)
+                val formattedDate =
+                    SimpleDateFormat("dd/MM/yyyy, HH:mm", Locale.getDefault()).format(trip.start)
 
                 Column(modifier = Modifier.padding(vertical = 16.dp, horizontal = 16.dp)) {
 
@@ -200,10 +187,13 @@ class LastRidesView {
                         text = formattedDate + " Uhr",
                         fontWeight = FontWeight.Bold,
                         fontSize = TextUnit(20f, TextUnitType.Sp),
-                        modifier = Modifier.clickable { store.next {
-                            it.homeInfo.selectedTripDate2 = trip.start
-                            it.homeInfo.showDialog2 = true
-                        }}
+                        modifier = Modifier
+                            .clickable {
+                                store.next {
+                                    it.homeInfo.selectedTripDate2 = trip.start
+                                    it.homeInfo.showDialog2 = true
+                                }
+                            }
                             .padding(bottom = 10.dp)
                     )
 

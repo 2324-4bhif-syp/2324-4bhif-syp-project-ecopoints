@@ -772,6 +772,12 @@ class TripView {
                 val radius = canvasSize / 2
                 val center = Offset(radius, radius)
 
+                // Draw outer circle
+                drawCircle(color = Color.LightGray, radius = radius)
+
+                // Draw inner circle
+                drawCircle(color = Color.Gray, radius = radius / 2)
+
                 // Draw X and Y axes
                 drawLine(
                     color = Color.Black,

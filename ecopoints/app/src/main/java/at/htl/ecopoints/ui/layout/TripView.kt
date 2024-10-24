@@ -125,21 +125,52 @@ class TripView {
                 ) {
                     Scaffold(
                         topBar = {
-                            Row(
+                            Surface(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .background(MaterialTheme.colorScheme.tertiaryContainer),
-                                horizontalArrangement = Arrangement.Start
+                                    .background(MaterialTheme.colorScheme.surface),
+                                color = MaterialTheme.colorScheme.surface,
+                                shadowElevation = 4.dp,
                             ) {
-                                Button(onClick = {
-                                    store.next { it.tripViewModel.map.showMap = true }
-                                }) {
-                                    Text(text = "Map")
-                                }
-                                Button(onClick = {
-                                    store.next { it.tripViewModel.showTestCommandDialog = true }
-                                }) {
-                                    Text(text = "TestCommands")
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 16.dp, vertical = 12.dp),
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Button(
+                                        onClick = {
+                                            store.next { it.tripViewModel.map.showMap = true }
+                                        },
+                                        modifier = Modifier
+                                            .weight(1f)
+                                            .padding(end = 8.dp),
+                                        colors = ButtonDefaults.buttonColors(
+                                            containerColor = MaterialTheme.colorScheme.primaryContainer,
+                                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                                        ),
+                                        shape = MaterialTheme.shapes.medium,
+                                        elevation = ButtonDefaults.buttonElevation(4.dp)
+                                    ) {
+                                        Text(text = "Map", style = MaterialTheme.typography.bodyLarge)
+                                    }
+
+                                    Button(
+                                        onClick = {
+                                            store.next { it.tripViewModel.showTestCommandDialog = true }
+                                        },
+                                        modifier = Modifier
+                                            .weight(1f)
+                                            .padding(start = 8.dp),
+                                        colors = ButtonDefaults.buttonColors(
+                                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                                            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                                        ),
+                                        shape = MaterialTheme.shapes.medium,
+                                        elevation = ButtonDefaults.buttonElevation(4.dp)
+                                    ) {
+                                        Text(text = "Test Commands", style = MaterialTheme.typography.bodyLarge)
+                                    }
                                 }
                             }
                         },
@@ -271,7 +302,7 @@ class TripView {
         ) {
             val data = state.value
 
-            SectionHeader(title = "Speed Data")
+            SectionHeader(title = "Vehicle Data")
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -323,8 +354,6 @@ class TripView {
             }
 
 
-            SectionHeader(title = "OBD Data")
-
             // Row for Distance, Driving Time, and Avg Speed
             Row(
                 modifier = Modifier
@@ -344,7 +373,8 @@ class TripView {
                 )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+
+            SectionHeader(title = "GPS Data")
 
             Row(
                 modifier = Modifier

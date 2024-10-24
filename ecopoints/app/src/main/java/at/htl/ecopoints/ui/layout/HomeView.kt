@@ -66,6 +66,7 @@ import at.htl.ecopoints.model.HomeInfo
 import at.htl.ecopoints.model.Store
 import at.htl.ecopoints.apis.TankerkoenigApiClient
 import at.htl.ecopoints.io.JsonFileWriter
+import at.htl.ecopoints.model.Model
 import at.htl.ecopoints.model.Trip
 import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.ui.component.ShowMap
@@ -102,7 +103,11 @@ class HomeView {
 
     fun compose(activity: ComponentActivity) {
         activity.setContent {
-            EcoPointsTheme {
+            val state = store.subject.map { it }.subscribeAsState(Model())
+
+            EcoPointsTheme(
+                darkTheme = state.value.isDarkMode
+            ) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background

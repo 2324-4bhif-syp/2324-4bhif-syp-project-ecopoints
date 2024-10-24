@@ -1,8 +1,0 @@
-th.rotate {
-    transform: rotate(-90deg);
-    white-space: nowrap;
-    width: 20px; /* Adjust depending on the column width */
-    height: 100px;
-    text-align: left;
-    vertical-align: bottom;
-}

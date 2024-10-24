@@ -3,3 +3,4 @@ node_modules
 notebook/3d_path_map_with_lines_and_elevation.html
 notebook/driven_route_map.html
 notebook/data.json
+notebook/.ipynb_checkpoints

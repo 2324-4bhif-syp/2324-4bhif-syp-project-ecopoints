@@ -62,4 +62,4 @@ NOTE: If you have issues with rendering the plots, use the following command to 
 pip install --upgrade notebook ipywidgets
 ----
 
-Wow, you did it!
+Wow, you did it!, now you can start analyzing :)

@@ -44,6 +44,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -771,8 +772,19 @@ class TripView {
                 val radius = canvasSize / 2
                 val center = Offset(radius, radius)
 
-                // Draw outer circle
-                drawCircle(color = Color.LightGray, radius = radius)
+                // Draw X and Y axes
+                drawLine(
+                    color = Color.Black,
+                    start = Offset(center.x, 0f),
+                    end = Offset(center.x, size.height),
+                    strokeWidth = 2f
+                )
+                drawLine(
+                    color = Color.Black,
+                    start = Offset(0f, center.y),
+                    end = Offset(size.width, center.y),
+                    strokeWidth = 2f
+                )
 
                 // Map the g-forces to the screen space (adjust scaling as needed)
                 val dotX = (xForce / maxForce) * radius
@@ -787,7 +799,6 @@ class TripView {
             }
         }
     }
-
     //endregion
 
     //region Bluetooth interaction

@@ -402,15 +402,15 @@ class TripView {
         val sensorManager = context.getSystemService(SENSOR_SERVICE) as SensorManager
         val accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
 
-        var xForce = remember { mutableStateOf(0f) }
-        var yForce = remember { mutableStateOf(0f) }
-        var zForce = remember { mutableStateOf(0f) }
+        val xForce = remember { mutableStateOf(0f) }
+        val yForce = remember { mutableStateOf(0f) }
+        val zForce = remember { mutableStateOf(0f) }
 
-        var xOffset = remember { mutableStateOf(0f) }
-        var yOffset = remember { mutableStateOf(0f) }
-        var zOffset = remember { mutableStateOf(0f) }
+        val xOffset = remember { mutableStateOf(0f) }
+        val yOffset = remember { mutableStateOf(0f) }
+        val zOffset = remember { mutableStateOf(0f) }
 
-        var isCalibrated = remember { mutableStateOf(false) }
+        val isCalibrated = remember { mutableStateOf(false) }
 
         val sensorEventListener = object : SensorEventListener {
             override fun onSensorChanged(event: SensorEvent) {
@@ -450,9 +450,9 @@ class TripView {
 
             Button(onClick = {
                 // Set the current g-forces as the offsets (calibration)
-                xOffset = xForce
-                yOffset = yForce
-                zOffset = zForce
+                xOffset.value = xForce.value
+                yOffset.value = yForce.value
+                zOffset.value = zForce.value
                 isCalibrated.value = true
             }) {
                 Text("Calibrate")

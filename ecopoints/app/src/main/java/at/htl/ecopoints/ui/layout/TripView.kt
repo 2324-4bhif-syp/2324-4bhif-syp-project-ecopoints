@@ -120,7 +120,7 @@ class TripView {
             val state = store.subject.map { it }.subscribeAsState(Model())
 
             EcoPointsTheme(
-                darkTheme = state.value.isDarkMode
+                darkTheme = !state.value.isDarkMode
             ) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -810,47 +810,67 @@ class TripView {
         ) {
             Row(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
                 Button(
-                    shape = MaterialTheme.shapes.medium,
                     onClick = { startTrip() },
                     modifier = Modifier
-                        .padding(4.dp)
+                        .padding(8.dp)
                         .weight(1f)
                         .height(40.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                    ),
+                    shape = MaterialTheme.shapes.medium,
+                    elevation = ButtonDefaults.buttonElevation(4.dp)
                 ) {
                     Text(text = "Start Trip", fontSize = 14.sp)
                 }
                 Button(
-                    shape = MaterialTheme.shapes.medium,
                     onClick = { stopTrip() },
                     modifier = Modifier
-                        .padding(4.dp)
+                        .padding(8.dp)
                         .weight(1f)
                         .height(40.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                    ),
+                    shape = MaterialTheme.shapes.medium,
+                    elevation = ButtonDefaults.buttonElevation(4.dp)
                 ) {
                     Text(text = "Stop Trip", fontSize = 14.sp)
                 }
             }
             Row(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
                 Button(
-                    shape = MaterialTheme.shapes.medium,
                     onClick = { btConnectionHandler.createConnection(state.value.selectedDevice) },
                     modifier = Modifier
-                        .padding(4.dp)
+                        .padding(8.dp)
                         .weight(1f)
                         .height(40.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                    ),
+                    shape = MaterialTheme.shapes.medium,
+                    elevation = ButtonDefaults.buttonElevation(4.dp)
                 ) {
                     Text(text = "Connect", fontSize = 14.sp)
                 }
                 Button(
-                    shape = MaterialTheme.shapes.medium,
                     onClick = {
                         Log.d(TAG, "Show Bt-Device selection dialog")
                         store.next { it.tripViewModel.showDeviceSelectionDialog = true }
                     },
                     modifier = Modifier
-                        .padding(4.dp)
+                        .padding(8.dp)
                         .weight(1f)
                         .height(40.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                    ),
+                    shape = MaterialTheme.shapes.medium,
+                    elevation = ButtonDefaults.buttonElevation(4.dp)
                 ) {
                     Text(text = "Select Device", fontSize = 14.sp)
                 }
@@ -889,7 +909,6 @@ class TripView {
             }
         }
     }
-
 
     @Composable
     fun ListPairedBtDevices(store: Store, btConnectionHandler: BtConnectionHandler) {

@@ -175,7 +175,7 @@ class TripView {
 
                                     IconButton(
                                         onClick = {
-                                            // TODO
+                                            store.next { it.isDarkMode = !it.isDarkMode }
                                         },
                                         modifier = Modifier.padding(start = 8.dp)
                                     ) {

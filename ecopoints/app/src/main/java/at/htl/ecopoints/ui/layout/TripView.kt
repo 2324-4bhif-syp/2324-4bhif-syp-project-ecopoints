@@ -25,6 +25,7 @@ import androidx.compose.material.icons.filled.Air
 import androidx.compose.material.icons.filled.Brightness4
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.LocalGasStation
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.RotateRight
 import androidx.compose.material.icons.filled.Speed
@@ -334,23 +335,31 @@ class TripView {
                     value = "${data["Gps-Speed"] ?: "0"} km/h",
                     icon = Icons.Default.LocationOn
                 )
-            }
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
                 InfoCard(
                     title = "Obd-Speed",
                     value = "${data["Vehicle Speed"] ?: "0"} km/h",
                     icon = Icons.Default.Speed
                 )
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+
                 InfoCard(
                     title = "RPM",
                     value = "${data["Engine RPM"] ?: "0"} rpm",
                     icon = Icons.Default.RotateRight
+                )
+
+                InfoCard(
+                    title = "Fuel Pressure",
+                    value = "${data["Fuel Rail Gauge Pressure"] ?: "0"} bar",
+                    icon = Icons.Default.LocalGasStation
                 )
             }
 
@@ -360,11 +369,13 @@ class TripView {
                     .padding(horizontal = 16.dp, vertical = 8.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
+
                 InfoCard(
                     title = "Engine Load",
                     value = "${data["Engine Load"] ?: "0"}%",
                     icon = Icons.Default.Build
                 )
+
                 InfoCard(
                     title = "Throttle Position",
                     value = "${data["Throttle Position"] ?: "0"}%",

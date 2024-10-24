@@ -1,0 +1,760 @@
+[{
+"timestamp": 1729776073199,
+"data": {"Engine Load": "78,0", "Air Intake Temperature": "28,0", "Armin-Speed": "44", "Latitude": "48.32229", "Vehicle Speed": "41", "Longitude": "14.2560094", "Engine Coolant Temperature": "98,0", "Engine RPM": "1764", "Altitude": "533.2629371630688", "Gps-Speed": "45"}
+},{
+"timestamp": 1729776076865,
+"data": {"Engine Load": "79,2", "Air Intake Temperature": "28,0", "Armin-Speed": "58", "Latitude": "48.3228149", "Vehicle Speed": "50", "Longitude": "14.2559251", "Engine Coolant Temperature": "98,0", "Engine RPM": "2019", "Altitude": "537.8433669175811", "Gps-Speed": "56"}
+},{
+"timestamp": 1729776080531,
+"data": {"Engine Load": "64,3", "Air Intake Temperature": "29,0", "Armin-Speed": "60", "Latitude": "48.3234293", "Vehicle Speed": "61", "Longitude": "14.2557084", "Engine Coolant Temperature": "97,0", "Engine RPM": "2542", "Altitude": "542.9021828678829", "Gps-Speed": "60"}
+},{
+"timestamp": 1729776084177,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "29,0", "Armin-Speed": "56", "Latitude": "48.3238445", "Vehicle Speed": "57", "Longitude": "14.2554576", "Engine Coolant Temperature": "97,0", "Engine RPM": "1716", "Altitude": "545.9120652412547", "Gps-Speed": "55"}
+},{
+"timestamp": 1729776087816,
+"data": {"Engine Load": "66,3", "Air Intake Temperature": "29,0", "Armin-Speed": "49", "Latitude": "48.3243346", "Vehicle Speed": "51", "Longitude": "14.2552351", "Engine Coolant Temperature": "97,0", "Engine RPM": "1532", "Altitude": "548.2280764101899", "Gps-Speed": "52"}
+},{
+"timestamp": 1729776091455,
+"data": {"Engine Load": "67,1", "Air Intake Temperature": "29,0", "Armin-Speed": "55", "Latitude": "48.3248224", "Vehicle Speed": "52", "Longitude": "14.2555903", "Engine Coolant Temperature": "97,0", "Engine RPM": "1495", "Altitude": "548.5874387095906", "Gps-Speed": "55"}
+},{
+"timestamp": 1729776095109,
+"data": {"Engine Load": "42,4", "Air Intake Temperature": "28,0", "Armin-Speed": "57", "Latitude": "48.3251639", "Vehicle Speed": "57", "Longitude": "14.2559898", "Engine Coolant Temperature": "96,0", "Engine RPM": "1620", "Altitude": "547.8405881058367", "Gps-Speed": "58"}
+},{
+"timestamp": 1729776098755,
+"data": {"Engine Load": "45,1", "Air Intake Temperature": "28,0", "Armin-Speed": "57", "Latitude": "48.3256505", "Vehicle Speed": "59", "Longitude": "14.2564862", "Engine Coolant Temperature": "95,0", "Engine RPM": "1704", "Altitude": "545.6635211144196", "Gps-Speed": "57"}
+},{
+"timestamp": 1729776102399,
+"data": {"Engine Load": "35,3", "Air Intake Temperature": "28,0", "Armin-Speed": "61", "Latitude": "48.3261645", "Vehicle Speed": "59", "Longitude": "14.2569268", "Engine Coolant Temperature": "95,0", "Engine RPM": "1728", "Altitude": "544.5790182862944", "Gps-Speed": "57"}
+},{
+"timestamp": 1729776106055,
+"data": {"Engine Load": "45,5", "Air Intake Temperature": "28,0", "Armin-Speed": "60", "Latitude": "48.326588", "Vehicle Speed": "57", "Longitude": "14.257241", "Engine Coolant Temperature": "94,0", "Engine RPM": "1676", "Altitude": "544.5790182862944", "Gps-Speed": "58"}
+},{
+"timestamp": 1729776109700,
+"data": {"Engine Load": "46,3", "Air Intake Temperature": "28,0", "Armin-Speed": "58", "Latitude": "48.3271428", "Vehicle Speed": "57", "Longitude": "14.2575584", "Engine Coolant Temperature": "93,0", "Engine RPM": "1654", "Altitude": "544.9295722986544", "Gps-Speed": "57"}
+},{
+"timestamp": 1729776113339,
+"data": {"Engine Load": "26,3", "Air Intake Temperature": "27,0", "Armin-Speed": "59", "Latitude": "48.327706", "Vehicle Speed": "57", "Longitude": "14.2577075", "Engine Coolant Temperature": "93,0", "Engine RPM": "1659", "Altitude": "544.7326543969702", "Gps-Speed": "57"}
+},{
+"timestamp": 1729776116958,
+"data": {"Engine Load": "47,5", "Air Intake Temperature": "27,0", "Armin-Speed": "55", "Latitude": "48.3281382", "Vehicle Speed": "55", "Longitude": "14.2576863", "Engine Coolant Temperature": "92,0", "Engine RPM": "1629", "Altitude": "544.4491870930509", "Gps-Speed": "54"}
+},{
+"timestamp": 1729776120593,
+"data": {"Engine Load": "47,8", "Air Intake Temperature": "27,0", "Armin-Speed": "55", "Latitude": "48.3286716", "Vehicle Speed": "54", "Longitude": "14.2574221", "Engine Coolant Temperature": "92,0", "Engine RPM": "1573", "Altitude": "543.8325156902214", "Gps-Speed": "55"}
+},{
+"timestamp": 1729776124240,
+"data": {"Engine Load": "33,7", "Air Intake Temperature": "27,0", "Armin-Speed": "59", "Latitude": "48.329053", "Vehicle Speed": "54", "Longitude": "14.2571135", "Engine Coolant Temperature": "91,0", "Engine RPM": "1591", "Altitude": "543.1942532644921", "Gps-Speed": "57"}
+},{
+"timestamp": 1729776127873,
+"data": {"Engine Load": "42,0", "Air Intake Temperature": "27,0", "Armin-Speed": "57", "Latitude": "48.3294993", "Vehicle Speed": "54", "Longitude": "14.2566076", "Engine Coolant Temperature": "91,0", "Engine RPM": "1585", "Altitude": "542.4889742876212", "Gps-Speed": "54"}
+},{
+"timestamp": 1729776131504,
+"data": {"Engine Load": "76,9", "Air Intake Temperature": "26,0", "Armin-Speed": "55", "Latitude": "48.3299586", "Vehicle Speed": "54", "Longitude": "14.2561365", "Engine Coolant Temperature": "91,0", "Engine RPM": "1576", "Altitude": "542.7226185849086", "Gps-Speed": "56"}
+},{
+"timestamp": 1729776135134,
+"data": {"Engine Load": "80,8", "Air Intake Temperature": "25,0", "Armin-Speed": "59", "Latitude": "48.3302055", "Vehicle Speed": "57", "Longitude": "14.2558859", "Engine Coolant Temperature": "90,0", "Engine RPM": "1652", "Altitude": "544.0359041781323", "Gps-Speed": "59"}
+},{
+"timestamp": 1729776138760,
+"data": {"Engine Load": "56,1", "Air Intake Temperature": "25,0", "Armin-Speed": "61", "Latitude": "48.3308769", "Vehicle Speed": "61", "Longitude": "14.2553195", "Engine Coolant Temperature": "90,0", "Engine RPM": "1774", "Altitude": "549.7305704540994", "Gps-Speed": "62"}
+},{
+"timestamp": 1729776142384,
+"data": {"Engine Load": "56,1", "Air Intake Temperature": "25,0", "Armin-Speed": "65", "Latitude": "48.3314835", "Vehicle Speed": "62", "Longitude": "14.2550045", "Engine Coolant Temperature": "90,0", "Engine RPM": "1806", "Altitude": "553.6850728778687", "Gps-Speed": "65"}
+},{
+"timestamp": 1729776146018,
+"data": {"Engine Load": "56,9", "Air Intake Temperature": "25,0", "Armin-Speed": "69", "Latitude": "48.3319858", "Vehicle Speed": "65", "Longitude": "14.2550053", "Engine Coolant Temperature": "90,0", "Engine RPM": "1883", "Altitude": "555.0671952698814", "Gps-Speed": "65"}
+},{
+"timestamp": 1729776149640,
+"data": {"Engine Load": "60,8", "Air Intake Temperature": "25,0", "Armin-Speed": "68", "Latitude": "48.3326511", "Vehicle Speed": "67", "Longitude": "14.2553796", "Engine Coolant Temperature": "90,0", "Engine RPM": "1942", "Altitude": "554.7920528854012", "Gps-Speed": "68"}
+},{
+"timestamp": 1729776153239,
+"data": {"Engine Load": "99,6", "Air Intake Temperature": "24,0", "Armin-Speed": "83", "Latitude": "48.3331956", "Vehicle Speed": "73", "Longitude": "14.2554775", "Engine Coolant Temperature": "90,0", "Engine RPM": "2039", "Altitude": "553.1023950478677", "Gps-Speed": "81"}
+},{
+"timestamp": 1729776156857,
+"data": {"Engine Load": "100,0", "Air Intake Temperature": "24,0", "Armin-Speed": "101", "Latitude": "48.334138", "Vehicle Speed": "93", "Longitude": "14.2550809", "Engine Coolant Temperature": "90,0", "Engine RPM": "2635", "Altitude": "551.0340992552684", "Gps-Speed": "97"}
+},{
+"timestamp": 1729776160488,
+"data": {"Engine Load": "67,8", "Air Intake Temperature": "24,0", "Armin-Speed": "88", "Latitude": "48.3350377", "Vehicle Speed": "93", "Longitude": "14.2546845", "Engine Coolant Temperature": "90,0", "Engine RPM": "2115", "Altitude": "553.5572702713347", "Gps-Speed": "87"}
+},{
+"timestamp": 1729776164118,
+"data": {"Engine Load": "60,0", "Air Intake Temperature": "24,0", "Armin-Speed": "81", "Latitude": "48.3356371", "Vehicle Speed": "83", "Longitude": "14.2544278", "Engine Coolant Temperature": "90,0", "Engine RPM": "1902", "Altitude": "558.2027069468465", "Gps-Speed": "82"}
+},{
+"timestamp": 1729776167740,
+"data": {"Engine Load": "68,6", "Air Intake Temperature": "24,0", "Armin-Speed": "78", "Latitude": "48.3363944", "Vehicle Speed": "79", "Longitude": "14.2540572", "Engine Coolant Temperature": "90,0", "Engine RPM": "1807", "Altitude": "565.7135135537499", "Gps-Speed": "78"}
+},{
+"timestamp": 1729776171376,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "24,0", "Armin-Speed": "79", "Latitude": "48.3371245", "Vehicle Speed": "76", "Longitude": "14.2535987", "Engine Coolant Temperature": "90,0", "Engine RPM": "1727", "Altitude": "570.3525008618942", "Gps-Speed": "78"}
+},{
+"timestamp": 1729776175011,
+"data": {"Engine Load": "57,6", "Air Intake Temperature": "24,0", "Armin-Speed": "77", "Latitude": "48.337621", "Vehicle Speed": "75", "Longitude": "14.2531372", "Engine Coolant Temperature": "90,0", "Engine RPM": "1694", "Altitude": "571.8284751833567", "Gps-Speed": "79"}
+},{
+"timestamp": 1729776178627,
+"data": {"Engine Load": "55,7", "Air Intake Temperature": "24,0", "Armin-Speed": "81", "Latitude": "48.3382799", "Vehicle Speed": "79", "Longitude": "14.2524252", "Engine Coolant Temperature": "89,0", "Engine RPM": "1763", "Altitude": "571.0535570795691", "Gps-Speed": "81"}
+},{
+"timestamp": 1729776182236,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "24,0", "Armin-Speed": "78", "Latitude": "48.3387804", "Vehicle Speed": "78", "Longitude": "14.2519132", "Engine Coolant Temperature": "89,0", "Engine RPM": "1774", "Altitude": "569.1241624377545", "Gps-Speed": "78"}
+},{
+"timestamp": 1729776185861,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "24,0", "Armin-Speed": "79", "Latitude": "48.3394345", "Vehicle Speed": "78", "Longitude": "14.2512256", "Engine Coolant Temperature": "89,0", "Engine RPM": "1761", "Altitude": "565.6657914224236", "Gps-Speed": "79"}
+},{
+"timestamp": 1729776189474,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "24,0", "Armin-Speed": "85", "Latitude": "48.3401914", "Vehicle Speed": "78", "Longitude": "14.2508298", "Engine Coolant Temperature": "88,0", "Engine RPM": "1761", "Altitude": "561.6754228693762", "Gps-Speed": "79"}
+},{
+"timestamp": 1729776193127,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "24,0", "Armin-Speed": "83", "Latitude": "48.3406097", "Vehicle Speed": "78", "Longitude": "14.2508035", "Engine Coolant Temperature": "88,0", "Engine RPM": "1762", "Altitude": "560.03210284923", "Gps-Speed": "79"}
+},{
+"timestamp": 1729776196745,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "24,0", "Armin-Speed": "76", "Latitude": "48.3415056", "Vehicle Speed": "77", "Longitude": "14.2501921", "Engine Coolant Temperature": "87,0", "Engine RPM": "1746", "Altitude": "554.6701633865422", "Gps-Speed": "75"}
+},{
+"timestamp": 1729776200366,
+"data": {"Engine Load": "71,4", "Air Intake Temperature": "24,0", "Armin-Speed": "72", "Latitude": "48.3421348", "Vehicle Speed": "72", "Longitude": "14.2496241", "Engine Coolant Temperature": "87,0", "Engine RPM": "1649", "Altitude": "554.6967300179427", "Gps-Speed": "74"}
+},{
+"timestamp": 1729776204001,
+"data": {"Engine Load": "44,7", "Air Intake Temperature": "23,0", "Armin-Speed": "75", "Latitude": "48.3426085", "Vehicle Speed": "73", "Longitude": "14.249202", "Engine Coolant Temperature": "87,0", "Engine RPM": "1644", "Altitude": "554.5147529321285", "Gps-Speed": "75"}
+},{
+"timestamp": 1729776207616,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "23,0", "Armin-Speed": "70", "Latitude": "48.3432201", "Vehicle Speed": "70", "Longitude": "14.248611", "Engine Coolant Temperature": "86,0", "Engine RPM": "1610", "Altitude": "555.879674944872", "Gps-Speed": "70"}
+},{
+"timestamp": 1729776211225,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "23,0", "Armin-Speed": "66", "Latitude": "48.3435978", "Vehicle Speed": "66", "Longitude": "14.2481146", "Engine Coolant Temperature": "86,0", "Engine RPM": "872", "Altitude": "556.4473729631758", "Gps-Speed": "64"}
+},{
+"timestamp": 1729776214867,
+"data": {"Engine Load": "53,7", "Air Intake Temperature": "23,0", "Armin-Speed": "58", "Latitude": "48.3439963", "Vehicle Speed": "58", "Longitude": "14.2474349", "Engine Coolant Temperature": "86,0", "Engine RPM": "1740", "Altitude": "558.0856735341523", "Gps-Speed": "58"}
+},{
+"timestamp": 1729776218497,
+"data": {"Engine Load": "69,0", "Air Intake Temperature": "23,0", "Armin-Speed": "55", "Latitude": "48.3443332", "Vehicle Speed": "55", "Longitude": "14.2467554", "Engine Coolant Temperature": "86,0", "Engine RPM": "1623", "Altitude": "560.0754581834257", "Gps-Speed": "54"}
+},{
+"timestamp": 1729776222108,
+"data": {"Engine Load": "88,2", "Air Intake Temperature": "23,0", "Armin-Speed": "56", "Latitude": "48.3445732", "Vehicle Speed": "54", "Longitude": "14.2462446", "Engine Coolant Temperature": "86,0", "Engine RPM": "1578", "Altitude": "561.3434432244411", "Gps-Speed": "54"}
+},{
+"timestamp": 1729776225735,
+"data": {"Engine Load": "68,6", "Air Intake Temperature": "23,0", "Armin-Speed": "58", "Latitude": "48.3449772", "Vehicle Speed": "54", "Longitude": "14.2456735", "Engine Coolant Temperature": "86,0", "Engine RPM": "1551", "Altitude": "564.4229400800623", "Gps-Speed": "59"}
+},{
+"timestamp": 1729776229366,
+"data": {"Engine Load": "64,7", "Air Intake Temperature": "23,0", "Armin-Speed": "60", "Latitude": "48.3455138", "Vehicle Speed": "59", "Longitude": "14.2452257", "Engine Coolant Temperature": "86,0", "Engine RPM": "1699", "Altitude": "566.7396027179452", "Gps-Speed": "62"}
+},{
+"timestamp": 1729776232983,
+"data": {"Engine Load": "69,8", "Air Intake Temperature": "23,0", "Armin-Speed": "63", "Latitude": "48.3458953", "Vehicle Speed": "62", "Longitude": "14.2448077", "Engine Coolant Temperature": "86,0", "Engine RPM": "1792", "Altitude": "569.6753738820795", "Gps-Speed": "65"}
+},{
+"timestamp": 1729776236616,
+"data": {"Engine Load": "50,2", "Air Intake Temperature": "23,0", "Armin-Speed": "65", "Latitude": "48.3464126", "Vehicle Speed": "65", "Longitude": "14.2441917", "Engine Coolant Temperature": "87,0", "Engine RPM": "1888", "Altitude": "575.0830253047005", "Gps-Speed": "66"}
+},{
+"timestamp": 1729776240216,
+"data": {"Engine Load": "63,9", "Air Intake Temperature": "24,0", "Armin-Speed": "60", "Latitude": "48.3468381", "Vehicle Speed": "64", "Longitude": "14.2438628", "Engine Coolant Temperature": "87,0", "Engine RPM": "1882", "Altitude": "579.5277848392802", "Gps-Speed": "60"}
+},{
+"timestamp": 1729776243830,
+"data": {"Engine Load": "55,7", "Air Intake Temperature": "24,0", "Armin-Speed": "49", "Latitude": "48.3472351", "Vehicle Speed": "54", "Longitude": "14.2433076", "Engine Coolant Temperature": "87,0", "Engine RPM": "1615", "Altitude": "585.0440781541673", "Gps-Speed": "48"}
+},{
+"timestamp": 1729776247446,
+"data": {"Engine Load": "63,5", "Air Intake Temperature": "24,0", "Armin-Speed": "45", "Latitude": "48.3475428", "Vehicle Speed": "46", "Longitude": "14.2427794", "Engine Coolant Temperature": "87,0", "Engine RPM": "1144", "Altitude": "587.457754014592", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776251075,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "24,0", "Armin-Speed": "55", "Latitude": "48.3477945", "Vehicle Speed": "50", "Longitude": "14.2423285", "Engine Coolant Temperature": "88,0", "Engine RPM": "2011", "Altitude": "589.2129869816873", "Gps-Speed": "53"}
+},{
+"timestamp": 1729776254706,
+"data": {"Engine Load": "93,3", "Air Intake Temperature": "24,0", "Armin-Speed": "38", "Latitude": "48.3480755", "Vehicle Speed": "38", "Longitude": "14.2418584", "Engine Coolant Temperature": "88,0", "Engine RPM": "1677", "Altitude": "590.5878433984869", "Gps-Speed": "40"}
+},{
+"timestamp": 1729776258306,
+"data": {"Engine Load": "80,4", "Air Intake Temperature": "24,0", "Armin-Speed": "56", "Latitude": "48.3484116", "Vehicle Speed": "46", "Longitude": "14.2413215", "Engine Coolant Temperature": "88,0", "Engine RPM": "1802", "Altitude": "593.296866655752", "Gps-Speed": "57"}
+},{
+"timestamp": 1729776261931,
+"data": {"Engine Load": "77,3", "Air Intake Temperature": "25,0", "Armin-Speed": "58", "Latitude": "48.3487393", "Vehicle Speed": "60", "Longitude": "14.240854", "Engine Coolant Temperature": "88,0", "Engine RPM": "2444", "Altitude": "596.0154513402201", "Gps-Speed": "61"}
+},{
+"timestamp": 1729776265574,
+"data": {"Engine Load": "67,8", "Air Intake Temperature": "24,0", "Armin-Speed": "67", "Latitude": "48.3491864", "Vehicle Speed": "64", "Longitude": "14.2401423", "Engine Coolant Temperature": "89,0", "Engine RPM": "1832", "Altitude": "599.4470139647369", "Gps-Speed": "68"}
+},{
+"timestamp": 1729776269197,
+"data": {"Engine Load": "69,0", "Air Intake Temperature": "24,0", "Armin-Speed": "70", "Latitude": "48.3495439", "Vehicle Speed": "67", "Longitude": "14.239574", "Engine Coolant Temperature": "90,0", "Engine RPM": "1954", "Altitude": "601.2025175938998", "Gps-Speed": "68"}
+},{
+"timestamp": 1729776272806,
+"data": {"Engine Load": "68,2", "Air Intake Temperature": "24,0", "Armin-Speed": "66", "Latitude": "48.3500308", "Vehicle Speed": "66", "Longitude": "14.2388571", "Engine Coolant Temperature": "90,0", "Engine RPM": "1926", "Altitude": "602.8472660858864", "Gps-Speed": "68"}
+},{
+"timestamp": 1729776276431,
+"data": {"Engine Load": "52,5", "Air Intake Temperature": "23,0", "Armin-Speed": "71", "Latitude": "48.3506663", "Vehicle Speed": "68", "Longitude": "14.2384566", "Engine Coolant Temperature": "90,0", "Engine RPM": "1982", "Altitude": "605.9459116967088", "Gps-Speed": "72"}
+},{
+"timestamp": 1729776280057,
+"data": {"Engine Load": "54,5", "Air Intake Temperature": "23,0", "Armin-Speed": "75", "Latitude": "48.3512208", "Vehicle Speed": "72", "Longitude": "14.2384825", "Engine Coolant Temperature": "90,0", "Engine RPM": "2079", "Altitude": "609.1830312751491", "Gps-Speed": "73"}
+},{
+"timestamp": 1729776283670,
+"data": {"Engine Load": "60,8", "Air Intake Temperature": "23,0", "Armin-Speed": "70", "Latitude": "48.3519233", "Vehicle Speed": "71", "Longitude": "14.2388182", "Engine Coolant Temperature": "90,0", "Engine RPM": "2122", "Altitude": "613.0997217468692", "Gps-Speed": "67"}
+},{
+"timestamp": 1729776287305,
+"data": {"Engine Load": "64,3", "Air Intake Temperature": "23,0", "Armin-Speed": "66", "Latitude": "48.3524991", "Vehicle Speed": "67", "Longitude": "14.2393376", "Engine Coolant Temperature": "90,0", "Engine RPM": "1963", "Altitude": "617.3455444544484", "Gps-Speed": "69"}
+},{
+"timestamp": 1729776290920,
+"data": {"Engine Load": "31,4", "Air Intake Temperature": "23,0", "Armin-Speed": "60", "Latitude": "48.3529814", "Vehicle Speed": "62", "Longitude": "14.239307", "Engine Coolant Temperature": "90,0", "Engine RPM": "1839", "Altitude": "619.4605105409415", "Gps-Speed": "59"}
+},{
+"timestamp": 1729776294534,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "23,0", "Armin-Speed": "51", "Latitude": "48.353541", "Vehicle Speed": "54", "Longitude": "14.2392592", "Engine Coolant Temperature": "90,0", "Engine RPM": "1602", "Altitude": "621.8882334650569", "Gps-Speed": "50"}
+},{
+"timestamp": 1729776298153,
+"data": {"Engine Load": "59,6", "Air Intake Temperature": "23,0", "Armin-Speed": "45", "Latitude": "48.353841", "Vehicle Speed": "45", "Longitude": "14.2390283", "Engine Coolant Temperature": "90,0", "Engine RPM": "1909", "Altitude": "623.9890288181685", "Gps-Speed": "44"}
+},{
+"timestamp": 1729776301738,
+"data": {"Engine Load": "58,4", "Air Intake Temperature": "23,0", "Armin-Speed": "39", "Latitude": "48.354167", "Vehicle Speed": "41", "Longitude": "14.238638", "Engine Coolant Temperature": "90,0", "Engine RPM": "1753", "Altitude": "626.4573546488455", "Gps-Speed": "38"}
+},{
+"timestamp": 1729776305364,
+"data": {"Engine Load": "63,1", "Air Intake Temperature": "24,0", "Armin-Speed": "37", "Latitude": "48.3544862", "Vehicle Speed": "36", "Longitude": "14.238827", "Engine Coolant Temperature": "90,0", "Engine RPM": "1522", "Altitude": "629.0422108062337", "Gps-Speed": "31"}
+},{
+"timestamp": 1729776308977,
+"data": {"Engine Load": "70,6", "Air Intake Temperature": "24,0", "Armin-Speed": "39", "Latitude": "48.3546926", "Vehicle Speed": "35", "Longitude": "14.239101", "Engine Coolant Temperature": "90,0", "Engine RPM": "1430", "Altitude": "630.2813818355172", "Gps-Speed": "38"}
+},{
+"timestamp": 1729776312586,
+"data": {"Engine Load": "58,0", "Air Intake Temperature": "24,0", "Armin-Speed": "52", "Latitude": "48.3551587", "Vehicle Speed": "45", "Longitude": "14.2390915", "Engine Coolant Temperature": "90,0", "Engine RPM": "1814", "Altitude": "631.0289046678305", "Gps-Speed": "50"}
+},{
+"timestamp": 1729776316192,
+"data": {"Engine Load": "80,0", "Air Intake Temperature": "24,0", "Armin-Speed": "54", "Latitude": "48.3555364", "Vehicle Speed": "51", "Longitude": "14.2389046", "Engine Coolant Temperature": "91,0", "Engine RPM": "2111", "Altitude": "633.3308962201982", "Gps-Speed": "52"}
+},{
+"timestamp": 1729776319805,
+"data": {"Engine Load": "71,0", "Air Intake Temperature": "24,0", "Armin-Speed": "51", "Latitude": "48.3560317", "Vehicle Speed": "49", "Longitude": "14.2390196", "Engine Coolant Temperature": "91,0", "Engine RPM": "2067", "Altitude": "637.9673550220066", "Gps-Speed": "49"}
+},{
+"timestamp": 1729776323446,
+"data": {"Engine Load": "58,8", "Air Intake Temperature": "24,0", "Armin-Speed": "50", "Latitude": "48.3564494", "Vehicle Speed": "50", "Longitude": "14.2394677", "Engine Coolant Temperature": "91,0", "Engine RPM": "2084", "Altitude": "641.9781582078969", "Gps-Speed": "50"}
+},{
+"timestamp": 1729776327067,
+"data": {"Engine Load": "8,6", "Air Intake Temperature": "24,0", "Armin-Speed": "49", "Latitude": "48.3567754", "Vehicle Speed": "49", "Longitude": "14.2397585", "Engine Coolant Temperature": "91,0", "Engine RPM": "2052", "Altitude": "644.7472069665808", "Gps-Speed": "49"}
+},{
+"timestamp": 1729776330662,
+"data": {"Engine Load": "69,8", "Air Intake Temperature": "24,0", "Armin-Speed": "44", "Latitude": "48.3571283", "Vehicle Speed": "43", "Longitude": "14.2401563", "Engine Coolant Temperature": "92,0", "Engine RPM": "1840", "Altitude": "647.6616907307058", "Gps-Speed": "45"}
+},{
+"timestamp": 1729776334285,
+"data": {"Engine Load": "68,2", "Air Intake Temperature": "24,0", "Armin-Speed": "49", "Latitude": "48.357483", "Vehicle Speed": "45", "Longitude": "14.2400763", "Engine Coolant Temperature": "92,0", "Engine RPM": "1847", "Altitude": "649.5804024532094", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776337887,
+"data": {"Engine Load": "65,9", "Air Intake Temperature": "24,0", "Armin-Speed": "48", "Latitude": "48.3579046", "Vehicle Speed": "47", "Longitude": "14.2396976", "Engine Coolant Temperature": "92,0", "Engine RPM": "1966", "Altitude": "652.1700277731168", "Gps-Speed": "48"}
+},{
+"timestamp": 1729776341498,
+"data": {"Engine Load": "61,6", "Air Intake Temperature": "24,0", "Armin-Speed": "49", "Latitude": "48.3583461", "Vehicle Speed": "48", "Longitude": "14.2394478", "Engine Coolant Temperature": "92,0", "Engine RPM": "1988", "Altitude": "655.1155240935783", "Gps-Speed": "50"}
+},{
+"timestamp": 1729776345110,
+"data": {"Engine Load": "61,6", "Air Intake Temperature": "24,0", "Armin-Speed": "52", "Latitude": "48.3587157", "Vehicle Speed": "48", "Longitude": "14.2395689", "Engine Coolant Temperature": "92,0", "Engine RPM": "1995", "Altitude": "657.1937578843865", "Gps-Speed": "48"}
+},{
+"timestamp": 1729776348723,
+"data": {"Engine Load": "62,0", "Air Intake Temperature": "24,0", "Armin-Speed": "42", "Latitude": "48.3590882", "Vehicle Speed": "47", "Longitude": "14.2400031", "Engine Coolant Temperature": "92,0", "Engine RPM": "1991", "Altitude": "660.1892271795715", "Gps-Speed": "43"}
+},{
+"timestamp": 1729776352339,
+"data": {"Engine Load": "63,5", "Air Intake Temperature": "24,0", "Armin-Speed": "48", "Latitude": "48.3594979", "Vehicle Speed": "42", "Longitude": "14.240111", "Engine Coolant Temperature": "93,0", "Engine RPM": "1736", "Altitude": "662.1568050648864", "Gps-Speed": "46"}
+},{
+"timestamp": 1729776355945,
+"data": {"Engine Load": "54,5", "Air Intake Temperature": "24,0", "Armin-Speed": "51", "Latitude": "48.3598413", "Vehicle Speed": "46", "Longitude": "14.2399018", "Engine Coolant Temperature": "93,0", "Engine RPM": "1867", "Altitude": "662.7403651010868", "Gps-Speed": "49"}
+},{
+"timestamp": 1729776359558,
+"data": {"Engine Load": "67,5", "Air Intake Temperature": "23,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "46", "Longitude": "14.239841", "Engine Coolant Temperature": "93,0", "Engine RPM": "1928", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776363368,
+"data": {"Engine Load": "45,1", "Air Intake Temperature": "23,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "46", "Longitude": "14.239841", "Engine Coolant Temperature": "93,0", "Engine RPM": "1936", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776367154,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "23,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "42", "Longitude": "14.239841", "Engine Coolant Temperature": "93,0", "Engine RPM": "1788", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776370967,
+"data": {"Engine Load": "42,0", "Air Intake Temperature": "24,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "35", "Longitude": "14.239841", "Engine Coolant Temperature": "93,0", "Engine RPM": "1539", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776374792,
+"data": {"Engine Load": "63,1", "Air Intake Temperature": "24,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "20", "Longitude": "14.239841", "Engine Coolant Temperature": "93,0", "Engine RPM": "874", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776378588,
+"data": {"Engine Load": "64,3", "Air Intake Temperature": "24,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "23", "Longitude": "14.239841", "Engine Coolant Temperature": "93,0", "Engine RPM": "1360", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776382406,
+"data": {"Engine Load": "67,8", "Air Intake Temperature": "23,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "35", "Longitude": "14.239841", "Engine Coolant Temperature": "93,0", "Engine RPM": "2084", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776386220,
+"data": {"Engine Load": "54,9", "Air Intake Temperature": "24,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "41", "Longitude": "14.239841", "Engine Coolant Temperature": "93,0", "Engine RPM": "1670", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776390012,
+"data": {"Engine Load": "59,6", "Air Intake Temperature": "24,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "45", "Longitude": "14.239841", "Engine Coolant Temperature": "94,0", "Engine RPM": "1807", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776393788,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "23,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "52", "Longitude": "14.239841", "Engine Coolant Temperature": "94,0", "Engine RPM": "2118", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776397621,
+"data": {"Engine Load": "76,1", "Air Intake Temperature": "23,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "55", "Longitude": "14.239841", "Engine Coolant Temperature": "94,0", "Engine RPM": "2251", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776401500,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "23,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "62", "Longitude": "14.239841", "Engine Coolant Temperature": "94,0", "Engine RPM": "1762", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776405338,
+"data": {"Engine Load": "27,1", "Air Intake Temperature": "23,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "62", "Longitude": "14.239841", "Engine Coolant Temperature": "93,0", "Engine RPM": "1793", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776409175,
+"data": {"Engine Load": "50,2", "Air Intake Temperature": "23,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "63", "Longitude": "14.239841", "Engine Coolant Temperature": "93,0", "Engine RPM": "1829", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776412997,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "23,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "67", "Longitude": "14.239841", "Engine Coolant Temperature": "93,0", "Engine RPM": "1920", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776416757,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "68", "Longitude": "14.239841", "Engine Coolant Temperature": "92,0", "Engine RPM": "1986", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776421057,
+"data": {"Engine Load": "49,8", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "69", "Longitude": "14.239841", "Engine Coolant Temperature": "91,0", "Engine RPM": "2012", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776424859,
+"data": {"Engine Load": "70,6", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "62", "Longitude": "14.239841", "Engine Coolant Temperature": "90,0", "Engine RPM": "1844", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776428698,
+"data": {"Engine Load": "63,1", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "59", "Longitude": "14.239841", "Engine Coolant Temperature": "90,0", "Engine RPM": "1770", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776432534,
+"data": {"Engine Load": "70,6", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "56", "Longitude": "14.239841", "Engine Coolant Temperature": "90,0", "Engine RPM": "1647", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776436397,
+"data": {"Engine Load": "61,2", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "53", "Longitude": "14.239841", "Engine Coolant Temperature": "89,0", "Engine RPM": "1594", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776440231,
+"data": {"Engine Load": "65,1", "Air Intake Temperature": "23,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "51", "Longitude": "14.239841", "Engine Coolant Temperature": "90,0", "Engine RPM": "1491", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776444071,
+"data": {"Engine Load": "42,7", "Air Intake Temperature": "23,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "54", "Longitude": "14.239841", "Engine Coolant Temperature": "90,0", "Engine RPM": "1544", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776447879,
+"data": {"Engine Load": "38,0", "Air Intake Temperature": "23,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "58", "Longitude": "14.239841", "Engine Coolant Temperature": "90,0", "Engine RPM": "1682", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776451687,
+"data": {"Engine Load": "46,3", "Air Intake Temperature": "23,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "55", "Longitude": "14.239841", "Engine Coolant Temperature": "90,0", "Engine RPM": "1610", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776455475,
+"data": {"Engine Load": "41,2", "Air Intake Temperature": "23,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "55", "Longitude": "14.239841", "Engine Coolant Temperature": "90,0", "Engine RPM": "1592", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776459278,
+"data": {"Engine Load": "47,5", "Air Intake Temperature": "23,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "56", "Longitude": "14.239841", "Engine Coolant Temperature": "90,0", "Engine RPM": "1631", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776463100,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "23,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "58", "Longitude": "14.239841", "Engine Coolant Temperature": "90,0", "Engine RPM": "1668", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776466899,
+"data": {"Engine Load": "69,8", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "57", "Longitude": "14.239841", "Engine Coolant Temperature": "89,0", "Engine RPM": "1673", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776470723,
+"data": {"Engine Load": "26,7", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "64", "Longitude": "14.239841", "Engine Coolant Temperature": "89,0", "Engine RPM": "1839", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776474553,
+"data": {"Engine Load": "47,8", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "64", "Longitude": "14.239841", "Engine Coolant Temperature": "89,0", "Engine RPM": "1864", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776478398,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "65", "Longitude": "14.239841", "Engine Coolant Temperature": "89,0", "Engine RPM": "1897", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776482185,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "56", "Longitude": "14.239841", "Engine Coolant Temperature": "88,0", "Engine RPM": "1746", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776486009,
+"data": {"Engine Load": "58,0", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "39", "Longitude": "14.239841", "Engine Coolant Temperature": "88,0", "Engine RPM": "1694", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776489855,
+"data": {"Engine Load": "67,1", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "40", "Longitude": "14.239841", "Engine Coolant Temperature": "87,0", "Engine RPM": "1641", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776493716,
+"data": {"Engine Load": "41,2", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "53", "Longitude": "14.239841", "Engine Coolant Temperature": "87,0", "Engine RPM": "2107", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776497569,
+"data": {"Engine Load": "67,8", "Air Intake Temperature": "23,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "56", "Longitude": "14.239841", "Engine Coolant Temperature": "88,0", "Engine RPM": "1626", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776501419,
+"data": {"Engine Load": "69,0", "Air Intake Temperature": "23,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "57", "Longitude": "14.239841", "Engine Coolant Temperature": "88,0", "Engine RPM": "1663", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776505253,
+"data": {"Engine Load": "62,7", "Air Intake Temperature": "23,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "58", "Longitude": "14.239841", "Engine Coolant Temperature": "88,0", "Engine RPM": "1681", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776509073,
+"data": {"Engine Load": "34,5", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "68", "Longitude": "14.239841", "Engine Coolant Temperature": "88,0", "Engine RPM": "1937", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776512927,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "23,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "74", "Longitude": "14.239841", "Engine Coolant Temperature": "88,0", "Engine RPM": "1662", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776516803,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "23,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "74", "Longitude": "14.239841", "Engine Coolant Temperature": "88,0", "Engine RPM": "1674", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776520645,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "73", "Longitude": "14.239841", "Engine Coolant Temperature": "88,0", "Engine RPM": "1652", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776524498,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "72", "Longitude": "14.239841", "Engine Coolant Temperature": "88,0", "Engine RPM": "1634", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776528342,
+"data": {"Engine Load": "47,8", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "72", "Longitude": "14.239841", "Engine Coolant Temperature": "88,0", "Engine RPM": "1621", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776532164,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "74", "Longitude": "14.239841", "Engine Coolant Temperature": "87,0", "Engine RPM": "1667", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776535955,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "74", "Longitude": "14.239841", "Engine Coolant Temperature": "87,0", "Engine RPM": "1666", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776539810,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "75", "Longitude": "14.239841", "Engine Coolant Temperature": "87,0", "Engine RPM": "1698", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776543628,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "70", "Longitude": "14.239841", "Engine Coolant Temperature": "86,0", "Engine RPM": "1595", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776547450,
+"data": {"Engine Load": "29,0", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "72", "Longitude": "14.239841", "Engine Coolant Temperature": "86,0", "Engine RPM": "1633", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776551316,
+"data": {"Engine Load": "72,5", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "72", "Longitude": "14.239841", "Engine Coolant Temperature": "86,0", "Engine RPM": "1637", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776555149,
+"data": {"Engine Load": "78,4", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "73", "Longitude": "14.239841", "Engine Coolant Temperature": "86,0", "Engine RPM": "1657", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776558976,
+"data": {"Engine Load": "69,4", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "70", "Longitude": "14.239841", "Engine Coolant Temperature": "86,0", "Engine RPM": "1588", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776562761,
+"data": {"Engine Load": "70,2", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "69", "Longitude": "14.239841", "Engine Coolant Temperature": "86,0", "Engine RPM": "1568", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776566534,
+"data": {"Engine Load": "64,3", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "70", "Longitude": "14.239841", "Engine Coolant Temperature": "86,0", "Engine RPM": "1580", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776570321,
+"data": {"Engine Load": "68,2", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "72", "Longitude": "14.239841", "Engine Coolant Temperature": "86,0", "Engine RPM": "1632", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776574104,
+"data": {"Engine Load": "47,5", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "74", "Longitude": "14.239841", "Engine Coolant Temperature": "86,0", "Engine RPM": "1665", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776577905,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "72", "Longitude": "14.239841", "Engine Coolant Temperature": "86,0", "Engine RPM": "1648", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776581703,
+"data": {"Engine Load": "49,4", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "67", "Longitude": "14.239841", "Engine Coolant Temperature": "86,0", "Engine RPM": "1550", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776585516,
+"data": {"Engine Load": "51,8", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "65", "Longitude": "14.239841", "Engine Coolant Temperature": "86,0", "Engine RPM": "1478", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776589311,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "66", "Longitude": "14.239841", "Engine Coolant Temperature": "86,0", "Engine RPM": "1491", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776593128,
+"data": {"Engine Load": "0,8", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "66", "Longitude": "14.239841", "Engine Coolant Temperature": "86,0", "Engine RPM": "1492", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776596912,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "66", "Longitude": "14.239841", "Engine Coolant Temperature": "86,0", "Engine RPM": "1117", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776600691,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "67", "Longitude": "14.239841", "Engine Coolant Temperature": "85,0", "Engine RPM": "1964", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776604546,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "63", "Longitude": "14.239841", "Engine Coolant Temperature": "85,0", "Engine RPM": "1839", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776608396,
+"data": {"Engine Load": "0,4", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "62", "Longitude": "14.239841", "Engine Coolant Temperature": "84,0", "Engine RPM": "1847", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776612191,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "48", "Longitude": "14.239841", "Engine Coolant Temperature": "84,0", "Engine RPM": "972", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776615985,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "49", "Longitude": "14.239841", "Engine Coolant Temperature": "84,0", "Engine RPM": "2025", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776619786,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "41", "Longitude": "14.239841", "Engine Coolant Temperature": "84,0", "Engine RPM": "1735", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776623602,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "42", "Longitude": "14.239841", "Engine Coolant Temperature": "83,0", "Engine RPM": "1747", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776627410,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "44", "Longitude": "14.239841", "Engine Coolant Temperature": "83,0", "Engine RPM": "1826", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776631234,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "41", "Longitude": "14.239841", "Engine Coolant Temperature": "83,0", "Engine RPM": "1808", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776635098,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "31", "Longitude": "14.239841", "Engine Coolant Temperature": "83,0", "Engine RPM": "1300", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776638917,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "32", "Longitude": "14.239841", "Engine Coolant Temperature": "83,0", "Engine RPM": "1354", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776642744,
+"data": {"Engine Load": "36,5", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "30", "Longitude": "14.239841", "Engine Coolant Temperature": "83,0", "Engine RPM": "1265", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776646586,
+"data": {"Engine Load": "57,3", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "34", "Longitude": "14.239841", "Engine Coolant Temperature": "83,0", "Engine RPM": "1404", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776650400,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "41", "Longitude": "14.239841", "Engine Coolant Temperature": "83,0", "Engine RPM": "1637", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776654241,
+"data": {"Engine Load": "28,2", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "43", "Longitude": "14.239841", "Engine Coolant Temperature": "83,0", "Engine RPM": "1794", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776658044,
+"data": {"Engine Load": "20,8", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "43", "Longitude": "14.239841", "Engine Coolant Temperature": "83,0", "Engine RPM": "1766", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776661830,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "44", "Longitude": "14.239841", "Engine Coolant Temperature": "83,0", "Engine RPM": "1828", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776665641,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "42", "Longitude": "14.239841", "Engine Coolant Temperature": "83,0", "Engine RPM": "1762", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776669464,
+"data": {"Engine Load": "39,2", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "40", "Longitude": "14.239841", "Engine Coolant Temperature": "83,0", "Engine RPM": "1695", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776673271,
+"data": {"Engine Load": "36,9", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "22", "Longitude": "14.239841", "Engine Coolant Temperature": "83,0", "Engine RPM": "866", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776677080,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "8", "Longitude": "14.239841", "Engine Coolant Temperature": "83,0", "Engine RPM": "1107", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776680889,
+"data": {"Engine Load": "74,1", "Air Intake Temperature": "23,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "22", "Longitude": "14.239841", "Engine Coolant Temperature": "83,0", "Engine RPM": "1407", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776684690,
+"data": {"Engine Load": "60,8", "Air Intake Temperature": "23,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "35", "Longitude": "14.239841", "Engine Coolant Temperature": "84,0", "Engine RPM": "1981", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776688496,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "23,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "47", "Longitude": "14.239841", "Engine Coolant Temperature": "84,0", "Engine RPM": "1945", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776692259,
+"data": {"Engine Load": "85,1", "Air Intake Temperature": "23,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "35", "Longitude": "14.239841", "Engine Coolant Temperature": "84,0", "Engine RPM": "1603", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776696070,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "43", "Longitude": "14.239841", "Engine Coolant Temperature": "84,0", "Engine RPM": "1668", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776699890,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "46", "Longitude": "14.239841", "Engine Coolant Temperature": "84,0", "Engine RPM": "1917", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776703717,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "46", "Longitude": "14.239841", "Engine Coolant Temperature": "84,0", "Engine RPM": "1907", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776707512,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "46", "Longitude": "14.239841", "Engine Coolant Temperature": "84,0", "Engine RPM": "1918", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776711300,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "46", "Longitude": "14.239841", "Engine Coolant Temperature": "83,0", "Engine RPM": "1911", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776715068,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "47", "Longitude": "14.239841", "Engine Coolant Temperature": "83,0", "Engine RPM": "1934", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776718862,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "50", "Longitude": "14.239841", "Engine Coolant Temperature": "83,0", "Engine RPM": "2073", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776722661,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "51", "Longitude": "14.239841", "Engine Coolant Temperature": "83,0", "Engine RPM": "2117", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776726500,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "51", "Longitude": "14.239841", "Engine Coolant Temperature": "82,0", "Engine RPM": "2143", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776730339,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "52", "Longitude": "14.239841", "Engine Coolant Temperature": "82,0", "Engine RPM": "2159", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776734150,
+"data": {"Engine Load": "90,2", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "39", "Longitude": "14.239841", "Engine Coolant Temperature": "82,0", "Engine RPM": "1702", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776737934,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "49", "Longitude": "14.239841", "Engine Coolant Temperature": "82,0", "Engine RPM": "1890", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776741713,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "53", "Longitude": "14.239841", "Engine Coolant Temperature": "82,0", "Engine RPM": "2215", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776745518,
+"data": {"Engine Load": "72,9", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "44", "Longitude": "14.239841", "Engine Coolant Temperature": "82,0", "Engine RPM": "1861", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776749336,
+"data": {"Engine Load": "85,5", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "49", "Longitude": "14.239841", "Engine Coolant Temperature": "82,0", "Engine RPM": "1926", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776753159,
+"data": {"Engine Load": "87,1", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "64", "Longitude": "14.239841", "Engine Coolant Temperature": "82,0", "Engine RPM": "2548", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776756947,
+"data": {"Engine Load": "86,7", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "68", "Longitude": "14.239841", "Engine Coolant Temperature": "82,0", "Engine RPM": "1931", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776760789,
+"data": {"Engine Load": "52,5", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "75", "Longitude": "14.239841", "Engine Coolant Temperature": "83,0", "Engine RPM": "2165", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776764612,
+"data": {"Engine Load": "62,0", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "76", "Longitude": "14.239841", "Engine Coolant Temperature": "84,0", "Engine RPM": "2258", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776768441,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "72", "Longitude": "14.239841", "Engine Coolant Temperature": "85,0", "Engine RPM": "2121", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776772235,
+"data": {"Engine Load": "43,1", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "61", "Longitude": "14.239841", "Engine Coolant Temperature": "85,0", "Engine RPM": "1845", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776776059,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "33", "Longitude": "14.239841", "Engine Coolant Temperature": "85,0", "Engine RPM": "870", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776779893,
+"data": {"Engine Load": "51,8", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "24", "Longitude": "14.239841", "Engine Coolant Temperature": "85,0", "Engine RPM": "1424", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776783665,
+"data": {"Engine Load": "70,2", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "32", "Longitude": "14.239841", "Engine Coolant Temperature": "85,0", "Engine RPM": "2001", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776787443,
+"data": {"Engine Load": "93,3", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "38", "Longitude": "14.239841", "Engine Coolant Temperature": "85,0", "Engine RPM": "2271", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776791224,
+"data": {"Engine Load": "51,8", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "38", "Longitude": "14.239841", "Engine Coolant Temperature": "85,0", "Engine RPM": "1571", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776794998,
+"data": {"Engine Load": "65,1", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "43", "Longitude": "14.239841", "Engine Coolant Temperature": "86,0", "Engine RPM": "1790", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776798790,
+"data": {"Engine Load": "98,0", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "52", "Longitude": "14.239841", "Engine Coolant Temperature": "86,0", "Engine RPM": "2042", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776803086,
+"data": {"Engine Load": "60,8", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "66", "Longitude": "14.239841", "Engine Coolant Temperature": "86,0", "Engine RPM": "1891", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776806877,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "68", "Longitude": "14.239841", "Engine Coolant Temperature": "87,0", "Engine RPM": "1970", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776810664,
+"data": {"Engine Load": "37,3", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "66", "Longitude": "14.239841", "Engine Coolant Temperature": "86,0", "Engine RPM": "1949", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776814485,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "63", "Longitude": "14.239841", "Engine Coolant Temperature": "86,0", "Engine RPM": "1872", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776818308,
+"data": {"Engine Load": "74,5", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "55", "Longitude": "14.239841", "Engine Coolant Temperature": "86,0", "Engine RPM": "1656", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776822143,
+"data": {"Engine Load": "15,7", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "52", "Longitude": "14.239841", "Engine Coolant Temperature": "85,0", "Engine RPM": "1540", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776825969,
+"data": {"Engine Load": "58,0", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "41", "Longitude": "14.239841", "Engine Coolant Temperature": "85,0", "Engine RPM": "1721", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776829782,
+"data": {"Engine Load": "65,5", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "44", "Longitude": "14.239841", "Engine Coolant Temperature": "85,0", "Engine RPM": "1837", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776833630,
+"data": {"Engine Load": "48,6", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "44", "Longitude": "14.239841", "Engine Coolant Temperature": "85,0", "Engine RPM": "1841", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776837425,
+"data": {"Engine Load": "27,5", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "48", "Longitude": "14.239841", "Engine Coolant Temperature": "85,0", "Engine RPM": "1994", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776841169,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "52", "Longitude": "14.239841", "Engine Coolant Temperature": "85,0", "Engine RPM": "2173", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776844970,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "53", "Longitude": "14.239841", "Engine Coolant Temperature": "85,0", "Engine RPM": "2250", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776848749,
+"data": {"Engine Load": "23,1", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "33", "Longitude": "14.239841", "Engine Coolant Temperature": "84,0", "Engine RPM": "891", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776852560,
+"data": {"Engine Load": "69,4", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "34", "Longitude": "14.239841", "Engine Coolant Temperature": "84,0", "Engine RPM": "1989", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776856328,
+"data": {"Engine Load": "39,6", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "47", "Longitude": "14.239841", "Engine Coolant Temperature": "84,0", "Engine RPM": "1914", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776860130,
+"data": {"Engine Load": "15,7", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "53", "Longitude": "14.239841", "Engine Coolant Temperature": "84,0", "Engine RPM": "2189", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776863935,
+"data": {"Engine Load": "45,5", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "52", "Longitude": "14.239841", "Engine Coolant Temperature": "84,0", "Engine RPM": "2166", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776867723,
+"data": {"Engine Load": "31,0", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "55", "Longitude": "14.239841", "Engine Coolant Temperature": "83,0", "Engine RPM": "2240", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776871480,
+"data": {"Engine Load": "61,2", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "59", "Longitude": "14.239841", "Engine Coolant Temperature": "83,0", "Engine RPM": "2441", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776875259,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "62", "Longitude": "14.239841", "Engine Coolant Temperature": "83,0", "Engine RPM": "1811", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776879067,
+"data": {"Engine Load": "63,1", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "58", "Longitude": "14.239841", "Engine Coolant Temperature": "84,0", "Engine RPM": "1693", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776882896,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "20,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "65", "Longitude": "14.239841", "Engine Coolant Temperature": "84,0", "Engine RPM": "1846", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776886724,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "65", "Longitude": "14.239841", "Engine Coolant Temperature": "84,0", "Engine RPM": "1901", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776890536,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "65", "Longitude": "14.239841", "Engine Coolant Temperature": "83,0", "Engine RPM": "1888", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776894380,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "20,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "69", "Longitude": "14.239841", "Engine Coolant Temperature": "83,0", "Engine RPM": "2004", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776898189,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "20,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "65", "Longitude": "14.239841", "Engine Coolant Temperature": "83,0", "Engine RPM": "1966", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776901937,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "45", "Longitude": "14.239841", "Engine Coolant Temperature": "83,0", "Engine RPM": "966", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776905716,
+"data": {"Engine Load": "35,7", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "44", "Longitude": "14.239841", "Engine Coolant Temperature": "82,0", "Engine RPM": "1774", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776909492,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "20,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "52", "Longitude": "14.239841", "Engine Coolant Temperature": "82,0", "Engine RPM": "2113", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776913292,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "20,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "53", "Longitude": "14.239841", "Engine Coolant Temperature": "82,0", "Engine RPM": "2204", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776917103,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "20,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "53", "Longitude": "14.239841", "Engine Coolant Temperature": "82,0", "Engine RPM": "2225", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776920919,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "20,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "52", "Longitude": "14.239841", "Engine Coolant Temperature": "81,0", "Engine RPM": "2189", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776924700,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "20,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "51", "Longitude": "14.239841", "Engine Coolant Temperature": "81,0", "Engine RPM": "2088", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776928517,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "20,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "53", "Longitude": "14.239841", "Engine Coolant Temperature": "81,0", "Engine RPM": "2178", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776932250,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "20,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "52", "Longitude": "14.239841", "Engine Coolant Temperature": "81,0", "Engine RPM": "2190", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776936016,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "20,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "52", "Longitude": "14.239841", "Engine Coolant Temperature": "80,0", "Engine RPM": "2192", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776939779,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "20,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "50", "Longitude": "14.239841", "Engine Coolant Temperature": "80,0", "Engine RPM": "2064", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776943549,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "20,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "52", "Longitude": "14.239841", "Engine Coolant Temperature": "80,0", "Engine RPM": "2149", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776947314,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "20,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "52", "Longitude": "14.239841", "Engine Coolant Temperature": "79,0", "Engine RPM": "2182", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776951089,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "20,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "51", "Longitude": "14.239841", "Engine Coolant Temperature": "79,0", "Engine RPM": "2156", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776954895,
+"data": {"Engine Load": "49,4", "Air Intake Temperature": "20,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "48", "Longitude": "14.239841", "Engine Coolant Temperature": "79,0", "Engine RPM": "2029", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776958700,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "20,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "41", "Longitude": "14.239841", "Engine Coolant Temperature": "79,0", "Engine RPM": "1816", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776962472,
+"data": {"Engine Load": "65,1", "Air Intake Temperature": "20,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "23", "Longitude": "14.239841", "Engine Coolant Temperature": "79,0", "Engine RPM": "1578", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776966251,
+"data": {"Engine Load": "97,6", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "33", "Longitude": "14.239841", "Engine Coolant Temperature": "79,0", "Engine RPM": "1925", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776970062,
+"data": {"Engine Load": "65,5", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "42", "Longitude": "14.239841", "Engine Coolant Temperature": "79,0", "Engine RPM": "1678", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776973862,
+"data": {"Engine Load": "52,9", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "42", "Longitude": "14.239841", "Engine Coolant Temperature": "79,0", "Engine RPM": "1736", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776977653,
+"data": {"Engine Load": "50,6", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "41", "Longitude": "14.239841", "Engine Coolant Temperature": "79,0", "Engine RPM": "1715", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776981438,
+"data": {"Engine Load": "39,2", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "39", "Longitude": "14.239841", "Engine Coolant Temperature": "80,0", "Engine RPM": "1642", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776985216,
+"data": {"Engine Load": "63,1", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "36", "Longitude": "14.239841", "Engine Coolant Temperature": "80,0", "Engine RPM": "1512", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776988995,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "34", "Longitude": "14.239841", "Engine Coolant Temperature": "80,0", "Engine RPM": "1440", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776992763,
+"data": {"Engine Load": "40,0", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "28", "Longitude": "14.239841", "Engine Coolant Temperature": "80,0", "Engine RPM": "864", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729776996528,
+"data": {"Engine Load": "73,7", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "23", "Longitude": "14.239841", "Engine Coolant Temperature": "80,0", "Engine RPM": "1544", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729777000335,
+"data": {"Engine Load": "2,0", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "23", "Longitude": "14.239841", "Engine Coolant Temperature": "80,0", "Engine RPM": "1456", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729777004135,
+"data": {"Engine Load": "53,3", "Air Intake Temperature": "21,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "8", "Longitude": "14.239841", "Engine Coolant Temperature": "81,0", "Engine RPM": "870", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729777007955,
+"data": {"Engine Load": "16,9", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "8", "Longitude": "14.239841", "Engine Coolant Temperature": "81,0", "Engine RPM": "1168", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729777011758,
+"data": {"Engine Load": "35,3", "Air Intake Temperature": "22,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "2", "Longitude": "14.239841", "Engine Coolant Temperature": "81,0", "Engine RPM": "833", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729777015543,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "23,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "0", "Longitude": "14.239841", "Engine Coolant Temperature": "82,0", "Engine RPM": "805", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{
+"timestamp": 1729777019222,
+"data": {"Engine Load": "0,0", "Air Intake Temperature": "24,0", "Armin-Speed": "48", "Latitude": "48.3603189", "Vehicle Speed": "0", "Longitude": "14.239841", "Engine Coolant Temperature": "82,0", "Engine RPM": "0", "Altitude": "664.9367486140661", "Gps-Speed": "47"}
+},{}]

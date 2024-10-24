@@ -1,7 +1,5 @@
 = Dokumentation zur OBD-Funktionalität bei diversen Fahrzeugen
 
-:toc: preamble
-
 == Inhaltsverzeichnis
 
 === Fahrzeugdaten
@@ -14,7 +12,7 @@
 | Intake Manifold Pressure | &#x2714; | &#x2714; | &#x2714; | &#x2714; | &#x2716; | &#x2716;
 | Engine Runtime | &#x2714; | &#x2716; | &#x2714; | &#x2714; | &#x2716; | &#x2716;
 | Relative Throttle Position | &#x003F; | &#x003F; | &#x003F; | &#x003F; | &#x003F; | &#x003F;
-| Air Intake Temperature | &#x2714; | &#x2716; | &#x2714; | &#x2714; | &#x2716; | &#x2716;
+| Air Intake Temperature | &#x2714; | &#x2716; | &#x2714; | &#x2714; | &#x2716; | &#x2714;
 | Fuel Rail Pressure | &#x2716; | &#x2716; | &#x2716; | &#x2716; | &#x2716; | &#x2716;
 | Fuel Consumption Rate | &#x2716; | &#x2716; | &#x2716; | &#x2716; | &#x2716; | &#x2716;
 | Engine Coolant Temperature | &#x2714; | &#x003F; | &#x2714; | &#x2714; | &#x2714; | &#x2714;
@@ -26,14 +24,8 @@
 | Fuel Rail Gauge Pressure | &#x003F; | &#x2716; | &#x2716; | &#x003F; | &#x2716; | &#x2716;
 | Fuel Level | &#x2716; | &#x003F; | &#x2714; | &#x2716; | &#x2716; | &#x2716;
 | Engine Oil Temperature | &#x2716; | &#x2714; | &#x2716; | &#x2716; | &#x2714; | &#x2716;
-| VIN | &#x2714; | &#x2716; | &#x2714; | &#x2716; | &#x2714; | &#x2716;
-| Vehicle Speed | &#x2714; | &#x2716; | &#x2714; | &#x2714; | &#x003F; | &#x2716;
-| Engine RPM | &#x2714; | &#x2714; | &#x003F; | &#x2714; | &#x2716; | &#x2716;
+| VIN | &#x2714; | &#x2716; | &#x2714; | &#x2716; | &#x2714; | &#x003F;
+| Vehicle Speed | &#x2714; | &#x2716; | &#x2714; | &#x2714; | &#x003F; | &#x2714;
+| Engine RPM | &#x2714; | &#x2714; | &#x003F; | &#x2714; | &#x2716; | &#x2714;
 | Fuel Pressure | &#x2716; | &#x2716; | &#x2716; | &#x2716; | &#x2716; | &#x2716;
 |===
-
-=== VW Passat Diesel 2013
-
-=== BMW 3 Benzin 2004
-
-=== Renault Laguna Diesel 2004

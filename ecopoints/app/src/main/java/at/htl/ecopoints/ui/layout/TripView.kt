@@ -87,7 +87,7 @@ class TripView {
                     it.tripViewModel.carData["Latitude"] = location.latitude.toString()
                     it.tripViewModel.carData["Longitude"] = location.longitude.toString()
                     it.tripViewModel.carData["Altitude"] = location.altitude.toString()
-                    it.tripViewModel.carData["Gps-Speed"] = ((location.speed * 10.0).roundToInt() / 10).toString()
+                    it.tripViewModel.carData["Gps-Speed"] = ((location.speed * 10.0 * 3.6).roundToInt() / 10).toString()
                     it.tripViewModel.carData["Armin-Speed"] =  ((speedCalculator.calculateSpeed(loc)*10.0).roundToInt() / 10).toString()
 //                        val fuelCons = generateRandomFuelCons()
 //                        it.tripViewModel.map.add(
@@ -255,7 +255,6 @@ class TripView {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                Gauge(title = "Speed", value = data["Vehicle Speed"] ?: "0", unit = "km/h")
                 Gauge(title = "GPS-Speed", value = data["Gps-Speed"] ?: "0", unit = "km/h")
                 Gauge(title = "Armin-Speed", value = data["Armin-Speed"] ?: "0", unit = "km/h")
             }
@@ -267,7 +266,8 @@ class TripView {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                Gauge(title = "RPM2", value = data["Engine RPM_CLEANED_RES"] ?: "0", unit = "rpm")
+//                Gauge(title = "RPM2", value = data["Engine RPM_CLEANED_RES"] ?: "0", unit = "rpm")
+                Gauge(title = "Obd-Speed", value = data["Vehicle Speed"] ?: "0", unit = "km/h")
                 Gauge(title = "RPM", value = data["Engine RPM"] ?: "0", unit = "rpm")
             }
 
@@ -278,7 +278,7 @@ class TripView {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                Gauge(title = "Engine Load", value = data["Engine Absolute Load"] ?: "0", unit = "%")
+                Gauge(title = "Engine Load", value = data["Engine Load"] ?: "0", unit = "%")
                 Gauge(title = "Throttle Position", value = data["Throttle Position"] ?: "0", unit = "%")
             }
 

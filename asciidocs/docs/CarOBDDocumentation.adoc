@@ -7,17 +7,86 @@
 === Audi A4 Diesel 2019
 
 |===
-| Fahrzeugdaten | Status
+| Fahrzeugdaten | Resultat | Status
 
-| Engine Load | &#x2714;
+| Engine Load | 14,5% | &#x2714;
+| Intake Manifold Pressure | 99 kPa | &#x2714;
+| Engine Runtime | 00:01:03 | &#x2714;
+| Relative Throttle Position | 19.6% | &#x003F;
+| Air Intake Temperature | 23.0 °C | &#x2714;
+| Fuel Rail Pressure | Error | &#x2716;
+| Fuel Consumption Rate | Error | &#x2716;
+| Engine Coolant Temperature | 38 °C | &#x2714;
+| Fuel Type | Error | &#x2716;
+| Barometric Pressure | 99 kPa | &#x2714;
+| Engine Absolute Load | Error | &#x2716;
+| Ambient Air Temperature | 21 °C | &#x2714;
+| Throttle Position | 27.8% | &#x003F;
+| Fuel Rail Gauge Pressure | 30020 kPa | &#x003F;
+| Fuel Level | 9.0% | &#x2714;
+| Engine Oil Temperature | Error | &#x2716;
+| VIN | | &#x2714;
+| Vehicle Speed | 0 Km/h | &#x2714;
+| Engine RPM | 3760516694891 RPM | &#x003F;
+| Fuel Pressure | Error | &#x2716;
 |===
 
 === BMW 3 Diesel 2011
+|===
+| Fahrzeugdaten | Resultat | Status
 
-=== VW Polo Diesel 2019
+| Engine Load | Does not exist | &#x2716;
+| Intake Manifold Pressure | 11 kPa | &#x2714;
+| Engine Runtime | 00:00:54 | &#x2714;
+| Relative Throttle Position | 87.1% | &#x003F;
+| Air Intake Temperature | Error | &#x2716;
+| Fuel Rail Pressure | Error | &#x2716;
+| Fuel Consumption Rate | Error | &#x2716;
+| Engine Coolant Temperature | -28 °C | &#x003F;
+| Fuel Type | Error | &#x2716;
+| Barometric Pressure | 99 kPa | &#x2714;
+| Engine Absolute Load | 0.0 % | &#x003F;
+| Ambient Air Temperature | 28 °C | &#x2714;
+| Throttle Position | 38.8% | &#x003F;
+| Fuel Rail Gauge Pressure | Error | &#x2716;
+| Fuel Level | 28.6% | &#x003F;
+| Engine Oil Temperature | 33.0 °C | &#x2714;
+| VIN | | &#x2716;
+| Vehicle Speed | Error | &#x271;
+| Engine RPM | 3760516694891 RPM | &#x003F;
+| Fuel Pressure | Error | &#x2716;
+|===
+
+=== Fahrzeugdaten
+
+[options="header", cols="1,1,1,1"]
+|===
+|  | VW Polo Diesel 2019 | BMW 3 Diesel 2011 | Audi A4 Diesel 2019
+
+| Engine Load | &#x2714; | &#x2716; | &#x2714;
+| Intake Manifold Pressure | &#x2714; | &#x2714; | &#x2714;
+| Engine Runtime | &#x2714; | &#x2714; | &#x2714;
+| Relative Throttle Position | &#x003F; | &#x003F; | &#x003F;
+| Air Intake Temperature | &#x2714; | &#x2716; | &#x2714;
+| Fuel Rail Pressure | &#x2716; | &#x2716; | &#x2716;
+| Fuel Consumption Rate | &#x2716; | &#x2716; | &#x2716;
+| Engine Coolant Temperature | &#x2714; | &#x003F; | &#x2714;
+| Fuel Type | &#x2716; | &#x2716; | &#x2716;
+| Barometric Pressure | &#x2714; | &#x2714; | &#x2714;
+| Engine Absolute Load | &#x2716; | &#x003F; | &#x2716;
+| Ambient Air Temperature | &#x2714; | &#x2714; | &#x2714;
+| Throttle Position | &#x003F; | &#x003F; | &#x003F;
+| Fuel Rail Gauge Pressure | &#x2716; | &#x2716; | &#x2716;
+| Fuel Level | &#x2714; | &#x003F; | &#x2714;
+| Engine Oil Temperature | &#x2716; | &#x2714; | &#x2716;
+| VIN | &#x2714; | &#x2716; | &#x2714;
+| Vehicle Speed | &#x2716; | &#x2716; | &#x2716;
+| Engine RPM | &#x003F; | &#x003F; | &#x003F;
+| Fuel Pressure | &#x2716; | &#x2716; | &#x2716;
+|===
 
 === VW Passat Diesel 2013
 
 === BMW 3 Benzin 2004
 
-=== Renault Laguna Diesel 2005
+=== Renault Laguna Diesel 2004

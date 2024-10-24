@@ -1,2 +1,8 @@
 .idea
+.vscode
 node_modules
+notebook/.ipynb_checkpoints
+notebook/data/data.json
+notebook/html_files/3d_path_map_with_lines_and_elevation.html
+notebook/html_files/driven_route_map.html
+

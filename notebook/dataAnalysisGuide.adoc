@@ -1,0 +1,64 @@
+= Data Analysis Guide
+:toc: auto
+:icons: font
+:source-highlighter: coderay
+:imagesdir: images
+
+== Requirements
+* Jupyter Notebook should be up and running
+* The latest version of Ecopoints pulled
+* data.json file should be present in the data/ directory 
+
+== Installation of missing libraries
+
+=== Pandas
+
+image::pandas.png[]
+
+[source,shell]
+----
+pip install pandas
+----
+
+=== pydeck 
+
+image::pydeck.png[]
+
+[source,shell]
+----
+pip install pydeck
+----
+
+
+=== plotly
+
+image::plotly.png[]
+
+[source,shell]
+----
+pip install plotly
+----
+
+=== dash
+
+image::dash.png[]
+
+[source,shell]
+----
+pip install jupyter-dash
+----
+
+== Running
+
+IMPORTANT: You need to restart your notebook first before running the notebook!
+
+If all the requirements are met, you can run the notebook by executing the cells below. (Run->Run All Cells)
+
+NOTE: If you have issues with rendering the plots, use the following command to install the required libraries, then restart the notebook:
+
+[source,shell]
+----
+pip install --upgrade notebook ipywidgets
+----
+
+Wow, you did it!, now you can start analyzing :)

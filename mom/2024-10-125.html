@@ -745,7 +745,10 @@ pre.rouge .gs {
 <div class="ulist">
 <ul>
 <li>
-<p>GET CreateTrip &#8594; Returns new TripId,</p>
+<p>GET CreateTrip &#8594; Returns new TripId, Creates trip with start time and tripid</p>
+</li>
+<li>
+<p>Post EndTrip &#8594; Ends the started Trip, sets end-time in current trip</p>
 </li>
 <li>
 <p>GET GetAllTrips &#8594; Returns a list of TripIds</p>
@@ -755,6 +758,13 @@ pre.rouge .gs {
 </li>
 <li>
 <p>GET Query &#8594; (data name, trip-id) &#8594; Queries the db for specified data in a trip, and returns this data</p>
+<div class="ulist">
+<ul>
+<li>
+<p>dynamische get request / dynamische query z.b: "get {name} from  db" und ich rufe dann die query mit dem namen auf, was ich für die visualisierung brauche</p>
+</li>
+</ul>
+</div>
 </li>
 </ul>
 </div></div></td>
@@ -818,7 +828,7 @@ pre.rouge .gs {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-10-25 09:20:50 UTC
+Last updated 2024-10-25 09:23:25 UTC
 </div>
 </div>
 </body>

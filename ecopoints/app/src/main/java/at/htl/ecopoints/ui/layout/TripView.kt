@@ -1017,7 +1017,6 @@ class TripView {
                 title = "Not connected",
                 text = "Please connect to a device first",
                 onDismiss = {
-                    obdReaderKt.cancelTest()
                     store.next { it.tripViewModel.showTestCommandDialog = false }
                 })
         }
@@ -1035,7 +1034,7 @@ class TripView {
             LaunchedEffect(key1 = state.value.showTestCommandDialog) {
                 if (state.value.showTestCommandDialog) {
                     store.next { it.tripViewModel.availablePIDSs.clear() }
-                    obdReaderKt.testRelevantCommands(
+                    obdReaderKt.checkAvailablePIDsAndCommands(
                         btConnectionHandler.inputStream,
                         btConnectionHandler.outputStream
                     )
@@ -1045,6 +1044,7 @@ class TripView {
             BasicAlertDialog(
                 onDismissRequest = {
                     store.next {
+                        obdReaderKt.stopCheckingAvailablePIDs()
                         it.tripViewModel.showTestCommandDialog = false
                     }
                 },

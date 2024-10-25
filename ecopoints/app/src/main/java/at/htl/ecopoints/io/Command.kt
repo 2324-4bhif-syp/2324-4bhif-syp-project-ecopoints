@@ -47,8 +47,8 @@ val obdAvailablePIDsCommands = listOf<ObdCommand>(
     AvailablePIDsCommand(AvailablePIDsCommand.AvailablePIDsRanges.PIDS_01_TO_20),
     AvailablePIDsCommand(AvailablePIDsCommand.AvailablePIDsRanges.PIDS_21_TO_40),
     AvailablePIDsCommand(AvailablePIDsCommand.AvailablePIDsRanges.PIDS_41_TO_60),
-    AvailablePIDsCommand(AvailablePIDsCommand.AvailablePIDsRanges.PIDS_61_TO_80),
-    AvailablePIDsCommand(AvailablePIDsCommand.AvailablePIDsRanges.PIDS_81_TO_A0),
+//    AvailablePIDsCommand(AvailablePIDsCommand.AvailablePIDsRanges.PIDS_61_TO_80),
+//    AvailablePIDsCommand(AvailablePIDsCommand.AvailablePIDsRanges.PIDS_81_TO_A0),
 )
 
 val relevantObdCommands = listOf<ObdCommand>(
@@ -78,17 +78,17 @@ val relevantObdCommands = listOf<ObdCommand>(
     FuelConsumptionRateCommand()
 )
 
-val carDataCommands = listOf<ObdCommand>(
-    RPMCommand(),
-//        RpmCleanedResCommand(),
-    SpeedCommand(),
-//        FuelConsumptionRateCommand(),
-//        LoadCommand(),
-//        AbsoluteLoadCommand(),
-//        ThrottlePositionCommand(),
-//        RelativeThrottlePositionCommand(),
-    EngineCoolantTemperatureCommand(),
-    AirIntakeTemperatureCommand(),
-    LoadCommand(),
-//        OilTemperatureCommand(),
-)
+//val carDataCommands = listOf<ObdCommand>(
+//    RPMCommand(),
+////        RpmCleanedResCommand(),
+//    SpeedCommand(),
+////        FuelConsumptionRateCommand(),
+////        LoadCommand(),
+////        AbsoluteLoadCommand(),
+////        ThrottlePositionCommand(),
+////        RelativeThrottlePositionCommand(),
+//    EngineCoolantTemperatureCommand(),
+//    AirIntakeTemperatureCommand(),
+//    LoadCommand(),
+////        OilTemperatureCommand(),
+//)

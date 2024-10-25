@@ -153,21 +153,21 @@ class ObdReaderKt {
     }
 
     fun testRelevantCommands(inputStream: InputStream?, outputStream: OutputStream?) {
-            try {
-                val obdConnection = ObdDeviceConnection(inputStream!!, outputStream!!)
+        try {
+            val obdConnection = ObdDeviceConnection(inputStream!!, outputStream!!)
 
-                var availableCommands = getWorkingObdCommands(obdConnection)
+            var availableCommands = getWorkingObdCommands(obdConnection)
 
-                Log.d(TEST_COMMANDS_TAG, "Available Commands are:")
+            Log.d(TEST_COMMANDS_TAG, "Available Commands are:")
 
-                availableCommands.forEach { command ->
-                    Log.d(TEST_COMMANDS_TAG, command.name)
-                }
-
+            availableCommands.forEach { command ->
+                Log.d(TEST_COMMANDS_TAG, command.name)
+                store.next{it -> it.tripViewModel.availablePids[command.name] = "available"}
             }
-            catch (e: Exception) {
-                Log.e(TEST_COMMANDS_TAG, "Error while setting up OBD connection", e)
-            }
+
+        } catch (e: Exception) {
+            Log.e(TEST_COMMANDS_TAG, "Error while setting up OBD connection", e)
+        }
 
 //                while (isActive)
 //                    obdCommands.forEach { command ->
@@ -270,7 +270,7 @@ class ObdReaderKt {
     }
 
     fun getWorkingObdCommands(obdConnection: ObdDeviceConnection): List<ObdCommand> {
-        val workingCommands = mutableListOf<ObdCommand>()
+        var workingCommands = mutableListOf<ObdCommand>()
         val availablePIDs = mutableListOf<ObdResponse>()
 
         var maxRetries = 3;
@@ -291,6 +291,7 @@ class ObdReaderKt {
 
                         availablePIDs.add(result)
                         isSuccessful = true;
+                        attempts++;
                     } catch (e: Exception) {
                         attempts++;
                         Log.e(
@@ -304,14 +305,16 @@ class ObdReaderKt {
                 }
             }
 
-        }
-
-        Log.d(TEST_COMMANDS_TAG, "Available PIDs are:")
-        availablePIDs.forEach { pid ->
-            Log.d(TEST_COMMANDS_TAG, pid.formattedValue)
-            store.next{
-                it.tripViewModel.availablePids[pid.command.toString()] = pid.value
+            Log.d(TEST_COMMANDS_TAG, "Available PIDs are:")
+            availablePIDs.forEach { pid ->
+                Log.d(TEST_COMMANDS_TAG, pid.formattedValue)
+                store.next {
+                    it.tripViewModel.availablePids[pid.command.name] = pid.value
+                }
             }
+            workingCommands = obdCommands.filter { command ->
+                availablePIDs.any { pid -> pid.command.pid == command.pid }
+            }.toMutableList()
         }
 
 //        workingCommands = obdCommands.filter { command ->

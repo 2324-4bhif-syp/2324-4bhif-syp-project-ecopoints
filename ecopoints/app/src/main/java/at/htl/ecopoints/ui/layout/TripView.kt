@@ -1055,7 +1055,7 @@ class TripView {
                     ), horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Row(Modifier.padding(20.dp)) {
-                        Text("Test Command Results")
+                        Text("Available PIDs Are:")
                     }
 
                     LazyColumn(

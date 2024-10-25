@@ -330,6 +330,6 @@ image:sprint7/ranking.jpg[500,200]
 
 * Daten Aufzeichnen
 * Welche Daten gehen bei welchem Auto
-*
-*
-*
+* Daten Visualisieren
+** Vergleichen
+

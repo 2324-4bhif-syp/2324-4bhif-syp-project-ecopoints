@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.util.Log;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -134,6 +135,30 @@ public class BtConnectionHandler {
         });
 
         return future;
+    }
+
+    public void disconnect() {
+        try {
+            store.next(i->{
+                if (i != null) {
+                    i.tripViewModel.connectionStateString = "Disconnecting";
+                }
+            });
+            if (inputStream != null) {
+                inputStream.close();
+            }
+            if (outputStream != null) {
+                outputStream.close();
+            }
+        } catch (IOException e) {
+            Log.e(TAG, "Exception during disconnection", e);
+        }
+        store.next(i->{
+            if (i != null) {
+                i.tripViewModel.isConnected = false;
+                i.tripViewModel.connectionStateString = "Not Connected";
+            }
+        });
     }
 
     @SuppressLint("MissingPermission")

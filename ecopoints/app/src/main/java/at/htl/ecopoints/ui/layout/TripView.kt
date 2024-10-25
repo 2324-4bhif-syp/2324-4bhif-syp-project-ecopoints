@@ -303,7 +303,6 @@ class TripView {
             tripActive = true
         } else {
             Log.w(TAG, "Tried to start a trip without a connection to a device")
-            store.next{it.tripViewModel.showCannotStartTripDialog = true}
         }
 
     }
@@ -935,8 +934,10 @@ class TripView {
             Row(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
                 Button(
                     onClick = {
-                        btConnectionHandler.createConnection(state.value.selectedDevice)
-
+                        if (!state.value.isConnected)
+                            btConnectionHandler.createConnection(state.value.selectedDevice)
+                        else
+                            btConnectionHandler.disconnect()
                     },
                     modifier = Modifier
                         .padding(8.dp)
@@ -949,7 +950,10 @@ class TripView {
                     shape = MaterialTheme.shapes.medium,
                     elevation = ButtonDefaults.buttonElevation(4.dp)
                 ) {
-                    Text(text = "Connect", fontSize = 14.sp)
+                    Text(
+                        text = if (state.value.isConnected) "Disconnect" else "Connect",
+                        fontSize = 14.sp
+                    )
                 }
                 Button(
                     onClick = {

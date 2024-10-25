@@ -7,6 +7,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -24,6 +25,15 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Clear
+import androidx.compose.material.icons.rounded.ClearAll
+import androidx.compose.material.icons.rounded.PersonAddAlt1
+import androidx.compose.material.icons.rounded.Share
+import androidx.compose.material.icons.rounded.ViewCompact
+import androidx.compose.material.icons.rounded.ViewList
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -55,6 +65,8 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.FileProvider
@@ -140,6 +152,99 @@ class HomeView {
                             horizontalArrangement = Arrangement.SpaceEvenly,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
+                            Column {
+                                androidx.compose.material.Button(
+                                    onClick = { shareJsonFile(activity) },
+                                    colors = androidx.compose.material.ButtonDefaults.outlinedButtonColors(
+                                        backgroundColor = MaterialTheme.colorScheme.background
+                                    ),
+                                    shape = RoundedCornerShape(30),
+                                    border = BorderStroke(1.dp, Color.LightGray)
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Rounded.Share,
+                                        contentDescription = "Share JSON",
+                                        tint = MaterialTheme.colorScheme.primary
+                                    )
+
+                                    Text(
+                                        text = "JSON",
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = TextUnit(15f, TextUnitType.Sp),
+                                        color = MaterialTheme.colorScheme.primary,
+                                        modifier = Modifier.padding(
+                                            start = 8.dp,
+                                            bottom = 4.dp,
+                                            top = 4.dp
+                                        )
+                                    )
+                                }
+                            }
+
+                            Column {
+                                androidx.compose.material.Button(
+                                    onClick = { shareLogFile(activity) },
+                                    colors = androidx.compose.material.ButtonDefaults.outlinedButtonColors(
+                                        backgroundColor = MaterialTheme.colorScheme.background
+                                    ),
+                                    shape = RoundedCornerShape(30),
+                                    border = BorderStroke(1.dp, Color.LightGray)
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Rounded.Share,
+                                        contentDescription = "Share Log",
+                                        tint = MaterialTheme.colorScheme.primary
+                                    )
+
+                                    Text(
+                                        text = "Log",
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = TextUnit(15f, TextUnitType.Sp),
+                                        color = MaterialTheme.colorScheme.primary,
+                                        modifier = Modifier.padding(
+                                            start = 8.dp,
+                                            bottom = 4.dp,
+                                            top = 4.dp
+                                        )
+                                    )
+                                }
+                            }
+
+                            Column {
+                                androidx.compose.material.Button(
+                                    onClick = {
+                                        jsonFileWriter.clearFile()
+                                        jsonFileWriter.clearLog()
+                                        Toast
+                                            .makeText(activity, "File cleared", Toast.LENGTH_SHORT)
+                                            .show() },
+                                    colors = androidx.compose.material.ButtonDefaults.outlinedButtonColors(
+                                        backgroundColor = MaterialTheme.colorScheme.background
+                                    ),
+                                    shape = RoundedCornerShape(30),
+                                    border = BorderStroke(1.dp, Color.LightGray)
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Rounded.ClearAll,
+                                        contentDescription = "Clear File",
+                                        tint = MaterialTheme.colorScheme.primary
+                                    )
+
+                                    Text(
+                                        text = "Clear",
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = TextUnit(15f, TextUnitType.Sp),
+                                        color = MaterialTheme.colorScheme.primary,
+                                        modifier = Modifier.padding(
+                                            start = 8.dp,
+                                            bottom = 4.dp,
+                                            top = 4.dp
+                                        )
+                                    )
+                                }
+                            }
+
+                            /*
                             GradientButton(
                                 onClick = { shareJsonFile(activity) },
                                 text = "Share JSON File",
@@ -166,6 +271,7 @@ class HomeView {
                                     .weight(1f)
                                     .padding(8.dp)
                             )
+                             */
                         }
                     }
 
@@ -505,9 +611,66 @@ class HomeView {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(30.dp, 10.dp, 30.dp, 220.dp),
+                    .padding(8.dp, 10.dp, 8.dp, 220.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
+
+                Column {
+                    Row {
+                        androidx.compose.material.Button(
+                            onClick = { /*TODO*/ },
+                            colors = androidx.compose.material.ButtonDefaults.outlinedButtonColors(
+                                backgroundColor = MaterialTheme.colorScheme.background
+                            ),
+                            shape = RoundedCornerShape(30),
+                            border = BorderStroke(1.dp, Color.LightGray)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Rounded.ViewList,
+                                contentDescription = "View All",
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+
+                            Text(
+                                text = "View All",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = TextUnit(20f, TextUnitType.Sp),
+                                color = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.padding(start = 8.dp, bottom = 8.dp, top = 8.dp)
+                            )
+                        }
+                    }
+                }
+
+                Column {
+                    Row {
+                        androidx.compose.material.Button(
+                            onClick = { /*TODO*/ },
+                            colors = androidx.compose.material.ButtonDefaults.outlinedButtonColors(
+                                backgroundColor = MaterialTheme.colorScheme.background
+                            ),
+                            shape = RoundedCornerShape(30),
+                            border = BorderStroke(1.dp, Color.LightGray)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Rounded.Add,
+                                contentDescription = "New Trip",
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+
+                            Text(
+                                text = "Trip",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = TextUnit(20f, TextUnitType.Sp),
+                                color = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.padding(start = 8.dp, bottom = 8.dp, top = 8.dp)
+                            )
+                        }
+                    }
+                }
+
+
+                /*
                 Button(
                     onClick = {
                         store.next {
@@ -554,6 +717,7 @@ class HomeView {
                 ) {
                     Text("New Trip")
                 }
+                        */
             }
 
             if (state.value.showDetailedLastRidesPopup) {

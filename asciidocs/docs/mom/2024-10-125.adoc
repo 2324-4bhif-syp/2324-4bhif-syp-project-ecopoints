@@ -113,6 +113,6 @@ a|
 ** Daten aus der InfluxDB
 ** Dynamische Queries
 ** Erstmal für die Fahrdaten jeweils ein Diagramm
+** Daten werden live von db ausgelesen
 * Home Activity mit last trips fixen
 | 00.00.2024
-

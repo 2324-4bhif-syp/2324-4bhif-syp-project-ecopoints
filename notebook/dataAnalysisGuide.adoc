@@ -11,6 +11,9 @@
 
 == Installation of missing libraries
 
+NOTE: There is a file called install.bat, which installs all needed libraries. + 
+If you want to use Linux, you can use the install.sh file.
+
 === Pandas
 
 image::pandas.png[]

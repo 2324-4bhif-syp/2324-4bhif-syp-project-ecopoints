@@ -50,7 +50,7 @@ class ObdReaderKt {
 
                 } catch (e: Exception) {
                     Log.e(
-                        CHECK_AVAILABLE_COMMAND_PIDS_TAG,
+                        TAG,
                         "Error running OBD2 command ${command.name} setting up OBD-Adapter",
                         e
                     )
@@ -64,11 +64,61 @@ class ObdReaderKt {
         }
     }
 
-    fun checkAvailablePIDsAndCommands(inputStream: InputStream?, outputStream: OutputStream?) {
-        try {
-            val obdConnection = ObdDeviceConnection(inputStream!!, outputStream!!)
+    public fun getAvailablePIDsAndCommands(
+        inputStream: InputStream?,
+        outputStream: OutputStream?
+    ) {
+        var workingCommands = mutableListOf<ObdCommand>()
+        val availablePIDs = mutableListOf<ObdResponse>()
 
-            var (availableCommands, availablePIDs) = getAvailablePIDsAndCommands(obdConnection)
+        var maxRetries = 3;
+
+        getAvailablePIDsScope.launch {
+            try {
+
+                val obdConnection = ObdDeviceConnection(inputStream!!, outputStream!!)
+                setupELM(obdConnection)
+                obdAvailablePIDsCommands.forEach { command ->
+                    var attempts = 0;
+                    var isSuccessful = false;
+
+                    while (attempts <= maxRetries && !isSuccessful) {
+                        try {
+                            Log.i(
+                                CHECK_AVAILABLE_COMMAND_PIDS_TAG,
+                                "Running command ${command.name}"
+                            )
+
+                            val result = obdConnection.run(command, false, 500, 0)
+
+                            Log.d(CHECK_AVAILABLE_COMMAND_PIDS_TAG, buildObdResultLog(result))
+
+                            availablePIDs.add(result)
+                            isSuccessful = true;
+                            attempts++;
+                        } catch (e: Exception) {
+                            attempts++;
+                            Log.e(
+                                CHECK_AVAILABLE_COMMAND_PIDS_TAG,
+                                "Error running OBD2 command ${command.name} while getting available PIDs",
+                                e
+                            )
+                            Log.d(
+                                CHECK_AVAILABLE_COMMAND_PIDS_TAG,
+                                "Retrying command ${command.name}"
+                            )
+                        }
+                        delay(500)
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e(CHECK_AVAILABLE_COMMAND_PIDS_TAG, "Error while setting up OBD connection", e)
+            }
+            workingCommands = relevantObdCommands.filter { command ->
+                availablePIDs.any {
+                    pid -> pid.value.split(",").contains(command.pid)
+                }
+            }.toMutableList()
 
             Log.d(CHECK_AVAILABLE_COMMAND_PIDS_TAG, "Available PIDs are:")
             availablePIDs.forEach { pid ->
@@ -80,67 +130,21 @@ class ObdReaderKt {
 
             Log.d(CHECK_AVAILABLE_COMMAND_PIDS_TAG, "Available Commands are:")
 
-            availableCommands.forEach { command ->
+            workingCommands.forEach { command ->
                 Log.d(CHECK_AVAILABLE_COMMAND_PIDS_TAG, command.name)
-                store.next{it -> it.tripViewModel.availablePIDSs[command.name] = "available"}
+                store.next { it -> it.tripViewModel.availableCommands[command.name] = "available" }
             }
 
             Log.d(CHECK_AVAILABLE_COMMAND_PIDS_TAG, "Setting currently supported commands")
-            currentlySupportedCommands = availableCommands
-
-        } catch (e: Exception) {
-            Log.e(CHECK_AVAILABLE_COMMAND_PIDS_TAG, "Error while setting up OBD connection", e)
+            currentlySupportedCommands = workingCommands
         }
-    }
-
-    private fun getAvailablePIDsAndCommands(obdConnection: ObdDeviceConnection) : Pair<MutableList<ObdCommand>, MutableList<ObdResponse>> {
-        var workingCommands = mutableListOf<ObdCommand>()
-        val availablePIDs = mutableListOf<ObdResponse>()
-
-        var maxRetries = 3;
-
-        getAvailablePIDsScope.launch {
-            setupELM(obdConnection)
-            obdAvailablePIDsCommands.forEach { command ->
-                var attempts = 0;
-                var isSuccessful = false;
-
-                while (attempts <= maxRetries && !isSuccessful) {
-                    try {
-                        Log.i(CHECK_AVAILABLE_COMMAND_PIDS_TAG, "Running command ${command.name}")
-
-                        val result = obdConnection.run(command, false, 500, 0)
-
-                        Log.d(CHECK_AVAILABLE_COMMAND_PIDS_TAG, buildObdResultLog(result))
-
-                        availablePIDs.add(result)
-                        isSuccessful = true;
-                        attempts++;
-                    } catch (e: Exception) {
-                        attempts++;
-                        Log.e(
-                            CHECK_AVAILABLE_COMMAND_PIDS_TAG,
-                            "Error running OBD2 command ${command.name} while getting available PIDs",
-                            e
-                        )
-                        Log.d(CHECK_AVAILABLE_COMMAND_PIDS_TAG, "Retrying command ${command.name}")
-                    }
-                    delay(500)
-                }
-            }
-            workingCommands = relevantObdCommands.filter { command ->
-                availablePIDs.any { pid -> pid.command.pid == command.pid }
-            }.toMutableList()
-        }
-
-        return Pair(workingCommands, availablePIDs)
     }
 
     fun stopCheckingAvailablePIDs() {
         getAvailablePIDsScope.cancel()
         getAvailablePIDsScope = CoroutineScope(Dispatchers.IO)
         sleep(1000)
-        currentlySupportedCommands =listOf<ObdCommand>()
+        currentlySupportedCommands = listOf<ObdCommand>()
     }
 
 
@@ -158,9 +162,9 @@ class ObdReaderKt {
         writer.clearFile()
         writer.startJsonFile()
 
-        if(currentlySupportedCommands.isEmpty()) {
+        if (currentlySupportedCommands.isEmpty()) {
             Log.e(TAG, "No OBD commands available")
-            checkAvailablePIDsAndCommands(inputStream, outputStream)
+            getAvailablePIDsAndCommands(inputStream, outputStream)
         }
 
         scope.launch() {

@@ -1074,7 +1074,7 @@ class TripView {
             LaunchedEffect(key1 = state.value.showTestCommandDialog) {
                 if (state.value.showTestCommandDialog) {
                     store.next { it.tripViewModel.availablePIDSs.clear() }
-                    obdReaderKt.checkAvailablePIDsAndCommands(
+                    obdReaderKt.getAvailablePIDsAndCommands(
                         btConnectionHandler.inputStream,
                         btConnectionHandler.outputStream
                     )
@@ -1095,83 +1095,30 @@ class TripView {
                 )
             ) {
                 Column(
-                    modifier = Modifier.background(
-                        MaterialTheme.colorScheme.background, MaterialTheme.shapes.extraLarge
-                    ), horizontalAlignment = Alignment.CenterHorizontally
+                    modifier = Modifier
+                        .background(
+                            MaterialTheme.colorScheme.background,
+                            MaterialTheme.shapes.extraLarge
+                        )
+                        .fillMaxHeight(),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Row(Modifier.padding(20.dp)) {
                         Text("Available PIDs Are:")
                     }
 
+                    // First LazyColumn for PIDs, no fixed height so it only takes needed space
                     LazyColumn(
-                        Modifier
+                        modifier = Modifier
                             .padding(20.dp)
-                            .height(600.dp)
-                    ) {
-                        items(state.value.availableCommands.entries.size) { index ->
-                            Surface(
-                                modifier = Modifier
-                                    .padding(5.dp)
-                                    .fillMaxWidth(),
-                                border = BorderStroke(
-                                    1.dp,
-                                    MaterialTheme.colorScheme.onBackground,
-                                ),
-                                shape = androidx.compose.foundation.shape.RoundedCornerShape(4.dp),
-                            ) {
-                                Column(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(5.dp)
-                                ) {
-                                    if (state.value.availablePIDSs.size > index) {
-                                        val value =
-                                            state.value.availablePIDSs.entries.elementAt(
-                                                index
-                                            )
-
-                                        Row(
-                                            modifier = Modifier.fillMaxWidth(),
-                                            horizontalArrangement = Arrangement.SpaceBetween
-                                        ) {
-                                            Text(
-                                                text = value.key,
-                                                color = MaterialTheme.colorScheme.primary
-                                            )
-                                        }
-                                        Row(
-                                            modifier = Modifier.fillMaxWidth(),
-                                            horizontalArrangement = Arrangement.End
-                                        ) {
-
-                                            Text(
-                                                text = value.value,
-                                                color = MaterialTheme.colorScheme.primary
-                                            )
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    Row(Modifier.padding(20.dp)) {
-                        Text("Available Commands Are:")
-                    }
-                    LazyColumn(
-                        Modifier
-                            .padding(20.dp)
-                            .height(600.dp)
+                            .wrapContentHeight() // Allows it to only use necessary space
                     ) {
                         items(state.value.availablePIDSs.entries.size) { index ->
                             Surface(
                                 modifier = Modifier
                                     .padding(5.dp)
                                     .fillMaxWidth(),
-                                border = BorderStroke(
-                                    1.dp,
-                                    MaterialTheme.colorScheme.onBackground,
-                                ),
+                                border = BorderStroke(1.dp, MaterialTheme.colorScheme.onBackground),
                                 shape = androidx.compose.foundation.shape.RoundedCornerShape(4.dp),
                             ) {
                                 Column(
@@ -1179,39 +1126,85 @@ class TripView {
                                         .fillMaxWidth()
                                         .padding(5.dp)
                                 ) {
-                                    if (state.value.availablePIDSs.size > index) {
-                                        val value =
-                                            state.value.availablePIDSs.entries.elementAt(
-                                                index
-                                            )
+                                    val value = state.value.availablePIDSs.entries.elementAt(index)
 
-                                        Row(
-                                            modifier = Modifier.fillMaxWidth(),
-                                            horizontalArrangement = Arrangement.SpaceBetween
-                                        ) {
-                                            Text(
-                                                text = value.key,
-                                                color = MaterialTheme.colorScheme.primary
-                                            )
-                                        }
-                                        Row(
-                                            modifier = Modifier.fillMaxWidth(),
-                                            horizontalArrangement = Arrangement.End
-                                        ) {
-
-                                            Text(
-                                                text = value.value,
-                                                color = MaterialTheme.colorScheme.primary
-                                            )
-                                        }
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.SpaceBetween
+                                    ) {
+                                        Text(
+                                            text = value.key,
+                                            color = MaterialTheme.colorScheme.primary
+                                        )
+                                    }
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.End
+                                    ) {
+                                        Text(
+                                            text = value.value,
+                                            color = MaterialTheme.colorScheme.primary
+                                        )
                                     }
                                 }
                             }
                         }
                     }
 
+                    // Command heading
+                    Row(Modifier.padding(20.dp)) {
+                        Text("Available Commands Are:")
+                    }
+
+                    // Second LazyColumn for commands with weight modifier to fill remaining space
+                    LazyColumn(
+                        modifier = Modifier
+                            .padding(20.dp)
+                            .weight(1f) // Makes it expand to available space
+                    ) {
+                        items(state.value.availableCommands.entries.size) { index ->
+                            Surface(
+                                modifier = Modifier
+                                    .padding(5.dp)
+                                    .fillMaxWidth(),
+                                border = BorderStroke(1.dp, MaterialTheme.colorScheme.onBackground),
+                                shape = androidx.compose.foundation.shape.RoundedCornerShape(4.dp),
+                            ) {
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(5.dp)
+                                ) {
+                                    val command =
+                                        state.value.availableCommands.entries.elementAt(index)
+
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.SpaceBetween
+                                    ) {
+                                        Text(
+                                            text = command.key,
+                                            color = MaterialTheme.colorScheme.primary
+                                        )
+                                    }
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.End
+                                    ) {
+                                        Text(
+                                            text = "available",
+                                            color = MaterialTheme.colorScheme.primary
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // Close button at the bottom
                     Row(
-                        horizontalArrangement = Arrangement.Center,
+                        modifier = Modifier.padding(20.dp),
+                        horizontalArrangement = Arrangement.Center
                     ) {
                         Button(onClick = {
                             store.next {
@@ -1222,6 +1215,7 @@ class TripView {
                         }
                     }
                 }
+
             }
         }
     }

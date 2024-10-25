@@ -347,9 +347,9 @@ image::ecopoints-light-dark.png[500,200]
 === Daten Exportieren
 
 |===
-^|v1 ^|v2
-^| image:24-ui-v1.jpg[500,200]
-^| image:24-ui-v2.jpg[500,200]
+^|Homepage ^|Exportieren
+^| image:homepage.jpg[500,200]
+^| image:export-data.jpg[500,200]
 |===
 
 === UI Live Demo
@@ -360,9 +360,9 @@ image::ecopoints-light-dark.png[500,200]
 ** Welche Autoplattform unterstützt welche OBD Commands
 ** https://2324-4bhif-syp.github.io/2324-4bhif-syp-project-ecopoints/CarOBDDocumentation[OBD Compatibility]
 
-=== Aufgaben [Linus, Oliver]
+=== Aufgaben [Linus]
 
-* Daten aufzeichnen und exportieren
+* Daten aufzeichnen, speichern und exportieren
 
 [.code,json]
 ----
@@ -384,7 +384,7 @@ image::ecopoints-light-dark.png[500,200]
   }
 ----
 
-=== Aufgaben [Linus, Oliver]
+=== Aufgaben [Oliver]
 
 * Aufgezeichnete Daten visualisieren
 

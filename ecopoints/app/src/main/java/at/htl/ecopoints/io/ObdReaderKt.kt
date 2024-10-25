@@ -4,7 +4,6 @@ import android.util.Log
 import at.htl.ecopoints.model.Store
 import com.github.eltonvs.obd.command.ObdCommand
 import com.github.eltonvs.obd.command.ObdProtocols
-import com.github.eltonvs.obd.command.ObdRawResponse
 import com.github.eltonvs.obd.command.ObdResponse
 import com.github.eltonvs.obd.command.Switcher
 import com.github.eltonvs.obd.command.at.ResetAdapterCommand
@@ -13,7 +12,6 @@ import com.github.eltonvs.obd.command.at.SetEchoCommand
 import com.github.eltonvs.obd.command.at.SetHeadersCommand
 import com.github.eltonvs.obd.command.at.SetLineFeedCommand
 import com.github.eltonvs.obd.command.at.SetSpacesCommand
-import com.github.eltonvs.obd.command.bytesToInt
 import com.github.eltonvs.obd.command.control.AvailablePIDsCommand
 import com.github.eltonvs.obd.command.control.VINCommand
 import com.github.eltonvs.obd.command.engine.AbsoluteLoadCommand
@@ -23,10 +21,8 @@ import com.github.eltonvs.obd.command.engine.RelativeThrottlePositionCommand
 import com.github.eltonvs.obd.command.engine.RuntimeCommand
 import com.github.eltonvs.obd.command.engine.SpeedCommand
 import com.github.eltonvs.obd.command.engine.ThrottlePositionCommand
-import com.github.eltonvs.obd.command.fuel.FuelAirEquivalenceRatioCommand
 import com.github.eltonvs.obd.command.fuel.FuelConsumptionRateCommand
 import com.github.eltonvs.obd.command.fuel.FuelLevelCommand
-import com.github.eltonvs.obd.command.fuel.FuelTrimCommand
 import com.github.eltonvs.obd.command.fuel.FuelTypeCommand
 import com.github.eltonvs.obd.command.pressure.BarometricPressureCommand
 import com.github.eltonvs.obd.command.pressure.FuelPressureCommand
@@ -49,7 +45,6 @@ import java.io.OutputStream
 import java.lang.Thread.sleep
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.random.Random
 
 
 @Singleton
@@ -58,7 +53,7 @@ class ObdReaderKt {
     private val TEST_COMMANDS_TAG = "OBD_COMMAND_TEST"
 
     var scope = CoroutineScope(Dispatchers.IO)
-    var testCommandScope = CoroutineScope(Dispatchers.IO)
+    var getAvailablePIDsScope = CoroutineScope(Dispatchers.IO)
 
     val obdSetupCommands = listOf<ObdCommand>(
         ResetAdapterCommand(),
@@ -67,6 +62,9 @@ class ObdReaderKt {
         SetSpacesCommand(Switcher.OFF),
         SetHeadersCommand(Switcher.OFF),
         SelectProtocolCommand(ObdProtocols.AUTO),
+    )
+
+    val obdAvailablePIDsCommands = listOf<ObdCommand>(
         AvailablePIDsCommand(AvailablePIDsCommand.AvailablePIDsRanges.PIDS_01_TO_20),
         AvailablePIDsCommand(AvailablePIDsCommand.AvailablePIDsRanges.PIDS_21_TO_40),
         AvailablePIDsCommand(AvailablePIDsCommand.AvailablePIDsRanges.PIDS_41_TO_60),
@@ -155,51 +153,62 @@ class ObdReaderKt {
     }
 
     fun testRelevantCommands(inputStream: InputStream?, outputStream: OutputStream?) {
-        testCommandScope.launch { // Launch a coroutine in the scope
             try {
                 val obdConnection = ObdDeviceConnection(inputStream!!, outputStream!!)
-                setupELM(obdConnection)
 
-                while (isActive)
-                    obdCommands.forEach { command ->
-                        try {
-                            Log.i(TEST_COMMANDS_TAG, "Running command ${command.name}")
+                var availableCommands = getWorkingObdCommands(obdConnection)
 
+                Log.d(TEST_COMMANDS_TAG, "Available Commands are:")
 
-                            val result = obdConnection.run(command, false, 250, 0)
+                availableCommands.forEach { command ->
+                    Log.d(TEST_COMMANDS_TAG, command.name)
+                }
 
-                            Log.d(TEST_COMMANDS_TAG, buildObdResultLog(result))
-
-
-                            store.next { it ->
-                                it.tripViewModel.obdTestCommandResults[command.name] =
-                                    result.formattedValue
-                            }
-
-                        } catch (e: Exception) {
-                            Log.e(
-                                TEST_COMMANDS_TAG,
-                                "Error running OBD2 command ${command.name} while testing all commands",
-                                e
-                            )
-                            store.next { it ->
-                                it.tripViewModel.obdTestCommandResults[command.name] =
-                                    "Error running command"
-                            }
-                        }
-                        delay(500)
-                    }
-            } catch (e: Exception) {
-                Log.e(TEST_COMMANDS_TAG, "Error while setting up OBD connection", e)
-            } finally {
-                Log.i(TEST_COMMANDS_TAG, "OBD command test finished")
             }
-        }
+            catch (e: Exception) {
+                Log.e(TEST_COMMANDS_TAG, "Error while setting up OBD connection", e)
+            }
+
+//                while (isActive)
+//                    obdCommands.forEach { command ->
+//                        try {
+//                            Log.i(TEST_COMMANDS_TAG, "Running command ${command.name}")
+//
+//
+//                            val result = obdConnection.run(command, false, 250, 0)
+//
+//                            Log.d(TEST_COMMANDS_TAG, buildObdResultLog(result))
+//
+//
+//                            store.next { it ->
+//                                it.tripViewModel.obdTestCommandResults[command.name] =
+//                                    result.formattedValue
+//                            }
+//
+//                        } catch (e: Exception) {
+//                            Log.e(
+//                                TEST_COMMANDS_TAG,
+//                                "Error running OBD2 command ${command.name} while testing all commands",
+//                                e
+//                            )
+//                            store.next { it ->
+//                                it.tripViewModel.obdTestCommandResults[command.name] =
+//                                    "Error running command"
+//                            }
+//                        }
+//                        delay(500)
+//                    }
+//            } catch (e: Exception) {
+//                Log.e(TEST_COMMANDS_TAG, "Error while setting up OBD connection", e)
+//            } finally {
+//                Log.i(TEST_COMMANDS_TAG, "OBD command test finished")
+
+//        }
     }
 
     fun cancelTest() {
-        testCommandScope.cancel()
-        testCommandScope = CoroutineScope(Dispatchers.IO)
+        getAvailablePIDsScope.cancel()
+        getAvailablePIDsScope = CoroutineScope(Dispatchers.IO)
     }
 
     fun stopReading() {
@@ -260,103 +269,62 @@ class ObdReaderKt {
         }
     }
 
+    fun getWorkingObdCommands(obdConnection: ObdDeviceConnection): List<ObdCommand> {
+        val workingCommands = mutableListOf<ObdCommand>()
+        val availablePIDs = mutableListOf<ObdResponse>()
+
+        var maxRetries = 3;
+
+        getAvailablePIDsScope.launch {
+            setupELM(obdConnection)
+            obdAvailablePIDsCommands.forEach { command ->
+                var attempts = 0;
+                var isSuccessful = false;
+
+                while (attempts <= maxRetries && !isSuccessful) {
+                    try {
+                        Log.i(TEST_COMMANDS_TAG, "Running command ${command.name}")
+
+                        val result = obdConnection.run(command, false, 500, 0)
+
+                        Log.d(TEST_COMMANDS_TAG, buildObdResultLog(result))
+
+                        availablePIDs.add(result)
+                        isSuccessful = true;
+                    } catch (e: Exception) {
+                        attempts++;
+                        Log.e(
+                            TEST_COMMANDS_TAG,
+                            "Error running OBD2 command ${command.name} while getting available PIDs",
+                            e
+                        )
+                        Log.d(TEST_COMMANDS_TAG, "Retrying command ${command.name}")
+                    }
+                    delay(500)
+                }
+            }
+
+        }
+
+        Log.d(TEST_COMMANDS_TAG, "Available PIDs are:")
+        availablePIDs.forEach { pid ->
+            Log.d(TEST_COMMANDS_TAG, pid.formattedValue)
+            store.next{
+                it.tripViewModel.availablePids[pid.command.toString()] = pid.value
+            }
+        }
+
+//        workingCommands = obdCommands.filter { command ->
+//            availablePIDs.any { pid -> pid.command.pid == command.pid }
+//        }.toMutableList()
+
+        return workingCommands
+    }
+
     fun writeDataSnapshotToFile(data: String) {
         Log.d(TAG, "Writing data snapshot to file: $data")
         writer.appendJson(data)
     }
-
-//    fun startReading(inputStream: InputStream?, outputStream: OutputStream?) {
-//        scope.launch {
-//            try {
-//                val obdConnection = ObdDeviceConnection(inputStream!!, outputStream!!)
-//
-//                setupELM(obdConnection)
-//
-//                while (isActive) {
-//                    obdCommands.forEach { command ->
-//                        try {
-//                            val result = obdConnection.run(command, false, 0, 0)
-//                            var sb = StringBuilder()
-//
-//                            sb.appendLine("${command.name} Result:")
-//                            sb.appendLine("PID: $command.pid")
-//                            sb.appendLine("Raw command: ${command.rawCommand}")
-//                            sb.appendLine("Formatted value value: ${result.formattedValue}")
-//                            sb.appendLine("Value: ${result.value}")
-//                            sb.appendLine("Raw response: ${result.rawResponse}")
-//                            sb.appendLine("Unit: ${result.unit}")
-//
-//                            val logMsg = sb.toString()
-//
-//                            Log.d(
-//                                TAG, logMsg
-//                            )
-//
-//                            delay(250)
-//                        } catch (e: Exception) {
-//                            //Log.e(TAG, "Error running OBD2 command ${command.name}", e)
-//                        }
-//                    }
-//                    delay(1000)
-//                }
-//            } catch (e: Exception) {
-//                //Log.e(TAG, "Error while setting up OBD connection", e)
-//            }
-//        }
-//
-//
-////        //Setup
-////        singleThreadExecutor.execute {
-////            try {
-////                val obdConnection = ObdDeviceConnection(
-////                    inputStream!!,
-////                    outputStream!!
-////                )
-////
-////
-////            } catch (e: Exception) {
-////                Log.e(TAG, "Error while setting up OBD connection", e)
-////            }
-////        }
-////
-////
-////        executor.scheduleAtFixedRate({
-////            try {
-////                val obdConnection = ObdDeviceConnection(
-////                    inputStream!!,
-////                    outputStream!!
-////                )
-////
-////                val res: Any = obdConnection.run(RPMCommand(), false, 0, 0)
-////                Log.d(TAG, "RPM: $res")
-////            } catch (e: Exception) {
-////                Log.e(TAG, "Error while setting up OBD connection", e)
-////            }
-////        }, 1, 300, TimeUnit.MILLISECONDS)
-//    }
-
-//    fun updateCarData(command: ObdCommand, result: ObdResponse) {
-//        store.next {
-//
-//            try {
-//
-//                when (command) {
-//                    is RPMCommand -> it.tripViewModel.carData.currentEngineRPM =
-//                        result.value.toDouble()
-//
-//                    is SpeedCommand -> it.tripViewModel.carData.speed = result.value.toDouble()
-//                    is ThrottlePositionCommand -> it.tripViewModel.carData.throttlePosition =
-//                        result.value.toDouble()
-//
-//                    is RuntimeCommand -> it.tripViewModel.carData.engineRunTime =
-//                        result.formattedValue
-//                }
-//            } catch (_: Exception) {
-//            }
-//            it.tripViewModel.carData.timeStamp = Timestamp(System.currentTimeMillis())
-//
-//        }
-//    }
 
     fun buildObdResultLog(result: ObdResponse): String {
         var sb = StringBuilder()

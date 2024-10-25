@@ -15,6 +15,6 @@ public class TripViewModel {
     public volatile String connectionStateString = "Not Connected";
     public boolean showDeviceSelectionDialog = false;
     public boolean showTestCommandDialog = false;
-    public ConcurrentHashMap<String,String> obdTestCommandResults = new ConcurrentHashMap<>();
+    public ConcurrentHashMap<String,String> availablePids = new ConcurrentHashMap<>();
     public ConcurrentHashMap<String,String> carData = new ConcurrentHashMap<>();
 }

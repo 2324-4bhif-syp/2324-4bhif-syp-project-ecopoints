@@ -44,7 +44,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -177,7 +176,7 @@ class TripView {
                                         elevation = ButtonDefaults.buttonElevation(4.dp)
                                     ) {
                                         Text(
-                                            text = "Test Commands",
+                                            text = "Available Commands",
                                             style = MaterialTheme.typography.bodyLarge
                                         )
                                     }
@@ -1030,7 +1029,7 @@ class TripView {
             //only call this on the first composition
             LaunchedEffect(key1 = state.value.showTestCommandDialog) {
                 if (state.value.showTestCommandDialog) {
-                    store.next { it.tripViewModel.obdTestCommandResults.clear() }
+                    store.next { it.tripViewModel.availablePids.clear() }
                     obdReaderKt.testRelevantCommands(
                         btConnectionHandler.inputStream,
                         btConnectionHandler.outputStream
@@ -1064,7 +1063,7 @@ class TripView {
                             .padding(20.dp)
                             .height(600.dp)
                     ) {
-                        items(state.value.obdTestCommandResults.entries.size) { index ->
+                        items(state.value.availablePids.entries.size) { index ->
                             Surface(
                                 modifier = Modifier
                                     .padding(5.dp)
@@ -1080,9 +1079,9 @@ class TripView {
                                         .fillMaxWidth()
                                         .padding(5.dp)
                                 ) {
-                                    if (state.value.obdTestCommandResults.size > index) {
+                                    if (state.value.availablePids.size > index) {
                                         val value =
-                                            state.value.obdTestCommandResults.entries.elementAt(
+                                            state.value.availablePids.entries.elementAt(
                                                 index
                                             )
 

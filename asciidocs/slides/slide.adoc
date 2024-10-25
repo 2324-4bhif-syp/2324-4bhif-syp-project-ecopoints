@@ -323,3 +323,46 @@ image:sprint7/ranking.jpg[500,200]
 ** Oracle cloud hat nie gut funktioniert
 * Benutzerverwaltung mit login in der App
 * Fahrdaten mit server synchronisieren
+
+== 2024 Sprint 2
+
+=== Aufgaben [Linus, Abdul, Armin]
+
+* Fahrdaten aufzeichnen und exportieren
+** Live Anzeige in der App
+** UI Änderungen
+
+=== UI Verlauf
+
+|===
+^|v1 ^|v2
+^| image:24-ui-v1.jpg[500,200]
+^| image:24-ui-v2.jpg[500,200]
+|===
+
+=== UI Darkmode-Lightmode
+
+image::ecopoints-light-dark.png[500,200]
+
+=== Daten Exportieren
+
+|===
+^|v1 ^|v2
+^| image:24-ui-v1.jpg[500,200]
+^| image:24-ui-v2.jpg[500,200]
+|===
+
+=== UI Live Demo
+
+=== Aufgaben [Laurent]
+
+* Vergleich von Autoplattformen
+** Welche Autoplattform unterstützt welche OBD Commands
+** https://2324-4bhif-syp.github.io/2324-4bhif-syp-project-ecopoints/CarOBDDocumentation[OBD Compatibility]
+
+=== Aufgaben [Linus, Oliver]
+
+* Daten aufzeichnen und exportieren
+* Aufgezeichnete Daten visualisieren
+
+

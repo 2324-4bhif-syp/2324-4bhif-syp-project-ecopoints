@@ -74,7 +74,7 @@ Das Speichern von Trips und Fahrdaten erfolgt beim Beenden einer Fahrt.
 Ein Trip setzt sich aus mehreren CarData-Objekten zusammen, die während der Fahrt laufend gesammelt werden.
 
 
-image::img/trip-endpoints[]
+image::images/trip-endpoints[]
 
 [,json]
 ----
@@ -91,7 +91,7 @@ image::img/trip-endpoints[]
 ==== CarData
 Ein CarData-Objekt enthält die Daten, die während der Fahrt gesammelt werden.
 
-image::img/cardata-endpoints[]
+image::images/cardata-endpoints[]
 
 [,json]
 ----
@@ -113,7 +113,7 @@ image::img/cardata-endpoints[]
 ==== User
 Der User hat die Möglichkeit, sich einzuloggen, seine Fahrten zu tracken und seine Eco-Points zu sehen.
 
-image::img/user-endpoints[]
+image::images/user-endpoints[]
 
 == Deployment
 

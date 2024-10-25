@@ -1,7 +1,19 @@
 = Dokumentation zur OBD-Funktionalität bei diversen Fahrzeugen
-:icons: font    
+ifndef::imagesdir[:imagesdir: ../img]
+ifdef::env-ide[]
+:imagesdir: ../img
+endif::[]
+ifndef::env-ide[]
+:imagesdir: img
+endif::[]
 
 == Tabelle der OBD-Funktionalität
+
+[green]#&#x2714;# .... Funktioniert wie erwartet
+
+[red]#&#x2716;# .... Funktioniert nicht / nicht unterstützt
+
+[yellow]#&#x003F;# .... Funktioniert eingeschränkt -> Werte die keinen Sinn ergeben oder gar keine Antwort vom OBD
 
 [options="header",cols="1,1,1,1,1,1,1"]
 |===
@@ -12,8 +24,8 @@
 | Barometric Pressure ^.^| [red]#&#x2716;#  ^.^| [red]#&#x2716;#   ^.^| [green]#&#x2714;#  ^.^| [green]#&#x2714;#  ^.^| [green]#&#x2714;#  ^.^| [green]#&#x2714;#
 | Engine Runtime ^.^| [red]#&#x2716;#  ^.^| [red]#&#x2716;#  ^.^| [red]#&#x2716;#   ^.^| [green]#&#x2714;#  ^.^| [green]#&#x2714;#  ^.^| [green]#&#x2714;#
 | Engine Coolant Temperature  ^.^| [green]#&#x2714;#  ^.^| [green]#&#x2714;# ^.^| [yellow]#&#x003F;#  ^.^| [green]#&#x2714;#  ^.^| [green]#&#x2714;#  ^.^| [green]#&#x2714;#
-| Engine RPM ^.^| [red]#&#x2716;#  ^.^| [red]#&#x2716;#   ^.^| [green]#&#x2714;#  ^.^| [green]#&#x2714;#  ^.^| [green]#&#x2714;# ^.^| [yellow]#&#x003F;#
-| Engine Load ^.^| [red]#&#x2716;#  ^.^| [red]#&#x2716;#  ^.^| [red]#&#x2716;#  ^.^| [yellow]#&#x003F;# ^.^| [yellow]#&#x003F;# ^.^| [yellow]#&#x003F;#
+| Engine RPM ^.^| [red]#&#x2716;#  ^.^| [green]#&#x2714;#   ^.^| [green]#&#x2714;#  ^.^| [green]#&#x2714;#  ^.^| [green]#&#x2714;# ^.^| [yellow]#&#x003F;#
+| Engine Load ^.^| [red]#&#x2716;#  ^.^| [green]#&#x2714;#  ^.^| [red]#&#x2716;#  ^.^| [yellow]#&#x003F;# ^.^| [yellow]#&#x003F;# ^.^| [yellow]#&#x003F;#
 | Relative Throttle Position ^.^| [yellow]#&#x003F;# ^.^| [yellow]#&#x003F;# ^.^| [yellow]#&#x003F;# ^.^| [yellow]#&#x003F;# ^.^| [yellow]#&#x003F;# ^.^| [yellow]#&#x003F;#
 | Throttle Position  ^.^| [green]#&#x2714;# ^.^| [yellow]#&#x003F;# ^.^| [yellow]#&#x003F;# ^.^| [yellow]#&#x003F;# ^.^| [yellow]#&#x003F;# ^.^| [yellow]#&#x003F;#
 | Fuel Rail Gauge Pressure ^.^| [red]#&#x2716;#  ^.^| [red]#&#x2716;#  ^.^| [red]#&#x2716;#  ^.^| [yellow]#&#x003F;# ^.^| [yellow]#&#x003F;# ^.^| [red]#&#x2716;# 
@@ -30,8 +42,8 @@
 
 == OBD-Funktionalität bei verschiedenen Fahrzeugen
 
-image::img/carobdfunctionality.png[OBD-Funktionalität bei verschiedenen Fahrzeugen]
+image:carobdfunctionality.png[OBD-Funktionalität bei verschiedenen Fahrzeugen]
 
 == OBD-Funktionsfähigkeit
 
-image::img/obdfunctionality.png[OBD-Funktionsfähigkeit]
+image:obdfunctionality.png[OBD-Funktionsfähigkeit]

@@ -24,8 +24,8 @@ endif::[]
 | Barometric Pressure ^.^| [red]#&#x2716;#  ^.^| [red]#&#x2716;#   ^.^| [green]#&#x2714;#  ^.^| [green]#&#x2714;#  ^.^| [green]#&#x2714;#  ^.^| [green]#&#x2714;#
 | Engine Runtime ^.^| [red]#&#x2716;#  ^.^| [red]#&#x2716;#  ^.^| [red]#&#x2716;#   ^.^| [green]#&#x2714;#  ^.^| [green]#&#x2714;#  ^.^| [green]#&#x2714;#
 | Engine Coolant Temperature  ^.^| [green]#&#x2714;#  ^.^| [green]#&#x2714;# ^.^| [yellow]#&#x003F;#  ^.^| [green]#&#x2714;#  ^.^| [green]#&#x2714;#  ^.^| [green]#&#x2714;#
-| Engine RPM ^.^| [red]#&#x2716;#  ^.^| [red]#&#x2716;#   ^.^| [green]#&#x2714;#  ^.^| [green]#&#x2714;#  ^.^| [green]#&#x2714;# ^.^| [yellow]#&#x003F;#
-| Engine Load ^.^| [red]#&#x2716;#  ^.^| [red]#&#x2716;#  ^.^| [red]#&#x2716;#  ^.^| [yellow]#&#x003F;# ^.^| [yellow]#&#x003F;# ^.^| [yellow]#&#x003F;#
+| Engine RPM ^.^| [red]#&#x2716;#  ^.^| [green]#&#x2714;#   ^.^| [green]#&#x2714;#  ^.^| [green]#&#x2714;#  ^.^| [green]#&#x2714;# ^.^| [yellow]#&#x003F;#
+| Engine Load ^.^| [red]#&#x2716;#  ^.^| [green]#&#x2714;#  ^.^| [red]#&#x2716;#  ^.^| [yellow]#&#x003F;# ^.^| [yellow]#&#x003F;# ^.^| [yellow]#&#x003F;#
 | Relative Throttle Position ^.^| [yellow]#&#x003F;# ^.^| [yellow]#&#x003F;# ^.^| [yellow]#&#x003F;# ^.^| [yellow]#&#x003F;# ^.^| [yellow]#&#x003F;# ^.^| [yellow]#&#x003F;#
 | Throttle Position  ^.^| [green]#&#x2714;# ^.^| [yellow]#&#x003F;# ^.^| [yellow]#&#x003F;# ^.^| [yellow]#&#x003F;# ^.^| [yellow]#&#x003F;# ^.^| [yellow]#&#x003F;#
 | Fuel Rail Gauge Pressure ^.^| [red]#&#x2716;#  ^.^| [red]#&#x2716;#  ^.^| [red]#&#x2716;#  ^.^| [yellow]#&#x003F;# ^.^| [yellow]#&#x003F;# ^.^| [red]#&#x2716;# 

@@ -109,7 +109,10 @@ a|
 
 | Abdullah
 a|
-* Dashboard
-** Mit Said reden wie man die daten da visualisiert
+* Dashboard mit Grafana visualisieren
+** Daten aus der InfluxDB
+** Dynamische Queries
+** Erstmal für die Fahrdaten jeweils ein Diagramm
+* Home Activity mit last trips fixen
 | 00.00.2024
 

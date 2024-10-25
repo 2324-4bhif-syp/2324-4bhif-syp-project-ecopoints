@@ -97,8 +97,9 @@ Endpoints:
 | 00.00.2024
 | Laurent
 a|
-* Dashboard
-** Mit Said reden wie man die daten da visualisiert
+* Deployment auf Leocloud
+** Backend und InfluxDb
+** GH Actions
 | 00.00.2024
 
 | Armin
@@ -108,7 +109,7 @@ a|
 
 | Abdullah
 a|
-* Deployment auf Leocloud
-** Backend und InfluxDb
+* Dashboard
+** Mit Said reden wie man die daten da visualisiert
 | 00.00.2024
 

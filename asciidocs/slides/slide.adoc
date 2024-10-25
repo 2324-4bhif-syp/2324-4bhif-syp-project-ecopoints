@@ -324,12 +324,30 @@ image:sprint7/ranking.jpg[500,200]
 * Benutzerverwaltung mit login in der App
 * Fahrdaten mit server synchronisieren
 
-== Sprint 11
+== 2024 Sprint 2
 
 === Aufgaben
 
-* Daten Aufzeichnen
-* Welche Daten gehen bei welchem Auto
-* Daten Visualisieren
-** Vergleichen
+* Fahrdaten aufzeichnen und exportieren
+** Live Anzeige in der App
+** UI Änderungen
+
+=== UI Verlauf
+
+|===
+^|v1 ^|v2
+^| image:24-ui-v1.jpg[500,200]
+^| image:24-ui-v2.jpg[500,200]
+|===
+
+=== UI Darkmode-Lightmode
+
+image::ecopoints-light-dark.png[500,200]
+
+=== UI Live Demo
+
+=== Aufgaben
+
+
+
 

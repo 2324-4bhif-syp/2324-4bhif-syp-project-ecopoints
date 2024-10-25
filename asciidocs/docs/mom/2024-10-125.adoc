@@ -115,6 +115,6 @@ a|
 | Abdullah
 a|
 * Dashboard
-** Mit Said reden wie man die daten da visualisiert
+** Daten werden live von db ausgelesen
 | 00.00.2024
 

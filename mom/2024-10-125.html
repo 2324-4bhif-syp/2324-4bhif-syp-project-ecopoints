@@ -725,11 +725,13 @@ pre.rouge .gs {
 <div class="content">
 <pre class="rouge highlight"><code data-lang="json"><span class="nl">"Trips"</span><span class="p">:[</span><span class="w">
     </span><span class="p">{</span><span class="w">
-        </span><span class="nl">"trip-id"</span><span class="p">:</span><span class="w"> </span><span class="s2">".."</span><span class="w">
-        </span><span class="err">data:</span><span class="p">[</span><span class="w">
+        </span><span class="nl">"tripId"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"startTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"endTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
             </span><span class="p">{</span><span class="w">
             </span><span class="nl">"timestamp"</span><span class="p">:</span><span class="w"> </span><span class="s2">"..."</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"CarData"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="err">...</span><span class="p">}</span><span class="w">
+            </span><span class="nl">"carData"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="err">...</span><span class="p">}</span><span class="w">
             </span><span class="p">}</span><span class="w">
         </span><span class="p">]</span><span class="w">
     </span><span class="p">},</span><span class="w">
@@ -746,7 +748,13 @@ pre.rouge .gs {
 <p>GET CreateTrip &#8594; Returns new TripId,</p>
 </li>
 <li>
+<p>GET GetAllTrips &#8594; Returns a list of TripIds</p>
+</li>
+<li>
 <p>POST PostCarData &#8594; (tripId), data &#8594; Adds data to current trip</p>
+</li>
+<li>
+<p>GET Query &#8594; (data name, trip-id) &#8594; Queries the db for specified data in a trip, and returns this data</p>
 </li>
 </ul>
 </div></div></td>
@@ -810,7 +818,7 @@ pre.rouge .gs {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-10-25 09:04:34 UTC
+Last updated 2024-10-25 09:20:50 UTC
 </div>
 </div>
 </body>

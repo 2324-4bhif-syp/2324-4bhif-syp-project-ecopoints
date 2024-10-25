@@ -11,7 +11,7 @@ endif::[]
 
 [green]#&#x2714;# .... Funktioniert wie erwartet
 
-[red]#&#x2716;# .... Funktioniert nicht
+[red]#&#x2716;# .... Funktioniert nicht / nicht unterstützt
 
 [yellow]#&#x003F;# .... Funktioniert eingeschränkt -> Werte die keinen Sinn ergeben oder gar keine Antwort vom OBD
 

@@ -92,11 +92,12 @@ a|
 
 Endpoints:
 
-* GET CreateTrip -> Returns new TripId,
+* GET CreateTrip -> Returns new TripId, Creates trip with start time and tripid
+* Post EndTrip -> Ends the started Trip, sets end-time in current trip
 * GET GetAllTrips -> Returns a list of TripIds
 * POST PostCarData -> (tripId), data -> Adds data to current trip
 * GET Query -> (data name, trip-id) -> Queries the db for specified data in a trip, and returns this data
-
+** dynamische get request / dynamische query z.b: "get {name} from  db" und ich rufe dann die query mit dem namen auf, was ich für die visualisierung brauche
 
 | 00.00.2024
 | Laurent

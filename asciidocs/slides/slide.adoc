@@ -363,6 +363,29 @@ image::ecopoints-light-dark.png[500,200]
 === Aufgaben [Linus, Oliver]
 
 * Daten aufzeichnen und exportieren
+
+[.code,json]
+----
+
+  {
+    "timestamp": 1729832164831,
+    "data": {
+      "Engine Load": "0,0",
+      "Air Intake Temperature": "10,0",
+      "Armin-Speed": "0",
+      "Latitude": "48.3554645",
+      "Vehicle Speed": "51",
+      "Longitude": "14.1817403",
+      "Engine Coolant Temperature": "34,0",
+      "Engine RPM": "2079",
+      "Altitude": "482.7057666812181",
+      "Gps-Speed": "52"
+    }
+  }
+----
+
+=== Aufgaben [Linus, Oliver]
+
 * Aufgezeichnete Daten visualisieren
 
 

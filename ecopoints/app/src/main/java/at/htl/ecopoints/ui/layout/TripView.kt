@@ -122,125 +122,155 @@ class TripView {
 
             val isDarkMode = store.subject.map { it.isDarkMode }.subscribeAsState(false)
 
-            EcoPointsTheme(
-                darkTheme = isDarkMode.value
-            ) {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Scaffold(
-                        topBar = {
-                            Surface(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .background(MaterialTheme.colorScheme.surface),
-                                color = MaterialTheme.colorScheme.surface,
-                                shadowElevation = 4.dp,
-                            ) {
-                                Row(
+            EcoPointsTheme(darkTheme = isDarkMode.value) {
+                Box(modifier = Modifier.fillMaxSize()) {
+                    // Main content
+                    Surface(
+                        modifier = Modifier.fillMaxSize(),
+                        color = MaterialTheme.colorScheme.background
+                    ) {
+                        Scaffold(
+                            topBar = {
+                                Surface(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(horizontal = 16.dp, vertical = 12.dp),
-                                    horizontalArrangement = Arrangement.SpaceBetween
+                                        .background(MaterialTheme.colorScheme.surface),
+                                    color = MaterialTheme.colorScheme.surface,
+                                    shadowElevation = 4.dp,
                                 ) {
-                                    /*Button(
-                                        onClick = {
-                                            store.next { it.tripViewModel.map.showMap = true }
-                                        },
+                                    Row(
                                         modifier = Modifier
-                                            .weight(1f)
-                                            .padding(end = 8.dp),
-                                        colors = ButtonDefaults.buttonColors(
-                                            containerColor = MaterialTheme.colorScheme.primaryContainer,
-                                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                                        ),
-                                        shape = MaterialTheme.shapes.medium,
-                                        elevation = ButtonDefaults.buttonElevation(4.dp)
+                                            .fillMaxWidth()
+                                            .padding(horizontal = 16.dp, vertical = 12.dp),
+                                        horizontalArrangement = Arrangement.SpaceBetween
                                     ) {
-                                        Text(text = "Map", style = MaterialTheme.typography.bodyLarge)
-                                    }*/
+                                        Button(
+                                            onClick = {
+                                                store.next {
+                                                    it.tripViewModel.showTestCommandDialog = true
+                                                }
+                                            },
+                                            modifier = Modifier.padding(end = 8.dp),
+                                            colors = ButtonDefaults.buttonColors(
+                                                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                                                contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                                            ),
+                                            shape = MaterialTheme.shapes.medium,
+                                            elevation = ButtonDefaults.buttonElevation(4.dp)
+                                        ) {
+                                            Text(
+                                                text = "Available Commands",
+                                                style = MaterialTheme.typography.bodyLarge
+                                            )
+                                        }
 
-                                    Button(
-                                        onClick = {
-                                            store.next {
-                                                it.tripViewModel.showTestCommandDialog = true
-                                            }
-                                        },
-                                        modifier = Modifier.padding(end = 8.dp),
-                                        colors = ButtonDefaults.buttonColors(
-                                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                                            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
-                                        ),
-                                        shape = MaterialTheme.shapes.medium,
-                                        elevation = ButtonDefaults.buttonElevation(4.dp)
-                                    ) {
-                                        Text(
-                                            text = "Available Commands",
-                                            style = MaterialTheme.typography.bodyLarge
+                                        IconButton(
+                                            onClick = {
+                                                store.next { it.isDarkMode = !it.isDarkMode }
+                                            },
+                                            modifier = Modifier.padding(start = 8.dp)
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Default.Brightness4,
+                                                contentDescription = "Change Theme",
+                                                tint = MaterialTheme.colorScheme.primary
+                                            )
+                                        }
+                                    }
+                                }
+                            },
+                            bottomBar = {
+                                Column(modifier = Modifier.padding(bottom = 50.dp)) {
+                                    ConnectionInfo(store, btConnectionHandler)
+                                }
+
+                                Column {
+                                    val (currentScreen, setCurrentScreen) = remember {
+                                        mutableStateOf(
+                                            "Trip"
                                         )
                                     }
-
-                                    IconButton(
-                                        onClick = {
-                                            store.next { it.isDarkMode = !it.isDarkMode }
-                                        },
-                                        modifier = Modifier.padding(start = 8.dp)
+                                    Box(
+                                        modifier = Modifier.fillMaxSize()
                                     ) {
-                                        Icon(
-                                            imageVector = Icons.Default.Brightness4,
-                                            contentDescription = "Change Theme",
-                                            tint = MaterialTheme.colorScheme.primary
+                                        BottomNavBar(
+                                            currentScreen = currentScreen,
+                                            onScreenSelected = { newScreen ->
+                                                setCurrentScreen(
+                                                    newScreen
+                                                )
+                                            },
+                                            context = activity
                                         )
                                     }
                                 }
                             }
-                        },
-                        bottomBar = {
-                            Column(modifier = Modifier.padding(bottom = 50.dp)) {
-                                ConnectionInfo(store, btConnectionHandler)
-                            }
-
-                            Column {
-                                val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Trip") }
+                        ) {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .verticalScroll(rememberScrollState())
+                                    .padding(it)
+                            ) {
+                                Spacer(modifier = Modifier.height(16.dp))
                                 Box(
-                                    modifier = Modifier.fillMaxSize()
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(8.dp)
                                 ) {
-                                    BottomNavBar(
-                                        currentScreen = currentScreen,
-                                        onScreenSelected = { newScreen -> setCurrentScreen(newScreen) },
-                                        context = activity
+                                    LiveCarData(
+                                        store,
+                                        context = activity.applicationContext
                                     )
                                 }
+
+                                BtDeviceSelectionDialog(store, btConnectionHandler)
+                                ShowMapCard(store = store)
+                                ShowAvailableObdCommandsCard(store = store)
                             }
                         }
-                    ) {
-                        // Content that can scroll if necessary
-                        Column(
+                    }
+
+                    val connectionState =
+                        store.subject.map { it.tripViewModel.connectionStateString }
+                            .subscribeAsState("")
+
+                    // Spinner overlay
+                    if (connectionState.value.contains("Connecting...")) {
+                        Box(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .verticalScroll(rememberScrollState())  // Makes the content scrollable
-                                .padding(it)
+                                .background(Color.Black.copy(alpha = 0.5f)),
+                            contentAlignment = Alignment.Center
                         ) {
-                            // Remove large spacer for now to test layout
-                            Spacer(modifier = Modifier.height(16.dp))  // Small dynamic spacer
-
-                            // Ensure that LiveCarData is inside a container that allows it to render
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(8.dp)  // Add some padding for visibility
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center
                             ) {
-                                LiveCarData(
-                                    store,
-                                    context = activity.applicationContext
-                                )  // Display your car data here
-                            }
+                                CircularProgressIndicator(
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                                Spacer(modifier = Modifier.height(16.dp)) // Space between spinner and text
 
-                            // Other composables below
-                            BtDeviceSelectionDialog(store, btConnectionHandler)
-                            ShowMapCard(store = store)
-                            ShowAvailableObdCommandsCard(store = store)
+                                Text(
+                                    text = "Connecting to ELM327 Adapter: ${store.subject.value?.tripViewModel?.selectedDevice?.name}",
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    color = Color.White,
+                                    textAlign = TextAlign.Center
+                                )
+                                Text(
+                                    text = connectionState.value,
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    color = Color.White,
+                                    textAlign = TextAlign.Center
+                                )
+                                Text(
+                                    text = "Please wait a moment.",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = Color.White,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
                         }
                     }
                 }
@@ -273,6 +303,7 @@ class TripView {
             tripActive = true
         } else {
             Log.w(TAG, "Tried to start a trip without a connection to a device")
+            store.next{it.tripViewModel.showCannotStartTripDialog = true}
         }
 
     }
@@ -879,7 +910,8 @@ class TripView {
                         contentColor = MaterialTheme.colorScheme.onSecondaryContainer
                     ),
                     shape = MaterialTheme.shapes.medium,
-                    elevation = ButtonDefaults.buttonElevation(4.dp)
+                    elevation = ButtonDefaults.buttonElevation(4.dp),
+                    enabled = !tripActive && state.value.isConnected
                 ) {
                     Text(text = "Start Trip", fontSize = 14.sp)
                 }
@@ -894,14 +926,18 @@ class TripView {
                         contentColor = MaterialTheme.colorScheme.onSecondaryContainer
                     ),
                     shape = MaterialTheme.shapes.medium,
-                    elevation = ButtonDefaults.buttonElevation(4.dp)
+                    elevation = ButtonDefaults.buttonElevation(4.dp),
+                    enabled = tripActive
                 ) {
                     Text(text = "Stop Trip", fontSize = 14.sp)
                 }
             }
             Row(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
                 Button(
-                    onClick = { btConnectionHandler.createConnection(state.value.selectedDevice) },
+                    onClick = {
+                        btConnectionHandler.createConnection(state.value.selectedDevice)
+
+                    },
                     modifier = Modifier
                         .padding(8.dp)
                         .weight(1f)

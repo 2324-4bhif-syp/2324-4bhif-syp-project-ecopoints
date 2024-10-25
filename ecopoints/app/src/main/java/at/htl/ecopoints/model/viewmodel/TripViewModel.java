@@ -18,4 +18,6 @@ public class TripViewModel {
     public ConcurrentHashMap<String,String> availablePIDSs = new ConcurrentHashMap<>();
     public ConcurrentHashMap<String,String> availableCommands = new ConcurrentHashMap<>();
     public ConcurrentHashMap<String,String> carData = new ConcurrentHashMap<>();
+    public boolean showCannotStartTripDialog = false;
+
 }

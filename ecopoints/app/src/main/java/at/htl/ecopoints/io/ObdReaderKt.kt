@@ -3,36 +3,7 @@ package at.htl.ecopoints.io
 import android.util.Log
 import at.htl.ecopoints.model.Store
 import com.github.eltonvs.obd.command.ObdCommand
-import com.github.eltonvs.obd.command.ObdProtocols
 import com.github.eltonvs.obd.command.ObdResponse
-import com.github.eltonvs.obd.command.Switcher
-import com.github.eltonvs.obd.command.at.ResetAdapterCommand
-import com.github.eltonvs.obd.command.at.SelectProtocolCommand
-import com.github.eltonvs.obd.command.at.SetEchoCommand
-import com.github.eltonvs.obd.command.at.SetHeadersCommand
-import com.github.eltonvs.obd.command.at.SetLineFeedCommand
-import com.github.eltonvs.obd.command.at.SetSpacesCommand
-import com.github.eltonvs.obd.command.control.AvailablePIDsCommand
-import com.github.eltonvs.obd.command.control.VINCommand
-import com.github.eltonvs.obd.command.engine.AbsoluteLoadCommand
-import com.github.eltonvs.obd.command.engine.LoadCommand
-import com.github.eltonvs.obd.command.engine.RPMCommand
-import com.github.eltonvs.obd.command.engine.RelativeThrottlePositionCommand
-import com.github.eltonvs.obd.command.engine.RuntimeCommand
-import com.github.eltonvs.obd.command.engine.SpeedCommand
-import com.github.eltonvs.obd.command.engine.ThrottlePositionCommand
-import com.github.eltonvs.obd.command.fuel.FuelConsumptionRateCommand
-import com.github.eltonvs.obd.command.fuel.FuelLevelCommand
-import com.github.eltonvs.obd.command.fuel.FuelTypeCommand
-import com.github.eltonvs.obd.command.pressure.BarometricPressureCommand
-import com.github.eltonvs.obd.command.pressure.FuelPressureCommand
-import com.github.eltonvs.obd.command.pressure.FuelRailGaugePressureCommand
-import com.github.eltonvs.obd.command.pressure.FuelRailPressureCommand
-import com.github.eltonvs.obd.command.pressure.IntakeManifoldPressureCommand
-import com.github.eltonvs.obd.command.temperature.AirIntakeTemperatureCommand
-import com.github.eltonvs.obd.command.temperature.AmbientAirTemperatureCommand
-import com.github.eltonvs.obd.command.temperature.EngineCoolantTemperatureCommand
-import com.github.eltonvs.obd.command.temperature.OilTemperatureCommand
 import com.github.eltonvs.obd.connection.ObdDeviceConnection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -54,69 +25,6 @@ class ObdReaderKt {
 
     var scope = CoroutineScope(Dispatchers.IO)
     var getAvailablePIDsScope = CoroutineScope(Dispatchers.IO)
-
-    val obdSetupCommands = listOf<ObdCommand>(
-        ResetAdapterCommand(),
-        SetEchoCommand(Switcher.OFF),
-        SetLineFeedCommand(Switcher.OFF),
-        SetSpacesCommand(Switcher.OFF),
-        SetHeadersCommand(Switcher.OFF),
-        SelectProtocolCommand(ObdProtocols.AUTO),
-    )
-
-    val obdAvailablePIDsCommands = listOf<ObdCommand>(
-        AvailablePIDsCommand(AvailablePIDsCommand.AvailablePIDsRanges.PIDS_01_TO_20),
-        AvailablePIDsCommand(AvailablePIDsCommand.AvailablePIDsRanges.PIDS_21_TO_40),
-        AvailablePIDsCommand(AvailablePIDsCommand.AvailablePIDsRanges.PIDS_41_TO_60),
-        AvailablePIDsCommand(AvailablePIDsCommand.AvailablePIDsRanges.PIDS_61_TO_80),
-        AvailablePIDsCommand(AvailablePIDsCommand.AvailablePIDsRanges.PIDS_81_TO_A0),
-    )
-
-    val obdCommands = listOf<ObdCommand>(
-        RPMCommand(),
-        SpeedCommand(),
-
-        AbsoluteLoadCommand(),
-        LoadCommand(),
-
-        ThrottlePositionCommand(),
-        RelativeThrottlePositionCommand(),
-
-        EngineCoolantTemperatureCommand(),
-        OilTemperatureCommand(),
-        AirIntakeTemperatureCommand(),
-        AmbientAirTemperatureCommand(),
-
-        RuntimeCommand(),
-
-        VINCommand(),
-
-        FuelLevelCommand(),
-        FuelTypeCommand(),
-        FuelConsumptionRateCommand(),
-        FuelRailPressureCommand(),
-        FuelPressureCommand(),
-        FuelRailGaugePressureCommand(),
-
-        IntakeManifoldPressureCommand(),
-        BarometricPressureCommand(),
-
-        )
-
-    val carDataCommands = listOf<ObdCommand>(
-        RPMCommand(),
-//        RpmCleanedResCommand(),
-        SpeedCommand(),
-//        FuelConsumptionRateCommand(),
-//        LoadCommand(),
-//        AbsoluteLoadCommand(),
-//        ThrottlePositionCommand(),
-//        RelativeThrottlePositionCommand(),
-        EngineCoolantTemperatureCommand(),
-        AirIntakeTemperatureCommand(),
-        LoadCommand(),
-//        OilTemperatureCommand(),
-    )
 
     @Inject
     lateinit var store: Store
@@ -162,7 +70,7 @@ class ObdReaderKt {
 
             availableCommands.forEach { command ->
                 Log.d(TEST_COMMANDS_TAG, command.name)
-                store.next{it -> it.tripViewModel.availablePids[command.name] = "available"}
+                store.next{it -> it.tripViewModel.availablePIDSs[command.name] = "available"}
             }
 
         } catch (e: Exception) {
@@ -309,17 +217,13 @@ class ObdReaderKt {
             availablePIDs.forEach { pid ->
                 Log.d(TEST_COMMANDS_TAG, pid.formattedValue)
                 store.next {
-                    it.tripViewModel.availablePids[pid.command.name] = pid.value
+                    it.tripViewModel.availablePIDSs[pid.command.name] = pid.value
                 }
             }
-            workingCommands = obdCommands.filter { command ->
+            workingCommands = relevantObdCommands.filter { command ->
                 availablePIDs.any { pid -> pid.command.pid == command.pid }
             }.toMutableList()
         }
-
-//        workingCommands = obdCommands.filter { command ->
-//            availablePIDs.any { pid -> pid.command.pid == command.pid }
-//        }.toMutableList()
 
         return workingCommands
     }

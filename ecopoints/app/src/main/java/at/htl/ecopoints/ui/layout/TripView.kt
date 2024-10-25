@@ -240,13 +240,15 @@ class TripView {
                             // Other composables below
                             BtDeviceSelectionDialog(store, btConnectionHandler)
                             ShowMapCard(store = store)
-                            ShowTestObdCommandsCard(store = store)
+                            ShowAvailableObdCommandsCard(store = store)
                         }
                     }
                 }
             }
         }
     }
+
+//region Trip
 
     private fun stopTrip() {
         if (tripActive) {
@@ -275,6 +277,10 @@ class TripView {
 
     }
 
+//endregion
+
+//region Alerts
+
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun ShowAlert(
@@ -301,8 +307,11 @@ class TripView {
         )
     }
 
+//endregion
+
 //region LiveData Visual
 
+    @SuppressLint("DefaultLocale")
     @Composable
     fun LiveCarData(store: Store, context: Context) {
         val isConnectedState =
@@ -311,11 +320,11 @@ class TripView {
             .subscribeAsState(ConcurrentHashMap<String, String>())
 
         LaunchedEffect(key1 = isConnectedState) {
-            store.next { store ->
-                obdReaderKt.carDataCommands.forEach {
-                    store.tripViewModel.carData[it.name] = "0"
-                }
-            }
+//            store.next { store ->
+//                obdReaderKt.carDataCommands.forEach {
+//                    store.tripViewModel.carData[it.name] = "0"
+//                }
+//            }
         }
 
         // Main Column for the dashboard layout
@@ -429,28 +438,24 @@ class TripView {
             ) {
                 InfoCard2(
                     title = "Latitude",
-                    value = "${
-                        (data["Latitude"]?.toFloatOrNull() ?: 0f).let {
-                            String.format(
-                                "%.1f",
-                                it
-                            )
-                        }
-                    }",
+                    value = (data["Latitude"]?.toFloatOrNull() ?: 0f).let {
+                        String.format(
+                            "%.1f",
+                            it
+                        )
+                    },
                     icon = Icons.Default.LocationOn,
                     modifier = Modifier.weight(1f) // Ensure equal width
                 )
 
                 InfoCard2(
                     title = "Longitude",
-                    value = "${
-                        (data["Longitude"]?.toFloatOrNull() ?: 0f).let {
-                            String.format(
-                                "%.1f",
-                                it
-                            )
-                        }
-                    }",
+                    value = (data["Longitude"]?.toFloatOrNull() ?: 0f).let {
+                        String.format(
+                            "%.1f",
+                            it
+                        )
+                    },
                     icon = Icons.Default.LocationOn,
                     modifier = Modifier.weight(1f) // Ensure equal width
                 )
@@ -806,7 +811,7 @@ class TripView {
     }
     //endregion
 
-    //region Bluetooth interaction
+//region Bluetooth interaction
 
     @ExperimentalMaterial3Api
     @Composable
@@ -999,11 +1004,11 @@ class TripView {
 
 //endregion
 
-//region Testing OBD commands
+//region Available Obd-Commands
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun ShowTestObdCommandsCard(store: Store) {
+    fun ShowAvailableObdCommandsCard(store: Store) {
         val state = store.subject.map { it.tripViewModel }.subscribeAsState(TripViewModel())
 
         //Don't show the dialog if the device is not connected
@@ -1029,7 +1034,7 @@ class TripView {
             //only call this on the first composition
             LaunchedEffect(key1 = state.value.showTestCommandDialog) {
                 if (state.value.showTestCommandDialog) {
-                    store.next { it.tripViewModel.availablePids.clear() }
+                    store.next { it.tripViewModel.availablePIDSs.clear() }
                     obdReaderKt.testRelevantCommands(
                         btConnectionHandler.inputStream,
                         btConnectionHandler.outputStream
@@ -1063,7 +1068,7 @@ class TripView {
                             .padding(20.dp)
                             .height(600.dp)
                     ) {
-                        items(state.value.availablePids.entries.size) { index ->
+                        items(state.value.availableCommands.entries.size) { index ->
                             Surface(
                                 modifier = Modifier
                                     .padding(5.dp)
@@ -1079,9 +1084,9 @@ class TripView {
                                         .fillMaxWidth()
                                         .padding(5.dp)
                                 ) {
-                                    if (state.value.availablePids.size > index) {
+                                    if (state.value.availablePIDSs.size > index) {
                                         val value =
-                                            state.value.availablePids.entries.elementAt(
+                                            state.value.availablePIDSs.entries.elementAt(
                                                 index
                                             )
 
@@ -1109,6 +1114,62 @@ class TripView {
                             }
                         }
                     }
+
+                    Row(Modifier.padding(20.dp)) {
+                        Text("Available Commands Are:")
+                    }
+                    LazyColumn(
+                        Modifier
+                            .padding(20.dp)
+                            .height(600.dp)
+                    ) {
+                        items(state.value.availablePIDSs.entries.size) { index ->
+                            Surface(
+                                modifier = Modifier
+                                    .padding(5.dp)
+                                    .fillMaxWidth(),
+                                border = BorderStroke(
+                                    1.dp,
+                                    MaterialTheme.colorScheme.onBackground,
+                                ),
+                                shape = androidx.compose.foundation.shape.RoundedCornerShape(4.dp),
+                            ) {
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(5.dp)
+                                ) {
+                                    if (state.value.availablePIDSs.size > index) {
+                                        val value =
+                                            state.value.availablePIDSs.entries.elementAt(
+                                                index
+                                            )
+
+                                        Row(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            horizontalArrangement = Arrangement.SpaceBetween
+                                        ) {
+                                            Text(
+                                                text = value.key,
+                                                color = MaterialTheme.colorScheme.primary
+                                            )
+                                        }
+                                        Row(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            horizontalArrangement = Arrangement.End
+                                        ) {
+
+                                            Text(
+                                                text = value.value,
+                                                color = MaterialTheme.colorScheme.primary
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
                     Row(
                         horizontalArrangement = Arrangement.Center,
                     ) {

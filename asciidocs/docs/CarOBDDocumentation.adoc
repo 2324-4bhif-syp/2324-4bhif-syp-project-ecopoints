@@ -1,7 +1,19 @@
 = Dokumentation zur OBD-Funktionalität bei diversen Fahrzeugen
-:icons: font    
+ifndef::imagesdir[:imagesdir: ../img]
+ifdef::env-ide[]
+:imagesdir: ../img
+endif::[]
+ifndef::env-ide[]
+:imagesdir: img
+endif::[]
 
 == Tabelle der OBD-Funktionalität
+
+[green]#&#x2714;# .... Funktioniert
+
+[red]#&#x2716;# .... Funktioniert nicht
+
+[yellow]#&#x003F;# .... Manchmal
 
 [options="header",cols="1,1,1,1,1,1,1"]
 |===
@@ -30,8 +42,8 @@
 
 == OBD-Funktionalität bei verschiedenen Fahrzeugen
 
-image::img/carobdfunctionality.png[OBD-Funktionalität bei verschiedenen Fahrzeugen]
+image:carobdfunctionality.png[OBD-Funktionalität bei verschiedenen Fahrzeugen]
 
 == OBD-Funktionsfähigkeit
 
-image::img/obdfunctionality.png[OBD-Funktionsfähigkeit]
+image:obdfunctionality.png[OBD-Funktionsfähigkeit]

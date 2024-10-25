@@ -323,3 +323,13 @@ image:sprint7/ranking.jpg[500,200]
 ** Oracle cloud hat nie gut funktioniert
 * Benutzerverwaltung mit login in der App
 * Fahrdaten mit server synchronisieren
+
+== Sprint 11
+
+=== Aufgaben
+
+* Daten Aufzeichnen
+* Welche Daten gehen bei welchem Auto
+*
+*
+*

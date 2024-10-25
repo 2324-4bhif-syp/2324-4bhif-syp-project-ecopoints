@@ -30,6 +30,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material.icons.rounded.ClearAll
+import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.PersonAddAlt1
 import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material.icons.rounded.ViewCompact
@@ -38,6 +39,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -378,29 +380,18 @@ class HomeView {
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            Image(
-                painter = painterResource(id = R.drawable.home_austria_flag),
-                contentDescription = "flag",
-                modifier = Modifier
-                    .size(30.dp)
-                    .clip(RoundedCornerShape(10.dp))
-            )
-
-            Spacer(modifier = Modifier.weight(1f))
-
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(
-                    painter = painterResource(id = R.drawable.home_crown),
-                    contentDescription = "crown",
+                    painter = painterResource(id = R.drawable.ranking_category_ecopoints),
+                    contentDescription = "Eco-Points",
                     modifier = Modifier
                         .size(35.dp)
                         .clip(RoundedCornerShape(10.dp))
                 )
 
                 Text(
-                    text = String.format("%.1f", ecopoints),
+                    text = ecopoints.toString(),
                     style = TextStyle(
-                        color = Color(0xFFFFD700),
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Bold
                     ),
@@ -411,18 +402,17 @@ class HomeView {
             Spacer(modifier = Modifier.weight(1f))
 
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Image(
-                    painter = painterResource(id = R.drawable.home_friends),
-                    contentDescription = "friends",
+                Icon(
+                    imageVector = Icons.Rounded.Person,
+                    contentDescription = "Friends",
+                    tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier
                         .size(30.dp)
-                        .clip(RoundedCornerShape(10.dp))
                 )
 
                 Text(
                     text = "6",
                     style = TextStyle(
-                        color = Color(0xFF00A5FF),
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Bold
                     ),
@@ -431,7 +421,7 @@ class HomeView {
             }
         }
 
-        Divider(thickness = 1.dp, color = Color.LightGray)
+        HorizontalDivider(thickness = 1.dp, color = Color.LightGray)
     }
 
     @Composable
@@ -611,28 +601,36 @@ class HomeView {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp, 10.dp, 8.dp, 220.dp),
+                    .padding(5.dp, 100.dp, 5.dp, 100.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-
-                Column {
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(end = 8.dp)
+                ) {
                     Row {
                         androidx.compose.material.Button(
-                            onClick = { /*TODO*/ },
+                            onClick = {
+                                store.next {
+                                    it.homeInfo.showDetailedLastRidesPopup = true
+                                } },
                             colors = androidx.compose.material.ButtonDefaults.outlinedButtonColors(
                                 backgroundColor = MaterialTheme.colorScheme.background
                             ),
                             shape = RoundedCornerShape(30),
+                            modifier = Modifier
+                                .fillMaxWidth(),
                             border = BorderStroke(1.dp, Color.LightGray)
                         ) {
                             Icon(
                                 imageVector = Icons.Rounded.ViewList,
-                                contentDescription = "View All",
+                                contentDescription = "View Trips",
                                 tint = MaterialTheme.colorScheme.primary
                             )
 
                             Text(
-                                text = "View All",
+                                text = "Trips",
                                 fontWeight = FontWeight.Bold,
                                 fontSize = TextUnit(20f, TextUnitType.Sp),
                                 color = MaterialTheme.colorScheme.primary,
@@ -642,13 +640,22 @@ class HomeView {
                     }
                 }
 
-                Column {
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(start = 8.dp)
+                ) {
                     Row {
                         androidx.compose.material.Button(
-                            onClick = { /*TODO*/ },
+                            onClick = {
+                                val intent = Intent(context, MainActivity::class.java)
+                                context.startActivity(intent)
+                            },
                             colors = androidx.compose.material.ButtonDefaults.outlinedButtonColors(
                                 backgroundColor = MaterialTheme.colorScheme.background
                             ),
+                            modifier = Modifier
+                                .fillMaxWidth(),
                             shape = RoundedCornerShape(30),
                             border = BorderStroke(1.dp, Color.LightGray)
                         ) {
@@ -668,56 +675,6 @@ class HomeView {
                         }
                     }
                 }
-
-
-                /*
-                Button(
-                    onClick = {
-                        store.next {
-                            it.homeInfo.showDetailedLastRidesPopup = true
-                        }
-                    },
-                    modifier = Modifier
-                        .background(
-                            brush = Brush.horizontalGradient(
-                                colors = gradientColors
-                            ),
-                            shape = RoundedCornerShape(30.dp)
-                        )
-                        .weight(1f)
-                        .padding(2.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Transparent,
-                        contentColor = Black
-                    )
-                ) {
-                    Text("View All")
-                }
-
-                Spacer(modifier = Modifier.width(30.dp))
-
-                Button(
-                    onClick = {
-                        val intent = Intent(context, MainActivity::class.java)
-                        context.startActivity(intent)
-                    },
-                    modifier = Modifier
-                        .background(
-                            brush = Brush.horizontalGradient(
-                                colors = gradientColors
-                            ),
-                            shape = RoundedCornerShape(30.dp)
-                        )
-                        .weight(1f)
-                        .padding(2.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Transparent,
-                        contentColor = Black
-                    )
-                ) {
-                    Text("New Trip")
-                }
-                        */
             }
 
             if (state.value.showDetailedLastRidesPopup) {

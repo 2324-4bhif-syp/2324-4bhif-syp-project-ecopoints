@@ -76,11 +76,13 @@ a|
 ----
 "Trips":[
     {
-        "trip-id": ".."
-        data:[
+        "tripId": "",
+        "startTime": "",
+        "endTime": "",
+        "data": [
             {
             "timestamp": "...",
-            "CarData": {...}
+            "carData": {...}
             }
         ]
     },
@@ -91,7 +93,9 @@ a|
 Endpoints:
 
 * GET CreateTrip -> Returns new TripId,
+* GET GetAllTrips -> Returns a list of TripIds
 * POST PostCarData -> (tripId), data -> Adds data to current trip
+* GET Query -> (data name, trip-id) -> Queries the db for specified data in a trip, and returns this data
 
 
 | 00.00.2024

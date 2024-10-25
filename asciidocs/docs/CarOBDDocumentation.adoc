@@ -9,11 +9,11 @@ endif::[]
 
 == Tabelle der OBD-Funktionalität
 
-[green]#&#x2714;# .... Funktioniert
+[green]#&#x2714;# .... Funktioniert wie erwartet
 
 [red]#&#x2716;# .... Funktioniert nicht
 
-[yellow]#&#x003F;# .... Manchmal
+[yellow]#&#x003F;# .... Funktioniert eingeschränkt -> Werte die keinen Sinn ergeben oder gar keine Antwort vom OBD
 
 [options="header",cols="1,1,1,1,1,1,1"]
 |===

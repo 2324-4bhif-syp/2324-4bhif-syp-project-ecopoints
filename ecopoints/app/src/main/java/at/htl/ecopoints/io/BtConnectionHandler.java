@@ -39,6 +39,7 @@ public class BtConnectionHandler {
     public Set<BluetoothDevice> pairedBtDevices;
     private final BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     private BluetoothSocket btSocket;
+
     @Inject
     public BtConnectionHandler() {
 
@@ -84,6 +85,7 @@ public class BtConnectionHandler {
                 } else {
                     store.next(i -> {
                                 if (i != null) {
+                                    i.tripViewModel.isSetupFinished = true;
                                     i.tripViewModel.isConnected = false;
                                     i.tripViewModel.connectionStateString = "Could not connect";
                                 }
@@ -138,7 +140,7 @@ public class BtConnectionHandler {
 
     public void disconnect() {
         try {
-            store.next(i->{
+            store.next(i -> {
                 if (i != null) {
                     i.tripViewModel.connectionStateString = "Disconnecting";
                 }
@@ -153,7 +155,7 @@ public class BtConnectionHandler {
         } catch (IOException e) {
             Log.e(TAG, "Exception during disconnection", e);
         }
-        store.next(i->{
+        store.next(i -> {
             if (i != null) {
                 i.tripViewModel.isConnected = false;
                 i.tripViewModel.connectionStateString = "Not Connected";

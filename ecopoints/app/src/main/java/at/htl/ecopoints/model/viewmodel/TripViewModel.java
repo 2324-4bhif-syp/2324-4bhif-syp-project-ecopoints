@@ -21,9 +21,9 @@ public class TripViewModel {
     public boolean showCannotStartTripDialog = false;
 
     // Refers to connecting to the device and setting up obd
-    public boolean isSetupFinished = false;
+    public boolean isSetupFinished = true;
     // To show the current step of the ELM Setup process, while not showing up when the connection over bluetooth is not established
     public boolean hasELMSetupAndCheckingForAvailableCommandsProcessStarted = false;
     //Current Step the ELM Setup process is on, will be shown in the UI when connecting to the elm device
-    public String elmSetupCurrentStep = "";
+    public String elmSetupCurrentStep = "Not Initialized";
 }

@@ -241,9 +241,14 @@ class TripView {
 
                     val ecuState =
                         store.subject.map { it.tripViewModel.hasELMSetupAndCheckingForAvailableCommandsProcessStarted }
-                            .subscribeAsState(false)
+                            .subscribeAsState(true)
 
-                    val elmSetupCurrentStepState = store.subject.map { it.tripViewModel.elmSetupCurrentStep }.subscribeAsState("Not Started")
+                    val elmSetupCurrentStepState =
+                        store.subject.map { it.tripViewModel.elmSetupCurrentStep }
+                            .subscribeAsState("Not Initialized")
+
+                    val isConnectionActive = store.subject.map { it.tripViewModel.isConnected }
+                        .subscribeAsState(false)
 
                     // Spinner overlay
                     if (!setupState.value) {
@@ -262,6 +267,13 @@ class TripView {
                                 )
                                 Spacer(modifier = Modifier.height(16.dp)) // Space between spinner and text
 
+                                Text(
+                                    text = "Please wait a moment.",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = Color.White,
+                                    textAlign = TextAlign.Center
+                                )
+
                                 //Bt Connection
                                 Text(
                                     text = "Connecting to ELM327 Adapter: ${store.subject.value?.tripViewModel?.selectedDevice?.name}",
@@ -276,23 +288,29 @@ class TripView {
                                     textAlign = TextAlign.Center
                                 )
 
-                                if (ecuState.value) {
+                                if (isConnectionActive.value) {
+                                    LaunchedEffect(Unit) { // Using Unit as a key means it runs once per composition
+                                        obdReaderKt.startReading(
+                                            btConnectionHandler.inputStream,
+                                            btConnectionHandler.outputStream
+                                        )
+                                    }
+                                }
+
 
                                     //ELM Setup and getting Available Commands
                                     Text(
-                                        text = "Setting up ELM327 Adapter: ${elmSetupCurrentStepState.value}",
+                                        text = "Setting up ELM327 Adapter:",
                                         style = MaterialTheme.typography.bodyLarge,
                                         color = Color.White,
                                         textAlign = TextAlign.Center
                                     )
-                                }
-
-                                Text(
-                                    text = "Please wait a moment.",
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    color = Color.White,
-                                    textAlign = TextAlign.Center
-                                )
+                                    Text(
+                                        text = "${elmSetupCurrentStepState.value}",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = Color.White,
+                                        textAlign = TextAlign.Center
+                                    )
                             }
                         }
                     }
@@ -954,16 +972,11 @@ class TripView {
             Row(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
                 Button(
                     onClick = {
-                        if (!state.value.isConnected){
 
+                        if (!state.value.isConnected) {
                             btConnectionHandler.createConnection(state.value.selectedDevice)
-                            store.next{it.tripViewModel.isSetupFinished = false}
-                            obdReaderKt.startReading(
-                                btConnectionHandler.inputStream,
-                                btConnectionHandler.outputStream
-                            )
-                        }
-                        else {
+                            store.next { it.tripViewModel.isSetupFinished = false }
+                        } else {
 
                             btConnectionHandler.disconnect()
                             tripActive = false

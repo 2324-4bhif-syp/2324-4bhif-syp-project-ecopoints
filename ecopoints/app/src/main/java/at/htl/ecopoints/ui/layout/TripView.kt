@@ -937,7 +937,12 @@ class TripView {
                         if (!state.value.isConnected)
                             btConnectionHandler.createConnection(state.value.selectedDevice)
                         else
+                        {
+
                             btConnectionHandler.disconnect()
+                            tripActive = false
+                            obdReaderKt.stopReading()
+                        }
                     },
                     modifier = Modifier
                         .padding(8.dp)

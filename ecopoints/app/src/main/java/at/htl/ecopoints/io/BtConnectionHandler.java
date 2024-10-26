@@ -38,7 +38,7 @@ public class BtConnectionHandler {
     Store store;
     public Set<BluetoothDevice> pairedBtDevices;
     private final BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-
+    private BluetoothSocket btSocket;
     @Inject
     public BtConnectionHandler() {
 
@@ -109,11 +109,10 @@ public class BtConnectionHandler {
 
         executor.execute(() -> {
             try {
-                @SuppressLint("MissingPermission") BluetoothSocket btSocket = btDevice.createRfcommSocketToServiceRecord(RF_COMM_UUID);
+                btSocket = btDevice.createRfcommSocketToServiceRecord(RF_COMM_UUID);
                 btSocket.connect();
                 if (btSocket.isConnected()) {
                     Log.d(TAG, "Connected to Bt-Device: " + btDevice.getName());
-
                     try {
                         inputStream = btSocket.getInputStream();
                         outputStream = btSocket.getOutputStream();
@@ -144,6 +143,7 @@ public class BtConnectionHandler {
                     i.tripViewModel.connectionStateString = "Disconnecting";
                 }
             });
+            btSocket.close();
             if (inputStream != null) {
                 inputStream.close();
             }

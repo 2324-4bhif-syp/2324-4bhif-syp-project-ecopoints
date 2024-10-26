@@ -29,8 +29,8 @@ class ObdReaderKt {
     @Inject
     lateinit var store: Store
 
-    @Inject
-    lateinit var writer: JsonFileWriter
+//    @Inject
+//    lateinit var writer: JsonFileWriter
 
     @Inject
     constructor() {
@@ -64,7 +64,7 @@ class ObdReaderKt {
         }
     }
 
-    public fun getAvailablePIDsAndCommands(
+    fun getAvailablePIDsAndCommands(
         inputStream: InputStream?,
         outputStream: OutputStream?
     ) {
@@ -111,12 +111,15 @@ class ObdReaderKt {
                         delay(500)
                     }
                 }
+
+                sleep(1000)
+                setupELM(obdConnection)
             } catch (e: Exception) {
                 Log.e(CHECK_AVAILABLE_COMMAND_PIDS_TAG, "Error while setting up OBD connection", e)
             }
             workingCommands = relevantObdCommands.filter { command ->
-                availablePIDs.any {
-                    pid -> pid.value.split(",").contains(command.pid)
+                availablePIDs.any { pid ->
+                    pid.value.split(",").contains(command.pid)
                 }
             }.toMutableList()
 
@@ -152,59 +155,68 @@ class ObdReaderKt {
         scope.cancel()
         scope = CoroutineScope(Dispatchers.IO)
         sleep(1000)
-        writer.endJsonFile()
+//        writer.endJsonFile()
     }
 
     fun startReading(
         inputStream: InputStream?,
         outputStream: OutputStream?,
     ) {
-        writer.clearFile()
-        writer.startJsonFile()
+//        writer.clearFile()
+//        writer.startJsonFile()
 
-        if (currentlySupportedCommands.isEmpty()) {
-            Log.e(TAG, "No OBD commands available")
-            getAvailablePIDsAndCommands(inputStream, outputStream)
-        }
+//        if (currentlySupportedCommands.isEmpty()) {
+//            Log.e(TAG, "No OBD commands available")
+//            getAvailablePIDsAndCommands(inputStream, outputStream)
+//        }
 
         scope.launch() {
             try {
+
+                getAvailablePIDsAndCommands(inputStream, outputStream)
+
                 val obdConnection = ObdDeviceConnection(inputStream!!, outputStream!!)
-                setupELM(obdConnection)
+                currentlySupportedCommands = currentlySupportedCommands.reversed()
+
+                var commandErrorMap = HashMap<String, Int>()
 
                 while (isActive) {
                     currentlySupportedCommands.forEach { command ->
-                        try {
-                            Log.i(TAG, "Running command ${command.name}")
+                        if (commandErrorMap.getOrDefault(command.name, 0) > 10) {
+                            Log.e(
+                                TAG,
+                                "Command ${command.name} failed more than 10 times. Skipping command"
+                            )
+                        } else
+                            try {
+                                Log.i(TAG, "Running command ${command.name}")
 
-                            writer.log(TAG + ": " + "Running command ${command.name}")
 
-                            val result = obdConnection.run(command, false, 100, 5)
-                            Log.d(TAG, buildObdResultLog(result))
-                            writer.log(TAG + ": " + buildObdResultLog(result))
+                                val result = obdConnection.run(command, false, 0, 5)
+                                Log.d(TAG, buildObdResultLog(result))
 
-                            store.next { it ->
-                                it.tripViewModel.carData[command.name] =
-                                    result.value
+                                store.next { it ->
+                                    it.tripViewModel.carData[command.name] =
+                                        result.value
 //                                    Random.nextInt(2000).toString()
+                                }
+                            } catch (e: Exception) {
+                                Log.e(TAG, "Error running OBD2 command ${command.name}", e)
+                                commandErrorMap[command.name] =
+                                    commandErrorMap.getOrDefault(command.name, 0) + 1
                             }
-//                            delay(250)
-                        } catch (e: Exception) {
-                            Log.e(TAG, "Error running OBD2 command ${command.name}", e)
-                            writer.log(TAG + ": " + "Error running OBD2 command ${command.name}" + e);
-                        }
-                        delay(100)
+//                        delay(100)
                     }
 
                     // Take a snapshot and convert to JSON
-                    val snapshot = store.subject.value!!.tripViewModel.carData.map { (key, value) ->
-                        "\"$key\": \"$value\""
-                    }.joinToString(", ", "{", "}")
-
-                    val timestamp = System.currentTimeMillis()
-                    val jsonSnapshot = "{\n\"timestamp\": $timestamp,\n\"data\": $snapshot\n},"
-
-                    if (scope.isActive) writeDataSnapshotToFile(jsonSnapshot)
+//                    val snapshot = store.subject.value!!.tripViewModel.carData.map { (key, value) ->
+//                        "\"$key\": \"$value\""
+//                    }.joinToString(", ", "{", "}")
+//
+//                    val timestamp = System.currentTimeMillis()
+//                    val jsonSnapshot = "{\n\"timestamp\": $timestamp,\n\"data\": $snapshot\n},"
+//
+//                    if (scope.isActive) writeDataSnapshotToFile(jsonSnapshot)
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Error while setting up OBD connection", e)
@@ -215,7 +227,7 @@ class ObdReaderKt {
 
     fun writeDataSnapshotToFile(data: String) {
         Log.d(TAG, "Writing data snapshot to file: $data")
-        writer.appendJson(data)
+//        writer.appendJson(data)
     }
 
     fun buildObdResultLog(result: ObdResponse): String {

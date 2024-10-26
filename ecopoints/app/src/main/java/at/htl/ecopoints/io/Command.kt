@@ -58,24 +58,38 @@ val relevantObdCommands = listOf<ObdCommand>(
     IntakeManifoldPressureCommand(),
     RPMCommand(),
     SpeedCommand(),
-//    TimingAdvanceCommand(),
     MassAirFlowCommand(),
     ThrottlePositionCommand(),
-//    RuntimeCommand(),
-//    DistanceMILOnCommand(),
     FuelPressureCommand(),
     FuelRailGaugePressureCommand(),
-//    EgrErrorCommand(),
     FuelLevelCommand(),
     BarometricPressureCommand(),
-//    AbsoluteLoadCommand(),
     RelativeThrottlePositionCommand(),
     AmbientAirTemperatureCommand(),
-//    TimeSinceMILOnCommand(),
     FuelTypeCommand(),
     OilTemperatureCommand(),
     FuelConsumptionRateCommand()
 )
+
+val runFrequencyMap = mapOf(
+    LoadCommand() to 1, // Run every iteration
+    EngineCoolantTemperatureCommand() to 5,
+    FuelPressureCommand() to 1, // Run every 5th iteration
+    IntakeManifoldPressureCommand() to 1,
+    RPMCommand() to 1,
+    SpeedCommand() to 1,
+    MassAirFlowCommand() to 1,
+    ThrottlePositionCommand() to 1,
+    FuelRailGaugePressureCommand() to 5,
+    FuelLevelCommand() to 10, // Run every 4th iteration
+    BarometricPressureCommand() to 5,
+    RelativeThrottlePositionCommand() to 1,
+    AmbientAirTemperatureCommand() to 5,
+    FuelTypeCommand() to 10,
+    OilTemperatureCommand() to 5,
+    FuelConsumptionRateCommand() to 1
+)
+
 
 //val carDataCommands = listOf<ObdCommand>(
 //    RPMCommand(),

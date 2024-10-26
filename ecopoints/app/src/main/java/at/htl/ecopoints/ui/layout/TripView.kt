@@ -144,25 +144,25 @@ class TripView {
                                             .padding(horizontal = 16.dp, vertical = 12.dp),
                                         horizontalArrangement = Arrangement.SpaceBetween
                                     ) {
-                                        Button(
-                                            onClick = {
-                                                store.next {
-                                                    it.tripViewModel.showTestCommandDialog = true
-                                                }
-                                            },
-                                            modifier = Modifier.padding(end = 8.dp),
-                                            colors = ButtonDefaults.buttonColors(
-                                                containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                                                contentColor = MaterialTheme.colorScheme.onSecondaryContainer
-                                            ),
-                                            shape = MaterialTheme.shapes.medium,
-                                            elevation = ButtonDefaults.buttonElevation(4.dp)
-                                        ) {
-                                            Text(
-                                                text = "Available Commands",
-                                                style = MaterialTheme.typography.bodyLarge
-                                            )
-                                        }
+//                                        Button(
+//                                            onClick = {
+//                                                store.next {
+//                                                    it.tripViewModel.showTestCommandDialog = true
+//                                                }
+//                                            },
+//                                            modifier = Modifier.padding(end = 8.dp),
+//                                            colors = ButtonDefaults.buttonColors(
+//                                                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+//                                                contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+//                                            ),
+//                                            shape = MaterialTheme.shapes.medium,
+//                                            elevation = ButtonDefaults.buttonElevation(4.dp)
+//                                        ) {
+//                                            Text(
+//                                                text = "Available Commands",
+//                                                style = MaterialTheme.typography.bodyLarge
+//                                            )
+//                                        }
 
                                         IconButton(
                                             onClick = {
@@ -226,17 +226,27 @@ class TripView {
 
                                 BtDeviceSelectionDialog(store, btConnectionHandler)
                                 ShowMapCard(store = store)
-                                ShowAvailableObdCommandsCard(store = store)
+//                                ShowAvailableObdCommandsCard(store = store)
                             }
                         }
                     }
 
+                    val setupState =
+                        store.subject.map { it.tripViewModel.isSetupFinished }
+                            .subscribeAsState(true)
+
                     val connectionState =
                         store.subject.map { it.tripViewModel.connectionStateString }
-                            .subscribeAsState("")
+                            .subscribeAsState("Not connected")
+
+                    val ecuState =
+                        store.subject.map { it.tripViewModel.hasELMSetupAndCheckingForAvailableCommandsProcessStarted }
+                            .subscribeAsState(false)
+
+                    val elmSetupCurrentStepState = store.subject.map { it.tripViewModel.elmSetupCurrentStep }.subscribeAsState("Not Started")
 
                     // Spinner overlay
-                    if (connectionState.value.contains("Connecting...")) {
+                    if (!setupState.value) {
                         Box(
                             modifier = Modifier
                                 .fillMaxSize()
@@ -252,6 +262,7 @@ class TripView {
                                 )
                                 Spacer(modifier = Modifier.height(16.dp)) // Space between spinner and text
 
+                                //Bt Connection
                                 Text(
                                     text = "Connecting to ELM327 Adapter: ${store.subject.value?.tripViewModel?.selectedDevice?.name}",
                                     style = MaterialTheme.typography.bodyLarge,
@@ -264,6 +275,18 @@ class TripView {
                                     color = Color.White,
                                     textAlign = TextAlign.Center
                                 )
+
+                                if (ecuState.value) {
+
+                                    //ELM Setup and getting Available Commands
+                                    Text(
+                                        text = "Setting up ELM327 Adapter: ${elmSetupCurrentStepState.value}",
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        color = Color.White,
+                                        textAlign = TextAlign.Center
+                                    )
+                                }
+
                                 Text(
                                     text = "Please wait a moment.",
                                     style = MaterialTheme.typography.bodyMedium,
@@ -296,10 +319,7 @@ class TripView {
 
         if (store.subject.value?.tripViewModel?.isConnected == true) {
             Log.i(TAG, "Trip started")
-            obdReaderKt.startReading(
-                btConnectionHandler.inputStream,
-                btConnectionHandler.outputStream
-            )
+
             tripActive = true
         } else {
             Log.w(TAG, "Tried to start a trip without a connection to a device")
@@ -934,10 +954,16 @@ class TripView {
             Row(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
                 Button(
                     onClick = {
-                        if (!state.value.isConnected)
+                        if (!state.value.isConnected){
+
                             btConnectionHandler.createConnection(state.value.selectedDevice)
-                        else
-                        {
+                            store.next{it.tripViewModel.isSetupFinished = false}
+                            obdReaderKt.startReading(
+                                btConnectionHandler.inputStream,
+                                btConnectionHandler.outputStream
+                            )
+                        }
+                        else {
 
                             btConnectionHandler.disconnect()
                             tripActive = false
@@ -1278,6 +1304,7 @@ class TripView {
     }
 
 //endregion
+
 }
 
 

@@ -23,7 +23,4 @@ public class CarData : BaseEntity
 
     [JsonProperty("time_stamp")]
     public DateTime TimeStamp { get; set; }
-
-    public Trip Trip { get; set; }
-    public long TripId { get; set; }
 }

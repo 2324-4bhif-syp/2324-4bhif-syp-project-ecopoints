@@ -388,4 +388,41 @@ image::ecopoints-light-dark.png[500,200]
 
 * Aufgezeichnete Daten visualisieren
 
+== 2024 Sprint 3
+
+=== Aufgaben [Linus]
+
+* Kleine UI Verbesserungen
+* Automatisches erkennen von unterstützten OBD Commands
+* App sollte mit verschiedenen OBD Adaptern funktionieren
+
+==== UI
+
+|===
+^|Buttons disabled ^| Spinner when connecting
+^| image:24-sprint-3/buttons.jpg[500,200]
+^| image:24-sprint-3/spinner.jpg[500,200]
+|===
+
+=== Automatisches erkennen von unterstützten OBD Commands
+
+* Beim Verbinden mit dem OBD Adapter wird automatisch erkannt welche Commands unterstützt werden
+* Trotzdem funktionieren manche dieser Commands nicht
+
+=== Automatisches erkennen von unterstützten OBD Commands
+
+Video TODO
+
+=== Adapter Compatibility
+
+TODO
+
+=== Aufgaben [Oliver]
+
+=== Aufgaben [Abdullah]
+
+=== Aufgaben [Armin]
+
+=== Aufgaben [Laurent]
+
 

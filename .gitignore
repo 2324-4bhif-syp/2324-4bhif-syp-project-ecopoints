@@ -5,6 +5,8 @@ notebook/.ipynb_checkpoints
 notebook/html_files/*
 notebook/data/*
 notebook/.vscode
+backend-old/db-postgres/db-postgres/db/
+
 
 ### Csharp ###
 ## Ignore Visual Studio temporary files, build results, and

@@ -81,9 +81,6 @@ class TripView {
     lateinit var btConnectionHandler: BtConnectionHandler
 
     @Inject
-    lateinit var speedCalculator: GpsSpeedCalculator
-
-    @Inject
     lateinit var writer: JsonFileWriter
 
     private var tripActive = false
@@ -110,8 +107,6 @@ class TripView {
                     it.tripViewModel.carData["Altitude"] = location.altitude.toString()
                     it.tripViewModel.carData["Gps-Speed"] =
                         ((location.speed * 10.0 * 3.6).roundToInt() / 10).toString()
-                    it.tripViewModel.carData["Armin-Speed"] =
-                        ((speedCalculator.calculateSpeed(loc) * 10.0).roundToInt() / 10).toString()
 //                        val fuelCons = generateRandomFuelCons()
 //                        it.tripViewModel.map.add(
 //                            location.latitude, location.longitude,

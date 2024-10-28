@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -45,6 +46,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -74,10 +76,12 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.FileProvider
 import at.htl.ecopoints.MainActivity
 import at.htl.ecopoints.R
+import at.htl.ecopoints.apis.ApiCallback
 import at.htl.ecopoints.apis.TankerkoenigApiClient
 import at.htl.ecopoints.db.DBHelper
 import at.htl.ecopoints.io.JsonFileWriter
 import at.htl.ecopoints.model.CarData
+import at.htl.ecopoints.model.GasData
 import at.htl.ecopoints.model.HomeInfo
 import at.htl.ecopoints.model.Store
 import at.htl.ecopoints.model.Trip
@@ -87,6 +91,7 @@ import at.htl.ecopoints.ui.theme.EcoPointsTheme
 import com.google.android.gms.maps.model.LatLng
 import com.opencsv.CSVParserBuilder
 import com.opencsv.CSVReaderBuilder
+import kotlinx.coroutines.withTimeout
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
@@ -134,8 +139,9 @@ class HomeView {
                         HomeHeader(activity)
 
                     }
-                    ShowPhoto()
-                    ShowPrices()
+//                    ShowPhoto()
+//                    ShowPrices()
+                    ShowPhotoWithPrices()
 
                     ShowText()
 
@@ -245,35 +251,6 @@ class HomeView {
                                     )
                                 }
                             }
-
-                            /*
-                            GradientButton(
-                                onClick = { shareJsonFile(activity) },
-                                text = "Share JSON File",
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .padding(8.dp)
-                            )
-                            GradientButton(
-                                onClick = { shareLogFile(activity) },
-                                text = "Share Log File",
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .padding(8.dp)
-                            )
-                            GradientButton(
-                                onClick = {
-                                    jsonFileWriter.clearFile()
-                                    jsonFileWriter.clearLog()
-                                    Toast.makeText(activity, "File cleared", Toast.LENGTH_SHORT)
-                                        .show()
-                                },
-                                text = "Clear File",
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .padding(8.dp)
-                            )
-                             */
                         }
                     }
 
@@ -454,45 +431,83 @@ class HomeView {
 
 
     @Composable
+    fun ShowPhotoWithPrices() {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 20.dp), // Passt den Abstand nach oben an die Header-Leiste an
+            horizontalAlignment = Alignment.CenterHorizontally // Zentriert den Inhalt
+        ) {
+            val painter = painterResource(id = R.drawable.app_icon)
+
+            Image(
+                painter = painter,
+                contentDescription = null,
+                modifier = Modifier
+                    .size(200.dp) // Passe die Größe des Autos nach Bedarf an
+            )
+
+            Spacer(modifier = Modifier.height(1.dp)) // Minimaler Abstand zwischen dem Auto und den Preisen
+
+            ShowPrices() // Zeigt die Tankpreise direkt unter dem Auto an
+        }
+    }
+
+    @Composable
     fun ShowPrices() {
-        var dieselPrice = 0.0
-        var e5Price = 0.0
+        val dieselPrice = remember { mutableStateOf<Double?>(null) }
+        val e5Price = remember { mutableStateOf<Double?>(null) }
+        val errorMessage = remember { mutableStateOf<String?>(null) }
 
-        try {
-            thread {
-//                val gasData = //tankerkoenigApiClient.getApiData()
-//                dieselPrice = gasData.diesel
-                e5Price = 3.5// gasData.e5
-            }
+        LaunchedEffect(Unit) {
+            val apiClient = TankerkoenigApiClient()
+            apiClient.getApiData(object : ApiCallback {
+                override fun onSuccess(gasData: GasData) {
+                    dieselPrice.value = gasData.diesel
+                    e5Price.value = gasData.e5
+                }
 
-            while (dieselPrice == 0.0 && e5Price == 0.0) {
-                Thread.sleep(0.1.toLong())
-            }
-
-        } catch (e: Exception) {
-            Log.e("Tankpreis Error", "Error: ${e.message}")
+                override fun onError(error: String) {
+                    errorMessage.value = error
+                }
+            })
         }
 
-        Text(
-            text = buildAnnotatedString {
-                withStyle(style = SpanStyle(fontSize = 25.sp, fontStyle = FontStyle.Italic)) {
-                    append("Diesel\n")
-                }
-                append("  ${String.format("%.2f", dieselPrice)}€")
-            },
-            modifier = Modifier.padding(start = 90.dp, top = 180.dp),
-        )
-
-        Text(
-            text = buildAnnotatedString {
-                withStyle(style = SpanStyle(fontSize = 25.sp, fontStyle = FontStyle.Italic)) {
-                    append("Benzin\n")
-                }
-                append("  ${String.format("%.2f", e5Price)}€")
-            },
-            modifier = Modifier.padding(start = 270.dp, top = 180.dp),
-        )
+        if (dieselPrice.value != null && e5Price.value != null) {
+            Row(
+                modifier = Modifier
+                    .padding(top = 1.dp) // Abstand nach oben
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center // Zentriert die Preise horizontal
+            ) {
+                Text(
+                    text = "Diesel: ${String.format("%.2f", dieselPrice.value)}€",
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier.padding(end = 20.dp)
+                )
+                Text(
+                    text = "Benzin: ${String.format("%.2f", e5Price.value)}€",
+                    style = MaterialTheme.typography.titleLarge
+                )
+            }
+        } else if (errorMessage.value != null) {
+            Text(
+                text = errorMessage.value ?: "Unbekannter Fehler",
+                modifier = Modifier.padding(1.dp),
+                color = Color.Red,
+                style = MaterialTheme.typography.titleMedium
+            )
+        } else {
+            Text(
+                text = "Tankpreise werden geladen...",
+                modifier = Modifier.padding(1.dp),
+                style = MaterialTheme.typography.titleMedium
+            )
+        }
     }
+
+
+
 
 
     @Composable
@@ -568,7 +583,7 @@ class HomeView {
             Color(0xFF9bd99e)
         )
 
-//        addFakeDataToDB(context) infinite call loop
+        addFakeDataToDB(context)
 
         val trips = getTopThreeTripDataFromDB(context)
 

@@ -43,19 +43,20 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     }
 
     private fun createTripTable(db: SQLiteDatabase) {
-        val query = ("CREATE TABLE IF NOT EXISTS " + TABLE_TRIP + " ("
-                + TRIP_ID_COL_PK + " TEXT PRIMARY KEY, " +
-                CAR_ID_COL_FK + " INTEGER," +
-                USER_ID_COL_FK + " INTEGER," +
-                DISTANCE_COL + " REAL," +
-                AVGSPEED_COL + " REAL," +
-                AVGENGINE_ROTATION_COL + " REAL," +
-                START_DATE_COL + " TEXT," +
-                END_DATE_COL + " TEXT," +
-                REWARDEDECOPOINTS_COL + " REAL" + ")")
-
+        val query = ("CREATE TABLE IF NOT EXISTS $TABLE_TRIP ("
+                + "$TRIP_ID_COL_PK TEXT PRIMARY KEY, "
+                + "$CAR_ID_COL_FK INTEGER, "
+                + "$USER_ID_COL_FK INTEGER, "
+                + "$DISTANCE_COL REAL, "
+                + "$AVGSPEED_COL REAL, "
+                + "$AVGENGINE_ROTATION_COL REAL, "
+                + "$START_DATE_COL TEXT, "
+                + "$END_DATE_COL TEXT, "
+                + "$REWARDEDECOPOINTS_COL REAL)"
+                )
         db.execSQL(query)
     }
+
 
 
     override fun onUpgrade(db: SQLiteDatabase, p1: Int, p2: Int) {
@@ -351,7 +352,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
 
     companion object{
         private val DATABASE_NAME = "ECO_LOCAL_DB"
-        private val DATABASE_VERSION = 1
+        private val DATABASE_VERSION = 2
         val TABLE_CARDATA = "ECO_CARDATA"
         val TABLE_TRIP = "ECO_TRIP"
 

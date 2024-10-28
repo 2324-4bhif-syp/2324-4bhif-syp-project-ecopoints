@@ -22,12 +22,10 @@ public class TankerkoenigApiClient {
     private static final String API_KEY = "5b14766e-b489-5782-49b0-d376c5c04c4b";
     private static final String BASE_URL = "https://creativecommons.tankerkoenig.de/json/detail.php?id=005056ba-7cb6-1ed2-bceb-90e59ad2cd35&apikey=";
 
-    // Methode zum Starten der asynchronen Anfrage
     public void getApiData(ApiCallback callback) {
         new FetchDataTask(callback).execute();
     }
 
-    // AsyncTask für den Hintergrundabruf der API-Daten
     private static class FetchDataTask extends AsyncTask<Void, Void, GasData> {
         private final ApiCallback callback;
         private String errorMessage = null;
@@ -73,7 +71,6 @@ public class TankerkoenigApiClient {
             return parseResponse(informationString.toString());
         }
 
-        // Verarbeitung der JSON-Antwort
         private GasData parseResponse(String response) {
             try {
                 ObjectMapper mapper = new ObjectMapper();

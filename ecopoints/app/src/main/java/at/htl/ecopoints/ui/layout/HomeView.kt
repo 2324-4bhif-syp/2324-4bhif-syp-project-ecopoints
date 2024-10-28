@@ -19,27 +19,21 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material.icons.rounded.ClearAll
 import androidx.compose.material.icons.rounded.Person
-import androidx.compose.material.icons.rounded.PersonAddAlt1
 import androidx.compose.material.icons.rounded.Share
-import androidx.compose.material.icons.rounded.ViewCompact
 import androidx.compose.material.icons.rounded.ViewList
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -63,12 +57,9 @@ import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.graphics.Color.Companion.Green
 import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
@@ -91,7 +82,6 @@ import at.htl.ecopoints.ui.theme.EcoPointsTheme
 import com.google.android.gms.maps.model.LatLng
 import com.opencsv.CSVParserBuilder
 import com.opencsv.CSVReaderBuilder
-import kotlinx.coroutines.withTimeout
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
@@ -103,7 +93,6 @@ import java.util.Locale
 import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.concurrent.thread
 
 
 @Singleton
@@ -435,8 +424,8 @@ class HomeView {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 20.dp), // Passt den Abstand nach oben an die Header-Leiste an
-            horizontalAlignment = Alignment.CenterHorizontally // Zentriert den Inhalt
+                .padding(top = 20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             val painter = painterResource(id = R.drawable.app_icon)
 
@@ -444,12 +433,12 @@ class HomeView {
                 painter = painter,
                 contentDescription = null,
                 modifier = Modifier
-                    .size(200.dp) // Passe die Größe des Autos nach Bedarf an
+                    .size(200.dp)
             )
 
-            Spacer(modifier = Modifier.height(1.dp)) // Minimaler Abstand zwischen dem Auto und den Preisen
+            Spacer(modifier = Modifier.height(1.dp))
 
-            ShowPrices() // Zeigt die Tankpreise direkt unter dem Auto an
+            ShowPrices()
         }
     }
 
@@ -476,9 +465,9 @@ class HomeView {
         if (dieselPrice.value != null && e5Price.value != null) {
             Row(
                 modifier = Modifier
-                    .padding(top = 1.dp) // Abstand nach oben
+                    .padding(top = 1.dp)
                     .fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center // Zentriert die Preise horizontal
+                horizontalArrangement = Arrangement.Center
             ) {
                 Text(
                     text = "Diesel: ${String.format("%.2f", dieselPrice.value)}€",

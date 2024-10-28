@@ -48,12 +48,14 @@ class ObdReaderKt {
     // Set after calling checkAvailablePIDsAndCommands()
     var currentlySupportedCommands = listOf<ObdCommand>()
 
-    suspend fun setupELM(obdConnection: ObdDeviceConnection) {
+    suspend fun setupELM(inputStream: InputStream, outputStream: OutputStream) {
         try {
+            outputStream.flush();
+            val obdConnection = ObdDeviceConnection(inputStream, outputStream)
             obdSetupCommands.forEach { command ->
                 try {
                     Log.i(TAG, "Running command ${command.name}")
-                    var result = obdConnection.run(command, false, 0)
+                    var result = obdConnection.run(command, false, 200)
                     Log.d(TAG, buildObdResultLog(result))
 
                 } catch (e: Exception) {
@@ -63,6 +65,7 @@ class ObdReaderKt {
                         e
                     )
                 }
+                sleep(200)
             }
         } catch (e: Exception) {
             Log.e(TAG, "Error on OBD-Adapter setup", e)
@@ -78,14 +81,14 @@ class ObdReaderKt {
         var workingCommands = mutableListOf<ObdCommand>()
         val availablePIDs = mutableListOf<ObdResponse>()
 
-        var maxRetries = 3;
+        var maxRetries = 10;
         try {
 
-            val obdConnection = ObdDeviceConnection(inputStream!!, outputStream!!)
+            setupELM(inputStream!!, outputStream!!)
+            val obdConnection = ObdDeviceConnection(inputStream, outputStream)
             store.next {
                 it.tripViewModel.elmSetupCurrentStep = setupSteps[0]
             }
-            setupELM(obdConnection)
             store.next { it.tripViewModel.elmSetupCurrentStep = setupSteps[1] }
             obdAvailablePIDsCommands.forEach { command ->
                 var attempts = 0;
@@ -98,7 +101,7 @@ class ObdReaderKt {
                             "Running command ${command.name}"
                         )
 
-                        val result = obdConnection.run(command, false, 200, 0)
+                        val result = obdConnection.run(command, false, 1000, 0)
 
                         Log.d(CHECK_AVAILABLE_COMMAND_PIDS_TAG, buildObdResultLog(result))
 
@@ -122,8 +125,13 @@ class ObdReaderKt {
             store.next { it.tripViewModel.elmSetupCurrentStep = setupSteps[2] }
             sleep(1000)
             store.next { it.tripViewModel.elmSetupCurrentStep = setupSteps[3] }
-            setupELM(obdConnection)
+            while (inputStream.available() > 0)
+            {
+                inputStream.read()
+            }
+            setupELM(inputStream,outputStream)
             store.next { it.tripViewModel.isSetupFinished = true }
+            sleep(1000)
 
         } catch (e: Exception) {
             Log.e(
@@ -190,6 +198,7 @@ class ObdReaderKt {
             try {
                 getAvailablePIDsAndCommands(inputStream, outputStream)
 
+                sleep(1000)
                 val obdConnection = ObdDeviceConnection(inputStream!!, outputStream!!)
                 currentlySupportedCommands = currentlySupportedCommands.reversed()
 
@@ -200,6 +209,11 @@ class ObdReaderKt {
                     }
                 }
 
+                while (inputStream.available() > 0)
+                {
+                   inputStream.read()
+                }
+
                 while (isActive) {
                     currentlySupportedCommands.forEach { command ->
 //                        val frequency =
@@ -207,7 +221,7 @@ class ObdReaderKt {
 //                        val counter = commandCounterMap[command.name] ?: 0
 //
 //                        if (counter >= frequency)
-                        if (commandErrorMap.getOrDefault(command.name, 0) > 10) {
+                        if (commandErrorMap.getOrDefault(command.name, 0) > 15) {
                             Log.e(
                                 TAG,
                                 "Command ${command.name} failed more than 10 times. Skipping command"
@@ -217,8 +231,15 @@ class ObdReaderKt {
                                 Log.i(TAG, "Running command ${command.name}")
 
 
-                                val result = obdConnection.run(command, false, 0, 5)
+                                val result = obdConnection.run(command, false, 5)
+
+                                if(result.rawResponse.value == "7F0112"){
+                                    throw Exception("Error running OBD2 command ${command.name}")
+                                }
+
                                 Log.d(TAG, buildObdResultLog(result))
+
+
 
                                 store.next { it ->
                                     it.tripViewModel.carData[command.name] =
@@ -232,6 +253,10 @@ class ObdReaderKt {
                             }
                         // Reset the counter after running the command
                         commandCounterMap[command.name] = 0
+                    }
+                    while (inputStream.available() > 0)
+                    {
+                        inputStream.read()
                     }
                     // Take a snapshot and convert to JSON
                     val snapshot =

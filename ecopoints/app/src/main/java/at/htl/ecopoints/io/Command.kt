@@ -6,6 +6,7 @@ import com.github.eltonvs.obd.command.AdaptiveTimingMode
 import com.github.eltonvs.obd.command.ObdCommand
 import com.github.eltonvs.obd.command.ObdProtocols
 import com.github.eltonvs.obd.command.Switcher
+import com.github.eltonvs.obd.command.at.BufferDumpCommand
 import com.github.eltonvs.obd.command.at.ResetAdapterCommand
 import com.github.eltonvs.obd.command.at.SelectProtocolCommand
 import com.github.eltonvs.obd.command.at.SetAdaptiveTimingCommand
@@ -46,19 +47,19 @@ class SetAllToDefaultsCommand : ATCommand() {
     override val pid = "D"
 }
 
-class DLCCommand(value : kotlin.Int) : ATCommand() {
+class DLCCommand(value: kotlin.Int) : ATCommand() {
     override val tag = "SET_ALL_TO_DEFAULTS"
     override val name = "All To Defaults"
     override val pid = "D${value}"
 }
 
-class MemoryCommand(value : kotlin.Int) : ATCommand() {
+class MemoryCommand(value: kotlin.Int) : ATCommand() {
     override val tag = "SET_ALL_TO_DEFAULTS"
     override val name = "All To Defaults"
     override val pid = "M${value}"
 }
 
-class AllowLongMessagesCommand(value : kotlin.Int) : ATCommand() {
+class AllowLongMessagesCommand(value: kotlin.Int) : ATCommand() {
     override val tag = "SET_ALL_TO_DEFAULTS"
     override val name = "All To Defaults"
     override val pid = "AL${value}"
@@ -84,16 +85,18 @@ val obdSetupCommands = listOf<ObdCommand>(
     SetAllToDefaultsCommand(),
     DLCCommand(0),
 
+
     SetEchoCommand(Switcher.ON),
     SetHeadersCommand(Switcher.ON),
     SelectProtocolCommand(ObdProtocols.AUTO),
     SetEchoCommand(Switcher.ON),
     MemoryCommand(0),
-    SetSpacesCommand(Switcher.OFF),
     SetAdaptiveTimingCommand(AdaptiveTimingMode.AUTO_1),
-    AllowLongMessagesCommand(64),
-    SetTimeoutCommand(64),
+//    AllowLongMessagesCommand(64),
+    SetTimeoutCommand(500),
 
+    SetSpacesCommand(Switcher.OFF),
+    SetEchoCommand(Switcher.OFF),
     SetLineFeedCommand(Switcher.OFF),
     SetHeadersCommand(Switcher.OFF),
 )
@@ -104,6 +107,7 @@ val obdAvailablePIDsCommands = listOf<ObdCommand>(
 //    AvailablePIDsCommand(AvailablePIDsCommand.AvailablePIDsRanges.PIDS_41_TO_60),
 //    AvailablePIDsCommand(AvailablePIDsCommand.AvailablePIDsRanges.PIDS_61_TO_80),
 //    AvailablePIDsCommand(AvailablePIDsCommand.AvailablePIDsRanges.PIDS_81_TO_A0),
+    BufferDumpCommand()
 )
 
 val relevantObdCommands = listOf<ObdCommand>(
@@ -117,7 +121,6 @@ val relevantObdCommands = listOf<ObdCommand>(
     ThrottlePositionCommand(),
     FuelPressureCommand(),
     FuelRailGaugePressureCommand(),
-    FuelLevelCommand(),
     BarometricPressureCommand(),
     RelativeThrottlePositionCommand(),
     AmbientAirTemperatureCommand(),

@@ -534,42 +534,40 @@ class HomeView {
         trip: Trip,
         onClickAction: () -> Unit
     ) {
-        val gradientColors = listOf(Gray, Green, DarkGray)
-
-        Button(
+        androidx.compose.material.Button(
             onClick = onClickAction,
             modifier = Modifier
                 .padding(8.dp, 4.dp)
-                .fillMaxWidth()
-                .background(
-                    brush = Brush.horizontalGradient(
-                        colors = gradientColors
-                    ),
-                    shape = RoundedCornerShape(20.dp)
-                ),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Transparent,
-                contentColor = Black
-            )
+                .fillMaxWidth(),
+            shape = RoundedCornerShape(30.dp),
+            colors = androidx.compose.material.ButtonDefaults.outlinedButtonColors(
+                backgroundColor = MaterialTheme.colorScheme.surface,
+                contentColor = MaterialTheme.colorScheme.primary
+            ),
+            border = BorderStroke(1.dp, Color.LightGray)
         ) {
-            val formattedDate =
-                SimpleDateFormat("dd/MM/yyyy, HH:mm", Locale.getDefault()).format(trip.start)
+            val formattedDate = SimpleDateFormat("dd/MM/yyyy, HH:mm", Locale.getDefault()).format(trip.start)
             Column(
                 modifier = Modifier
-                    .padding(0.dp)
+                    .padding(vertical = 8.dp, horizontal = 16.dp)
                     .fillMaxWidth()
             ) {
-                Row() {
-                    Text(formattedDate + " Uhr")
-                }
                 Row {
-                    Text(trip.rewardedEcoPoints.toString() + " EP")
+                    Text(
+                        text = "$formattedDate Uhr",
+                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
+                    )
+                }
+                Spacer(modifier = Modifier.height(4.dp))
+                Row {
+                    Text(text = "${trip.rewardedEcoPoints} EP")
                     Spacer(modifier = Modifier.weight(1f))
-                    Text(text = trip.distance.toString() + " km")
+                    Text(text = "${trip.distance} km")
                 }
             }
         }
     }
+
 
 
     @Composable
@@ -818,7 +816,9 @@ class HomeView {
                 line = reader.readNext()
             }
         } catch (e: IOException) {
-            e.printStackTrace()
+            Log.e("CSV-Error", "Fehler beim Lesen der CSV-Datei $fileName: ${e.message}", e)
+        } catch (e: Exception) {
+            Log.e("CSV-Error", "Allgemeiner Fehler in readTripData2FromCsvAndAddToDB: ${e.message}", e)
         } finally {
             dbHelper.close()
         }

@@ -1,22 +1,17 @@
 @echo off
-REM Check if Docker is running
-docker info >nul 2>&1
-IF ERRORLEVEL 1 (
-    echo Docker is not running. Please start Docker Desktop.
-    exit /b
+SET CONTAINER_NAME=influxdb
+SET IMAGE_NAME=influxdb:latest
+SET PORT=8086
+
+REM Check if the container is already running
+docker ps -q -f name=%CONTAINER_NAME% | findstr . >nul
+IF %ERRORLEVEL% EQU 0 (
+    echo Container "%CONTAINER_NAME%" is already running. Starting it...
+    docker start %CONTAINER_NAME%
+) ELSE (
+    echo Container "%CONTAINER_NAME%" does not exist. Pulling the latest image and creating a new container...
+    docker pull %IMAGE_NAME%
+    docker run -d --name %CONTAINER_NAME% -p %PORT%:%PORT% %IMAGE_NAME%
 )
 
-REM Pull the latest InfluxDB image
-echo Pulling the latest InfluxDB image...
-docker pull influxdb:latest
-
-REM Stop and remove existing container if it exists
-echo Stopping and removing existing InfluxDB container if it exists...
-docker stop influxdb >nul 2>&1
-docker rm influxdb >nul 2>&1
-
-REM Start a new InfluxDB container
-echo Starting InfluxDB container...
-docker run --name influxdb -p 8086:8086 influxdb:latest
-
-echo InfluxDB is now running on http://localhost:8086
+echo InfluxDB container is up and running.

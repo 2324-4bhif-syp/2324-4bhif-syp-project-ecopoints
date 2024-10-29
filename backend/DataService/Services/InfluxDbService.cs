@@ -5,6 +5,9 @@ using InfluxDB.Client;
 using InfluxDB.Client.Api.Domain;
 using InfluxDB.Client.Writes;
 using Microsoft.Extensions.Configuration;
+using InfluxDB.Client.Api.Domain; // For Bucket and RetentionRule classes
+using System.Collections.Generic;   // For List<T>
+
 
 namespace DataService.Services
 {
@@ -26,6 +29,9 @@ namespace DataService.Services
 
         public async Task WriteTripDataAsync(Trip trip)
         {
+            // Ensure the bucket exists
+            await EnsureBucketExistsAsync();
+
             var writeApi = m_influxDbClient.GetWriteApiAsync();
 
             foreach (var dataPoint in trip.Data)
@@ -36,20 +42,52 @@ namespace DataService.Services
                 var point = PointData
                     .Measurement("car_sensors_data")
                     .Tag("trip-id", trip.TripId.ToString())
-                    .Field("Altitude", dataPoint.CarData.Altitude as double?)
-                    .Field("Longitude", dataPoint.CarData.Longitude as double?)
-                    .Field("Latitude", dataPoint.CarData.Latitude as double?)
-                    .Field("CoolantTemperature", dataPoint.CarData.CoolantTemperature as double?)   
-                    .Field("EngineLoad", dataPoint.CarData.EngineLoad as double?)
-                    .Field("EngineRpm", dataPoint.CarData.EngineRpm as double?)
-                    .Field("GpsSpeed", dataPoint.CarData.GpsSpeed as double?)
-                    .Field("ObdSpeed", dataPoint.CarData.ObdSpeed as double?)
+                    .Field("Altitude", dataPoint.CarData.Altitude)
+                    .Field("Longitude", dataPoint.CarData.Longitude)
+                    .Field("Latitude", dataPoint.CarData.Latitude)
+                    .Field("CoolantTemperature", dataPoint.CarData.CoolantTemperature)
+                    .Field("EngineLoad", dataPoint.CarData.EngineLoad)
+                    .Field("EngineRpm", dataPoint.CarData.EngineRpm)
+                    .Field("GpsSpeed", dataPoint.CarData.GpsSpeed)
+                    .Field("ObdSpeed", dataPoint.CarData.ObdSpeed)
                     .Timestamp(dataPoint.Timestamp, WritePrecision.Ms);
 
                 Console.WriteLine(point);
 
                 await writeApi.WritePointAsync(point, m_bucket, m_org);
             }
+        }
+
+        private async Task<string> GetOrganizationIdAsync(string orgName)
+        {
+            var orgsApi = m_influxDbClient.GetOrganizationsApi();
+            var orgs = await orgsApi.FindOrganizationsAsync();
+
+            var organization = orgs.FirstOrDefault(o => o.Name.Equals(orgName, StringComparison.OrdinalIgnoreCase));
+
+            return organization?.Id;
+        }
+
+
+        private async Task EnsureBucketExistsAsync()
+        {
+            var bucketsApi = m_influxDbClient.GetBucketsApi();
+            var buckets = await bucketsApi.FindBucketsAsync();
+            bool bucketExists = buckets.Any(b => b.Name.Equals(m_bucket, StringComparison.OrdinalIgnoreCase));
+
+            if (bucketExists)
+            {
+                Console.WriteLine($"Bucket '{m_bucket}' already exists.");
+                return; 
+            }
+
+            Console.WriteLine($"Creating bucket '{m_bucket}'...");
+
+            var retentionRule = new BucketRetentionRules(BucketRetentionRules.TypeEnum.Expire, everySeconds:0);
+            var bucket = new Bucket(name: m_bucket, retentionRules: new List<BucketRetentionRules> { retentionRule }, orgID: await GetOrganizationIdAsync(m_org));
+
+            await bucketsApi.CreateBucketAsync(bucket);
+            Console.WriteLine($"Bucket '{m_bucket}' created successfully.");
         }
 
 
@@ -83,10 +121,8 @@ namespace DataService.Services
             {
                 foreach (var record in table.Records)
                 {
-                    // Check the entire record to see what keys you have
                     Console.WriteLine($"Record: {record}");
 
-                    // Ensure you retrieve data correctly
                     var carSensorData = new CarSensorData
                     {
                         Timestamp = record.GetTime()?.ToDateTimeUtc() ?? DateTime.UtcNow,

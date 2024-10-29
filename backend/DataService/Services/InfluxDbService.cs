@@ -30,6 +30,9 @@ namespace DataService.Services
 
             foreach (var dataPoint in trip.Data)
             {
+                // Log the data point before writing to the database
+                Console.WriteLine($"Writing data point: Trip ID: {trip.TripId}, Timestamp: {dataPoint.Timestamp}, Altitude: {dataPoint.CarData.Altitude}, Longitude: {dataPoint.CarData.Longitude}, Latitude: {dataPoint.CarData.Latitude}");
+
                 var point = PointData
                     .Measurement("car_sensors_data")
                     .Tag("trip-id", trip.TripId.ToString())
@@ -47,6 +50,7 @@ namespace DataService.Services
             }
         }
 
+
         public async Task<bool> IsDatabaseHealthyAsync()
         {
             try
@@ -63,6 +67,7 @@ namespace DataService.Services
         public async Task<List<CarSensorData>> GetTripDataAsync(Guid tripId)
         {
             var query = $"from(bucket: \"{m_bucket}\") " +
+                        $"|> range(start: -30d) " +  // Adjust the time range as needed
                         $"|> filter(fn: (r) => r[\"trip-id\"] == \"{tripId}\")";
 
             var queryApi = m_influxDbClient.GetQueryApi();

@@ -9,6 +9,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<InfluxDbService>();
 
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

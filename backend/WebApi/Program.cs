@@ -20,14 +20,12 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// HealthCheck Endpoint
 app.MapGet("/api/CarSensor/health", async (InfluxDbService influxDbService) =>
 {
     var isHealthy = await influxDbService.IsDatabaseHealthyAsync();
     return isHealthy ? Results.Ok("Database is healthy") : Results.StatusCode(500);
 });
 
-// Post Endpoint to add trip data
 app.MapPost("/api/CarSensor/log", async (InfluxDbService influxDbService, Trip trip) =>
 {
     if (trip == null || trip.Data == null || trip.Data.Count == 0)
@@ -39,7 +37,6 @@ app.MapPost("/api/CarSensor/log", async (InfluxDbService influxDbService, Trip t
     return Results.Ok("Data logged successfully");
 });
 
-// GetAllTrips Endpoint to retrieve all unique trips
 app.MapGet("/api/CarSensor/trips", async (InfluxDbService influxDbService) =>
 {
     var tripIds = await influxDbService.GetAllTripsAsync();
@@ -52,7 +49,6 @@ app.MapGet("/api/CarSensor/trips", async (InfluxDbService influxDbService) =>
     return Results.Ok(tripIds);
 });
 
-// GetAll Endpoint to retrieve data for a specific trip ID
 app.MapGet("/api/CarSensor/trip/{tripId:guid}", async (InfluxDbService influxDbService, Guid tripId) =>
 {
     var data = await influxDbService.GetTripDataAsync(tripId);

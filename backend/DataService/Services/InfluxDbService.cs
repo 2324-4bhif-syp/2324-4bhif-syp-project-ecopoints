@@ -36,15 +36,17 @@ namespace DataService.Services
                 var point = PointData
                     .Measurement("car_sensors_data")
                     .Tag("trip-id", trip.TripId.ToString())
-                    .Field("Altitude", dataPoint.CarData.Altitude)
-                    .Field("Longitude", dataPoint.CarData.Longitude)
-                    .Field("Latitude", dataPoint.CarData.Latitude)
-                    .Field("CoolantTemperature", dataPoint.CarData.CoolantTemperature)
-                    .Field("EngineLoad", dataPoint.CarData.EngineLoad)
-                    .Field("EngineRpm", dataPoint.CarData.EngineRpm)
-                    .Field("GpsSpeed", dataPoint.CarData.GpsSpeed)
-                    .Field("ObdSpeed", dataPoint.CarData.ObdSpeed)
+                    .Field("Altitude", dataPoint.CarData.Altitude as double?)
+                    .Field("Longitude", dataPoint.CarData.Longitude as double?)
+                    .Field("Latitude", dataPoint.CarData.Latitude as double?)
+                    .Field("CoolantTemperature", dataPoint.CarData.CoolantTemperature as double?)   
+                    .Field("EngineLoad", dataPoint.CarData.EngineLoad as double?)
+                    .Field("EngineRpm", dataPoint.CarData.EngineRpm as double?)
+                    .Field("GpsSpeed", dataPoint.CarData.GpsSpeed as double?)
+                    .Field("ObdSpeed", dataPoint.CarData.ObdSpeed as double?)
                     .Timestamp(dataPoint.Timestamp, WritePrecision.Ms);
+
+                Console.WriteLine(point);
 
                 await writeApi.WritePointAsync(point, m_bucket, m_org);
             }
@@ -67,8 +69,10 @@ namespace DataService.Services
         public async Task<List<CarSensorData>> GetTripDataAsync(Guid tripId)
         {
             var query = $"from(bucket: \"{m_bucket}\") " +
-                        $"|> range(start: -30d) " +  // Adjust the time range as needed
-                        $"|> filter(fn: (r) => r[\"trip-id\"] == \"{tripId}\")";
+                        $"|> range(start: -30d) " + // Ensure this range is correct
+                        $"|> filter(fn: (r) => r[\"trip-id\"] == \"{tripId}\") " +
+                        $"|> filter(fn: (r) => r._measurement == \"car_sensors_data\") " + // Make sure to filter by the correct measurement
+                        $"|> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")"; // Pivot to get fields as columns
 
             var queryApi = m_influxDbClient.GetQueryApi();
             var tables = await queryApi.QueryAsync(query, m_org);
@@ -79,7 +83,10 @@ namespace DataService.Services
             {
                 foreach (var record in table.Records)
                 {
-                    // Initialize a new CarSensorData object with default values
+                    // Check the entire record to see what keys you have
+                    Console.WriteLine($"Record: {record}");
+
+                    // Ensure you retrieve data correctly
                     var carSensorData = new CarSensorData
                     {
                         Timestamp = record.GetTime()?.ToDateTimeUtc() ?? DateTime.UtcNow,
@@ -96,13 +103,13 @@ namespace DataService.Services
                         }
                     };
 
-                    // Add the data point to the results list
                     results.Add(carSensorData);
                 }
             }
 
             return results;
         }
+
 
 
         public async Task<List<Guid>> GetAllTripsAsync()

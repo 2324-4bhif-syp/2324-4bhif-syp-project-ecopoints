@@ -1,17 +1,23 @@
 #!/bin/bash
 
-CONTAINER_NAME="influxdb"
-IMAGE_NAME="influxdb:latest"
-PORT="8086"
-
-# Check if the container is already running
-if [ "$(docker ps -q -f name=$CONTAINER_NAME)" ]; then
-    echo "Container '$CONTAINER_NAME' is already running. Starting it..."
-    docker start $CONTAINER_NAME
+# Check if InfluxDB container is already running
+if [ "$(docker ps -q -f name=influxdb)" ]; then
+    echo "InfluxDB container is already running."
 else
-    echo "Container '$CONTAINER_NAME' does not exist. Pulling the latest image and creating a new container..."
-    docker pull $IMAGE_NAME
-    docker run -d --name $CONTAINER_NAME -p $PORT:$PORT $IMAGE_NAME
+    # Check if the container exists (but is not running)
+    if [ "$(docker ps -aq -f status=exited -f name=influxdb)" ]; then
+        echo "Starting existing InfluxDB container..."
+        docker start influxdb
+    else
+        # If the container does not exist, create and run it
+        echo "Creating and starting a new InfluxDB container..."
+        docker run -d -p 8086:8086 \
+            -v "$(pwd)/influxdb/data:/var/lib/influxdb" \
+            -v "$(pwd)/influxdb/config:/etc/influxdb" \
+            --name influxdb \
+            influxdb:latest
+    fi
 fi
 
-echo "InfluxDB container is up and running."
+# Pause the script to keep the terminal open (only needed if run in a non-interactive shell)
+read -p "Press [Enter] key to continue..."

@@ -1,13 +1,16 @@
-var builder = WebApplication.CreateBuilder(args);
+using DataService.Services;
+using Abstractions.Model;
+using Microsoft.Extensions.Configuration;
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSingleton<InfluxDbService>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -16,29 +19,49 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
+// HealthCheck Endpoint
+app.MapGet("/api/CarSensor/health", async (InfluxDbService influxDbService) =>
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+    var isHealthy = await influxDbService.IsDatabaseHealthyAsync();
+    return isHealthy ? Results.Ok("Database is healthy") : Results.StatusCode(500);
+});
 
-app.MapGet("/weatherforecast", () =>
+// Post Endpoint to add trip data
+app.MapPost("/api/CarSensor/log", async (InfluxDbService influxDbService, Trip trip) =>
+{
+    if (trip == null || trip.Data == null || trip.Data.Count == 0)
     {
-        var forecast = Enumerable.Range(1, 5).Select(index =>
-                new WeatherForecast
-                (
-                    DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                    Random.Shared.Next(-20, 55),
-                    summaries[Random.Shared.Next(summaries.Length)]
-                ))
-            .ToArray();
-        return forecast;
-    })
-    .WithName("GetWeatherForecast")
-    .WithOpenApi();
+        return Results.BadRequest("Invalid trip data");
+    }
+
+    await influxDbService.WriteTripDataAsync(trip);
+    return Results.Ok("Data logged successfully");
+});
+
+// GetAllTrips Endpoint to retrieve all unique trips
+app.MapGet("/api/CarSensor/trips", async (InfluxDbService influxDbService) =>
+{
+    var tripIds = await influxDbService.GetAllTripsAsync();
+
+    if (tripIds == null || tripIds.Count == 0)
+    {
+        return Results.NotFound("No trips found in the database");
+    }
+
+    return Results.Ok(tripIds);
+});
+
+// GetAll Endpoint to retrieve data for a specific trip ID
+app.MapGet("/api/CarSensor/trip/{tripId:guid}", async (InfluxDbService influxDbService, Guid tripId) =>
+{
+    var data = await influxDbService.GetTripDataAsync(tripId);
+
+    if (data == null || data.Count == 0)
+    {
+        return Results.NotFound("No data found for this trip ID");
+    }
+
+    return Results.Ok(data);
+});
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

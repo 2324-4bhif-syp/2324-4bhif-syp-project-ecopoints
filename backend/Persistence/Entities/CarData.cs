@@ -3,24 +3,29 @@ using Newtonsoft.Json;
 
 namespace Persistence.Entities;
 
-[Table("ECO_CAR-DATA")]
-public class CarData : BaseEntity
+public class CarData
 {
-    public double Longitude { get; set; }
-    public double Latitude { get; set; }
+    [JsonProperty("Latitude")]
+    public long Latitude { get; set; }
 
-    [JsonProperty("current_engine_rpm")]
-    public double CurrentEngineRPM { get; set; }
+    [JsonProperty("Longitude")]
+    public long Longitude { get; set; }
 
-    [JsonProperty("current_velocity")]
-    public double CurrentVelocity { get; set; }
+    [JsonProperty("Altitude")]
+    public long Altitude { get; set; }
 
-    [JsonProperty("throttle_position")]
-    public double ThrottlePosition { get; set; }
+    [JsonProperty("Engine Load")]
+    public long EngineLoad { get; set; }
 
-    [JsonProperty("engine_run_time")]
-    public string EngineRunTime { get; set; }
+    [JsonProperty("Engine Coolant Temperature")]
+    public long CoolantTemperature { get; set; }
 
-    [JsonProperty("time_stamp")]
-    public DateTime TimeStamp { get; set; }
+    [JsonProperty("Engine RPM")]
+    public long EngineRpm { get; set; }
+
+    [JsonProperty("Gps-Speed")]
+    public long GpsSpeed { get; set; }
+
+    [JsonProperty("Vehicle Speed")]
+    public long ObdSpeed { get; set; }
 }

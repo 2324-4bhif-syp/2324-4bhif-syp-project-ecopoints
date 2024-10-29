@@ -545,3 +545,4 @@ e2e/*.map
 .history
 .ionide
 
+/backend/WebApi/appsettings.json

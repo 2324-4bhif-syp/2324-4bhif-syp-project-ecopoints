@@ -5,8 +5,6 @@ using InfluxDB.Client;
 using InfluxDB.Client.Api.Domain;
 using InfluxDB.Client.Writes;
 using Microsoft.Extensions.Configuration;
-using InfluxDB.Client.Api.Domain; // For Bucket and RetentionRule classes
-using System.Collections.Generic;   // For List<T>
 
 
 namespace DataService.Services
@@ -151,7 +149,7 @@ namespace DataService.Services
             {
                 var point = PointData
                     .Measurement("car_sensors_data")
-                    .Tag("trip-id", tripId.ToString())  // Associate with existing trip ID
+                    .Tag("trip-id", tripId.ToString())
                     .Field("Altitude", dataPoint.CarData.Altitude)
                     .Field("Longitude", dataPoint.CarData.Longitude)
                     .Field("Latitude", dataPoint.CarData.Latitude)

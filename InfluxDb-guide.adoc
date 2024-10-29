@@ -1,0 +1,43 @@
+= Set Up InfluxDb
+:toc: auto
+:icons: font
+:source-highlighter: coderay
+:hide-uri-scheme: 
+
+NOTE: Docker must be up and running.
+
+== Install
+
+* Run the startInflux.bat if you are on Windows or startInflux.sh if you are on linux.
+* It will pull the latest version of the Influx image and start the container.
+
+== Set up
+
+* Go to http://localhost:8086/
+* You will be asked to put in user, ...
+** User: admin
+** pw: adminadmin
+** organization: org
+** bucket: test
+* Copy the token you get into your appsettings.json.
+* Should look like this:
+[source, json]
+----
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "InfluxDB": {
+    "Url": "http://localhost:8086",
+    "Token": "YOUR_TOKEN",
+    "Organization": "org",
+    "Bucket": "test"
+  },
+  "AllowedHosts": "*"
+}
+----
+
+You are now ready to run the backend.

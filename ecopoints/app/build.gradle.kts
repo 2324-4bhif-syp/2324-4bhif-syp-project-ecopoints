@@ -52,11 +52,18 @@ android {
     buildFeatures {
         compose = true
     }
+
+    packagingOptions {
+        exclude("META-INF/INDEX.LIST")
+        exclude("META-INF/LICENSE")
+        exclude("META-INF/NOTICE")
+        exclude("META-INF/DEPENDENCIES")
+        exclude("META-INF/LICENSE.md")
+        exclude("META-INF/NOTICE.md")
+    }
 }
 
 dependencies {
-
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -156,6 +163,12 @@ dependencies {
 
     // Mockito
     testImplementation (libs.mockito.core)
+
+    // Resteasy
+    implementation(libs.resteasy.client)
+
+    // SmallRye Config for application.properties config loader
+    implementation(libs.smallrye.config)
 }
 
 kapt {

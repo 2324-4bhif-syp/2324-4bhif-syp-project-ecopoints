@@ -42,7 +42,6 @@ app.MapGet("/api/{pluginName}", async (string pluginName, PluginSystem pluginSys
     if (pluginInstance == null)
         return Results.BadRequest("Could not create plugin instance.");
 
-    // Query-Parameter auslesen und in `QueryParameters` umwandeln
     var startDate = context.Request.Query.ContainsKey("startDate") 
         ? DateTime.Parse(context.Request.Query["startDate"]) 
         : (DateTime?)null;
@@ -54,12 +53,7 @@ app.MapGet("/api/{pluginName}", async (string pluginName, PluginSystem pluginSys
     var ids = context.Request.Query.ContainsKey("ids") 
         ? context.Request.Query["ids"].ToString().Split(',').Select(Guid.Parse).ToList() 
         : new List<Guid>();
-    
-    var aggregateFunction = context.Request.Query.ContainsKey("aggregateFunction") 
-        ? context.Request.Query["aggregateFunction"].ToString() 
-        : "SUM";
 
-    // QueryParameters setzen
     var parameters = new QueryParameters
     {
         StartDate = startDate,
@@ -67,7 +61,6 @@ app.MapGet("/api/{pluginName}", async (string pluginName, PluginSystem pluginSys
         Ids = ids
     };
 
-    // Plugin-Query ausführen und Ergebnis abrufen
     var result = await pluginInstance.ExecuteQuery(parameters);
     return Results.Ok(result);
 });

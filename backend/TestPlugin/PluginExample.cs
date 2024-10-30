@@ -18,15 +18,13 @@ public class PluginExample : IBasePluginLayout
 
     public async Task<IEnumerable<Dictionary<string, object>>> ExecuteQuery(QueryParameters parameters)
     {
-        // Verwenden der `GetTripDataAsync` Methode, um Trip-Daten basierend auf einer Trip-ID zu erhalten
-        var tripId = parameters.Ids.FirstOrDefault(); // Hier nur als Beispiel mit der ersten ID
+        var tripId = parameters.Ids.FirstOrDefault(); 
 
         if (tripId == null)
             return new List<Dictionary<string, object>> { new Dictionary<string, object> { { "Error", "Trip ID is required" } } };
 
         var tripData = await _dbService.GetTripDataAsync(tripId);
 
-        // Aggregation der Daten
         double sumGpsSpeed = 0;
         int count = 0;
         foreach (var data in tripData)

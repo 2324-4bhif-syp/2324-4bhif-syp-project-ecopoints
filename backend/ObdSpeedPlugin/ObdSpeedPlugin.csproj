@@ -7,11 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.0-rc.2.24473.5" />
-      <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.0-rc.2.24473.5" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\Attributes\Attributes.csproj" />
       <ProjectReference Include="..\Base\Base.csproj" />
       <ProjectReference Include="..\DataService\DataService.csproj" />
@@ -23,5 +18,4 @@
   </ItemGroup>
   <Copy SourceFiles="@(MyOutputFiles)" DestinationFolder="/home/abdul/4BHIF/syp/00Project/2324-4bhif-syp-project-ecopoints/backend/PluginsOutput" />
 </Target>
-
 </Project>

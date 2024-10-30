@@ -1,7 +1,9 @@
 using DataService.Services;
 using Abstractions.Model;
+using Base;
 using DataService.Controller;
 using Microsoft.Extensions.Configuration;
+using WebApi;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
@@ -10,6 +12,15 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<InfluxDbService>();
 builder.Services.AddSingleton<SensorDataController>();
+
+builder.Services.AddSingleton<PluginSystem>(provider =>
+{
+    var config = provider.GetRequiredService<IConfiguration>().GetSection("App").Get<AppConfig>();
+    var pluginSystem = new PluginSystem(config.AllPlugins.PluginsFolderPath);
+    pluginSystem.Initialize();
+    return pluginSystem;
+});
+
 
 var app = builder.Build();
 
@@ -20,6 +31,48 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.MapGet("/api/{pluginName}", async (string pluginName, PluginSystem pluginSystem, InfluxDbService dbService, HttpContext context) =>
+{
+    var pluginType = pluginSystem.FindPlugin(pluginName);
+    if (pluginType == null)
+        return Results.NotFound($"Plugin {pluginName} not found.");
+
+    var pluginInstance = Activator.CreateInstance(pluginType, dbService) as IBasePluginLayout;
+    if (pluginInstance == null)
+        return Results.BadRequest("Could not create plugin instance.");
+
+    // Query-Parameter auslesen und in `QueryParameters` umwandeln
+    var startDate = context.Request.Query.ContainsKey("startDate") 
+        ? DateTime.Parse(context.Request.Query["startDate"]) 
+        : (DateTime?)null;
+    
+    var endDate = context.Request.Query.ContainsKey("endDate") 
+        ? DateTime.Parse(context.Request.Query["endDate"]) 
+        : (DateTime?)null;
+    
+    var ids = context.Request.Query.ContainsKey("ids") 
+        ? context.Request.Query["ids"].ToString().Split(',').Select(Guid.Parse).ToList() 
+        : new List<Guid>();
+    
+    var aggregateFunction = context.Request.Query.ContainsKey("aggregateFunction") 
+        ? context.Request.Query["aggregateFunction"].ToString() 
+        : "SUM";
+
+    // QueryParameters setzen
+    var parameters = new QueryParameters
+    {
+        StartDate = startDate,
+        EndDate = endDate,
+        Ids = ids
+    };
+
+    // Plugin-Query ausführen und Ergebnis abrufen
+    var result = await pluginInstance.ExecuteQuery(parameters);
+    return Results.Ok(result);
+});
+
+
 
 app.MapGet("/api/health", (SensorDataController controller) => controller.CheckHealth())
     .WithOpenApi(operation =>

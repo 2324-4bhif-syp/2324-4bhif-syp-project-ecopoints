@@ -14,6 +14,14 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Attributes\Attributes.csproj" />
+      <ProjectReference Include="..\Base\Base.csproj" />
       <ProjectReference Include="..\DataService\DataService.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Update="appsettings.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 </Project>

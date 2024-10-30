@@ -11,4 +11,10 @@
       <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.0-rc.2.24473.5" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Attributes\Attributes.csproj" />
+      <ProjectReference Include="..\Base\Base.csproj" />
+      <ProjectReference Include="..\DataService\DataService.csproj" />
+    </ItemGroup>
+
 </Project>

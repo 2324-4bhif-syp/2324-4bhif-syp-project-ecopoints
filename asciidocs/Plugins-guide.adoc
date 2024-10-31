@@ -1,0 +1,121 @@
+= Plugin-System Guide
+:toc: auto
+:icons: font
+:source-highlighter: coderay
+:hide-uri-scheme:
+
+== Überblick
+Das Plugin-System ist ein flexibles Framework, das Entwicklern ermöglicht, spezialisierte Module (Plugins) hinzuzufügen und dynamisch zu nutzen, ohne die Hauptanwendung ändern zu müssen. Dieses System erlaubt es, verschiedene Plugins für spezifische Aufgaben zu erstellen und hinzuzufügen.
+
+== Funktionen des Plugin-Systems
+- **Ermöglicht das Erstellen und Hinzufügen neuer Plugins** ohne Codeänderungen an der Hauptanwendung.
+- **Automatisches Laden und Initialisieren** von Plugins beim Start der Anwendung.
+- **Dynamische Abfrage** von Plugins über die API, um spezifische Funktionen auf Basis der Plugin-Implementierungen auszuführen.
+
+== Verwendung des Plugin-Systems
+
+Um das Plugin-System zu nutzen, müssen Plugins erstellt, konfiguriert und abgerufen werden.
+
+=== Erstellen eines Plugins
+
+Plugins müssen das `IBasePluginLayout`-Interface implementieren und mit einem `PluginAttribute` versehen sein. Hier ein Beispiel-Plugin, das die OBD-Geschwindigkeit (`obdSpeed`) eines Trips für einen bestimmten Zeitraum zurückgibt.
+
+[source,csharp]
+----
+using Base;
+using DataService.Services;
+using SlideLizard.Service.Export;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace CustomInfluxPlugins
+{
+    [Plugin("obd_speed_plugin", typeof(void))]
+    public class ObdSpeedPlugin : IBasePluginLayout
+    {
+        private readonly InfluxDbService _dbService;
+
+        public bool RequiresCalculation => false;
+
+        public ObdSpeedPlugin(InfluxDbService dbService)
+        {
+            _dbService = dbService;
+        }
+
+        public async Task<IEnumerable<Dictionary<string, object>>> ExecuteQuery(QueryParameters parameters)
+        {
+            var tripId = parameters.Ids?.FirstOrDefault() ?? Guid.Empty;
+            if (tripId == Guid.Empty)
+            {
+                return new List<Dictionary<string, object>> { new Dictionary<string, object> { { "Error", "Trip ID is required" } } };
+            }
+
+            var tripData = await _dbService.GetTripDataAsync(tripId);
+            var filteredData = tripData
+                .Where(data => (!parameters.StartDate.HasValue || data.Timestamp >= parameters.StartDate) &&
+                               (!parameters.EndDate.HasValue || data.Timestamp <= parameters.EndDate))
+                .Select(data => new Dictionary<string, object>
+                {
+                    { "timestamp", data.Timestamp },
+                    { "obdSpeed", data.CarData.ObdSpeed }
+                });
+
+            return filteredData;
+        }
+    }
+}
+----
+
+=== Einbinden des Plugins in das System
+
+Das Plugin wird in das Plugin-System integriert, indem es in das Verzeichnis geladen wird, das das System beim Starten der Anwendung durchsucht. Die Anwendung lädt alle Plugins automatisch, die das `IBasePluginLayout`-Interface implementieren.
+
+
+In .csproj-Datei muss das Plugin-Verzeichnis hinzugefügt werden, wo das dll des Plugins kopiert werden soll:
+
+[source,xml]
+----
+<Target Name="CopyDllsAfterBuild" AfterTargets="Build">
+  <ItemGroup>
+    <MyOutputFiles Include="$(OutputPath)*.dll" />
+  </ItemGroup>
+  <Copy SourceFiles="@(MyOutputFiles)" DestinationFolder="PATH/TO/PLUGINS" />
+</Target>
+
+----
+
+In appsettings.json muss der Pfad zum Plugins-Verzeichnis konfiguriert werden:
+[source,json]
+----
+{
+    "App": {
+    "AllPlugins": {
+      "PluginsFolderPath": "PATH/TO/PLUGINS"
+    }
+  }
+}
+----
+
+
+
+=== Nutzung eines Plugins über die API
+
+Um ein Plugin aufzurufen, nutze den HTTP-GET-Endpunkt `/api/{pluginName}`, wobei `{pluginName}` der Name des Plugins ist, wie im `PluginAttribute` definiert.
+
+== Beispiel-API-Aufrufe für das Plugin
+
+Hier sind einige Beispiele, wie das Plugin über die API aufgerufen werden kann:
+
+* Abrufen der `obdSpeed`-Daten für einen bestimmten Trip ohne Zeitbereich:
+[source, bash]
+----
+curl -X 'GET' 'http://localhost:5221/api/obd_speed_plugin?ids=5fa85f64-5717-4562-b3fc-2c963f66afa6'
+----
+
+* Abrufen der `obdSpeed`-Daten für einen bestimmten Trip innerhalb eines Zeitraums:
+[source, bash]
+----
+curl -X 'GET' 'http://localhost:5221/api/obd_speed_plugin?ids=5fa85f64-5717-4562-b3fc-2c963f66afa6&startDate=2024-10-30T22:00:00Z&endDate=2024-10-30T23:00:00Z'
+----

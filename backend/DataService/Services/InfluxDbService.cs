@@ -103,7 +103,7 @@ namespace DataService.Services
         public async Task<List<CarSensorData>> GetTripDataAsync(Guid tripId)
         {
             var query = $"from(bucket: \"{m_bucket}\") " +
-                        $"|> range(start: -30d) " +
+                        $"|> range(start: -30d) " + //DATUM MUSS VOR 30 TAGEN LIEGEN SONST GIBT ES KEINE DATEN!! (und ich frag mich seit 1h warum ich keine Daten bekomme...)
                         $"|> filter(fn: (r) => r[\"trip-id\"] == \"{tripId}\") " +
                         $"|> filter(fn: (r) => r._measurement == \"car_sensors_data\") " +
                         $"|> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")";
@@ -136,7 +136,8 @@ namespace DataService.Services
                     results.Add(carSensorData);
                 }
             }
-
+            
+            Console.WriteLine($"Fetched {results.Count} records for trip ID {tripId}");
             return results;
         }
 
@@ -161,6 +162,8 @@ namespace DataService.Services
                     .Timestamp(dataPoint.Timestamp, WritePrecision.Ms);
 
                 await writeApi.WritePointAsync(point, m_bucket, m_org);
+                
+                Console.WriteLine($"Added point for trip {tripId}: Timestamp={dataPoint.Timestamp}, ObdSpeed={dataPoint.CarData.ObdSpeed}");
             }
         }
 

@@ -546,3 +546,4 @@ e2e/*.map
 .ionide
 
 /backend/WebApi/appsettings.json
+/backend/PluginsOutput

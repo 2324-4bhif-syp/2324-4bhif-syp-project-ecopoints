@@ -6,6 +6,7 @@ import { BrowserModule } from "@angular/platform-browser";
 import { HttpClientModule } from "@angular/common/http";
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
+import { GraphComponent } from "./graph/graph.component";
 
 const appRoutes: Routes = [
     { path: '', component: GraphOverviewComponent }
@@ -14,7 +15,8 @@ const appRoutes: Routes = [
 @NgModule({
     declarations: [
         AppComponent,
-        GraphOverviewComponent
+        GraphOverviewComponent,
+        GraphComponent
     ],
     imports: [
 

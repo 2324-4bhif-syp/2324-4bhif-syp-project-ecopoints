@@ -1,0 +1,7 @@
+<div class="centered-div" *ngIf="graph">
+    <h1 style="display: inline-block;">{{ graph.title }}</h1>
+    <div class="iframe-container">
+      <iframe [src]="getSafeUrl(graph.iFrameLink)" frameborder="0" class="grafana-iframe"></iframe>
+    </div>
+  </div>
+  

@@ -1,1 +1,12 @@
-<p>graph-overview works!</p>
+<div class="navbar">
+    <div *ngFor="let graph of graphs; let i = index" class="nav-item">
+      <button class="nav-button" [class.active]="currentGraph === graph" (click)="selectGraph(i)">
+        {{ graph.title }}
+      </button>
+    </div>
+  </div>
+  
+  <div class="graph-container">
+    <app-graph *ngIf="currentGraph" [graph]="currentGraph" [visible]="true"></app-graph>
+  </div>
+  

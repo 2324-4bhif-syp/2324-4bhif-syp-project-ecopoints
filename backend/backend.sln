@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EngineRpmPlugin", "EngineRp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GpsSpeedPlugin", "GpsSpeedPlugin\GpsSpeedPlugin.csproj", "{900C1862-EB37-44BC-8317-E37C8005AA5F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persistence", "Persistence\Persistence.csproj", "{904112E0-CA5F-4EC0-9D38-E311D56ACF9A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -89,6 +91,10 @@ Global
 		{900C1862-EB37-44BC-8317-E37C8005AA5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{900C1862-EB37-44BC-8317-E37C8005AA5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{900C1862-EB37-44BC-8317-E37C8005AA5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{904112E0-CA5F-4EC0-9D38-E311D56ACF9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{904112E0-CA5F-4EC0-9D38-E311D56ACF9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{904112E0-CA5F-4EC0-9D38-E311D56ACF9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{904112E0-CA5F-4EC0-9D38-E311D56ACF9A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

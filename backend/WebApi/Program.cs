@@ -1,3 +1,4 @@
+using System.Configuration;
 using DataService.Services;
 using Abstractions.Model;
 using Base;
@@ -20,7 +21,6 @@ builder.Services.AddSingleton<PluginSystem>(provider =>
     pluginSystem.Initialize();
     return pluginSystem;
 });
-
 
 var app = builder.Build();
 

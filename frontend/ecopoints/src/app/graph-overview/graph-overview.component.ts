@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Graph } from '../model/Graph';
+import { GraphService } from '../services/graph.service';
 
 @Component({
   selector: 'app-graph-overview',
@@ -7,15 +8,29 @@ import { Graph } from '../model/Graph';
   styleUrl: './graph-overview.component.css'
 })
 export class GraphOverviewComponent implements OnInit {
-  public graphs: Graph[] = [
-    { id: 1, title: 'Graph 1', iFrameLink: 'http://localhost:3000/d-solo/ee2r6d08shr7ka/eco-points?orgId=1&from=1730073573402&to=1730419173402&var-ids=5fa85f64-5717-4562-b3fc-2c963f66afa6&panelId=1&theme=light&css=.panel-container,.graph-panel{background-color:white !important;}.flot-background{fill:white !important;}' },
-    { id: 2, title: 'Graph 2', iFrameLink: 'https://grafana.com/your-graph2' },
-    { id: 3, title: 'Graph 3', iFrameLink: 'https://grafana.com/your-graph3' },
-  ];
+
+  constructor(private graphService: GraphService) {}
+
+  public graphs: Graph[] = [];
   public currentGraph: Graph | null = null;
 
+
   ngOnInit(): void {
-    this.currentGraph = this.graphs[0]; 
+    this.loadGraphs();
+  }
+
+  loadGraphs(): void {
+    this.graphService.getGraphs().subscribe(
+      (data: Graph[]) => {
+        this.graphs = data;
+        if (this.graphs.length > 0) {
+          this.currentGraph = this.graphs[0];
+        }
+      },
+      error => {
+        console.error('Error loading graphs:', error);
+      }
+    );
   }
 
   selectGraph(index: number): void {

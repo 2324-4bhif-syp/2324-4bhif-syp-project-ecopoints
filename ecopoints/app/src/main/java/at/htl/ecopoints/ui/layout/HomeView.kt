@@ -139,7 +139,7 @@ class HomeView {
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(bottom = 80.dp),
+                            .padding(bottom = 60.dp),
                         contentAlignment = Alignment.BottomCenter
                     ) {
                         Row(
@@ -465,7 +465,6 @@ class HomeView {
         if (dieselPrice.value != null && e5Price.value != null) {
             Row(
                 modifier = Modifier
-                    .padding(top = 1.dp)
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
             ) {
@@ -495,26 +494,13 @@ class HomeView {
         }
     }
 
-
-
-
-
     @Composable
     fun ShowText() {
-        val gradientColors = listOf(Gray, Green, DarkGray)
-
         Text(
             text = "Top 3 Rides:",
-            fontSize = 25.sp,
+            fontSize = TextUnit(25f, TextUnitType.Sp),
             fontWeight = FontWeight.Bold,
-            fontStyle = FontStyle.Italic,
-            modifier = Modifier.padding(10.dp, 270.dp, 0.dp, 0.dp),
-
-            style = TextStyle(
-                brush = Brush.linearGradient(
-                    colors = gradientColors
-                )
-            )
+            modifier = Modifier.padding(10.dp, 260.dp, 0.dp, 0.dp),
         )
     }
 
@@ -561,15 +547,7 @@ class HomeView {
 
     @Composable
     fun LastTrips(context: Context) {
-
         val state = store.subject.map { it.homeInfo }.subscribeAsState(HomeInfo())
-
-        val gradientColors = listOf(
-            Color(0xFF9bd99e),
-            Color(0xFF05900a),
-            Color(0xFF9bd99e)
-        )
-
         addFakeDataToDB(context)
 
         val trips = getTopThreeTripDataFromDB(context)
@@ -578,13 +556,12 @@ class HomeView {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp)
-                .padding(0.dp, 290.dp, 0.dp, 50.dp)
+                .padding(0.dp, 270.dp, 0.dp, 0.dp)
         ) {
             Spacer(modifier = Modifier.height(10.dp))
 
             LazyColumn(
                 modifier = Modifier
-                    .fillMaxSize()
                     .weight(1f)
             ) {
                 items(trips) { trip ->
@@ -598,12 +575,11 @@ class HomeView {
                 }
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
 
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(5.dp, 100.dp, 5.dp, 100.dp),
+                    .padding(5.dp, 0.dp, 5.dp, 100.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Column(
@@ -636,7 +612,7 @@ class HomeView {
                                 fontWeight = FontWeight.Bold,
                                 fontSize = TextUnit(20f, TextUnitType.Sp),
                                 color = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.padding(start = 8.dp, bottom = 8.dp, top = 8.dp)
+                                modifier = Modifier.padding(start = 8.dp, bottom = 8.dp)
                             )
                         }
                     }
@@ -672,7 +648,7 @@ class HomeView {
                                 fontWeight = FontWeight.Bold,
                                 fontSize = TextUnit(20f, TextUnitType.Sp),
                                 color = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.padding(start = 8.dp, bottom = 8.dp, top = 8.dp)
+                                modifier = Modifier.padding(start = 8.dp, bottom = 8.dp)
                             )
                         }
                     }

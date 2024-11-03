@@ -8,12 +8,15 @@ import { Observable } from 'rxjs';
 })
 export class GraphService {
 
-  private apiUrl = 'http://localhost:5221/api/graphs'; 
+  private apiUrl = 'http://localhost:5221/api'; 
 
   constructor(private http: HttpClient) { }
 
   getGraphs(): Observable<Graph[]> {
-    return this.http.get<Graph[]>(this.apiUrl);
+    return this.http.get<Graph[]>(`${this.apiUrl}/graphs`);
   }
 
+  getTripIds(): Observable<string[]> {
+    return this.http.get<string[]>(`${this.apiUrl}/trips`);
+  }
 }

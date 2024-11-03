@@ -1,4 +1,12 @@
-<div class="navbar">
+<div class="trip-selector-container">
+    <label for="trip-select" class="trip-label">Select Trip:</label>
+    <select id="trip-select" class="trip-dropdown" (change)="onTripIdSelect($event)">
+      <option *ngFor="let tripId of tripIds" [value]="tripId">{{ tripId }}</option>
+    </select>
+  </div>
+
+  
+  <div class="navbar">
     <div *ngFor="let graph of graphs; let i = index" class="nav-item">
       <button class="nav-button" [class.active]="currentGraph === graph" (click)="selectGraph(i)">
         {{ graph.title }}
@@ -6,8 +14,7 @@
     </div>
   </div>
   
-
-  
   <div class="graph-container">
     <app-graph *ngIf="currentGraph" [graph]="currentGraph" [visible]="true"></app-graph>
   </div>
+

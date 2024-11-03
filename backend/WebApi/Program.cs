@@ -72,9 +72,13 @@ app.MapGet("/api/{pluginName}", async (string pluginName, PluginSystem pluginSys
         ? DateTime.Parse(context.Request.Query["endDate"]) 
         : (DateTime?)null;
     
-    var ids = context.Request.Query.ContainsKey("ids") 
-        ? context.Request.Query["ids"].ToString().Split(',').Select(Guid.Parse).ToList() 
+    var ids = context.Request.Query.ContainsKey("ids")
+        ? context.Request.Query["ids"].ToString().Split(',')
+            .Where(id => Guid.TryParse(id, out _)) 
+            .Select(id => Guid.Parse(id))
+            .ToList()
         : new List<Guid>();
+
 
     var parameters = new QueryParameters
     {

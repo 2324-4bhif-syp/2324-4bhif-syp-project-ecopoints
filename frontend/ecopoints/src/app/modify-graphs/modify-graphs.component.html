@@ -1,62 +1,47 @@
 <div class="container mt-4">
     <!-- Back Button -->
-    <div class="mb-3">
-      <button class="btn btn-link" (click)="goBack()">
+    <button class="btn btn-link" (click)="goBack()">
         <i class="fas fa-arrow-left"></i> Back
-      </button>
-    </div>
+    </button>
 
-    <!-- modify-graphs.component.html -->
-     
-    <h3> Select Graph to update / delete</h3>
-    <select class="form-select" id="graphSelect" #graphSelect (change)="onGraphSelect($any(graphSelect).value)">
+    <h3>Select Graph to Update / Delete</h3>
+    <select class="form-select mb-4" id="graphSelect" #graphSelect (change)="onGraphSelect($any(graphSelect).value)">
         <option value="null">None</option>
-        <option *ngFor="let graph of graphs" [value]="graph.id">
-          {{ graph.title }}
-        </option>
+        <option *ngFor="let graph of graphs" [value]="graph.id">{{ graph.title }}</option>
     </select>
-    
-  
-    <br>
-    <br>
-    <h3 style="text-align: center;">Modify Graphs</h3>
+
+    <h3>Modify Graphs</h3>
     <form (ngSubmit)="addGraph()">
-      <div class="mb-3">
-        <label for="title" class="form-label">Title</label>
-        <input type="text" class="form-control" id="title" [(ngModel)]="graph.title" name="title" required>
-      </div>
-      <div class="mb-3">
-        <label for="iframeLink" class="form-label">iFrame Link</label>
-        <div class="input-group">
-        <input type="text" 
-               class="form-control" 
-               id="iframeLink" 
-               [(ngModel)]="graph.iFrameLink" 
-               name="iframeLink" 
-               [ngClass]="{'is-invalid': iFrameLinkError !== null}"
-               (ngModelChange)="iFrameLinkError = null"
-               required>
-
-               <button class="btn btn-info btn-sm" (click)="openDocumentation()" title="How to obtain the link" style="margin-left: 8px;">
-                <i class="fas fa-question-circle"></i>
-            </button>
-            
+        <div class="mb-4">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" class="form-control" id="title" [(ngModel)]="graph.title" name="title" required>
         </div>
 
-        <div *ngIf="iFrameLinkError" class="invalid-feedback">
-          {{ iFrameLinkError }}
+        <div class="mb-4">
+            <label for="iframeLink" class="form-label">iFrame Link</label>
+            <div class="input-group">
+                <input type="text" 
+                       class="form-control" 
+                       id="iframeLink" 
+                       [(ngModel)]="graph.iFrameLink" 
+                       name="iframeLink" 
+                       [ngClass]="{'is-invalid': iFrameLinkError !== null}"
+                       (ngModelChange)="iFrameLinkError = null"
+                       required>
+                <button class="btn btn-info" (click)="openDocumentation()" title="How to obtain the link">
+                    <i class="fas fa-question-circle"></i>
+                </button>
+            </div>
+            <div *ngIf="iFrameLinkError" class="invalid-feedback">
+                {{ iFrameLinkError }}
+            </div>
         </div>
-      </div>
-      <button type="submit" class="btn btn-primary">Add</button>
+
+        <button type="submit" class="btn btn-primary">Add</button>
     </form>
 
-
-    <br>
-    <form (ngSubmit)="updateGraph()">
-        <!-- Formularfelder hier -->
+    <form (ngSubmit)="updateGraph()" class="mt-3">
         <button type="submit" class="btn btn-primary">Update</button>
-        <button type="button" class="btn btn-danger" (click)="deleteGraph()" [disabled]="!graph.id">Delete</button>
+        <button type="button" class="btn btn-danger mt-2" (click)="deleteGraph()" [disabled]="!graph.id">Delete</button>
     </form>
-
-  </div>
-  
+</div>

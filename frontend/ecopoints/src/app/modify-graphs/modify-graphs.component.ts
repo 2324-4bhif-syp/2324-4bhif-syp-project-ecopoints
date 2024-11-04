@@ -64,7 +64,7 @@ export class ModifyGraphsComponent implements OnInit {
     // Extract the panelId from the updated iFrameLink
     const panelId = this.extractPanelIdFromUrl(this.graph.iFrameLink);
 
-    this.http.post<Graph>('http://localhost:5221/api/graphs', this.graph)
+    this.http.post<Graph>('http://localhost:5221/api/graph', this.graph)
         .subscribe({
           next: () => {
             console.log("Graph added successfully!");
@@ -85,7 +85,7 @@ export class ModifyGraphsComponent implements OnInit {
   
     this.graph.iFrameLink = this.appendParametersToUrl(this.graph.iFrameLink);
     
-    this.http.put<Graph>(`http://localhost:5221/api/graphs/${this.graph.id}`, this.graph)
+    this.http.put<Graph>(`http://localhost:5221/api/graph/${this.graph.id}`, this.graph)
       .subscribe({
         next: () => {
           console.log("Graph updated successfully!");
@@ -105,7 +105,7 @@ export class ModifyGraphsComponent implements OnInit {
     }
   
     if (confirm('Are you sure you want to delete this graph?')) {
-      this.http.delete(`http://localhost:5289/api/graphs/${this.graph.id}`).subscribe({
+      this.http.delete(`http://localhost:5221/api/graph/${this.graph.id}`).subscribe({
         next: () => {
           alert('Graph deleted successfully!');
           this.graphs = this.graphs.filter(g => g.id !== this.graph.id); 
@@ -137,7 +137,7 @@ export class ModifyGraphsComponent implements OnInit {
       // Check for required parameters
       const hasPanelId = urlObject.searchParams.has('panelId');
       const hasOrgId = urlObject.searchParams.has('orgId');
-      const hasVarId = urlObject.searchParams.has('var-id');
+      const hasVarId = urlObject.searchParams.has('var-ids');
 
       // Return true only if all required parameters are present
       return hasPanelId && hasOrgId && hasVarId;

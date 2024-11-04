@@ -5,15 +5,20 @@
       <option *ngFor="let tripId of tripIds" [value]="tripId">{{ tripId }}</option>
     </select>
 
-    <div class="admin-settings-dropdown dropdown">
-        <a href="#" id="adminSettingsDropdown" role="button" data-toggle="dropdown" aria-expanded="false" class="settings-icon">
-            <i class="fas fa-cog"></i> 
-            <i class="fas fa-caret-down"></i> 
-        </a>
-        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="adminSettingsDropdown">
-            <li><a class="dropdown-item" routerLink="/modify-graphs">Modify Graphs</a></li>
-        </ul>
+    <div class="admin-settings-dropdown">
+        <button 
+            id="settingsButton" 
+            class="settings-button" 
+            onclick="toggleDropdown()">
+            <i class="fas fa-cog"></i>
+            <i class="fas fa-caret-down"></i>
+        </button>
+        <div id="dropdownMenu" class="dropdown-content">
+            <a href="#" routerLink="/modify-graphs">Modify Graphs</a>
+        </div>
     </div>
+    
+    
 </div>
 
 <div *ngIf="showTripIdWarning" class="warning-message">

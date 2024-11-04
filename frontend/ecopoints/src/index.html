@@ -6,8 +6,31 @@
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="assets/images/Eco-Logo.png">
+
+  <!-- Font Awesome für Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 </head>
 <body>
   <app-root></app-root>
+
+  <!-- Dein JavaScript für das Dropdown-Menü -->
+  <script>
+    // Funktion, um das Dropdown-Menü ein- und auszublenden
+    function toggleDropdown() {
+        const dropdownMenu = document.getElementById("dropdownMenu");
+        dropdownMenu.style.display = dropdownMenu.style.display === "block" ? "none" : "block";
+    }
+
+    // Schließen des Dropdown-Menüs, wenn außerhalb geklickt wird
+    window.onclick = function(event) {
+        if (!event.target.matches('.settings-button') && !event.target.matches('.settings-button *')) {
+            const dropdownMenu = document.getElementById("dropdownMenu");
+            if (dropdownMenu && dropdownMenu.style.display === "block") {
+                dropdownMenu.style.display = "none";
+            }
+        }
+    };
+  </script>
 </body>
 </html>

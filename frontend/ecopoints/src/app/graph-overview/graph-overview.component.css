@@ -106,8 +106,8 @@ body {
 }
 
 .nav-button.active {
-    background-color: #34A853; /* Kräftiges Grün für aktiven Button */
-    color: #F7F5E6; /* Cremeweiß für aktiven Button-Text */
+    background-color: #34A853; 
+    color: #F7F5E6;
 }
 
 /* Container für den eingebetteten Graphen */
@@ -131,4 +131,23 @@ body {
     .trip-label {
         margin-bottom: 8px;
     }
+}
+
+/* Container für die zentrale Ausrichtung */
+.warning-message {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 60vh; 
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #d9534f; 
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: auto;
 }

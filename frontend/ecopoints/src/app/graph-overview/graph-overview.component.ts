@@ -15,10 +15,10 @@ export class GraphOverviewComponent implements OnInit {
   public tripIds: string[] = [];
   public selectedTripId: string | null = null;
   public currentGraph: Graph | null = null;
+  public showTripIdWarning: boolean = true; 
 
   ngOnInit(): void {
     this.loadTripIds();
-    this.loadGraphs();
   }
 
   loadTripIds(): void {
@@ -29,6 +29,7 @@ export class GraphOverviewComponent implements OnInit {
     );
   }
 
+  
   loadGraphs(): void {
     this.graphService.getGraphs().subscribe(
       (data: Graph[]) => {
@@ -42,21 +43,37 @@ export class GraphOverviewComponent implements OnInit {
 
   onTripIdSelect(event: Event): void {
     const selectedTripId = (event.target as HTMLSelectElement).value;
-    this.selectedTripId = selectedTripId;
-    this.updateGraphLinks();
+    
+    if (selectedTripId === 'null') {
+      this.selectedTripId = null;
+      this.showTripIdWarning = true;
+      this.currentGraph = null;
+      this.graphs = [];
+    } else {
+      this.selectedTripId = selectedTripId;
+      this.showTripIdWarning = false;
+      this.loadGraphsAndApplyTripId(); 
+    }
   }
 
+  loadGraphsAndApplyTripId(): void {
+    this.graphService.getGraphs().subscribe(
+      (data: Graph[]) => {
+        this.graphs = data;
+        this.updateGraphLinks();
+      }
+    );
+  }
 
   updateGraphLinks(): void {
     if (this.selectedTripId) {
-      const tripIdPattern = /var-ids=([^&]*)/; 
-      
+      const tripIdPattern = /var-ids=([^&]*)/;
+
       this.graphs = this.graphs.map(graph => ({
         ...graph,
         iFrameLink: graph.iFrameLink.replace(tripIdPattern, `var-ids=${this.selectedTripId}`)
       }));
       
-  
       if (this.currentGraph) {
         const index = this.graphs.findIndex(g => g.id === this.currentGraph!.id);
         if (index !== -1) {
@@ -65,7 +82,7 @@ export class GraphOverviewComponent implements OnInit {
       }
     }
   }
-  
+
 
   selectGraph(index: number): void {
     this.currentGraph = this.graphs[index];

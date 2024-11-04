@@ -1,6 +1,7 @@
 <div class="trip-selector-container">
     <label for="trip-select" class="trip-label">Select Trip:</label>
     <select id="trip-select" class="trip-dropdown" (change)="onTripIdSelect($event)">
+      <option value="null" selected>None</option> 
       <option *ngFor="let tripId of tripIds" [value]="tripId">{{ tripId }}</option>
     </select>
 
@@ -15,16 +16,18 @@
     </div>
 </div>
 
+<div *ngIf="showTripIdWarning" class="warning-message">
+    Please select a Trip to display Graphs.
+</div>
 
-  
-  <div class="navbar">
+<div class="navbar" *ngIf="!showTripIdWarning">
     <div *ngFor="let graph of graphs; let i = index" class="nav-item">
       <button class="nav-button" [class.active]="currentGraph === graph" (click)="selectGraph(i)">
         {{ graph.title }}
       </button>
     </div>
-  </div>
-  
-  <div class="graph-container">
-    <app-graph *ngIf="currentGraph" [graph]="currentGraph" [visible]="true"></app-graph>
-  </div>
+</div>
+
+<div class="graph-container" *ngIf="currentGraph">
+    <app-graph [graph]="currentGraph" [visible]="true"></app-graph>
+</div>

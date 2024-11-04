@@ -7,16 +7,19 @@ import { HttpClientModule } from "@angular/common/http";
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
 import { GraphComponent } from "./graph/graph.component";
+import { ModifyGraphsComponent } from "./modify-graphs/modify-graphs.component";
 
 const appRoutes: Routes = [
-    { path: '', component: GraphOverviewComponent }
+    { path: '', component: GraphOverviewComponent },
+    { path: 'modify-graphs', component: ModifyGraphsComponent }
 ];
 
 @NgModule({
     declarations: [
         AppComponent,
         GraphOverviewComponent,
-        GraphComponent
+        GraphComponent,
+        ModifyGraphsComponent
     ],
     imports: [
 

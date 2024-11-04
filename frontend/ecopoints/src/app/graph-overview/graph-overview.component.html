@@ -3,7 +3,18 @@
     <select id="trip-select" class="trip-dropdown" (change)="onTripIdSelect($event)">
       <option *ngFor="let tripId of tripIds" [value]="tripId">{{ tripId }}</option>
     </select>
-  </div>
+
+    <div class="admin-settings-dropdown dropdown">
+        <a href="#" id="adminSettingsDropdown" role="button" data-toggle="dropdown" aria-expanded="false" class="settings-icon">
+            <i class="fas fa-cog"></i> 
+            <i class="fas fa-caret-down"></i> 
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="adminSettingsDropdown">
+            <li><a class="dropdown-item" routerLink="/modify-graphs">Modify Graphs</a></li>
+        </ul>
+    </div>
+</div>
+
 
   
   <div class="navbar">
@@ -17,4 +28,3 @@
   <div class="graph-container">
     <app-graph *ngIf="currentGraph" [graph]="currentGraph" [visible]="true"></app-graph>
   </div>
-

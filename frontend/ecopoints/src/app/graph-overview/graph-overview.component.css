@@ -1,73 +1,32 @@
-
-  /* Hintergrundfarbe für den gesamten Bereich */
+/* Hintergrundfarbe für den gesamten Bereich */
 body {
     background-color: #F7F5E6; /* Cremeweiß für ruhigen Hintergrund */
     margin: 0;
     font-family: 'Roboto', sans-serif;
     color: #0B3D28; /* Dunkelgrün für Text */
-  }
-  
-  /* Navbar für die Grafennavigation */
-  .navbar {
-    display: flex;
-    justify-content: center;
-    background-color: #4285F4; /* Blau für die Navbar */
-    padding: 10px;
-    gap: 10px;
-  }
-  
-  .nav-button {
-    background-color: #B8E994; /* Hellgrün für Buttons */
-    color: #0B3D28; /* Dunkelgrün für Text */
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-  }
-  
-  .nav-button:hover {
-    background-color: #34A853; /* Kräftiges Grün für Hover */
-    color: #F7F5E6; /* Cremeweiß für Text im Hover */
-  }
-  
-  .nav-button.active {
-    background-color: #34A853; /* Kräftiges Grün für aktiven Button */
-    color: #F7F5E6; /* Cremeweiß für aktiven Button-Text */
-  }
-  
-  /* Container für den eingebetteten Graphen */
-  .graph-container {
-    display: flex;
-    justify-content: center;
-    padding: 20px;
-  }
-  
-  .graph-container app-graph {
-    width: 50vw; /* 90% der Ansichtsbreite */
-    height: 35vh; /* 75% der Ansichtshöhe */
-  }
+}
 
-
-  /* Container styling for alignment and padding */
+/* Trip Selector Container */
 .trip-selector-container {
     display: flex;
     align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
     margin-bottom: 16px;
-  }
-  
-  /* Label styling */
-  .trip-label {
+    position: relative;
+}
+
+/* Label styling */
+.trip-label {
     font-size: 1.1em;
     font-weight: bold;
     color: #0B3D28; /* Dunkelgrün für eine gute Lesbarkeit */
     margin-right: 8px;
-    font-family: 'Roboto', sans-serif; /* Ökologische und moderne Schriftart */
-  }
-  
-  /* Dropdown styling */
-  .trip-dropdown {
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Dropdown styling */
+.trip-dropdown {
     background-color: #B8E994; /* Hellgrün als Akzentfarbe */
     color: #0B3D28; /* Dunkelgrün für guten Kontrast */
     font-size: 1em;
@@ -77,39 +36,99 @@ body {
     font-family: 'Roboto', sans-serif;
     transition: background-color 0.3s ease, color 0.3s ease;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Leichter Schatten für Tiefe */
-  }
-  
-  /* Dropdown hover effect */
-  .trip-dropdown:hover {
-    background-color: #34A853; /* Mittleres Grün für Hover-Effekt */
-    color: #F7F5E6; /* Cremeweiß für bessere Lesbarkeit im Hover-Zustand */
+}
+
+/* Admin Settings Dropdown */
+.admin-settings-dropdown {
+    margin-left: auto; /* Rechtsausrichtung des Settings-Icons */
+}
+
+.settings-icon {
+    display: inline-flex;
+    align-items: center;
+    color: #4285F4; /* Blau für das Admin-Icon */
+    font-size: 1.5em;
+    margin-left: 10px;
     cursor: pointer;
-  }
-  
-  /* Dropdown focus and active styles */
-  .trip-dropdown:focus,
-  .trip-dropdown:active {
-    outline: none;
-    border-color: #4285F4; /* Blau als Kontrast bei Auswahl */
-    box-shadow: 0 0 5px 2px rgba(66, 133, 244, 0.4);
-  }
-  
-  /* Option styling */
-  .trip-dropdown option {
-    color: #0B3D28; /* Dunkelgrün für Lesbarkeit */
-    background-color: #F7F5E6; /* Cremeweiß als dezenter Hintergrund */
-  }
-  
-  /* Responsive adjustments */
-  @media (max-width: 600px) {
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.settings-icon:hover {
+    color: #34A853; /* Grün für Hover-Effekt */
+}
+
+.settings-icon .fa-caret-down {
+    font-size: 0.8em;
+    margin-left: 5px;
+}
+
+/* Dropdown Menü */
+.dropdown-menu {
+    border-radius: 4px;
+    background-color: #F7F5E6; /* Cremeweiß für Hintergrund */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-item {
+    color: #0B3D28; /* Dunkelgrün für Texte */
+}
+
+.dropdown-item:hover {
+    background-color: #B8E994; /* Hellgrün für Hover-Effekt */
+    color: #0B3D28;
+}
+
+
+/* Navbar für die Grafennavigation */
+.navbar {
+    display: flex;
+    justify-content: center;
+    background-color: #4285F4; /* Blau für die Navbar */
+    padding: 10px;
+    gap: 10px;
+}
+
+.nav-button {
+    background-color: #B8E994; /* Hellgrün für Buttons */
+    color: #0B3D28; /* Dunkelgrün für Text */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.nav-button:hover {
+    background-color: #34A853; /* Kräftiges Grün für Hover */
+    color: #F7F5E6; /* Cremeweiß für Text im Hover */
+}
+
+.nav-button.active {
+    background-color: #34A853; /* Kräftiges Grün für aktiven Button */
+    color: #F7F5E6; /* Cremeweiß für aktiven Button-Text */
+}
+
+/* Container für den eingebetteten Graphen */
+.graph-container {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+.graph-container app-graph {
+    width: 50vw;
+    height: 35vh;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
     .trip-selector-container {
-      flex-direction: column;
-      align-items: flex-start;
+        flex-direction: column;
+        align-items: flex-start;
     }
     .trip-label {
-      margin-bottom: 8px;
+        margin-bottom: 8px;
     }
-  }
-  
-
-  
+}

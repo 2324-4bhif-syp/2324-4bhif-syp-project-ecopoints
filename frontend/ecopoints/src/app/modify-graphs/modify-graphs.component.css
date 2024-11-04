@@ -1,0 +1,89 @@
+/* Hintergrundfarben und Layout */
+.container {
+    background-color: #C4E0F9; /* Pastellblau für ruhigen Hintergrund */
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Überschriften */
+h3 {
+    color: #0B3D28; /* Dunkelgrün für Überschriften */
+    text-align: center;
+    margin-bottom: 20px;
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Zurück-Button */
+.btn-link {
+    color: #4285F4; /* Weiches Blau für den Back-Button */
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* Formular-Labels und -Felder */
+.form-label {
+    display: block;
+    color: #0B3D28; /* Dunkelgrün für Labels */
+    font-weight: 500;
+    font-family: 'Open Sans', sans-serif;
+    margin-bottom: 5px;
+}
+
+.form-control,
+.form-select {
+    background-color: #F7F5E6; /* Cremeweiß für Eingabefelder */
+    border: 1px solid #AAAAAA; /* Dezentes Grau für Rand */
+    color: #0B3D28; /* Dunkelgrün für Text in den Feldern */
+    font-family: 'Open Sans', sans-serif;
+    width: 100%; /* Volle Breite */
+    box-sizing: border-box; /* Rand und Padding innerhalb der Breite */
+    margin-bottom: 15px; /* Abstand zwischen den Feldern */
+    padding: 10px; /* Innere Abstände für bessere Optik */
+}
+
+/* iFrame-Link-Gruppe */
+.input-group {
+    display: flex;
+    align-items: center;
+}
+
+.input-group .btn-info {
+    background-color: #34A853; /* Mittleres Grün für Icon-Buttons */
+    color: #FFFFFF;
+    border: none;
+    margin-left: 8px;
+}
+
+/* Fehler-Feedback */
+.is-invalid {
+    border-color: #8B5E3C; /* Brauner Rand für ungültige Felder */
+}
+
+.invalid-feedback {
+    color: #8B5E3C; /* Braun für Fehlermeldungen */
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: #34A853; /* Kräftiges Grün für Primär-Button */
+    border: none;
+    color: #FFFFFF;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.btn-danger {
+    background-color: #8B5E3C; /* Braune Akzentfarbe für den Delete-Button */
+    border: none;
+    color: #FFFFFF;
+    width: 100%;
+}
+
+.btn-primary:hover, .btn-danger:hover, .btn-info:hover {
+    opacity: 0.9;
+}

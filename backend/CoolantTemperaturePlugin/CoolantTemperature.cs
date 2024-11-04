@@ -5,7 +5,7 @@ using DataService.Services;
 namespace CoolantTemperaturePlugin;
 
 [Plugin("coolantTemp", typeof(void))]
-public class CoolantTemperature
+public class CoolantTemperature : IBasePluginLayout
 {
     private readonly InfluxDbService _dbService;
 

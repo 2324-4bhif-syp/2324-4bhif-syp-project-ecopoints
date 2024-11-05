@@ -28,16 +28,32 @@ public class CarData
     public double? ObdSpeed { get; set; }
 }
     
+
+public class Graph
+{
+    public int Id { get; set; }
+    public string Title { get; set; }
+    public string IFrameLink { get; set; }
+}
 class Program
 {
     private static async Task Main(string[] args)
     {
-        using var httpClient = new HttpClient();
         var tripData = GenerateFakeTripData();
+        //postTripData(tripData);
 
+        postGraphData();
+
+    }
+    
+    private static async void postTripData(Trip tripData)
+    {
+        using var httpClient = new HttpClient();
+
+        
         try
         {
-            var response = await httpClient.PostAsJsonAsync("http://localhost:5221/api/log", tripData);
+            var response = await httpClient.PostAsJsonAsync("http://localhost:5000/api/log", tripData);
             if (response.IsSuccessStatusCode)
             {
                 Console.WriteLine("Trip data successfully sent and logged in the database.");
@@ -50,6 +66,37 @@ class Program
         catch (Exception ex)
         {
             Console.WriteLine($"An error occurred: {ex.Message}");
+        }
+    }
+
+    private static async void postGraphData()
+    {
+        using var client = new HttpClient();
+        client.BaseAddress = new Uri("http://localhost:5000"); 
+
+        var graphs = new[]
+        {
+            new Graph { Id = 1, Title = "Obd Speed", IFrameLink = "http://localhost:3000/d-solo/ee2r6d08shr7ka/eco-points?orgId=1&from=now&to=now-30d&var-ids=$ids&panelId=1&theme=light&css=.panel-container,.graph-panel{background-color:white !important;}.flot-background{fill:white !important;}" },
+            new Graph { Id = 2, Title = "Gps Speed", IFrameLink = "http://localhost:3000/d-solo/ee2r6d08shr7ka/eco-points?orgId=1&from=now&to=now-30d&var-ids=$ids&panelId=4&theme=light&css=.panel-container,.graph-panel{background-color:white !important;}.flot-background{fill:white !important;}" },
+            new Graph { Id = 3, Title = "Engine Rpm", IFrameLink = "http://localhost:3000/d-solo/ee2r6d08shr7ka/eco-points?orgId=1&from=now&to=now-30d&var-ids=$ids&panelId=5&theme=light&css=.panel-container,.graph-panel{background-color:white !important;}.flot-background{fill:white !important;}" },
+            new Graph { Id = 4, Title = "Engine Load", IFrameLink = "http://localhost:3000/d-solo/ee2r6d08shr7ka/eco-points?orgId=1&from=now&to=now-30d&var-ids=$ids&panelId=7&theme=light&css=.panel-container,.graph-panel{background-color:white !important;}.flot-background{fill:white !important;}" },
+            new Graph { Id = 5, Title = "Coolant Temp", IFrameLink = "http://localhost:3000/d-solo/ee2r6d08shr7ka/eco-points?orgId=1&from=now&to=now-30d&var-ids=$ids&panelId=6&theme=light&css=.panel-container,.graph-panel{background-color:white !important;}.flot-background{fill:white !important;}" },
+            new Graph { Id = 6, Title = "longitude", IFrameLink = "http://localhost:3000/d-solo/ee2r6d08shr7ka/eco-points?orgId=1&from=now&to=now-30d&var-ids=$ids&panelId=2&theme=light&css=.panel-container,.graph-panel{background-color:white !important;}.flot-background{fill:white !important;}" },
+            new Graph { Id = 7, Title = "latitude", IFrameLink = "http://localhost:3000/d-solo/ee2r6d08shr7ka/eco-points?orgId=1&from=now&to=now-30d&var-ids=$ids&panelId=3&theme=light&css=.panel-container,.graph-panel{background-color:white !important;}.flot-background{fill:white !important;}" },
+            new Graph { Id = 8, Title = "altitude", IFrameLink = "http://localhost:3000/d-solo/ee2r6d08shr7ka/eco-points?orgId=1&from=now&to=now-30d&var-ids=$ids&panelId=8&theme=light&css=.panel-container,.graph-panel{background-color:white !important;}.flot-background{fill:white !important;}" }
+        };
+
+        foreach (var graph in graphs)
+        {
+            var response = await client.PostAsJsonAsync("/api/graph", graph);
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine($"Graph '{graph.Title}' posted successfully.");
+            }
+            else
+            {
+                Console.WriteLine($"Failed to post graph '{graph.Title}': {response.ReasonPhrase}");
+            }
         }
     }
 

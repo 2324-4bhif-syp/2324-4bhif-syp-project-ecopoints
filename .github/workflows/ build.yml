@@ -1,0 +1,32 @@
+name: Build and Deploy .NET Docker App
+
+on:
+  push:
+    branches:
+      - main  # Ausführung bei jedem Push auf den `main` Branch
+  pull_request:
+    branches:
+      - main  # Ausführung bei jedem PR in den `main` Branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.3'
+
+      - name: Build Docker image
+        working-directory: backend  # Setzt das Arbeitsverzeichnis auf "backend"
+        run: docker build -t ghcr.io/${{ github.repository }}/ecopoints-dotnet .
+
+      - name: Login to GitHub Container Registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Push Docker image to GitHub Container Registry
+        run: docker push ghcr.io/${{ github.repository }}/ecopoints-dotnet

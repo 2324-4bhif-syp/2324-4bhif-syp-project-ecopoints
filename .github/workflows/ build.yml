@@ -19,7 +19,7 @@ jobs:
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '8.0.3'
+          dotnet-version: '8.0.10'
 
       - name: Build Docker image
         working-directory: backend  # Setzt das Arbeitsverzeichnis auf "backend"

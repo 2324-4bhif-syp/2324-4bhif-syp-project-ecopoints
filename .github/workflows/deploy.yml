@@ -17,7 +17,9 @@ jobs:
           mkdir -p $HOME/.kube
           echo "${{ secrets.KUBE_CONFIG_DATA }}" | base64 -d > $HOME/.kube/config
 
-      # Secrets für die Datenbanken erstellen
+      - name: Verify Kubernetes Connection
+        run: kubectl get nodes
+
       - name: Create Secrets for PostgreSQL and InfluxDB
         run: |
           kubectl create secret generic db-connection-string \

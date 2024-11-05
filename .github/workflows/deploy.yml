@@ -1,4 +1,4 @@
-name: Deploy to Leocloud
+name: Deploy to Leocloud Kubernetes
 
 on:
   workflow_run:
@@ -12,18 +12,23 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Setup KUBECONFIG for Leocloud
+        run: |
+          echo "${{ secrets.KUBE_CONFIG_DATA }}" | base64 -d > $HOME/.kube/config
+
+      # Secrets für die Datenbanken erstellen
       - name: Create Secrets for PostgreSQL and InfluxDB
         run: |
           kubectl create secret generic db-connection-string \
             --from-literal=connectionString="Host=postgres_deployment;Port=5432;Database=db;Username=app;Password=${{ secrets.POSTGRES_PASSWORD }}" \
-            --dry-run=client -o yaml | kubectl apply -f -
+            --dry-run=client -o yaml | kubectl apply -f - --validate=false
 
           kubectl create secret generic influxdb-config \
             --from-literal=url="http://influxdb_deployment:8086" \
             --from-literal=token="${{ secrets.INFLUXDB_TOKEN }}" \
             --from-literal=organization="org" \
             --from-literal=bucket="test" \
-            --dry-run=client -o yaml | kubectl apply -f -
+            --dry-run=client -o yaml | kubectl apply -f - --validate=false
 
       - name: Deploy to Kubernetes
         uses: ghostzero/kubectl@v1

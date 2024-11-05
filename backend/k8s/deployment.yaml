@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: ecopoints-container
-          image: ghcr.io/ab321/2324-4bhif-syp-project-ecopoints/ecopoints-dotnet:latest
+          image: ghcr.io/2324-4bhif-syp/2324-4bhif-syp-project-ecopoints/ecopoints-dotnet:latest
           ports:
             - containerPort: 8080
           env:

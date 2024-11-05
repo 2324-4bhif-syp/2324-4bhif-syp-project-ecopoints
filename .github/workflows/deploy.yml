@@ -14,6 +14,7 @@ jobs:
 
       - name: Setup KUBECONFIG for Leocloud
         run: |
+          mkdir -p $HOME/.kube
           echo "${{ secrets.KUBE_CONFIG_DATA }}" | base64 -d > $HOME/.kube/config
 
       # Secrets für die Datenbanken erstellen

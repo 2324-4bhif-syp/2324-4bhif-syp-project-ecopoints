@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ecopoints-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ecopoints
+  template:
+    metadata:
+      labels:
+        app: ecopoints
+    spec:
+      containers:
+        - name: ecopoints-container
+          image: ghcr.io/ab321/2324-4bhif-syp-project-ecopoints/ecopoints-dotnet:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: "Production"
+            - name: ConnectionStrings__Default
+              valueFrom:
+                secretKeyRef:
+                  name: db-connection-string
+                  key: connectionString

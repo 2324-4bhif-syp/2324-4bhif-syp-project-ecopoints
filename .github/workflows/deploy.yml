@@ -1,0 +1,33 @@
+name: Deploy to Leocloud
+
+on:
+  workflow_run:
+    workflows: ["Build and Deploy .NET Docker App"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Create Secrets for PostgreSQL and InfluxDB
+        run: |
+          kubectl create secret generic db-connection-string \
+            --from-literal=connectionString="Host=postgres_deployment;Port=5432;Database=db;Username=app;Password=${{ secrets.POSTGRES_PASSWORD }}" \
+            --dry-run=client -o yaml | kubectl apply -f -
+
+          kubectl create secret generic influxdb-config \
+            --from-literal=url="http://influxdb_deployment:8086" \
+            --from-literal=token="${{ secrets.INFLUXDB_TOKEN }}" \
+            --from-literal=organization="org" \
+            --from-literal=bucket="test" \
+            --dry-run=client -o yaml | kubectl apply -f -
+
+      - name: Deploy to Kubernetes
+        uses: ghostzero/kubectl@v1
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+        with:
+          args: apply -f backend/k8s/deployment.yaml -f backend/k8s/service.yaml

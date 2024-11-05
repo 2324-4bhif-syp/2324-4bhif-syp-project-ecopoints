@@ -29,6 +29,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<InfluxDbService>();
 builder.Services.AddSingleton<SensorDataController>();
 builder.Services.AddScoped<GraphController>();
+builder.Services.AddDbContext<ApplicationDbContext>();
+
 
 builder.Services.AddSingleton<PluginSystem>(provider =>
 {

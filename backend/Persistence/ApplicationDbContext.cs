@@ -9,35 +9,30 @@ namespace Persistence;
 public class ApplicationDbContext : DbContext
 {
 
-    public DbSet<Graph> Graphs { get; set; }
-    
-    public ApplicationDbContext()
-    {
-    }
+    private readonly IConfiguration _configuration;
 
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+    public DbSet<Graph> Graphs { get; set; }
+
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IConfiguration configuration)
         : base(options)
     {
+        _configuration = configuration;
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         if (!optionsBuilder.IsConfigured)
         {
-            var configuration = new ConfigurationBuilder()
-                .SetBasePath(AppContext.BaseDirectory)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .Build();
             optionsBuilder
-                .LogTo(msg => Debug.WriteLine(msg), Microsoft.Extensions.Logging.LogLevel.Debug, Microsoft.EntityFrameworkCore.Diagnostics.DbContextLoggerOptions.SingleLine | Microsoft.EntityFrameworkCore.Diagnostics.DbContextLoggerOptions.UtcTime)
-                .UseNpgsql(configuration["ConnectionStrings:Default"]);
+                .LogTo(msg => Debug.WriteLine(msg), Microsoft.Extensions.Logging.LogLevel.Debug, 
+                    Microsoft.EntityFrameworkCore.Diagnostics.DbContextLoggerOptions.SingleLine | 
+                    Microsoft.EntityFrameworkCore.Diagnostics.DbContextLoggerOptions.UtcTime)
+                .UseNpgsql(_configuration.GetConnectionString("Default"));
         }
     }
 
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        
         SeedData(modelBuilder);
     }
 

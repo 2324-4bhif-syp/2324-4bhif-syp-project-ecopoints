@@ -53,7 +53,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 //Dynamicly load plugins
 app.MapGet("/api/{pluginName}", async (string pluginName, PluginSystem pluginSystem, InfluxDbService dbService, HttpContext context) =>

@@ -35,10 +35,15 @@ builder.Services.AddDbContext<ApplicationDbContext>();
 builder.Services.AddSingleton<PluginSystem>(provider =>
 {
     var config = provider.GetRequiredService<IConfiguration>().GetSection("App").Get<AppConfig>();
+    if (config == null || config.AllPlugins == null || string.IsNullOrEmpty(config.AllPlugins.PluginsFolderPath))
+    {
+        throw new InvalidOperationException("Configuration for plugins is missing.");
+    }
     var pluginSystem = new PluginSystem(config.AllPlugins.PluginsFolderPath);
     pluginSystem.Initialize();
     return pluginSystem;
 });
+
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));

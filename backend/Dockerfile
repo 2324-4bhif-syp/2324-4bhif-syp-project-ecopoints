@@ -29,10 +29,23 @@ COPY . ./
 
 # Publish the WebApi project
 WORKDIR /App/WebApi
-RUN dotnet publish -c Release -o out
+RUN dotnet publish -c Release -o ../PluginsOutput
+
+# Create the PluginsOutput directory in the Docker container
+RUN mkdir -p /App/PluginsOutput
+
+# Move the plugins to PluginsOutput within build-env
+RUN cp -r /App/WebApi/out/*.dll /App/PluginsOutput/
 
 # Runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /App
+
+# Copy appsettings and other necessary files
+COPY WebApi/appsettings.json /App/appsettings.json
+
+# Copy the output, including plugins
+COPY --from=build-env /App/PluginsOutput /App/PluginsOutput
 COPY --from=build-env /App/WebApi/out .
+
 ENTRYPOINT ["dotnet", "WebApi.dll"]

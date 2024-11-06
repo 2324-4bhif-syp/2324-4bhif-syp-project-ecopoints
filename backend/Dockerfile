@@ -41,9 +41,6 @@ RUN cp -r /App/WebApi/out/*.dll /App/PluginsOutput/
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /App
 
-# Copy appsettings and other necessary files
-COPY WebApi/appsettings.json /App/appsettings.json
-
 # Copy the output, including plugins
 COPY --from=build-env /App/PluginsOutput /App/PluginsOutput
 COPY --from=build-env /App/WebApi/out .

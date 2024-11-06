@@ -44,6 +44,9 @@ builder.Services.AddSingleton<PluginSystem>(provider =>
     return pluginSystem;
 });
 
+builder.Configuration
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false);
+
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));

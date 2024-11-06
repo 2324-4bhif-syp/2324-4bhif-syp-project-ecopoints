@@ -40,9 +40,9 @@ class Program
     private static async Task Main(string[] args)
     {
         var tripData = GenerateFakeTripData();
-        //postTripData(tripData);
+        postTripData(tripData);
 
-        postGraphData();
+        //postGraphData();
 
     }
     
@@ -53,7 +53,7 @@ class Program
         
         try
         {
-            var response = await httpClient.PostAsJsonAsync("http://localhost:5000/api/log", tripData);
+            var response = await httpClient.PostAsJsonAsync("http://localhost:8080/api/log", tripData);
             if (response.IsSuccessStatusCode)
             {
                 Console.WriteLine("Trip data successfully sent and logged in the database.");

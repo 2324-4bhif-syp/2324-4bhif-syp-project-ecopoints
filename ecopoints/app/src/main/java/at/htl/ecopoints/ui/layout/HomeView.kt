@@ -497,7 +497,7 @@ class HomeView {
     @Composable
     fun ShowText() {
         Text(
-            text = "Top 3 Rides:",
+            text = "Top Trips:",
             fontSize = TextUnit(25f, TextUnitType.Sp),
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(10.dp, 260.dp, 0.dp, 0.dp),
@@ -519,9 +519,9 @@ class HomeView {
                 backgroundColor = MaterialTheme.colorScheme.surface,
                 contentColor = MaterialTheme.colorScheme.primary
             ),
-            border = BorderStroke(1.dp, Color.LightGray)
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary)
         ) {
-            val formattedDate = SimpleDateFormat("dd/MM/yyyy, HH:mm", Locale.getDefault()).format(trip.start)
+            val formattedDate = SimpleDateFormat("dd.MM.yyyy, HH:mm", Locale.getDefault()).format(trip.start)
             Column(
                 modifier = Modifier
                     .padding(vertical = 8.dp, horizontal = 16.dp)
@@ -535,7 +535,15 @@ class HomeView {
                 }
                 Spacer(modifier = Modifier.height(4.dp))
                 Row {
-                    Text(text = "${trip.rewardedEcoPoints} EP")
+                    Text(text = "${trip.rewardedEcoPoints}")
+                    Image(
+                        painter = painterResource(id = R.drawable.ranking_category_ecopoints),
+                        contentDescription = "Eco-Points",
+                        modifier = Modifier
+                            .size(25.dp)
+                            .clip(RoundedCornerShape(10.dp))
+                            .align(Alignment.CenterVertically)
+                    )
                     Spacer(modifier = Modifier.weight(1f))
                     Text(text = "${trip.distance} km")
                 }
@@ -694,7 +702,7 @@ class HomeView {
                 title = {
                     Text(
                         "Trip: " + (selectedTripDate?.let {
-                            SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(it)
+                            SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(it)
                         } ?: "Unknown Date")
                     )
                 },
@@ -705,7 +713,7 @@ class HomeView {
                             Text(
                                 "End Date: ${
                                     SimpleDateFormat(
-                                        "dd/MM/yyyy, HH:mm",
+                                        "dd.MM.yyyy, HH:mm",
                                         Locale.getDefault()
                                     ).format(selectedTrip.end)
                                 }"

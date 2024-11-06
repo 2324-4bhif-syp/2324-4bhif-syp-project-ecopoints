@@ -125,7 +125,7 @@ class LastRidesView {
         Row(modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp, top = 10.dp)) {
             Column(modifier = Modifier.weight(1f)) {
                 androidx.compose.material.Text(
-                    text = "Last Rides",
+                    text = "Trips",
                     fontWeight = FontWeight.Bold,
                     fontSize = TextUnit(40f, TextUnitType.Sp)
                 )
@@ -149,11 +149,11 @@ class LastRidesView {
 
             Column {
                 Image(
-                    painter = painterResource(id = R.drawable.ranking_category_cars),
-                    contentDescription = "Picture",
+                    painter = painterResource(id = R.drawable.ranking_category_trips),
+                    contentDescription = "Trips",
                     modifier = Modifier
-                        .size(100.dp)
-                        .clip(RoundedCornerShape(80.dp))
+                        .size(120.dp)
+                        .padding(end = 20.dp)
                 )
             }
         }
@@ -178,7 +178,7 @@ class LastRidesView {
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
             trips.forEach { trip ->
                 val formattedDate =
-                    SimpleDateFormat("dd/MM/yyyy, HH:mm", Locale.getDefault()).format(trip.start)
+                    SimpleDateFormat("dd.MM.yyyy, HH:mm", Locale.getDefault()).format(trip.start)
 
                 Column(modifier = Modifier.padding(vertical = 16.dp, horizontal = 16.dp)) {
 
@@ -238,8 +238,10 @@ class LastRidesView {
                         }
                     }
 
-                    androidx.compose.material3.Divider(thickness = 1.dp, color = Color.LightGray)
-
+                    if(trip != trips.last())
+                    {
+                        androidx.compose.material3.Divider(thickness = 1.dp, color = Color.LightGray)
+                    }
                 }
             }
         }

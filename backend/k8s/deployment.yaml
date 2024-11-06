@@ -22,7 +22,4 @@ spec:
             - name: ASPNETCORE_ENVIRONMENT
               value: "Production"
             - name: ConnectionStrings__Default
-              valueFrom:
-                secretKeyRef:
-                  name: db-connection-string
-                  key: connectionString
+              value: "Host=postgres-deployment;Port=5432;Database=db;Username=app;Password=app"

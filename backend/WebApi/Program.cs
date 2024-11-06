@@ -12,6 +12,10 @@ using Trip = Abstractions.Model.Trip;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//string postgresHost = Environment.GetEnvironmentVariable("POSTGRES_HOST") ?? "localhost";
+//builder.Configuration["ConnectionStrings:Default"] = $"Host={postgresHost};Port=5432;Database=db;Username=app;Password=app";
+
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
@@ -23,14 +27,12 @@ builder.Services.AddCors(options =>
 });
 
 
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<InfluxDbService>();
 builder.Services.AddSingleton<SensorDataController>();
 builder.Services.AddScoped<GraphController>();
 builder.Services.AddDbContext<ApplicationDbContext>();
-
 
 builder.Services.AddSingleton<PluginSystem>(provider =>
 {

@@ -11,8 +11,8 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241105215808_initial_deployment")]
-    partial class initial_deployment
+    [Migration("20241106092105_initial_kubectl")]
+    partial class initial_kubectl
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

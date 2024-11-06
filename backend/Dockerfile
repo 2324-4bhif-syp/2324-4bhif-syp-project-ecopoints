@@ -46,7 +46,7 @@ WORKDIR /App
 # Copy the output, including plugins
 COPY --from=build-env /App/out .
 COPY --from=build-env /App/PluginsOutput /App/PluginsOutput
-COPY WebApi/appsettings.json /App/
+COPY ./WebApi/appsettings.json /App/
 
 
 # Start the Web API

@@ -25,9 +25,3 @@ spec:
                 secretKeyRef:
                   name: db-connection-string
                   key: connectionString
-          volumeMounts:
-            - mountPath: /App/PluginsOutput
-              name: plugins-output-volume
-      volumes:
-        - name: plugins-output-volume
-          emptyDir: {}

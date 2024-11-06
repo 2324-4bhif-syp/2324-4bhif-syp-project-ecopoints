@@ -2,7 +2,7 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
 WORKDIR /App
 
-# Copy the solution file and all project files
+# Copy the solution file and project files for all plugins and dependencies
 COPY backend.sln ./
 COPY Abstractions/Abstractions.csproj ./Abstractions/
 COPY Attributes/Attributes.csproj ./Attributes/

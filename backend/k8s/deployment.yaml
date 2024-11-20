@@ -3,7 +3,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: appsrv
-
 spec:
   replicas: 1
   selector:
@@ -14,6 +13,12 @@ spec:
       labels:
         app: appsrv
     spec:
+      initContainers:
+        - name: sysctl-init
+          image: busybox:latest
+          command: ["sh", "-c", "sysctl -w fs.inotify.max_user_instances=512 fs.inotify.max_user_watches=524288"]
+          securityContext:
+            privileged: true
       containers:
         - name: appsrv
           image: ghcr.io/2324-4bhif-syp/2324-4bhif-syp-project-ecopoints/ecopoints-dotnet:latest
@@ -21,24 +26,8 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
-          startupProbe:
-            httpGet:
-              path: /q/health
-              port: 8080
-            timeoutSeconds: 5
-            initialDelaySeconds: 15
-          readinessProbe:
-            tcpSocket:
-              port: 8080
-            initialDelaySeconds: 5
-            periodSeconds: 10
-          livenessProbe:
-            httpGet:
-              path: /q/health
-              port: 8080
-            timeoutSeconds: 5
-            initialDelaySeconds: 60
-            periodSeconds: 120
+          securityContext:
+            privileged: true
 ---
 apiVersion: v1
 kind: Service

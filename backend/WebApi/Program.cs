@@ -8,24 +8,23 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Persistence;
 using WebApi;
+using Microsoft.AspNetCore.HttpOverrides; // For Forwarded Headers
 using Trip = Abstractions.Model.Trip;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//string postgresHost = Environment.GetEnvironmentVariable("POSTGRES_HOST") ?? "localhost";
-//builder.Configuration["ConnectionStrings:Default"] = $"Host={postgresHost};Port=5432;Database=db;Username=app;Password=app";
-
-
+// Set up CORS policy
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:4200") 
-            .AllowAnyMethod()
-            .AllowAnyHeader();
+        policy.WithOrigins(
+            builder.Configuration["AllowedOrigin"] ?? "http://localhost:4200" // Default for local dev
+        )
+        .AllowAnyMethod()
+        .AllowAnyHeader();
     });
 });
-
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -49,23 +48,40 @@ builder.Services.AddSingleton<PluginSystem>(provider =>
 builder.Configuration
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false);
 
-
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
 
 var app = builder.Build();
 
+// Use CORS
 app.UseCors("AllowFrontend");
 
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,
+    ForwardLimit = 1
+});
+
+
+// Enable Swagger in development mode
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-//app.UseHttpsRedirection();
+// Default route to avoid redirect loops or errors
+app.MapFallback(() => Results.Redirect("/swagger"));
 
-//Dynamicly load plugins
+// Add middleware for request logging
+app.Use(async (context, next) =>
+{
+    Console.WriteLine($"Request Path: {context.Request.Path}");
+    Console.WriteLine($"Request Headers: {string.Join(", ", context.Request.Headers.Select(h => $"{h.Key}: {h.Value}"))}");
+    await next();
+});
+
+// Map routes
 app.MapGet("/api/{pluginName}", async (string pluginName, PluginSystem pluginSystem, InfluxDbService dbService, HttpContext context) =>
 {
     var pluginType = pluginSystem.FindPlugin(pluginName);
@@ -90,7 +106,6 @@ app.MapGet("/api/{pluginName}", async (string pluginName, PluginSystem pluginSys
             .Select(id => Guid.Parse(id))
             .ToList()
         : new List<Guid>();
-
 
     var parameters = new QueryParameters
     {

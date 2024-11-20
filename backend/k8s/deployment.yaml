@@ -1,25 +1,76 @@
+# Quarkus Application Server
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ecopoints-app
-  namespace: student-if200102
+  name: appsrv
+
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ecopoints
+      app: appsrv
   template:
     metadata:
       labels:
-        app: ecopoints
+        app: appsrv
     spec:
       containers:
-        - name: ecopoints-container
+        - name: appsrv
           image: ghcr.io/2324-4bhif-syp/2324-4bhif-syp-project-ecopoints/ecopoints-dotnet:latest
+          # remove this when stable. Currently we do not take care of version numbers
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
-          env:
-            - name: ASPNETCORE_ENVIRONMENT
-              value: "Production"
-            - name: ConnectionStrings__Default
-              value: "Host=postgres-deployment;Port=5432;Database=db;Username=app;Password=app"
+          startupProbe:
+            httpGet:
+              path: /q/health
+              port: 8080
+            timeoutSeconds: 5
+            initialDelaySeconds: 15
+          readinessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /q/health
+              port: 8080
+            timeoutSeconds: 5
+            initialDelaySeconds: 60
+            periodSeconds: 120
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: appsrv
+spec:
+  selector:
+    app: appsrv
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: appsrv-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "PUT, GET, POST, OPTIONS, DELETE"
+    # if the exposed path doesn't match backend path
+    # INGRESS.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: if180123.cloud.htl-leonding.ac.at
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: appsrv
+                port:
+                  number: 8080

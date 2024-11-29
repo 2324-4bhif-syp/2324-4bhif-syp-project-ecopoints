@@ -452,6 +452,7 @@ image::ecopoints-light-dark.png[500,200]
 === Aufgaben [Armin]
 
 * Anbindung an das Backend in der App
+* UI Verbesserungen
 
 === Aufgaben [Laurent]
 

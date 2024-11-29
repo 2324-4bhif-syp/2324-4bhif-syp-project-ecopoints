@@ -407,15 +407,18 @@ image::ecopoints-light-dark.png[500,200]
 === Automatisches erkennen von unterstützten OBD Commands
 
 * Beim Verbinden mit dem OBD Adapter wird automatisch erkannt welche Commands unterstützt werden
-* Trotzdem funktionieren manche dieser Commands nicht
-
-=== Automatisches erkennen von unterstützten OBD Commands
-
-Video TODO
+* Problem: Trotzdem funktionieren manche dieser Commands nicht
+** Nach 10 fehlscglagenen Versuchen wird der Command "deaktiviert"
 
 === Adapter Compatibility
 
-TODO
+* Beide Adapter funktionieren jetzt mit der App
+
+|===
+^|1. ^| 2.
+^|image:24-sprint-3/image-2024-11-29-07-48-17-658.png[]
+^|image:24-sprint-3/image-2024-11-29-07-48-51-748.png[]
+|===
 
 === Aufgaben [Oliver]
 

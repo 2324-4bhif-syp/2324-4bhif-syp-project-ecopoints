@@ -396,7 +396,7 @@ image::ecopoints-light-dark.png[500,200]
 * Automatisches erkennen von unterstützten OBD Commands
 * App sollte mit verschiedenen OBD Adaptern funktionieren
 
-==== UI
+=== UI
 
 |===
 ^|Buttons disabled ^| Spinner when connecting
@@ -422,10 +422,38 @@ image::ecopoints-light-dark.png[500,200]
 
 === Aufgaben [Oliver]
 
+* Backend
+** Anbindung an eine InfluxDB
+** Endpoints für Fahrdaten
+
+=== Trips
+
+[.code,json]
+----
+"Trips":[
+    {
+        "trip-id": ".."
+        data:[
+            {
+            "timestamp": "...",
+            "CarData": {...}
+            }
+        ]
+    },
+    ....
+]
+----
+
 === Aufgaben [Abdullah]
+
+* Dashboard mit Grafana visualisieren
+* Backend
 
 === Aufgaben [Armin]
 
+* Anbindung an das Backend in der App
+
 === Aufgaben [Laurent]
 
-
+* Deployment auf Leocloud
+** Backend/InfluxDB

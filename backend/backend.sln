@@ -37,7 +37,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpeedComparison", "SpeedCom
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EngineLoadRpmPlugin", "EngineLoadRpmPlugin\EngineLoadRpmPlugin.csproj", "{1B620B5D-FC24-4BDC-BBD1-3D6FB1B27CDF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AltitudeProfilePlugin", "AltitudeProfilePlugin\AltitudeProfilePlugin.csproj", "{A753DA41-728B-4186-9762-56E8DB253B52}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TripStatisticsPlugin", "TripStatisticsPlugin\TripStatisticsPlugin.csproj", "{47A6D342-3D12-4CDF-9BC9-0FF82FBD433D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -109,10 +109,10 @@ Global
 		{1B620B5D-FC24-4BDC-BBD1-3D6FB1B27CDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1B620B5D-FC24-4BDC-BBD1-3D6FB1B27CDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1B620B5D-FC24-4BDC-BBD1-3D6FB1B27CDF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A753DA41-728B-4186-9762-56E8DB253B52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A753DA41-728B-4186-9762-56E8DB253B52}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A753DA41-728B-4186-9762-56E8DB253B52}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A753DA41-728B-4186-9762-56E8DB253B52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47A6D342-3D12-4CDF-9BC9-0FF82FBD433D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47A6D342-3D12-4CDF-9BC9-0FF82FBD433D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47A6D342-3D12-4CDF-9BC9-0FF82FBD433D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47A6D342-3D12-4CDF-9BC9-0FF82FBD433D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -128,7 +128,7 @@ Global
 		{900C1862-EB37-44BC-8317-E37C8005AA5F} = {A2CD570D-B20B-4A3C-AA57-6D404435B628}
 		{91825E67-3B65-4CAF-A78D-7AB44EE7149C} = {A2CD570D-B20B-4A3C-AA57-6D404435B628}
 		{1B620B5D-FC24-4BDC-BBD1-3D6FB1B27CDF} = {A2CD570D-B20B-4A3C-AA57-6D404435B628}
-		{A753DA41-728B-4186-9762-56E8DB253B52} = {A2CD570D-B20B-4A3C-AA57-6D404435B628}
+		{47A6D342-3D12-4CDF-9BC9-0FF82FBD433D} = {A2CD570D-B20B-4A3C-AA57-6D404435B628}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3C6972D4-FCBC-4E22-8EDE-F999B2BA7722}

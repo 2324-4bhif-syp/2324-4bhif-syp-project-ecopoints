@@ -53,7 +53,7 @@ class Program
         
         try
         {
-            var response = await httpClient.PostAsJsonAsync("http://localhost:8080/api/log", tripData);
+            var response = await httpClient.PostAsJsonAsync("http://localhost:5221/api/log", tripData);
             if (response.IsSuccessStatusCode)
             {
                 Console.WriteLine("Trip data successfully sent and logged in the database.");
@@ -72,7 +72,7 @@ class Program
     private static async void postGraphData()
     {
         using var client = new HttpClient();
-        client.BaseAddress = new Uri("http://localhost:5000"); 
+        client.BaseAddress = new Uri("http://localhost:5221"); 
 
         var graphs = new[]
         {

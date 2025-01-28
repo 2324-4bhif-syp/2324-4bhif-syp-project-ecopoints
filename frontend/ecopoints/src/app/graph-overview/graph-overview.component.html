@@ -16,23 +16,49 @@
         <div id="dropdownMenu" class="dropdown-content">
             <a href="#" routerLink="/modify-graphs">Modify Graphs</a>
         </div>
-    </div>
-    
-    
+    </div>    
 </div>
+
+<div class="menu-button" (click)="toggleSidebar()">
+    &#9776;
+</div>
+
+
+<div class="sidebar" [class.open]="sidebarOpen">
+    <div class="sidebar-header">
+        <h3>Datenquellen</h3>
+        <button class="close-button" (click)="toggleSidebar()">✖</button>
+    </div>
+
+    <!-- Auswahl: Rohdaten oder Berechnete Werte -->
+    <div class="sidebar-content">
+        <button class="sidebar-tab" [class.active]="selectedCategory === 'rohdaten'" (click)="selectCategory('rohdaten')">
+            📊 Rohdaten
+        </button>
+        <button class="sidebar-tab" [class.active]="selectedCategory === 'berechnet'" (click)="selectCategory('berechnet')">
+            📈 Berechnete Werte
+        </button>
+    </div>
+</div>
+
+<!-- Dimmer (schließt Sidebar, wenn man außerhalb klickt) -->
+<div class="dimmer" *ngIf="sidebarOpen" (click)="toggleSidebar()"></div>
+
 
 <div *ngIf="showTripIdWarning" class="warning-message">
     Please select a Trip to display Graphs.
 </div>
 
 <div class="navbar" *ngIf="!showTripIdWarning">
-    <div *ngFor="let graph of graphs; let i = index" class="nav-item">
-      <button class="nav-button" [class.active]="currentGraph === graph" (click)="selectGraph(i)">
+    <div *ngFor="let graph of displayedGraphs" class="nav-item">
+      <button class="nav-button" [class.active]="currentGraph === graph" (click)="selectGraph(graph)">
         {{ graph.title }}
       </button>
     </div>
 </div>
 
+
+<!-- Graph-Anzeige -->
 <div class="graph-container" *ngIf="currentGraph">
     <app-graph [graph]="currentGraph" [visible]="true"></app-graph>
 </div>

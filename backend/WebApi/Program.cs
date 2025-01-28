@@ -184,7 +184,7 @@ app.MapPost("/api/graph", (GraphController controller, Graph graph) => controlle
         return operation;
     });
 
-app.MapPut("/api/graph/{id:int}", (GraphController controller, int id, Graph updatedGraph) => controller.UpdateGraph(id, updatedGraph))
+app.MapPut("/api/graph/{id:int}", (GraphController controller, int id, Graph updatedGraph, bool requiresCalc) => controller.UpdateGraph(id, updatedGraph, requiresCalc))
     .WithOpenApi(operation =>
     {
         operation.Summary = "Update an existing graph";

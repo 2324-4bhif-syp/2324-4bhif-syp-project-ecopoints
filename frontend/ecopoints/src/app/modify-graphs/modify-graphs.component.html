@@ -37,6 +37,15 @@
             </div>
         </div>
 
+        <div class="mb-4">
+            <label for="requiresCalc" class="form-label">Requires Calculation</label>
+            <select class="form-select" id="requiresCalc" [(ngModel)]="graph.requiresCalc" name="requiresCalc" (ngModelChange)="convertRequiresCalc()">
+                <option [ngValue]="false" selected>Nein</option>
+                <option [ngValue]="true">Ja</option>
+            </select>
+        </div>
+        
+
         <button type="submit" class="btn btn-primary">Add</button>
     </form>
 

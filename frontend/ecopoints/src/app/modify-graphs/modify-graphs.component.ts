@@ -13,6 +13,7 @@ export class ModifyGraphsComponent implements OnInit {
   graph: Graph = {
     title: '',
     iFrameLink: '',
+    requiresCalc: false
   };
 
   graphs: Graph[] = []; 
@@ -34,19 +35,28 @@ export class ModifyGraphsComponent implements OnInit {
       if (graphId === 'null') {
         this.graph = {
           title: '',
-          iFrameLink: ''
+          iFrameLink: '',
+          requiresCalc: false
         };
       } else {
         const selectedGraph = this.graphs.find(g => g.id === Number(graphId));
         if (selectedGraph) {
           this.graph = { ...selectedGraph }; 
         }
+        if (this.graph.requiresCalc === undefined || this.graph.requiresCalc === null) {
+          this.graph.requiresCalc = false;
+      }
       }
     }
 
     openDocumentation(): void {
       this.router.navigate(['/documentation']);
     }
+
+    convertRequiresCalc(): void {
+      this.graph.requiresCalc = !!this.graph.requiresCalc; // Konvertiert zu Boolean
+      console.log("requiresCalc Wert nach Umwandlung:", this.graph.requiresCalc);
+  }  
   
     
   addGraph(): void {
@@ -111,7 +121,8 @@ export class ModifyGraphsComponent implements OnInit {
           this.graphs = this.graphs.filter(g => g.id !== this.graph.id); 
           this.graph = { 
             title: '',
-            iFrameLink: ''
+            iFrameLink: '',
+            requiresCalc: false
           };
           this.loadGraphs(); 
           this.router.navigate(['/']);

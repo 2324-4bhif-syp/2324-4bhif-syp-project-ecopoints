@@ -19,4 +19,5 @@
   <Copy SourceFiles="@(MyOutputFiles)" DestinationFolder="/home/abdul/4BHIF/syp/00Project/2324-4bhif-syp-project-ecopoints/backend/PluginsOutput" />
 </Target>
 
+
 </Project>

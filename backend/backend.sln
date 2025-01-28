@@ -39,6 +39,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EngineLoadRpmPlugin", "Engi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TripStatisticsPlugin", "TripStatisticsPlugin\TripStatisticsPlugin.csproj", "{47A6D342-3D12-4CDF-9BC9-0FF82FBD433D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EngineHealthPlugin", "EngineHealthPlugin\EngineHealthPlugin.csproj", "{FB986EBE-3B31-4CD1-90B8-E8E1652093A7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -113,6 +115,10 @@ Global
 		{47A6D342-3D12-4CDF-9BC9-0FF82FBD433D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47A6D342-3D12-4CDF-9BC9-0FF82FBD433D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{47A6D342-3D12-4CDF-9BC9-0FF82FBD433D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB986EBE-3B31-4CD1-90B8-E8E1652093A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB986EBE-3B31-4CD1-90B8-E8E1652093A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB986EBE-3B31-4CD1-90B8-E8E1652093A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB986EBE-3B31-4CD1-90B8-E8E1652093A7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -129,6 +135,7 @@ Global
 		{91825E67-3B65-4CAF-A78D-7AB44EE7149C} = {A2CD570D-B20B-4A3C-AA57-6D404435B628}
 		{1B620B5D-FC24-4BDC-BBD1-3D6FB1B27CDF} = {A2CD570D-B20B-4A3C-AA57-6D404435B628}
 		{47A6D342-3D12-4CDF-9BC9-0FF82FBD433D} = {A2CD570D-B20B-4A3C-AA57-6D404435B628}
+		{FB986EBE-3B31-4CD1-90B8-E8E1652093A7} = {A2CD570D-B20B-4A3C-AA57-6D404435B628}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3C6972D4-FCBC-4E22-8EDE-F999B2BA7722}

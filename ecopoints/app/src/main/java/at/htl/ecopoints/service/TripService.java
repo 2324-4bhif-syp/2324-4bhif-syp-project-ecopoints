@@ -16,7 +16,7 @@ import at.htl.ecopoints.util.resteasy.RestApiClientBuilder;
 public class TripService {
     static final String TAG = TripService.class.getSimpleName();
     private final TripClient tripClient;
-    public static String BASE_URL = "";
+    public static String BASE_URL = "https://if180123.cloud.htl-leonding.ac.at";
 
     @Inject
     public TripService(RestApiClientBuilder builder) {

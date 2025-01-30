@@ -49,9 +49,11 @@ export class ModifyGraphsComponent implements OnInit {
       }
     }
 
-    openDocumentation(): void {
+    openDocumentation(event: Event): void {
+      event.stopPropagation(); // Verhindert das Absenden des Formulars
       this.router.navigate(['/documentation']);
     }
+  
 
     convertRequiresCalc(): void {
       this.graph.requiresCalc = !!this.graph.requiresCalc; // Konvertiert zu Boolean

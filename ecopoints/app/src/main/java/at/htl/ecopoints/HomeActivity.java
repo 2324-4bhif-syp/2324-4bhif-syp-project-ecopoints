@@ -27,6 +27,8 @@ public class HomeActivity extends ComponentActivity {
         Log.i(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
 
+        Log.i(TAG, "Getting all trips");
+
         this.tripService.getAllTrips().thenAccept(trips -> {
             Log.i(TAG, "Trips: " + trips);
         });

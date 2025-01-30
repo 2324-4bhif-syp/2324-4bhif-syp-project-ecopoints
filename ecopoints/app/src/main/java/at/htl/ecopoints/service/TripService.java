@@ -1,6 +1,7 @@
 package at.htl.ecopoints.service;
 
 import android.util.Log;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
@@ -10,13 +11,15 @@ import java.util.concurrent.CompletableFuture;
 import at.htl.ecopoints.client.TripClient;
 import at.htl.ecopoints.model.CarData;
 import at.htl.ecopoints.model.Trip;
+import at.htl.ecopoints.util.ConfigLoader;
 import at.htl.ecopoints.util.resteasy.RestApiClientBuilder;
+
 
 @Singleton
 public class TripService {
     static final String TAG = TripService.class.getSimpleName();
     private final TripClient tripClient;
-    public static String BASE_URL = "https://if180123.cloud.htl-leonding.ac.at";
+    private static final String BASE_URL = ConfigLoader.getBaseUrl();
 
     @Inject
     public TripService(RestApiClientBuilder builder) {
@@ -37,11 +40,11 @@ public class TripService {
     }
 
     public CompletableFuture<List<String>> getAllTrips() {
-        return CompletableFuture.supplyAsync(() -> (List<String>) tripClient.getAllTrips());
+        return CompletableFuture.supplyAsync(tripClient::getAllTrips);
     }
 
     public CompletableFuture<List<CarData>> getTripData(UUID tripId) {
-        return CompletableFuture.supplyAsync(() -> (List<CarData>) tripClient.getTripData(tripId));
+        return CompletableFuture.supplyAsync(() -> tripClient.getTripData(tripId));
     }
 
     public CompletableFuture<String> addDataToTrip(UUID tripId, List<CarData> sensorData) {

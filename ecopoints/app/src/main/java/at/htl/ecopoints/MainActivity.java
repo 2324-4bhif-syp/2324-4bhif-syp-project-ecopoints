@@ -20,6 +20,7 @@ import javax.inject.Inject;
 
 import at.htl.ecopoints.model.Store;
 import at.htl.ecopoints.ui.layout.TripView;
+import at.htl.ecopoints.util.ConfigLoader;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
@@ -42,8 +43,7 @@ public class MainActivity extends ComponentActivity {
         tripView.compose(this);
         checkPermissions();
 
-
-
+        ConfigLoader.init(this);
     }
 
     private void checkPermission(String permission) {

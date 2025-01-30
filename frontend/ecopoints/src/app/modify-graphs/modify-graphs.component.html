@@ -28,14 +28,25 @@
                        [ngClass]="{'is-invalid': iFrameLinkError !== null}"
                        (ngModelChange)="iFrameLinkError = null"
                        required>
-                <button class="btn btn-info" (click)="openDocumentation()" title="How to obtain the link">
-                    <i class="fas fa-question-circle"></i>
-                </button>
+                    <button type="button" class="btn btn-info" (click)="openDocumentation($event)" title="How to obtain the link">
+                        <i class="fas fa-question-circle"></i>
+                    </button>
+                    
+                    
             </div>
             <div *ngIf="iFrameLinkError" class="invalid-feedback">
                 {{ iFrameLinkError }}
             </div>
         </div>
+
+        <div class="mb-4">
+            <label for="requiresCalc" class="form-label">Requires Calculation</label>
+            <select class="form-select" id="requiresCalc" [(ngModel)]="graph.requiresCalc" name="requiresCalc" (ngModelChange)="convertRequiresCalc()">
+                <option [ngValue]="false" selected>Nein</option>
+                <option [ngValue]="true">Ja</option>
+            </select>
+        </div>
+        
 
         <button type="submit" class="btn btn-primary">Add</button>
     </form>

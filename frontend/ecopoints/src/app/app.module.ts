@@ -8,10 +8,12 @@ import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
 import { GraphComponent } from "./graph/graph.component";
 import { ModifyGraphsComponent } from "./modify-graphs/modify-graphs.component";
+import { DocumentationComponent } from "./documentation/documentation.component";
 
 const appRoutes: Routes = [
     { path: '', component: GraphOverviewComponent },
-    { path: 'modify-graphs', component: ModifyGraphsComponent }
+    { path: 'modify-graphs', component: ModifyGraphsComponent },
+    {path: 'documentation', component: DocumentationComponent}
 ];
 
 @NgModule({
@@ -19,7 +21,8 @@ const appRoutes: Routes = [
         AppComponent,
         GraphOverviewComponent,
         GraphComponent,
-        ModifyGraphsComponent
+        ModifyGraphsComponent,
+        DocumentationComponent
     ],
     imports: [
 

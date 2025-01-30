@@ -1,0 +1,48 @@
+<div class="container">
+    <button class="btn btn-back" (click)="goBack()">
+        <i class="fas fa-arrow-left"></i> Back
+    </button>
+
+    <h2 class="doc-title">How to obtain the link</h2>
+
+    <div class="doc-step">
+        <h3>1️⃣ Open Grafana</h3>
+        <p>Navigate to your Grafana dashboard by opening <a href="http://localhost:3000" target="_blank">http://localhost:3000</a> in your browser And then Click on Dashboards.</p>
+        <img src="assets/images/Grafana-home.png" alt="Grafana Home" class="doc-image">
+    </div>
+
+    <div class="doc-step">
+        <h3>2️⃣ Enter an Id</h3>
+        <p></p>
+        <img src="assets/images/enterId.png" alt="Enter Id" class="doc-image">
+    </div>
+
+    <div class="doc-step">
+        <h3>3️⃣ Open the Share Menu</h3>
+        <p>Click on the <strong>three dots (⋮)</strong> in the top-right corner of the graph and select <strong>"Share"</strong>.</p>
+        <img src="assets/images/shareMenu.png" alt="Grafana Share Option" class="doc-image">
+    </div>
+
+    <div class="doc-step">
+        <h3>4️⃣ Copy the Embed Link</h3>
+        <p>Go to the <strong>"Embed" tab</strong> and copy the generated <strong>iFrame link</strong>.</p>
+        <img src="assets/images/EmbedLink.png" alt="Grafana Embed Option" class="doc-image">
+    </div>
+
+    <div class="doc-step">
+        <h3>5️⃣ The copied Link</h3>
+        <p>Example:</p>
+        <pre class="code-box">
+http://localhost:3000/d-solo/ee2r6d08shr7ka/eco-points?orgId=1&var-ids=0&from=1737643141117&to=1737643231116&panelId=9
+        </pre>
+    </div>
+
+    <div class="doc-step">
+        <h3>6️⃣ Paste it in the Application</h3>
+        <p>Go to <strong>Modify Graphs</strong>, paste the iFrame link into the "iFrame Link" field, and save it.</p>
+        <img src="assets/images/modifyGraph.png" alt="Modify Graphs" class="doc-image">
+    </div>
+
+
+    <h3 class="final-text">🎉 Congratulations! Your graph is now embedded!</h3>
+</div>

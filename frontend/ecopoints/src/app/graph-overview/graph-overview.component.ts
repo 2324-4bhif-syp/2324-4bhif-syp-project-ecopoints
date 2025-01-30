@@ -9,16 +9,29 @@ import { GraphService } from '../services/graph.service';
 })
 export class GraphOverviewComponent implements OnInit {
 
-  constructor(private graphService: GraphService) {}
-
   public graphs: Graph[] = [];
+  public tripList: { tripId: string, date: string }[] = [];  
   public tripIds: string[] = [];
   public selectedTripId: string | null = null;
   public currentGraph: Graph | null = null;
   public showTripIdWarning: boolean = true; 
 
+  public sidebarOpen = false;
+  public selectedCategory: 'rohdaten' | 'berechnet' = 'rohdaten';
+  public displayedGraphs: Graph[] = [];
+
+  private rohdatenGraphs: Graph[] = [];
+  private berechneteGraphs: Graph[] = [];
+
+  constructor(private graphService: GraphService) {}
+
+
   ngOnInit(): void {
-    this.loadTripIds();
+    this.loadTrips();
+  }
+
+  toggleSidebar(): void {
+    this.sidebarOpen = !this.sidebarOpen;
   }
 
   loadTripIds(): void {
@@ -28,20 +41,39 @@ export class GraphOverviewComponent implements OnInit {
       }
     );
   }
-
   
-  loadGraphs(): void {
-    this.graphService.getGraphs().subscribe(
-      (data: Graph[]) => {
-        this.graphs = data;
-        if (this.graphs.length > 0) {
-          this.currentGraph = this.graphs[0];
-        }
-      }
-    );
-  }
 
-  onTripIdSelect(event: Event): void {
+  async loadTrips(): Promise<void> {
+    try {
+      const tripIds = await this.graphService.getTripIds().toPromise();
+  
+      if (!tripIds || tripIds.length === 0) {
+        return;
+      }
+  
+      const tripRequests = tripIds.map(async (tripId) => {
+        const tripData = await this.graphService.getTripData(tripId).toPromise();
+  
+        if (!Array.isArray(tripData) || tripData.length === 0) {
+          return { tripId, date: "Unknown Date" };
+        }
+  
+        return {
+          tripId,
+          date: new Date(tripData[0].timestamp).toLocaleString()
+        };
+      });
+  
+      this.tripList = await Promise.all(tripRequests);
+    } catch (error) {
+      console.error("Fehler beim Laden der Trips:", error);
+    }
+  }
+  
+  
+
+
+  onTripSelect(event: Event): void {
     const selectedTripId = (event.target as HTMLSelectElement).value;
     
     if (selectedTripId === 'null') {
@@ -52,39 +84,57 @@ export class GraphOverviewComponent implements OnInit {
     } else {
       this.selectedTripId = selectedTripId;
       this.showTripIdWarning = false;
-      this.loadGraphsAndApplyTripId(); 
+      this.loadGraphsAndApplyTripId();
     }
   }
 
   loadGraphsAndApplyTripId(): void {
     this.graphService.getGraphs().subscribe(
-      (data: Graph[]) => {
-        this.graphs = data;
-        this.updateGraphLinks();
-      }
-    );
-  }
+        (data: Graph[]) => {
+            this.rohdatenGraphs = data.filter(graph => !graph.requiresCalc);
+            this.berechneteGraphs = data.filter(graph => graph.requiresCalc);
 
-  updateGraphLinks(): void {
-    if (this.selectedTripId) {
-      const tripIdPattern = /var-ids=([^&]*)/;
-
-      this.graphs = this.graphs.map(graph => ({
-        ...graph,
-        iFrameLink: graph.iFrameLink.replace(tripIdPattern, `var-ids=${this.selectedTripId}`)
-      }));
-      
-      if (this.currentGraph) {
-        const index = this.graphs.findIndex(g => g.id === this.currentGraph!.id);
-        if (index !== -1) {
-          this.currentGraph = this.graphs[index];
+            this.updateGraphLinks();
+            this.updateGraphList();
         }
-      }
+    );
+}
+
+updateGraphLinks(): void {
+  if (this.selectedTripId) {
+      const tripIdPattern = /var-ids=\$ids/; // Suche genau nach $ids
+
+      // Update Rohdaten-Graphen
+      this.rohdatenGraphs = this.rohdatenGraphs.map(graph => ({
+          ...graph,
+          iFrameLink: graph.iFrameLink.replace(tripIdPattern, `var-ids=${this.selectedTripId}`)
+      }));
+
+      // Update Berechnete Graphen
+      this.berechneteGraphs = this.berechneteGraphs.map(graph => ({
+          ...graph,
+          iFrameLink: graph.iFrameLink.replace(tripIdPattern, `var-ids=${this.selectedTripId}`)
+      }));
+
+      console.log("Graph-Links aktualisiert für Trip:", this.selectedTripId);
+  }
+}
+
+
+  selectCategory(category: 'rohdaten' | 'berechnet'): void {
+    this.selectedCategory = category;
+    this.updateGraphList();
+    this.toggleSidebar();
     }
+
+    updateGraphList(): void {
+      this.displayedGraphs = this.selectedCategory === 'rohdaten' ? this.rohdatenGraphs : this.berechneteGraphs;
+  }
+
+    selectGraph(graph: Graph): void {
+      this.currentGraph = graph;
+      console.log("Ausgewählter Graph iFrame-Link:", graph.iFrameLink);
   }
 
 
-  selectGraph(index: number): void {
-    this.currentGraph = this.graphs[index];
-  }
 }

@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Attributes\Attributes.csproj" />
+      <ProjectReference Include="..\Base\Base.csproj" />
+      <ProjectReference Include="..\DataService\DataService.csproj" />
+    </ItemGroup>
+    
+    <Target Name="CopyDllsAfterBuild" AfterTargets="Build">
+  <ItemGroup>
+    <MyOutputFiles Include="$(OutputPath)*.dll" />
+  </ItemGroup>
+  <Copy SourceFiles="@(MyOutputFiles)" DestinationFolder="/home/abdul/4BHIF/syp/00Project/2324-4bhif-syp-project-ecopoints/backend/PluginsOutput" />
+</Target>
+
+
+</Project>

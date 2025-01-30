@@ -1,38 +1,77 @@
-<div class="trip-selector-container">
-    <label for="trip-select" class="trip-label">Select Trip:</label>
-    <select id="trip-select" class="trip-dropdown" (change)="onTripIdSelect($event)">
-      <option value="null" selected>None</option> 
-      <option *ngFor="let tripId of tripIds" [value]="tripId">{{ tripId }}</option>
-    </select>
-
-    <div class="admin-settings-dropdown">
-        <button 
-            id="settingsButton" 
-            class="settings-button" 
-            onclick="toggleDropdown()">
-            <i class="fas fa-cog"></i>
-            <i class="fas fa-caret-down"></i>
-        </button>
-        <div id="dropdownMenu" class="dropdown-content">
-            <a href="#" routerLink="/modify-graphs">Modify Graphs</a>
+<!-- Header-Bereich -->
+<div class="header-container">
+    <!-- Linke Seite: Logo + Burger-Menü -->
+    <div class="header-left">
+        <div class="menu-button" (click)="toggleSidebar()">
+            &#9776;
+        </div>
+        <div class="logo-container">
+            <img src="assets/images/Eco-Logo.png" alt="Ecopoint Logo" class="logo"> 
+            <span class="app-title">Eco-Points</span>
         </div>
     </div>
-    
-    
+
+    <!-- Rechte Seite: Einstellungs-Icon -->
+    <div class="header-right">
+        <div class="admin-settings-dropdown">
+            <button 
+                id="settingsButton" 
+                class="settings-button" 
+                onclick="toggleDropdown()">
+                <i class="fas fa-cog"></i>
+                <i class="fas fa-caret-down"></i>
+            </button>
+            <div id="dropdownMenu" class="dropdown-content">
+                <a href="#" routerLink="/modify-graphs">Modify Graphs</a>
+            </div>
+        </div>    
+    </div>
 </div>
+
+<!-- Trip-Auswahl unter dem Header -->
+<div class="trip-selector-container">
+    <label for="trip-select" class="trip-label">Select Trip:</label>
+    <select id="trip-select" class="trip-dropdown" (change)="onTripSelect($event)">
+        <option value="null" selected>None</option>
+        <option *ngFor="let trip of tripList" [value]="trip.tripId">{{ trip.date }}</option>
+    </select>
+</div>
+
+
+<!-- Sidebar Container -->
+<div class="sidebar" [class.open]="sidebarOpen">
+    <button class="sidebar-close" (click)="toggleSidebar()">&times;</button>
+    
+    <div class="sidebar-title">Dashboard</div>
+
+    <div class="sidebar-content">
+        <button class="sidebar-tab" [class.active]="selectedCategory === 'rohdaten'" (click)="selectCategory('rohdaten')">
+            <i class="fas fa-database"></i> Rohdaten
+        </button>
+        <button class="sidebar-tab" [class.active]="selectedCategory === 'berechnet'" (click)="selectCategory('berechnet')">
+            <i class="fas fa-chart-line"></i> Berechnete Werte
+        </button>
+    </div>
+</div>
+
+<!-- Dimmer für Overlay -->
+<div class="dimmer" *ngIf="sidebarOpen" (click)="toggleSidebar()"></div>
+
 
 <div *ngIf="showTripIdWarning" class="warning-message">
     Please select a Trip to display Graphs.
 </div>
 
 <div class="navbar" *ngIf="!showTripIdWarning">
-    <div *ngFor="let graph of graphs; let i = index" class="nav-item">
-      <button class="nav-button" [class.active]="currentGraph === graph" (click)="selectGraph(i)">
+    <div *ngFor="let graph of displayedGraphs" class="nav-item">
+      <button class="nav-button" [class.active]="currentGraph === graph" (click)="selectGraph(graph)">
         {{ graph.title }}
       </button>
     </div>
 </div>
 
+
+<!-- Graph-Anzeige -->
 <div class="graph-container" *ngIf="currentGraph">
     <app-graph [graph]="currentGraph" [visible]="true"></app-graph>
 </div>

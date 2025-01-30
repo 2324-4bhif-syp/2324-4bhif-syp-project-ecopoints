@@ -43,6 +43,9 @@ class Program
 
     private static async Task Main(string[] args)
     {
+
+        //await postGraphData();
+
         var tasks = new List<Task>();
 
         for (int i = 0; i < 1000; i++)
@@ -61,6 +64,7 @@ class Program
     {
         try
         {
+
             var response =
                 await httpClient.PostAsJsonAsync("https://if200210.cloud.htl-leonding.ac.at/api/log", tripData);
             if (response.IsSuccessStatusCode)
@@ -77,10 +81,11 @@ class Program
             Console.WriteLine($"An error occurred: {ex.Message}");
         }
     }
-    private static async void postGraphData()
+
+    private static async Task postGraphData()
     {
         using var client = new HttpClient();
-        client.BaseAddress = new Uri("http://localhost:5000");
+        client.BaseAddress = new Uri("https://if200210.cloud.htl-leonding.ac.at"); 
 
         var graphs = new[]
         {
@@ -136,14 +141,22 @@ class Program
 
         foreach (var graph in graphs)
         {
-            var response = await client.PostAsJsonAsync("/api/graph", graph);
-            if (response.IsSuccessStatusCode)
+            try
             {
-                Console.WriteLine($"Graph '{graph.Title}' posted successfully.");
+                Console.WriteLine($"📡 Sending graph '{graph.Title}' to API...");
+
+                var response = await client.PostAsJsonAsync("/api/graph", graph);
+                response.EnsureSuccessStatusCode(); // Wirft Exception, falls nicht erfolgreich
+
+                Console.WriteLine($"✅ Successfully posted graph '{graph.Title}'!");
             }
-            else
+            catch (HttpRequestException httpEx)
             {
-                Console.WriteLine($"Failed to post graph '{graph.Title}': {response.ReasonPhrase}");
+                Console.WriteLine($"❌ HTTP Error: {httpEx.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ General Error: {ex.Message}");
             }
         }
     }

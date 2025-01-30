@@ -33,7 +33,7 @@ public class GraphController
         return Results.Ok("Graph added successfully");
     }
 
-    public async Task<IResult> UpdateGraph(int id, Graph updatedGraph)
+    public async Task<IResult> UpdateGraph(int id, Graph updatedGraph, bool reqCalc)
     {
         var graph = await _dbContext.Graphs.FindAsync(id);
         if (graph == null)
@@ -43,6 +43,7 @@ public class GraphController
 
         graph.Title = updatedGraph.Title;
         graph.IFrameLink = updatedGraph.IFrameLink;
+        graph.RequiresCalc = reqCalc;
 
         _dbContext.Graphs.Update(graph);
         await _dbContext.SaveChangesAsync();

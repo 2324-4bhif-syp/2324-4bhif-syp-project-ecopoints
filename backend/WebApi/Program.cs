@@ -205,12 +205,16 @@ app.MapPost("/api/graph", (GraphController controller, Graph graph) => controlle
         return operation;
     });
 
-app.MapPut("/api/graph/{id:int}", (GraphController controller, int id, Graph updatedGraph) => controller.UpdateGraph(id, updatedGraph))
+app.MapPut("/api/graph/{id:int}", async (GraphController controller, int id, [FromBody] Graph updatedGraph) =>
+    {
+        return await controller.UpdateGraph(id, updatedGraph, updatedGraph.RequiresCalc);
+    })
     .WithOpenApi(operation =>
     {
         operation.Summary = "Update an existing graph";
         return operation;
     });
+
 
 app.MapDelete("/api/graph/{id:int}", (GraphController controller, int id) => controller.DeleteGraph(id))
     .WithOpenApi(operation =>

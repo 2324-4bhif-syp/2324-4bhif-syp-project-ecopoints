@@ -8,7 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Persistence;
 using WebApi;
-using Microsoft.AspNetCore.HttpOverrides; // For Forwarded Headers
+using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Mvc; // For Forwarded Headers
 using Trip = Abstractions.Model.Trip;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -92,17 +93,17 @@ app.MapGet("/api/{pluginName}", async (string pluginName, PluginSystem pluginSys
     if (pluginInstance == null)
         return Results.BadRequest("Could not create plugin instance.");
 
-    var startDate = context.Request.Query.ContainsKey("startDate") 
-        ? DateTime.Parse(context.Request.Query["startDate"]) 
+    var startDate = context.Request.Query.ContainsKey("startDate")
+        ? DateTime.Parse(context.Request.Query["startDate"])
         : (DateTime?)null;
-    
-    var endDate = context.Request.Query.ContainsKey("endDate") 
-        ? DateTime.Parse(context.Request.Query["endDate"]) 
+
+    var endDate = context.Request.Query.ContainsKey("endDate")
+        ? DateTime.Parse(context.Request.Query["endDate"])
         : (DateTime?)null;
-    
+
     var ids = context.Request.Query.ContainsKey("ids")
         ? context.Request.Query["ids"].ToString().Split(',')
-            .Where(id => Guid.TryParse(id, out _)) 
+            .Where(id => Guid.TryParse(id, out _))
             .Select(id => Guid.Parse(id))
             .ToList()
         : new List<Guid>();
@@ -125,14 +126,27 @@ app.MapGet("/api/health", (SensorDataController controller) => controller.CheckH
     {
         operation.Summary = "Check if database is up and running";
         return operation;
-    }); 
+    });
 
 app.MapPost("/api/log", (SensorDataController controller, Trip trip) => controller.LogData(trip))
     .WithOpenApi(operation =>
     {
         operation.Summary = "Save whole trip to database";
         return operation;
-    }); 
+    });
+
+app.MapPost("/api/log/token", async (SensorDataController controller, Trip trip, [FromQuery] string token) =>
+    {
+        // Optionally: Validate the token or process it here
+        return await controller.LogDataToken(trip, token);
+    })
+    .WithOpenApi(operation =>
+    {
+        operation.Summary = "Save whole trip to database";
+        return operation;
+    });
+
+
 
 app.MapPost("/api/create-trip", (SensorDataController controller) => controller.CreateTrip())
     .WithOpenApi(operation =>

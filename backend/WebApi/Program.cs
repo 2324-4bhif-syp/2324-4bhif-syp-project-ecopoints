@@ -135,6 +135,13 @@ app.MapPost("/api/log", (SensorDataController controller, Trip trip) => controll
         return operation;
     });
 
+app.MapGet("/api/version", () => Results.Ok("1.0.0"))
+    .WithOpenApi(operation =>
+    {
+        operation.Summary = "Get the version of the API";
+        return operation;
+    });
+
 app.MapPost("/api/log/token", async (SensorDataController controller, Trip trip, [FromQuery] string token) =>
     {
         // Optionally: Validate the token or process it here

@@ -8,7 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Persistence;
 using WebApi;
-using Microsoft.AspNetCore.HttpOverrides; // For Forwarded Headers
+using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Mvc; // For Forwarded Headers
 using Trip = Abstractions.Model.Trip;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -184,12 +185,16 @@ app.MapPost("/api/graph", (GraphController controller, Graph graph) => controlle
         return operation;
     });
 
-app.MapPut("/api/graph/{id:int}", (GraphController controller, int id, Graph updatedGraph, bool requiresCalc) => controller.UpdateGraph(id, updatedGraph, requiresCalc))
+app.MapPut("/api/graph/{id:int}", async (GraphController controller, int id, [FromBody] Graph updatedGraph) =>
+    {
+        return await controller.UpdateGraph(id, updatedGraph, updatedGraph.RequiresCalc);
+    })
     .WithOpenApi(operation =>
     {
         operation.Summary = "Update an existing graph";
         return operation;
     });
+
 
 app.MapDelete("/api/graph/{id:int}", (GraphController controller, int id) => controller.DeleteGraph(id))
     .WithOpenApi(operation =>

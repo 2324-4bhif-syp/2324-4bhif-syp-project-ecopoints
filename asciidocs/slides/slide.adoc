@@ -451,6 +451,10 @@ image::ecopoints-light-dark.png[500,200]
 ** Anbindung an eine PostgresDB
 ** Plugin-System für die Daten
 
+* Dynamisches Frontend mit Angular
+** Integration mit Grafana
+* Deployment
+
 === Plugin-System
 
 Jedes
@@ -458,7 +462,7 @@ Plugin repräsentiert eine Datenabfrage (Query), und durch die Definition von At
 namen können diese Abfragen dynamisch ausgeführt und in Grafiken dargestellt werden.
 
 
-==== Plugin Bsp.
+=== Plugin Bsp.
 
 [.code,java]
 ----
@@ -485,7 +489,7 @@ public class Altitude: IBasePluginLayout
 }
 ----
 
-==== Plugin-Abfrage
+=== Plugin-Abfrage
 
 [.code,java]
 ----
@@ -520,7 +524,7 @@ app.MapGet("/api/{pluginName}", async
 });
 ----
 
-==== Plugins Files
+=== Plugins Files
 
 |===
 ^|1. ^| 2.

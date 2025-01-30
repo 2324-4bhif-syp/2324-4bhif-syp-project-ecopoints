@@ -10,6 +10,7 @@ import java.util.concurrent.CompletableFuture;
 
 import at.htl.ecopoints.client.TripClient;
 import at.htl.ecopoints.model.CarData;
+import at.htl.ecopoints.model.CarSensorData;
 import at.htl.ecopoints.model.Trip;
 import at.htl.ecopoints.util.ConfigLoader;
 import at.htl.ecopoints.util.resteasy.RestApiClientBuilder;
@@ -47,7 +48,7 @@ public class TripService {
         return CompletableFuture.supplyAsync(() -> tripClient.getTripData(tripId));
     }
 
-    public CompletableFuture<String> addDataToTrip(UUID tripId, List<CarData> sensorData) {
+    public CompletableFuture<String> addDataToTrip(UUID tripId, List<CarSensorData> sensorData) {
         return CompletableFuture.supplyAsync(() -> tripClient.addDataToTrip(tripId, sensorData))
                 .thenApply(response -> "Data added successfully")
                 .exceptionally(e -> "Failed to add data: " + e.getMessage());

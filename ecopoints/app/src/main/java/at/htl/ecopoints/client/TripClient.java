@@ -1,6 +1,7 @@
 package at.htl.ecopoints.client;
 
 import at.htl.ecopoints.model.CarData;
+import at.htl.ecopoints.model.CarSensorData;
 import at.htl.ecopoints.model.Trip;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -30,5 +31,5 @@ public interface TripClient {
 
     @POST
     @Path("/trip/{tripId}/data")
-    String addDataToTrip(@PathParam("tripId") UUID tripId, List<CarData> sensorData);
+    String addDataToTrip(@PathParam("tripId") UUID tripId, List<CarSensorData> sensorData);
 }

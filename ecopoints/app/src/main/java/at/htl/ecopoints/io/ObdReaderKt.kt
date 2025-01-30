@@ -190,11 +190,14 @@ class ObdReaderKt {
         sleep(1000)
         writer.endJsonFile()
 
-        //TODO: here
         val carSensorData = store.subject.value!!.tripViewModel.carData.toCarSensorData()
-        println("CarDataObject: $carSensorData")
+        println("CarSensorDataObject: $carSensorData")
 
-
+        tripService.createTrip().thenAccept { tripId ->
+            tripService.addDataToTrip(UUID.fromString(tripId), listOf(carSensorData)).thenAccept { response ->
+                println(response)
+            }
+        }
     }
 
     fun Map<String, String>.toCarSensorData(): CarSensorData {

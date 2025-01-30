@@ -31,27 +31,30 @@
 <!-- Trip-Auswahl unter dem Header -->
 <div class="trip-selector-container">
     <label for="trip-select" class="trip-label">Select Trip:</label>
-    <select id="trip-select" class="trip-dropdown" (change)="onTripIdSelect($event)">
+    <select id="trip-select" class="trip-dropdown" (change)="onTripSelect($event)">
         <option value="null" selected>None</option>
-        <option *ngFor="let tripId of tripIds" [value]="tripId">{{ tripId }}</option>
+        <option *ngFor="let trip of tripList" [value]="trip.tripId">{{ trip.date }}</option>
     </select>
 </div>
 
+
+<!-- Sidebar Container -->
 <div class="sidebar" [class.open]="sidebarOpen">
+    <button class="sidebar-close" (click)="toggleSidebar()">&times;</button>
+    
+    <div class="sidebar-title">Dashboard</div>
 
-
-    <!-- Auswahl: Rohdaten oder Berechnete Werte -->
     <div class="sidebar-content">
         <button class="sidebar-tab" [class.active]="selectedCategory === 'rohdaten'" (click)="selectCategory('rohdaten')">
-            📊 Rohdaten
+            <i class="fas fa-database"></i> Rohdaten
         </button>
         <button class="sidebar-tab" [class.active]="selectedCategory === 'berechnet'" (click)="selectCategory('berechnet')">
-            📈 Berechnete Werte
+            <i class="fas fa-chart-line"></i> Berechnete Werte
         </button>
     </div>
 </div>
 
-<!-- Dimmer (schließt Sidebar, wenn man außerhalb klickt) -->
+<!-- Dimmer für Overlay -->
 <div class="dimmer" *ngIf="sidebarOpen" (click)="toggleSidebar()"></div>
 
 

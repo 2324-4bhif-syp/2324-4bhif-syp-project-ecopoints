@@ -10,6 +10,7 @@ import { GraphService } from '../services/graph.service';
 export class GraphOverviewComponent implements OnInit {
 
   public graphs: Graph[] = [];
+  public tripList: { tripId: string, date: string }[] = [];  
   public tripIds: string[] = [];
   public selectedTripId: string | null = null;
   public currentGraph: Graph | null = null;
@@ -26,7 +27,7 @@ export class GraphOverviewComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.loadTripIds();
+    this.loadTrips();
   }
 
   toggleSidebar(): void {
@@ -42,7 +43,37 @@ export class GraphOverviewComponent implements OnInit {
   }
   
 
-  onTripIdSelect(event: Event): void {
+  async loadTrips(): Promise<void> {
+    try {
+      const tripIds = await this.graphService.getTripIds().toPromise();
+  
+      if (!tripIds || tripIds.length === 0) {
+        return;
+      }
+  
+      const tripRequests = tripIds.map(async (tripId) => {
+        const tripData = await this.graphService.getTripData(tripId).toPromise();
+  
+        if (!Array.isArray(tripData) || tripData.length === 0) {
+          return { tripId, date: "Unknown Date" };
+        }
+  
+        return {
+          tripId,
+          date: new Date(tripData[0].timestamp).toLocaleString()
+        };
+      });
+  
+      this.tripList = await Promise.all(tripRequests);
+    } catch (error) {
+      console.error("Fehler beim Laden der Trips:", error);
+    }
+  }
+  
+  
+
+
+  onTripSelect(event: Event): void {
     const selectedTripId = (event.target as HTMLSelectElement).value;
     
     if (selectedTripId === 'null') {
@@ -53,14 +84,13 @@ export class GraphOverviewComponent implements OnInit {
     } else {
       this.selectedTripId = selectedTripId;
       this.showTripIdWarning = false;
-      this.loadGraphsAndApplyTripId(); 
+      this.loadGraphsAndApplyTripId();
     }
   }
 
   loadGraphsAndApplyTripId(): void {
     this.graphService.getGraphs().subscribe(
         (data: Graph[]) => {
-            // Graphen in Rohdaten- und Berechnete-Werte-Listen trennen
             this.rohdatenGraphs = data.filter(graph => !graph.requiresCalc);
             this.berechneteGraphs = data.filter(graph => graph.requiresCalc);
 
@@ -94,7 +124,7 @@ updateGraphLinks(): void {
   selectCategory(category: 'rohdaten' | 'berechnet'): void {
     this.selectedCategory = category;
     this.updateGraphList();
-    this.toggleSidebar(); // Sidebar schließen nach Auswahl
+    this.toggleSidebar();
     }
 
     updateGraphList(): void {

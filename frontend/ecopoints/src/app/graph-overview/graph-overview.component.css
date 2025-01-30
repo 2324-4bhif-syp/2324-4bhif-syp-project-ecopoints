@@ -211,16 +211,26 @@ body {
 /* Sidebar */
 .sidebar {
     position: fixed;
-    top: 80px; /* Höhe des Headers */
-    left: -300px;
-    width: 250px;
-    height: calc(100% - 60px); /* Volle Höhe minus Header */
+    top: 80px; /* Unterhalb des Headers */
+    left: -280px; /* Standardmäßig versteckt */
+    width: 260px;
+    height: calc(100% - 60px); /* Höhe minus Header */
     background: #ffffff;
+    color: #333;
+    border-radius: 10px 0 0 10px; /* Abgerundete Kanten auf der linken Seite */
+    transition: all 0.3s ease-in-out;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1); /* Weicher Schatten */
+    padding: 15px;
+    z-index: 1002;
+
+}
+
+.sidebar-title {
+    font-size: 1.4em;
+    font-weight: bold;
     color: #0B3D28;
-    transition: left 0.3s ease-in-out;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-    z-index: 1001;
-    border-top: 1px solid #B8E994;
+    margin-bottom: 10px;
+    text-align: center;
 }
 
 .sidebar.open {
@@ -259,18 +269,67 @@ body {
 /* Sidebar Tabs */
 .sidebar-tab {
     width: 100%;
-    padding: 10px;
-    background: #333;
-    border: none;
+    padding: 12px;
+    background: #4CAF50; /* Modernes Grün */
     color: white;
-    font-size: 16px;
+    font-size: 1.1em;
+    font-weight: bold;
+    text-align: left;
+    border: none;
+    border-radius: 8px;
     cursor: pointer;
-    margin-top: 5px;
     transition: background 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.sidebar-tab i {
+    font-size: 1.2em;
 }
 
+.sidebar-tab:hover {
+    background: #388E3C;
+}
+
+/* Aktive Tab */
 .sidebar-tab.active {
-    background: #4CAF50;
+    background: #0b7a2f;
+}
+
+/* Sidebar Content */
+.sidebar-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.dimmer {
+    position: fixed;
+    top: 60px; /* Direkt unter dem Header */
+    left: 0;
+    width: 100%;
+    height: calc(100% - 60px);
+    background: rgba(0, 0, 0, 0.4); /* Dezente Transparenz */
+    z-index: 1001;
+    display: none;
+    transition: opacity 0.3s ease;
+}
+
+/* Dimmer aktivieren, wenn Sidebar offen ist */
+.sidebar.open + .dimmer {
+    display: block;
+}
+
+/* Schließen-Button */
+.sidebar-close {
+    background: none;
+    border: none;
+    color: #444;
+    font-size: 1.3em;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 15px;
 }
 
 /* Graphen-Button-Leiste */

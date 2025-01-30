@@ -1,6 +1,8 @@
 package at.htl.ecopoints.util;
 
 import android.content.Context;
+import android.util.Log;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;

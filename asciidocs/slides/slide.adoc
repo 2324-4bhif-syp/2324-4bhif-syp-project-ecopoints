@@ -393,8 +393,9 @@ image::ecopoints-light-dark.png[500,200]
 === Aufgaben [Linus]
 
 * Kleine UI Verbesserungen
-* Automatisches erkennen von unterstützten OBD Commands
-* App sollte mit verschiedenen OBD Adaptern funktionieren
+* Automatisches erkennen von unterstützten OBD-Commands
+* App sollte mit verschiedenen OBD-Adaptern funktionieren
+* Deployment
 
 === UI
 
@@ -408,7 +409,7 @@ image::ecopoints-light-dark.png[500,200]
 
 * Beim Verbinden mit dem OBD Adapter wird automatisch erkannt welche Commands unterstützt werden
 * Problem: Trotzdem funktionieren manche dieser Commands nicht
-** Nach 10 fehlscglagenen Versuchen wird der Command "deaktiviert"
+** Nach 10 fehlschlagenden Versuchen wird der Command "deaktiviert"
 
 === Adapter Compatibility
 

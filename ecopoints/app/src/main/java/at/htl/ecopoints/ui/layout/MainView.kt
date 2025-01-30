@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.rxjava3.subscribeAsState
 import androidx.compose.ui.Modifier
 import at.htl.ecopoints.model.Store
+import at.htl.ecopoints.service.TripService
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
 import javax.inject.Inject
 import javax.inject.Singleton

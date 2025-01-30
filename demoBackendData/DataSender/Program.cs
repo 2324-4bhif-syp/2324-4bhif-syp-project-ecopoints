@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 public class Trip
 {
     public Guid TripId { get; set; }
-    public List<CarSensorData> Data { get; set; } = new List<CarSensorData>(); 
+    public List<CarSensorData> Data { get; set; } = new List<CarSensorData>();
 }
 
 public class CarSensorData
@@ -27,7 +27,7 @@ public class CarData
     public double? GpsSpeed { get; set; }
     public double? ObdSpeed { get; set; }
 }
-    
+
 
 public class Graph
 {
@@ -35,29 +35,41 @@ public class Graph
     public string Title { get; set; }
     public string IFrameLink { get; set; }
 }
+
 class Program
 {
+    private static readonly HttpClient httpClient = new HttpClient();
+    private static readonly Guid TripId = Guid.Parse("e4f191ea-1481-4a03-bb57-b2969669ff29");
+
     private static async Task Main(string[] args)
     {
-        //var tripData = GenerateFakeTripData();
-        //postTripData(tripData);
 
-        await postGraphData();
-        Console.WriteLine("FINISH");
+        //await postGraphData();
 
+        var tasks = new List<Task>();
+
+        for (int i = 0; i < 1000; i++)
+        {
+            var tripData = GenerateFakeTripData();
+            tripData.TripId = TripId; 
+            tasks.Add(PostTripData(tripData));
+        }
+
+        await Task.WhenAll(tasks); 
+
+        Console.WriteLine("All trip data sent!");
     }
-    
-    private static async void postTripData(Trip tripData)
-    {
-        using var httpClient = new HttpClient();
 
-        
+    private static async Task PostTripData(Trip tripData)
+    {
         try
         {
-            var response = await httpClient.PostAsJsonAsync("http://localhost:5221/api/log", tripData);
+
+            var response =
+                await httpClient.PostAsJsonAsync("https://if200210.cloud.htl-leonding.ac.at/api/log", tripData);
             if (response.IsSuccessStatusCode)
             {
-                Console.WriteLine("Trip data successfully sent and logged in the database.");
+                Console.WriteLine("Trip data successfully sent.");
             }
             else
             {
@@ -77,14 +89,54 @@ class Program
 
         var graphs = new[]
         {
-            new Graph { Id = 1, Title = "Obd Speed", IFrameLink = "http://localhost:3000/d-solo/ee2r6d08shr7ka/eco-points?orgId=1&from=now&to=now-30d&var-ids=$ids&panelId=1&theme=light&css=.panel-container,.graph-panel{background-color:white !important;}.flot-background{fill:white !important;}" },
-            new Graph { Id = 2, Title = "Gps Speed", IFrameLink = "http://localhost:3000/d-solo/ee2r6d08shr7ka/eco-points?orgId=1&from=now&to=now-30d&var-ids=$ids&panelId=4&theme=light&css=.panel-container,.graph-panel{background-color:white !important;}.flot-background{fill:white !important;}" },
-            new Graph { Id = 3, Title = "Engine Rpm", IFrameLink = "http://localhost:3000/d-solo/ee2r6d08shr7ka/eco-points?orgId=1&from=now&to=now-30d&var-ids=$ids&panelId=5&theme=light&css=.panel-container,.graph-panel{background-color:white !important;}.flot-background{fill:white !important;}" },
-            new Graph { Id = 4, Title = "Engine Load", IFrameLink = "http://localhost:3000/d-solo/ee2r6d08shr7ka/eco-points?orgId=1&from=now&to=now-30d&var-ids=$ids&panelId=7&theme=light&css=.panel-container,.graph-panel{background-color:white !important;}.flot-background{fill:white !important;}" },
-            new Graph { Id = 5, Title = "Coolant Temp", IFrameLink = "http://localhost:3000/d-solo/ee2r6d08shr7ka/eco-points?orgId=1&from=now&to=now-30d&var-ids=$ids&panelId=6&theme=light&css=.panel-container,.graph-panel{background-color:white !important;}.flot-background{fill:white !important;}" },
-            new Graph { Id = 6, Title = "longitude", IFrameLink = "http://localhost:3000/d-solo/ee2r6d08shr7ka/eco-points?orgId=1&from=now&to=now-30d&var-ids=$ids&panelId=2&theme=light&css=.panel-container,.graph-panel{background-color:white !important;}.flot-background{fill:white !important;}" },
-            new Graph { Id = 7, Title = "latitude", IFrameLink = "http://localhost:3000/d-solo/ee2r6d08shr7ka/eco-points?orgId=1&from=now&to=now-30d&var-ids=$ids&panelId=3&theme=light&css=.panel-container,.graph-panel{background-color:white !important;}.flot-background{fill:white !important;}" },
-            new Graph { Id = 8, Title = "altitude", IFrameLink = "http://localhost:3000/d-solo/ee2r6d08shr7ka/eco-points?orgId=1&from=now&to=now-30d&var-ids=$ids&panelId=8&theme=light&css=.panel-container,.graph-panel{background-color:white !important;}.flot-background{fill:white !important;}" }
+            new Graph
+            {
+                Id = 1, Title = "Obd Speed",
+                IFrameLink =
+                    "http://localhost:3000/d-solo/ee2r6d08shr7ka/eco-points?orgId=1&from=now&to=now-30d&var-ids=$ids&panelId=1&theme=light&css=.panel-container,.graph-panel{background-color:white !important;}.flot-background{fill:white !important;}"
+            },
+            new Graph
+            {
+                Id = 2, Title = "Gps Speed",
+                IFrameLink =
+                    "http://localhost:3000/d-solo/ee2r6d08shr7ka/eco-points?orgId=1&from=now&to=now-30d&var-ids=$ids&panelId=4&theme=light&css=.panel-container,.graph-panel{background-color:white !important;}.flot-background{fill:white !important;}"
+            },
+            new Graph
+            {
+                Id = 3, Title = "Engine Rpm",
+                IFrameLink =
+                    "http://localhost:3000/d-solo/ee2r6d08shr7ka/eco-points?orgId=1&from=now&to=now-30d&var-ids=$ids&panelId=5&theme=light&css=.panel-container,.graph-panel{background-color:white !important;}.flot-background{fill:white !important;}"
+            },
+            new Graph
+            {
+                Id = 4, Title = "Engine Load",
+                IFrameLink =
+                    "http://localhost:3000/d-solo/ee2r6d08shr7ka/eco-points?orgId=1&from=now&to=now-30d&var-ids=$ids&panelId=7&theme=light&css=.panel-container,.graph-panel{background-color:white !important;}.flot-background{fill:white !important;}"
+            },
+            new Graph
+            {
+                Id = 5, Title = "Coolant Temp",
+                IFrameLink =
+                    "http://localhost:3000/d-solo/ee2r6d08shr7ka/eco-points?orgId=1&from=now&to=now-30d&var-ids=$ids&panelId=6&theme=light&css=.panel-container,.graph-panel{background-color:white !important;}.flot-background{fill:white !important;}"
+            },
+            new Graph
+            {
+                Id = 6, Title = "longitude",
+                IFrameLink =
+                    "http://localhost:3000/d-solo/ee2r6d08shr7ka/eco-points?orgId=1&from=now&to=now-30d&var-ids=$ids&panelId=2&theme=light&css=.panel-container,.graph-panel{background-color:white !important;}.flot-background{fill:white !important;}"
+            },
+            new Graph
+            {
+                Id = 7, Title = "latitude",
+                IFrameLink =
+                    "http://localhost:3000/d-solo/ee2r6d08shr7ka/eco-points?orgId=1&from=now&to=now-30d&var-ids=$ids&panelId=3&theme=light&css=.panel-container,.graph-panel{background-color:white !important;}.flot-background{fill:white !important;}"
+            },
+            new Graph
+            {
+                Id = 8, Title = "altitude",
+                IFrameLink =
+                    "http://localhost:3000/d-solo/ee2r6d08shr7ka/eco-points?orgId=1&from=now&to=now-30d&var-ids=$ids&panelId=8&theme=light&css=.panel-container,.graph-panel{background-color:white !important;}.flot-background{fill:white !important;}"
+            }
         };
 
         foreach (var graph in graphs)
@@ -123,7 +175,7 @@ class Program
             var sensorData = new CarSensorData
             {
                 Timestamp = DateTime.UtcNow.AddSeconds(-i * 10),
-                CarData = new CarData 
+                CarData = new CarData
                 {
                     Latitude = random.NextDouble() * 180 - 90,
                     Longitude = random.NextDouble() * 360 - 180,
@@ -141,5 +193,4 @@ class Program
 
         return trip;
     }
-
 }

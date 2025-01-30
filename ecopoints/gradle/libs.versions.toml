@@ -41,6 +41,7 @@ ui = "1.7.3"
 uiTooling = "1.7.3"
 smallryeConfig = "3.8.1"
 resteasyClient = "6.2.8.Final"
+multidex = "2.0.1"
 
 [libraries]
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
@@ -105,6 +106,7 @@ ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
 smallrye-config = { module = "io.smallrye.config:smallrye-config", version.ref = "smallryeConfig" }
 resteasy-client = { module = "org.jboss.resteasy:resteasy-client", version.ref = "resteasyClient" }
+androidx-multidex = { group = "androidx.multidex", name = "multidex", version.ref = "multidex" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

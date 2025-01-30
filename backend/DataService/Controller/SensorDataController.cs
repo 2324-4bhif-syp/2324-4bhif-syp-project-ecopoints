@@ -31,6 +31,17 @@ namespace DataService.Controller
             return Results.Ok("Data logged successfully");
         }
 
+        public async Task<IResult> LogDataToken(Trip trip, string token)
+        {
+            if (trip?.Data == null || trip.Data.Count == 0)
+            {
+                return Results.BadRequest("Invalid trip data");
+            }
+
+            await _dbService.WriteTripDataAsyncWithToken(trip, token);
+            return Results.Ok("Data logged successfully");
+        }
+
         public async Task<IResult> CreateTrip()
         {
             var tripId = await _dbService.CreateTripAsync();

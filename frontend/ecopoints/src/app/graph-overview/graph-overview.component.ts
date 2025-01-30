@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Graph } from '../model/Graph';
 import { GraphService } from '../services/graph.service';
+import { Duration } from '../model/Duration';
 
 @Component({
   selector: 'app-graph-overview',
@@ -23,6 +24,8 @@ export class GraphOverviewComponent implements OnInit {
   private rohdatenGraphs: Graph[] = [];
   private berechneteGraphs: Graph[] = [];
 
+
+
   constructor(private graphService: GraphService) {}
 
 
@@ -41,6 +44,7 @@ export class GraphOverviewComponent implements OnInit {
       }
     );
   }
+
   
 
   async loadTrips(): Promise<void> {

@@ -182,6 +182,17 @@ export class ModifyGraphsComponent implements OnInit {
    * @returns The modified URL with additional parameters.
    */
   appendParametersToUrl(url: string): string {
+
+    const urlObject = new URL(url, window.location.origin); 
+    const params = urlObject.searchParams;
+
+        // Ersetze from- und to-Werte
+    params.set('from', 'now');
+    params.set('to', 'now-30d');
+
+
+    url = urlObject.toString();
+
     const additionalParams = '&theme=light&css=.panel-container,.graph-panel{background-color:white !important;}.flot-background{fill:white !important;}';
     // Check if URL already contains query parameters
     if (url.includes('?')) {

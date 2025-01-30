@@ -8,9 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class GraphService {
 
-
-  private apiUrl = 'http://localhost:5221/api'; 
-
+  private apiUrl = 'http://localhost:5221/api'
   constructor(private http: HttpClient) { }
 
   getGraphs(): Observable<Graph[]> {

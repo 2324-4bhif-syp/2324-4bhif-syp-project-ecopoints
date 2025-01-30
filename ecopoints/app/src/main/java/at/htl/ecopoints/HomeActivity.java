@@ -28,16 +28,7 @@ public class HomeActivity extends ComponentActivity {
     public void onCreate(Bundle savedInstanceState) {
         Log.i(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
-
-        this.tripService.getAllTrips().thenAccept(trips -> {
-            Log.i(TAG, "Trips: " + trips);
-        });
-
-        this.tripService.getTripData(UUID.fromString("76206bbb-7df1-4046-b38d-21cf9a152172"))
-                .thenAccept(tripData -> {
-                    Log.i(TAG, "Trip data: " + tripData);
-                });
-
+        
         homeView.compose(this);
     }
 }

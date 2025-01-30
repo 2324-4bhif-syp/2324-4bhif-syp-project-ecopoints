@@ -189,15 +189,6 @@ class ObdReaderKt {
         scope = CoroutineScope(Dispatchers.IO)
         sleep(1000)
         writer.endJsonFile()
-
-        val carSensorData = store.subject.value!!.tripViewModel.carData.toCarSensorData()
-        println("CarSensorDataObject: $carSensorData")
-
-        tripService.createTrip().thenAccept { tripId ->
-            tripService.addDataToTrip(UUID.fromString(tripId), listOf(carSensorData)).thenAccept { response ->
-                println(response)
-            }
-        }
     }
 
     fun Map<String, String>.toCarSensorData(): CarSensorData {
@@ -223,6 +214,10 @@ class ObdReaderKt {
     ) {
         writer.clearFile()
         writer.startJsonFile()
+
+        tripService.createTrip().thenAccept { tripId ->
+            store.next { it.tripViewModel.tripId = UUID.fromString(tripId) }
+        }
 
 //        if (currentlySupportedCommands.isEmpty()) {
 //            Log.e(TAG, "No OBD commands available")
@@ -298,6 +293,12 @@ class ObdReaderKt {
                         store.subject.value!!.tripViewModel.carData.map { (key, value) ->
                             "\"$key\": \"$value\""
                         }.joinToString(", ", "{", "}")
+
+                    var tripId = store.subject.value!!.tripViewModel.tripId
+                    var carSensorData = store.subject.value!!.tripViewModel.carData.toCarSensorData()
+                    tripService.addDataToTrip(tripId, listOf(carSensorData)).thenAccept { response ->
+                        println(response)
+                    }
 
                     val timestamp = System.currentTimeMillis()
                     val jsonSnapshot = "{\n\"timestamp\": $timestamp,\n\"data\": $snapshot\n},"

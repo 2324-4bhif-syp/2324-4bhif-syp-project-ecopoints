@@ -447,8 +447,109 @@ image::ecopoints-light-dark.png[500,200]
 
 === Aufgaben [Abdullah]
 
-* Dashboard mit Grafana visualisieren
 * Backend
+** Anbindung an eine PostgresDB
+** Plugin-System für die Daten
+
+=== Plugin-System
+
+Jedes
+Plugin repräsentiert eine Datenabfrage (Query), und durch die Definition von Attribut-
+namen können diese Abfragen dynamisch ausgeführt und in Grafiken dargestellt werden.
+
+
+==== Plugin Bsp.
+
+[.code,java]
+----
+[Plugin("altitude", typeof(void))]
+public class Altitude: IBasePluginLayout
+{
+    private readonly InfluxDbService _dbService;
+
+    public bool RequiresCalculation => false;
+
+    public Altitude(InfluxDbService dbService)
+    {
+        _dbService = dbService;
+    }
+
+    public async Task<IEnumerable<Dictionary<string, object>>> ExecuteQuery
+    (QueryParameters parameters)
+    {
+        //Hier kommt die Logik für die Abfrage
+        ...
+
+        return filteredData;
+    }
+}
+----
+
+==== Plugin-Abfrage
+
+[.code,java]
+----
+
+app.MapGet("/api/{pluginName}", async
+(
+    string pluginName,
+    PluginSystem pluginSystem,
+    InfluxDbService dbService,
+    HttpContext context) =>
+{
+    var pluginType = pluginSystem.FindPlugin(pluginName);
+
+    if (pluginType == null)...
+
+    var pluginInstance = Activator
+    .CreateInstance(pluginType, dbService) as IBasePluginLayout;
+
+    var startDate = ...
+    var endDate = ...
+    var ids = ...
+
+    var parameters = new QueryParameters
+    {
+        StartDate = startDate,
+        EndDate = endDate,
+        Ids = ids
+    };
+
+    var result = await pluginInstance.ExecuteQuery(parameters);
+    return Results.Ok(result);
+});
+----
+
+==== Plugins Files
+
+|===
+^|1. ^| 2.
+^|image:24-sprint-3/pluginsBackendFiles.png[]
+^|image:24-sprint-3/PluginsFiles.png[]
+|===
+
+
+=== Frontend
+
+* Integration mit Grafana
+** Zeitraum & IDs werden dynamisch ersetzt.
+** Die Datenquellen werden automatisch aktualisiert.
+** Man können neue Graphen hinzufügen oder bestehende bearbeiten.
+
+* Dynamisches Frontend mit Angular +
+✅Dynamische Anzeige von Plugins als Grafen +
+✅ Hinzufügen, Löschen und Aktualisieren von Graphen +
+✅ Integration mit Grafana für Visualisierung +
+✅ Rohe Daten & berechnete Graphen separat anzeigen (Sidebar) +
+✅ Dropdown für die Auswahl von Trips
+
+=== Live Demo
+
+=== Deployment
+
+* Bruch...
+
+image:24-sprint-3/bruch.png[]]
 
 === Aufgaben [Armin]
 

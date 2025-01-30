@@ -42,6 +42,8 @@ class Program
         var tripData = GenerateFakeTripData();
         postTripData(tripData);
 
+        Console.WriteLine("sup");
+        
         //postGraphData();
 
     }
@@ -50,10 +52,12 @@ class Program
     {
         using var httpClient = new HttpClient();
 
+
+        tripData.TripId = Guid.Parse("76206bbb-7df1-4046-b38d-21cf9a152172");
         
         try
         {
-            var response = await httpClient.PostAsJsonAsync("http://localhost:8080/api/log", tripData);
+            var response = await httpClient.PostAsJsonAsync("https://if200210.cloud.htl-leonding.ac.at/api/log", tripData);
             if (response.IsSuccessStatusCode)
             {
                 Console.WriteLine("Trip data successfully sent and logged in the database.");

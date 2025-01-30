@@ -464,65 +464,11 @@ namen können diese Abfragen dynamisch ausgeführt und in Grafiken dargestellt w
 
 === Plugin Bsp.
 
-[.code,java]
-----
-[Plugin("altitude", typeof(void))]
-public class Altitude: IBasePluginLayout
-{
-    private readonly InfluxDbService _dbService;
+image:24-sprint-3/PluginBsp.png[]
 
-    public bool RequiresCalculation => false;
+=== GET-Abfrage für Plugins
 
-    public Altitude(InfluxDbService dbService)
-    {
-        _dbService = dbService;
-    }
-
-    public async Task<IEnumerable<Dictionary<string, object>>> ExecuteQuery
-    (QueryParameters parameters)
-    {
-        //Hier kommt die Logik für die Abfrage
-        ...
-
-        return filteredData;
-    }
-}
-----
-
-=== Plugin-Abfrage
-
-[.code,java]
-----
-
-app.MapGet("/api/{pluginName}", async
-(
-    string pluginName,
-    PluginSystem pluginSystem,
-    InfluxDbService dbService,
-    HttpContext context) =>
-{
-    var pluginType = pluginSystem.FindPlugin(pluginName);
-
-    if (pluginType == null)...
-
-    var pluginInstance = Activator
-    .CreateInstance(pluginType, dbService) as IBasePluginLayout;
-
-    var startDate = ...
-    var endDate = ...
-    var ids = ...
-
-    var parameters = new QueryParameters
-    {
-        StartDate = startDate,
-        EndDate = endDate,
-        Ids = ids
-    };
-
-    var result = await pluginInstance.ExecuteQuery(parameters);
-    return Results.Ok(result);
-});
-----
+image:24-sprint-3/pluginAbfrage.png[]
 
 === Plugins Files
 
@@ -539,6 +485,8 @@ app.MapGet("/api/{pluginName}", async
 ** Zeitraum & IDs werden dynamisch ersetzt.
 ** Die Datenquellen werden automatisch aktualisiert.
 ** Man können neue Graphen hinzufügen oder bestehende bearbeiten.
+
+=== Frontend
 
 * Dynamisches Frontend mit Angular +
 ✅Dynamische Anzeige von Plugins als Grafen +

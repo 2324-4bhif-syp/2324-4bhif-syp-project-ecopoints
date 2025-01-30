@@ -395,6 +395,7 @@ image::ecopoints-light-dark.png[500,200]
 * Kleine UI Verbesserungen
 * Automatisches erkennen von unterstützten OBD-Commands
 * App sollte mit verschiedenen OBD-Adaptern funktionieren
+* Deployment
 
 === UI
 

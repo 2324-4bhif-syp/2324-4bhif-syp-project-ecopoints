@@ -1,7 +1,11 @@
 package at.htl.ecopoints.io
 
 import android.util.Log
+import at.htl.ecopoints.model.CarData
+import at.htl.ecopoints.model.CarDataBackend
+import at.htl.ecopoints.model.CarSensorData
 import at.htl.ecopoints.model.Store
+import at.htl.ecopoints.service.TripService
 import com.github.eltonvs.obd.command.ObdCommand
 import com.github.eltonvs.obd.command.ObdResponse
 import com.github.eltonvs.obd.connection.ObdDeviceConnection
@@ -14,6 +18,8 @@ import kotlinx.coroutines.launch
 import java.io.InputStream
 import java.io.OutputStream
 import java.lang.Thread.sleep
+import java.sql.Timestamp
+import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -31,6 +37,9 @@ class ObdReaderKt {
 
     @Inject
     lateinit var writer: JsonFileWriter
+
+    @Inject
+    lateinit var tripService: TripService
 
     @Inject
     constructor() {
@@ -180,6 +189,29 @@ class ObdReaderKt {
         scope = CoroutineScope(Dispatchers.IO)
         sleep(1000)
         writer.endJsonFile()
+
+        //TODO: here
+        val carSensorData = store.subject.value!!.tripViewModel.carData.toCarSensorData()
+        println("CarDataObject: $carSensorData")
+
+
+    }
+
+    fun Map<String, String>.toCarSensorData(): CarSensorData {
+        var carSensorData = CarSensorData()
+        carSensorData.timestamp = Timestamp(System.currentTimeMillis())
+        var carData = CarDataBackend()
+        carData.latitude = this["Latitude"]?.toDoubleOrNull() ?: 0.0
+        carData.longitude = this["Longitude"]?.toDoubleOrNull() ?: 0.0
+        carData.altitude = this["Altitude"]?.toDoubleOrNull() ?: 0.0
+        carData.engineLoad = this["Engine Load"]?.toDoubleOrNull() ?: 0.0
+        carData.coolantTemperature = this["Engine Coolant Temperature"]?.toDoubleOrNull() ?: 0.0
+        carData.engineRpm = this["Engine RPM"]?.toDoubleOrNull() ?: 0.0
+        carData.gpsSpeed = this["Gps-Speed"]?.toDoubleOrNull() ?: 0.0
+        carData.obdSpeed = this["Vehicle Speed"]?.toDoubleOrNull() ?: 0.0
+        carSensorData.carData = carData
+
+        return carSensorData
     }
 
     fun startReading(

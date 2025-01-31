@@ -19,6 +19,9 @@ import java.io.InputStream
 import java.io.OutputStream
 import java.lang.Thread.sleep
 import java.sql.Timestamp
+import java.time.Instant
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
 import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -193,7 +196,13 @@ class ObdReaderKt {
 
     fun Map<String, String>.toCarSensorData(): CarSensorData {
         var carSensorData = CarSensorData()
-        carSensorData.timestamp = Timestamp(System.currentTimeMillis())
+        var timestamp : Timestamp = Timestamp(System.currentTimeMillis());
+
+        var instant : Instant = timestamp.toInstant();
+        var formattedTimestamp = instant.atOffset(ZoneOffset.UTC)
+            .format(DateTimeFormatter.ISO_INSTANT);
+
+        carSensorData.timestamp = formattedTimestamp
         var carData = CarDataBackend()
         carData.latitude = this["Latitude"]?.toDoubleOrNull() ?: 0.0
         carData.longitude = this["Longitude"]?.toDoubleOrNull() ?: 0.0
@@ -216,7 +225,7 @@ class ObdReaderKt {
         writer.startJsonFile()
 
         tripService.createTrip().thenAccept { tripId ->
-            store.next { it.tripViewModel.tripId = UUID.fromString(tripId) }
+            store.next { it.tripViewModel.tripId = tripId.tripId }
         }
 
 //        if (currentlySupportedCommands.isEmpty()) {

@@ -58,7 +58,11 @@ import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.service.TripService
 import at.htl.ecopoints.ui.component.ShowMap
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
+import com.fasterxml.jackson.databind.ObjectMapper
 import java.sql.Timestamp
+import java.time.Instant
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
@@ -177,8 +181,21 @@ class TripView {
                                                 ConcurrentHashMap<String, String>()
                                             for (command in relevantObdCommands) {
                                                 map[command.name] =
-                                                    Random.nextInt(0, 10000).toString();
+                                                    Random.nextDouble(0.0, 10000.0).toString();
+                                                Log.d(TAG, "Command: ${command.name} : Value: ${map[command.name]}")
                                             }
+                                            map["Latitude"] = "34.34"
+                                            map["Longitude"] = "43.3"
+                                            map["Altitude"] = "2000"
+
+                                            var mapper = ObjectMapper();
+                                            try {
+                                                var jsonData = mapper.writeValueAsString(map.toCarSensorData());
+                                                Log.d(TAG, tripId.value + "Trip data: " + jsonData);
+                                            } catch (e : Exception) {
+                                                Log.e(TAG, "Failed to serialize trip data", e);
+                                            }
+
                                             tripService.addDataToTrip(
                                                 UUID.fromString(tripId.value),
                                                 listOf(map.toCarSensorData())
@@ -1347,9 +1364,16 @@ class TripView {
     //endregion
     fun Map<String, String>.toCarSensorData(): CarSensorData {
         var carSensorData = CarSensorData()
-        carSensorData.timestamp = Timestamp(System.currentTimeMillis())
+        var timestamp : Timestamp = Timestamp(System.currentTimeMillis());
+
+        var instant : Instant = timestamp.toInstant();
+        var formattedTimestamp = instant.atOffset(ZoneOffset.UTC)
+            .format(DateTimeFormatter.ISO_INSTANT);
+
+        carSensorData.timestamp = formattedTimestamp
         var carData = CarDataBackend()
         carData.latitude = this["Latitude"]?.toDoubleOrNull() ?: 0.0
+        Log.d(TAG,"Latitude: ${carData.latitude}")
         carData.longitude = this["Longitude"]?.toDoubleOrNull() ?: 0.0
         carData.altitude = this["Altitude"]?.toDoubleOrNull() ?: 0.0
         carData.engineLoad = this["Engine Load"]?.toDoubleOrNull() ?: 0.0

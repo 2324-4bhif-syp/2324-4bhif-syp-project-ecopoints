@@ -11,6 +11,8 @@ namespace Abstractions.Model
     {
         [JsonProperty("timestamp")]
         public DateTime Timestamp { get; set; }
+        
+        [JsonProperty("CarData")]
         public CarData CarData { get; set; }
     }
 }

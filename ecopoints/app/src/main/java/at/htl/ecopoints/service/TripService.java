@@ -12,6 +12,7 @@ import at.htl.ecopoints.client.TripClient;
 import at.htl.ecopoints.model.CarData;
 import at.htl.ecopoints.model.CarSensorData;
 import at.htl.ecopoints.model.Trip;
+import at.htl.ecopoints.model.dto.TripIdDTO;
 import at.htl.ecopoints.util.ConfigLoader;
 import at.htl.ecopoints.util.resteasy.RestApiClientBuilder;
 
@@ -34,10 +35,11 @@ public class TripService {
                 .exceptionally(e -> "Failed to log trip: " + e.getMessage());
     }
 
-    public CompletableFuture<String> createTrip() {
-        return CompletableFuture.supplyAsync(tripClient::createTrip)
-                .thenApply(response -> "Trip created with ID: " + response)
-                .exceptionally(e -> "Failed to create trip: " + e.getMessage());
+    public CompletableFuture<TripIdDTO> createTrip() {
+        return CompletableFuture.supplyAsync(tripClient::createTrip);
+//                .thenApply(response -> "Trip created with ID: " + response.getTripId())
+//                .exceptionally(e -> "Failed to create trip: " + e.getMessage() + e.toString());;
+
     }
 
     public CompletableFuture<List<String>> getAllTrips() {

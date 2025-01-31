@@ -55,13 +55,17 @@ import at.htl.ecopoints.io.LocationManager
 import at.htl.ecopoints.model.*
 import at.htl.ecopoints.model.viewmodel.TripViewModel
 import at.htl.ecopoints.navigation.BottomNavBar
+import at.htl.ecopoints.service.TripService
 import at.htl.ecopoints.ui.component.ShowMap
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
+import java.sql.Timestamp
 import java.util.Date
+import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.math.roundToInt
+import kotlin.random.Random
 
 private val TAG = TripView::class.java.simpleName
 
@@ -82,6 +86,9 @@ class TripView {
 
     @Inject
     lateinit var writer: JsonFileWriter
+
+    @Inject
+    lateinit var tripService: TripService
 
     private var tripActive = false
 
@@ -116,6 +123,12 @@ class TripView {
             }
 
             val isDarkMode = store.subject.map { it.isDarkMode }.subscribeAsState(false)
+
+            val tripId = remember { mutableStateOf("") }
+            tripService.createTrip().thenAccept { id ->
+                if (id != null)
+                    tripId.value = id.tripId.toString();
+            }
 
             EcoPointsTheme(darkTheme = isDarkMode.value) {
                 Box(modifier = Modifier.fillMaxSize()) {
@@ -158,6 +171,26 @@ class TripView {
 //                                                style = MaterialTheme.typography.bodyLarge
 //                                            )
 //                                        }
+
+                                        Button(onClick = {
+                                            val map: ConcurrentHashMap<String, String> =
+                                                ConcurrentHashMap<String, String>()
+                                            for (command in relevantObdCommands) {
+                                                map[command.name] =
+                                                    Random.nextInt(0, 10000).toString();
+                                            }
+                                            tripService.addDataToTrip(
+                                                UUID.fromString(tripId.value),
+                                                listOf(map.toCarSensorData())
+                                            )
+                                                .thenAccept { response ->
+                                                    println(response)
+                                                }
+                                        }) {
+                                            Text(
+                                                text = "Test API"
+                                            )
+                                        }
 
                                         IconButton(
                                             onClick = {
@@ -293,19 +326,19 @@ class TripView {
                                 }
 
 
-                                    //ELM Setup and getting Available Commands
-                                    Text(
-                                        text = "Setting up ELM327 Adapter:",
-                                        style = MaterialTheme.typography.bodyLarge,
-                                        color = Color.White,
-                                        textAlign = TextAlign.Center
-                                    )
-                                    Text(
-                                        text = "${elmSetupCurrentStepState.value}",
-                                        style = MaterialTheme.typography.bodySmall,
-                                        color = Color.White,
-                                        textAlign = TextAlign.Center
-                                    )
+                                //ELM Setup and getting Available Commands
+                                Text(
+                                    text = "Setting up ELM327 Adapter:",
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    color = Color.White,
+                                    textAlign = TextAlign.Center
+                                )
+                                Text(
+                                    text = "${elmSetupCurrentStepState.value}",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = Color.White,
+                                    textAlign = TextAlign.Center
+                                )
                             }
                         }
                     }
@@ -1311,8 +1344,23 @@ class TripView {
         }
     }
 
-//endregion
+    //endregion
+    fun Map<String, String>.toCarSensorData(): CarSensorData {
+        var carSensorData = CarSensorData()
+        carSensorData.timestamp = Timestamp(System.currentTimeMillis())
+        var carData = CarDataBackend()
+        carData.latitude = this["Latitude"]?.toDoubleOrNull() ?: 0.0
+        carData.longitude = this["Longitude"]?.toDoubleOrNull() ?: 0.0
+        carData.altitude = this["Altitude"]?.toDoubleOrNull() ?: 0.0
+        carData.engineLoad = this["Engine Load"]?.toDoubleOrNull() ?: 0.0
+        carData.coolantTemperature = this["Engine Coolant Temperature"]?.toDoubleOrNull() ?: 0.0
+        carData.engineRpm = this["Engine RPM"]?.toDoubleOrNull() ?: 0.0
+        carData.gpsSpeed = this["Gps-Speed"]?.toDoubleOrNull() ?: 0.0
+        carData.obdSpeed = this["Vehicle Speed"]?.toDoubleOrNull() ?: 0.0
+        carSensorData.carData = carData
 
+        return carSensorData
+    }
 }
 
 

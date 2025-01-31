@@ -3,8 +3,11 @@ package at.htl.ecopoints.client;
 import at.htl.ecopoints.model.CarData;
 import at.htl.ecopoints.model.CarSensorData;
 import at.htl.ecopoints.model.Trip;
+import at.htl.ecopoints.model.dto.TripIdDTO;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -19,7 +22,7 @@ public interface TripClient {
 
     @POST
     @Path("/create-trip")
-    String createTrip();
+    TripIdDTO createTrip();
 
     @GET
     @Path("/trips")

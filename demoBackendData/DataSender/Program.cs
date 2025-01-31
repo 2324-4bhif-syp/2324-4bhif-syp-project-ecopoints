@@ -44,9 +44,9 @@ class Program
     private static async Task Main(string[] args)
     {
 
-        //await postGraphData();
+        await postGraphData();
 
-        var tasks = new List<Task>();
+        /*var tasks = new List<Task>();
 
         for (int i = 0; i < 1000; i++)
         {
@@ -57,7 +57,7 @@ class Program
 
         await Task.WhenAll(tasks); 
 
-        Console.WriteLine("All trip data sent!");
+        Console.WriteLine("All trip data sent!");*/
     }
 
     private static async Task PostTripData(Trip tripData)

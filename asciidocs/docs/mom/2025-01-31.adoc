@@ -1,0 +1,72 @@
+= Besprechung 31.01.2025
+
+ifndef::imagesdir[:imagesdir: images]
+:icons: font
+//:sectnums:    // Nummerierung der Überschriften / section numbering
+//:toc: left
+
+.Teilnehmer
+|===
+|anwesend | Abwesend
+
+|Linus Nestler
+|
+
+|Laurent Mali
+|
+
+|Armin Salkovic
+|
+
+
+|Abdullah Al-Desoky
+|
+
+
+|Oliver Daxinger
+|
+
+|===
+
+.Ort und Zeit
+[cols=2*]
+|===
+|Ort
+|Htl-Leonding 5bhif
+
+|von-bis
+| 3. Einheit
+|Dauer
+| 30 min
+|===
+
+== Besprochene Themen
+
+== Vereinbarungen und Entscheidungen
+
+=== Ziele für nächste Woche
+
+.Was wurde vereinbart?
+
+[%autowidth]
+|===
+|wer |macht was |bis wann
+
+| Linus
+a|
+| 00.00.2024
+
+| Oliver
+a|
+| 00.00.2024
+| Laurent
+a|
+| 00.00.2024
+
+| Armin
+a|
+| 00.00.2024
+
+| Abdullah
+a|
+| 00.00.2024

@@ -18,6 +18,11 @@ COPY EngineLoadPlugin/EngineLoadPlugin.csproj ./EngineLoadPlugin/
 COPY CoolantTemperaturePlugin/CoolantTemperaturePlugin.csproj ./CoolantTemperaturePlugin/
 COPY EngineRpmPlugin/EngineRpmPlugin.csproj ./EngineRpmPlugin/
 COPY GpsSpeedPlugin/GpsSpeedPlugin.csproj ./GpsSpeedPlugin/
+COPY SpeedComparison/SpeedComparison.csproj ./SpeedComparison/
+COPY EngineLoadRpmPlugin/EngineLoadRpmPlugin.csproj ./EngineLoadRpmPlugin/
+COPY TripStatisticsPlugin/TripStatisticsPlugin.csproj ./TripStatisticsPlugin/
+COPY EngineHealthPlugin/EngineHealthPlugin.csproj ./EngineHealthPlugin/
+
 
 # Restore dependencies
 RUN dotnet restore
@@ -34,7 +39,11 @@ RUN mkdir -p /App/PluginsOutput && \
     dotnet publish EngineLoadPlugin/EngineLoadPlugin.csproj -c Release -o /App/PluginsOutput && \
     dotnet publish CoolantTemperaturePlugin/CoolantTemperaturePlugin.csproj -c Release -o /App/PluginsOutput && \
     dotnet publish EngineRpmPlugin/EngineRpmPlugin.csproj -c Release -o /App/PluginsOutput && \
-    dotnet publish GpsSpeedPlugin/GpsSpeedPlugin.csproj -c Release -o /App/PluginsOutput
+    dotnet publish GpsSpeedPlugin/GpsSpeedPlugin.csproj -c Release -o /App/PluginsOutput && \
+    dotnet publish SpeedComparison/SpeedComparison.csproj -c Release -o /App/PluginsOutput && \
+    dotnet publish EngineLoadRpmPlugin/EngineLoadRpmPlugin.csproj -c Release -o /App/PluginsOutput && \
+    dotnet publish TripStatisticsPlugin/TripStatisticsPlugin.csproj -c Release -o /App/PluginsOutput && \
+    dotnet publish EngineHealthPlugin/EngineHealthPlugin.csproj -c Release -o /App/PluginsOutput
 
 # Publish the WebApi project
 RUN dotnet publish WebApi/WebApi.csproj -c Release -o /App/out

@@ -499,9 +499,9 @@ image:24-sprint-3/pluginAbfrage.png[]
 
 === Deployment
 
-* Bruch...
+Bruch...
 
-image:24-sprint-3/bruch.png[]]
+image:24-sprint-3/bruch.png[]
 
 === Aufgaben [Armin]
 

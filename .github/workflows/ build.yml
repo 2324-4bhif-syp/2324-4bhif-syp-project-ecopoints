@@ -1,4 +1,4 @@
-name: Build and Deploy .NET Docker App
+name: Build Docker App
 
 on:
   push:

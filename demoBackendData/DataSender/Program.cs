@@ -1,196 +1,58 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text.Json;
 using System.Threading.Tasks;
+using DataSender.Entities;
+using Newtonsoft.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
-public class Trip
-{
-    public Guid TripId { get; set; }
-    public List<CarSensorData> Data { get; set; } = new List<CarSensorData>();
-}
-
-public class CarSensorData
-{
-    public DateTime Timestamp { get; set; }
-    public CarData CarData { get; set; }
-}
-
-public class CarData
-{
-    public double? Latitude { get; set; }
-    public double? Longitude { get; set; }
-    public double? Altitude { get; set; }
-    public double? EngineLoad { get; set; }
-    public double? CoolantTemperature { get; set; }
-    public double? EngineRpm { get; set; }
-    public double? GpsSpeed { get; set; }
-    public double? ObdSpeed { get; set; }
-}
-
-
-public class Graph
-{
-    public int Id { get; set; }
-    public string Title { get; set; }
-    public string IFrameLink { get; set; }
-}
 
 class Program
 {
-    private static readonly HttpClient httpClient = new HttpClient();
-    private static readonly Guid TripId = Guid.Parse("e4f191ea-1481-4a03-bb57-b2969669ff29");
+    private static HttpClient _httpClient = new HttpClient();
+
+    private static string filePath =
+        Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "Data", "data.json");
 
     private static async Task Main(string[] args)
     {
-
-        //await postGraphData();
-
-        var tasks = new List<Task>();
-
-        for (int i = 0; i < 1000; i++)
-        {
-            var tripData = GenerateFakeTripData();
-            tripData.TripId = TripId; 
-            tasks.Add(PostTripData(tripData));
-        }
-
-        await Task.WhenAll(tasks); 
-
-        Console.WriteLine("All trip data sent!");
-    }
-
-    private static async Task PostTripData(Trip tripData)
-    {
+        string apiUrl = "http://localhost:5221/api/log"; // Hier API URL anpassen
         try
         {
+            Console.WriteLine($"Lese Daten aus {filePath}...");
+            string json = await File.ReadAllTextAsync(filePath);
 
-            var response =
-                await httpClient.PostAsJsonAsync("https://if200210.cloud.htl-leonding.ac.at/api/log", tripData);
+            var trip = JsonConvert.DeserializeObject<Trip>(json);
+
+            if (trip == null || trip.Data == null || trip.Data.Count == 0)
+            {
+                Console.WriteLine("Keine gültigen Daten im JSON gefunden.");
+                return;
+            }
+
+            Console.WriteLine($"Sende {trip.Data.Count} Datenpunkte für Trip ID: {trip.TripId} an API...");
+
+            // Daten per HTTP POST senden
+            HttpResponseMessage response = await _httpClient.PostAsJsonAsync(apiUrl, trip);
+
             if (response.IsSuccessStatusCode)
             {
-                Console.WriteLine("Trip data successfully sent.");
+                Console.WriteLine("Daten erfolgreich gesendet!");
             }
             else
             {
-                Console.WriteLine($"Failed to log data. Status code: {response.StatusCode}");
+                Console.WriteLine(
+                    $"Fehler beim Senden: {response.StatusCode} - {await response.Content.ReadAsStringAsync()}");
             }
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-            Console.WriteLine($"An error occurred: {ex.Message}");
+            Console.WriteLine(e);
+            throw;
         }
-    }
-
-    private static async Task postGraphData()
-    {
-        using var client = new HttpClient();
-        client.BaseAddress = new Uri("https://if200210.cloud.htl-leonding.ac.at"); 
-
-        var graphs = new[]
-        {
-            new Graph
-            {
-                Id = 1, Title = "Obd Speed",
-                IFrameLink =
-                    "http://localhost:3000/d-solo/ee2r6d08shr7ka/eco-points?orgId=1&from=now&to=now-30d&var-ids=$ids&panelId=1&theme=light&css=.panel-container,.graph-panel{background-color:white !important;}.flot-background{fill:white !important;}"
-            },
-            new Graph
-            {
-                Id = 2, Title = "Gps Speed",
-                IFrameLink =
-                    "http://localhost:3000/d-solo/ee2r6d08shr7ka/eco-points?orgId=1&from=now&to=now-30d&var-ids=$ids&panelId=4&theme=light&css=.panel-container,.graph-panel{background-color:white !important;}.flot-background{fill:white !important;}"
-            },
-            new Graph
-            {
-                Id = 3, Title = "Engine Rpm",
-                IFrameLink =
-                    "http://localhost:3000/d-solo/ee2r6d08shr7ka/eco-points?orgId=1&from=now&to=now-30d&var-ids=$ids&panelId=5&theme=light&css=.panel-container,.graph-panel{background-color:white !important;}.flot-background{fill:white !important;}"
-            },
-            new Graph
-            {
-                Id = 4, Title = "Engine Load",
-                IFrameLink =
-                    "http://localhost:3000/d-solo/ee2r6d08shr7ka/eco-points?orgId=1&from=now&to=now-30d&var-ids=$ids&panelId=7&theme=light&css=.panel-container,.graph-panel{background-color:white !important;}.flot-background{fill:white !important;}"
-            },
-            new Graph
-            {
-                Id = 5, Title = "Coolant Temp",
-                IFrameLink =
-                    "http://localhost:3000/d-solo/ee2r6d08shr7ka/eco-points?orgId=1&from=now&to=now-30d&var-ids=$ids&panelId=6&theme=light&css=.panel-container,.graph-panel{background-color:white !important;}.flot-background{fill:white !important;}"
-            },
-            new Graph
-            {
-                Id = 6, Title = "longitude",
-                IFrameLink =
-                    "http://localhost:3000/d-solo/ee2r6d08shr7ka/eco-points?orgId=1&from=now&to=now-30d&var-ids=$ids&panelId=2&theme=light&css=.panel-container,.graph-panel{background-color:white !important;}.flot-background{fill:white !important;}"
-            },
-            new Graph
-            {
-                Id = 7, Title = "latitude",
-                IFrameLink =
-                    "http://localhost:3000/d-solo/ee2r6d08shr7ka/eco-points?orgId=1&from=now&to=now-30d&var-ids=$ids&panelId=3&theme=light&css=.panel-container,.graph-panel{background-color:white !important;}.flot-background{fill:white !important;}"
-            },
-            new Graph
-            {
-                Id = 8, Title = "altitude",
-                IFrameLink =
-                    "http://localhost:3000/d-solo/ee2r6d08shr7ka/eco-points?orgId=1&from=now&to=now-30d&var-ids=$ids&panelId=8&theme=light&css=.panel-container,.graph-panel{background-color:white !important;}.flot-background{fill:white !important;}"
-            }
-        };
-
-        foreach (var graph in graphs)
-        {
-            try
-            {
-                Console.WriteLine($"📡 Sending graph '{graph.Title}' to API...");
-
-                var response = await client.PostAsJsonAsync("/api/graph", graph);
-                response.EnsureSuccessStatusCode(); // Wirft Exception, falls nicht erfolgreich
-
-                Console.WriteLine($"✅ Successfully posted graph '{graph.Title}'!");
-            }
-            catch (HttpRequestException httpEx)
-            {
-                Console.WriteLine($"❌ HTTP Error: {httpEx.Message}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"❌ General Error: {ex.Message}");
-            }
-        }
-    }
-
-    private static Trip GenerateFakeTripData()
-    {
-        var trip = new Trip
-        {
-            TripId = Guid.NewGuid()
-        };
-
-        var random = new Random();
-
-        for (int i = 0; i < 10; i++)
-        {
-            var sensorData = new CarSensorData
-            {
-                Timestamp = DateTime.UtcNow.AddSeconds(-i * 10),
-                CarData = new CarData
-                {
-                    Latitude = random.NextDouble() * 180 - 90,
-                    Longitude = random.NextDouble() * 360 - 180,
-                    Altitude = random.NextDouble() * 1000,
-                    EngineLoad = random.NextDouble() * 100,
-                    CoolantTemperature = random.NextDouble() * 120,
-                    EngineRpm = random.Next(1000, 8000),
-                    GpsSpeed = random.NextDouble() * 200,
-                    ObdSpeed = random.NextDouble() * 200
-                }
-            };
-
-            trip.Data.Add(sensorData);
-        }
-
-        return trip;
+        
     }
 }

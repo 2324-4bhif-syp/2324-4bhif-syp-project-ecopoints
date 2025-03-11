@@ -21,12 +21,13 @@ public class ObdSpeed : IBasePluginLayout
         var tripId = parameters.Ids.FirstOrDefault();
         if (tripId == Guid.Empty)
         {
+            Console.WriteLine("⚠ Trip ID is required but was not provided!");
             return new List<Dictionary<string, object>> { new Dictionary<string, object> { { "Error", "Trip ID is required" } } };
         }
 
         var tripData = await _dbService.GetTripDataAsync(tripId);
 
-        Console.WriteLine($"Fetched {tripData.Count} entries for tripId {tripId}.");
+        Console.WriteLine($"📊 ObdSpeedPlugin received {tripData.Count} entries for tripId {tripId}.");
         
         var filteredData = tripData
             .Where(data => (!parameters.StartDate.HasValue || data.Timestamp >= parameters.StartDate) &&
@@ -37,6 +38,8 @@ public class ObdSpeed : IBasePluginLayout
                 { "obdSpeed", data.CarData.ObdSpeed }
             });
 
+        Console.WriteLine($"✅ Returning {filteredData.Count()} ObdSpeed records for tripId {tripId}");
+        
         return filteredData;
     }
 }

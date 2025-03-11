@@ -1,0 +1,1695 @@
+{
+  "tripId": "e8dbc27b-e72a-4efa-b9cf-7c86ebe03b55",
+  "data": [
+    {
+      "timestamp": "2025-01-29T10:11:35.414000Z",
+      "carData": {
+        "latitude": 48.2678268,
+        "longitude": 14.253283,
+        "altitude": 329.70001220703125,
+        "engineLoad": 56.1,
+        "coolantTemperature": 48.0,
+        "engineRpm": 1507.0,
+        "gpsSpeed": 14.0,
+        "obdSpeed": 14.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:11:39.064000Z",
+      "carData": {
+        "latitude": 48.2677329,
+        "longitude": 14.2534731,
+        "altitude": 329.70001220703125,
+        "engineLoad": 22.4,
+        "coolantTemperature": 48.0,
+        "engineRpm": 2212.0,
+        "gpsSpeed": 29.0,
+        "obdSpeed": 21.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:11:42.732000Z",
+      "carData": {
+        "latitude": 48.2675447,
+        "longitude": 14.2538497,
+        "altitude": 329.70001220703125,
+        "engineLoad": 19.2,
+        "coolantTemperature": 49.0,
+        "engineRpm": 1896.0,
+        "gpsSpeed": 25.0,
+        "obdSpeed": 28.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:11:46.391000Z",
+      "carData": {
+        "latitude": 48.2673506,
+        "longitude": 14.2541252,
+        "altitude": 329.70001220703125,
+        "engineLoad": 60.4,
+        "coolantTemperature": 49.0,
+        "engineRpm": 1608.0,
+        "gpsSpeed": 29.0,
+        "obdSpeed": 25.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:11:50.559000Z",
+      "carData": {
+        "latitude": 48.2669166,
+        "longitude": 14.2542234,
+        "altitude": 329.70001220703125,
+        "engineLoad": 56.5,
+        "coolantTemperature": 50.0,
+        "engineRpm": 2270.0,
+        "gpsSpeed": 48.0,
+        "obdSpeed": 39.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:11:54.215000Z",
+      "carData": {
+        "latitude": 48.2665194,
+        "longitude": 14.254312,
+        "altitude": 329.70001220703125,
+        "engineLoad": 0.0,
+        "coolantTemperature": 51.0,
+        "engineRpm": 2140.0,
+        "gpsSpeed": 50.0,
+        "obdSpeed": 51.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:11:57.883000Z",
+      "carData": {
+        "latitude": 48.266081,
+        "longitude": 14.2544184,
+        "altitude": 329.70001220703125,
+        "engineLoad": 33.3,
+        "coolantTemperature": 52.0,
+        "engineRpm": 1848.0,
+        "gpsSpeed": 39.0,
+        "obdSpeed": 43.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:12:01.512000Z",
+      "carData": {
+        "latitude": 48.2658695,
+        "longitude": 14.2544522,
+        "altitude": 328.4085339235212,
+        "engineLoad": 36.5,
+        "coolantTemperature": 52.0,
+        "engineRpm": 872.0,
+        "gpsSpeed": 4.0,
+        "obdSpeed": 22.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:12:05.150000Z",
+      "carData": {
+        "latitude": 48.2657825,
+        "longitude": 14.2545164,
+        "altitude": 329.1000061035156,
+        "engineLoad": 0.0,
+        "coolantTemperature": 53.0,
+        "engineRpm": 1207.0,
+        "gpsSpeed": 21.0,
+        "obdSpeed": 8.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:12:08.778000Z",
+      "carData": {
+        "latitude": 48.2656769,
+        "longitude": 14.2548033,
+        "altitude": 329.1000061035156,
+        "engineLoad": 62.0,
+        "coolantTemperature": 53.0,
+        "engineRpm": 1737.0,
+        "gpsSpeed": 35.0,
+        "obdSpeed": 24.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:12:12.413000Z",
+      "carData": {
+        "latitude": 48.2655207,
+        "longitude": 14.2554347,
+        "altitude": 329.1000061035156,
+        "engineLoad": 44.3,
+        "coolantTemperature": 54.0,
+        "engineRpm": 2353.0,
+        "gpsSpeed": 46.0,
+        "obdSpeed": 40.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:12:16.057000Z",
+      "carData": {
+        "latitude": 48.2654295,
+        "longitude": 14.2559632,
+        "altitude": 330.93277551745985,
+        "engineLoad": 7.1,
+        "coolantTemperature": 55.0,
+        "engineRpm": 1911.0,
+        "gpsSpeed": 45.0,
+        "obdSpeed": 46.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:12:19.684000Z",
+      "carData": {
+        "latitude": 48.2653153,
+        "longitude": 14.2565698,
+        "altitude": 331.06169935551145,
+        "engineLoad": 29.4,
+        "coolantTemperature": 55.0,
+        "engineRpm": 1723.0,
+        "gpsSpeed": 39.0,
+        "obdSpeed": 40.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:12:23.322000Z",
+      "carData": {
+        "latitude": 48.2652515,
+        "longitude": 14.2570788,
+        "altitude": 330.852232804922,
+        "engineLoad": 49.4,
+        "coolantTemperature": 56.0,
+        "engineRpm": 1507.0,
+        "gpsSpeed": 27.0,
+        "obdSpeed": 34.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:12:26.959000Z",
+      "carData": {
+        "latitude": 48.2652242,
+        "longitude": 14.257328,
+        "altitude": 329.70001220703125,
+        "engineLoad": 56.9,
+        "coolantTemperature": 56.0,
+        "engineRpm": 1216.0,
+        "gpsSpeed": 21.0,
+        "obdSpeed": 22.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:12:30.591000Z",
+      "carData": {
+        "latitude": 48.2649824,
+        "longitude": 14.2574743,
+        "altitude": 329.70001220703125,
+        "engineLoad": 0.0,
+        "coolantTemperature": 57.0,
+        "engineRpm": 1634.0,
+        "gpsSpeed": 26.0,
+        "obdSpeed": 26.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:12:34.232000Z",
+      "carData": {
+        "latitude": 48.2648182,
+        "longitude": 14.257552,
+        "altitude": 329.1000061035156,
+        "engineLoad": 3.1,
+        "coolantTemperature": 57.0,
+        "engineRpm": 1482.0,
+        "gpsSpeed": 19.0,
+        "obdSpeed": 22.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:12:37.871000Z",
+      "carData": {
+        "latitude": 48.2646571,
+        "longitude": 14.2576029,
+        "altitude": 331.1000061035156,
+        "engineLoad": 34.5,
+        "coolantTemperature": 57.0,
+        "engineRpm": 1015.0,
+        "gpsSpeed": 11.0,
+        "obdSpeed": 16.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:12:41.513000Z",
+      "carData": {
+        "latitude": 48.2645655,
+        "longitude": 14.2576225,
+        "altitude": 331.1000061035156,
+        "engineLoad": 63.5,
+        "coolantTemperature": 57.0,
+        "engineRpm": 843.0,
+        "gpsSpeed": 15.0,
+        "obdSpeed": 6.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:12:45.139000Z",
+      "carData": {
+        "latitude": 48.2643656,
+        "longitude": 14.2575781,
+        "altitude": 329.1000061035156,
+        "engineLoad": 52.5,
+        "coolantTemperature": 57.0,
+        "engineRpm": 1859.0,
+        "gpsSpeed": 26.0,
+        "obdSpeed": 16.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:12:48.762000Z",
+      "carData": {
+        "latitude": 48.2642241,
+        "longitude": 14.2577404,
+        "altitude": 329.1000061035156,
+        "engineLoad": 38.4,
+        "coolantTemperature": 58.0,
+        "engineRpm": 1329.0,
+        "gpsSpeed": 23.0,
+        "obdSpeed": 21.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:12:52.395000Z",
+      "carData": {
+        "latitude": 48.2640756,
+        "longitude": 14.2578569,
+        "altitude": 329.1000061035156,
+        "engineLoad": 34.9,
+        "coolantTemperature": 58.0,
+        "engineRpm": 1263.0,
+        "gpsSpeed": 13.0,
+        "obdSpeed": 18.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:12:56.010000Z",
+      "carData": {
+        "latitude": 48.2640166,
+        "longitude": 14.2578847,
+        "altitude": 331.4000244140625,
+        "engineLoad": 36.1,
+        "coolantTemperature": 58.0,
+        "engineRpm": 845.0,
+        "gpsSpeed": 8.0,
+        "obdSpeed": 9.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:12:59.654000Z",
+      "carData": {
+        "latitude": 48.2639886,
+        "longitude": 14.2579005,
+        "altitude": 331.5,
+        "engineLoad": 38.8,
+        "coolantTemperature": 58.0,
+        "engineRpm": 840.0,
+        "gpsSpeed": 1.0,
+        "obdSpeed": 4.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:13:03.275000Z",
+      "carData": {
+        "latitude": 48.2639889,
+        "longitude": 14.2579004,
+        "altitude": 331.5,
+        "engineLoad": 38.0,
+        "coolantTemperature": 59.0,
+        "engineRpm": 802.0,
+        "gpsSpeed": 0.0,
+        "obdSpeed": 0.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:13:06.903000Z",
+      "carData": {
+        "latitude": 48.263989,
+        "longitude": 14.2579004,
+        "altitude": 331.4000244140625,
+        "engineLoad": 100.0,
+        "coolantTemperature": 59.0,
+        "engineRpm": 803.0,
+        "gpsSpeed": 0.0,
+        "obdSpeed": 0.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:13:10.533000Z",
+      "carData": {
+        "latitude": 48.2638619,
+        "longitude": 14.2579574,
+        "altitude": 331.5,
+        "engineLoad": 23.5,
+        "coolantTemperature": 59.0,
+        "engineRpm": 1924.0,
+        "gpsSpeed": 23.0,
+        "obdSpeed": 8.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:13:14.158000Z",
+      "carData": {
+        "latitude": 48.2635357,
+        "longitude": 14.2581093,
+        "altitude": 331.5,
+        "engineLoad": 25.1,
+        "coolantTemperature": 59.0,
+        "engineRpm": 1621.0,
+        "gpsSpeed": 38.0,
+        "obdSpeed": 29.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:13:17.793000Z",
+      "carData": {
+        "latitude": 48.263266,
+        "longitude": 14.2582213,
+        "altitude": 331.5,
+        "engineLoad": 0.0,
+        "coolantTemperature": 59.0,
+        "engineRpm": 1605.0,
+        "gpsSpeed": 33.0,
+        "obdSpeed": 38.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:13:21.432000Z",
+      "carData": {
+        "latitude": 48.2629727,
+        "longitude": 14.2582846,
+        "altitude": 331.5,
+        "engineLoad": 2.7,
+        "coolantTemperature": 60.0,
+        "engineRpm": 1346.0,
+        "gpsSpeed": 25.0,
+        "obdSpeed": 31.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:13:25.074000Z",
+      "carData": {
+        "latitude": 48.2628004,
+        "longitude": 14.2582168,
+        "altitude": 331.5,
+        "engineLoad": 36.9,
+        "coolantTemperature": 60.0,
+        "engineRpm": 849.0,
+        "gpsSpeed": 20.0,
+        "obdSpeed": 25.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:13:28.706000Z",
+      "carData": {
+        "latitude": 48.2627443,
+        "longitude": 14.2582001,
+        "altitude": 331.5,
+        "engineLoad": 38.4,
+        "coolantTemperature": 60.0,
+        "engineRpm": 835.0,
+        "gpsSpeed": 0.0,
+        "obdSpeed": 6.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:13:32.330000Z",
+      "carData": {
+        "latitude": 48.2627451,
+        "longitude": 14.2582,
+        "altitude": 331.3000183105469,
+        "engineLoad": 33.3,
+        "coolantTemperature": 61.0,
+        "engineRpm": 798.0,
+        "gpsSpeed": 0.0,
+        "obdSpeed": 0.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:13:35.953000Z",
+      "carData": {
+        "latitude": 48.2627452,
+        "longitude": 14.2582,
+        "altitude": 331.3000183105469,
+        "engineLoad": 38.4,
+        "coolantTemperature": 61.0,
+        "engineRpm": 801.0,
+        "gpsSpeed": 0.0,
+        "obdSpeed": 0.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:13:39.580000Z",
+      "carData": {
+        "latitude": 48.2627452,
+        "longitude": 14.2582,
+        "altitude": 331.5,
+        "engineLoad": 38.4,
+        "coolantTemperature": 61.0,
+        "engineRpm": 803.0,
+        "gpsSpeed": 0.0,
+        "obdSpeed": 0.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:13:43.209000Z",
+      "carData": {
+        "latitude": 48.2627022,
+        "longitude": 14.2582097,
+        "altitude": 331.4000244140625,
+        "engineLoad": 38.4,
+        "coolantTemperature": 61.0,
+        "engineRpm": 802.0,
+        "gpsSpeed": 7.0,
+        "obdSpeed": 0.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:13:46.828000Z",
+      "carData": {
+        "latitude": 48.2625394,
+        "longitude": 14.2582746,
+        "altitude": 331.8000183105469,
+        "engineLoad": 23.5,
+        "coolantTemperature": 61.0,
+        "engineRpm": 1565.0,
+        "gpsSpeed": 21.0,
+        "obdSpeed": 17.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:13:50.467000Z",
+      "carData": {
+        "latitude": 48.2624101,
+        "longitude": 14.258367,
+        "altitude": 331.8000183105469,
+        "engineLoad": 6.3,
+        "coolantTemperature": 61.0,
+        "engineRpm": 1280.0,
+        "gpsSpeed": 12.0,
+        "obdSpeed": 19.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:13:54.099000Z",
+      "carData": {
+        "latitude": 48.2623734,
+        "longitude": 14.258346,
+        "altitude": 331.6000061035156,
+        "engineLoad": 38.4,
+        "coolantTemperature": 61.0,
+        "engineRpm": 819.0,
+        "gpsSpeed": 0.0,
+        "obdSpeed": 5.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:13:57.717000Z",
+      "carData": {
+        "latitude": 48.2623759,
+        "longitude": 14.2583244,
+        "altitude": 331.6000061035156,
+        "engineLoad": 70.2,
+        "coolantTemperature": 61.0,
+        "engineRpm": 799.0,
+        "gpsSpeed": 4.0,
+        "obdSpeed": 0.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:14:01.332000Z",
+      "carData": {
+        "latitude": 48.2622294,
+        "longitude": 14.2581676,
+        "altitude": 331.5,
+        "engineLoad": 88.6,
+        "coolantTemperature": 62.0,
+        "engineRpm": 1537.0,
+        "gpsSpeed": 23.0,
+        "obdSpeed": 14.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:14:04.949000Z",
+      "carData": {
+        "latitude": 48.2620046,
+        "longitude": 14.2579386,
+        "altitude": 331.5,
+        "engineLoad": 98.4,
+        "coolantTemperature": 62.0,
+        "engineRpm": 1771.0,
+        "gpsSpeed": 41.0,
+        "obdSpeed": 32.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:14:08.586000Z",
+      "carData": {
+        "latitude": 48.2616211,
+        "longitude": 14.257532,
+        "altitude": 331.5,
+        "engineLoad": 40.0,
+        "coolantTemperature": 62.0,
+        "engineRpm": 1803.0,
+        "gpsSpeed": 52.0,
+        "obdSpeed": 47.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:14:12.219000Z",
+      "carData": {
+        "latitude": 48.261215,
+        "longitude": 14.2570727,
+        "altitude": 331.5,
+        "engineLoad": 0.0,
+        "coolantTemperature": 62.0,
+        "engineRpm": 1529.0,
+        "gpsSpeed": 47.0,
+        "obdSpeed": 52.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:14:15.842000Z",
+      "carData": {
+        "latitude": 48.2609505,
+        "longitude": 14.2567573,
+        "altitude": 331.5,
+        "engineLoad": 0.0,
+        "coolantTemperature": 63.0,
+        "engineRpm": 1400.0,
+        "gpsSpeed": 41.0,
+        "obdSpeed": 47.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:14:19.473000Z",
+      "carData": {
+        "latitude": 48.2606352,
+        "longitude": 14.2563809,
+        "altitude": 331.5,
+        "engineLoad": 0.4,
+        "coolantTemperature": 63.0,
+        "engineRpm": 1233.0,
+        "gpsSpeed": 33.0,
+        "obdSpeed": 41.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:14:23.098000Z",
+      "carData": {
+        "latitude": 48.2604333,
+        "longitude": 14.2561354,
+        "altitude": 331.5,
+        "engineLoad": 0.0,
+        "coolantTemperature": 63.0,
+        "engineRpm": 1508.0,
+        "gpsSpeed": 28.0,
+        "obdSpeed": 35.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:14:26.719000Z",
+      "carData": {
+        "latitude": 48.2602018,
+        "longitude": 14.2558483,
+        "altitude": 331.5,
+        "engineLoad": 38.0,
+        "coolantTemperature": 63.0,
+        "engineRpm": 1230.0,
+        "gpsSpeed": 23.0,
+        "obdSpeed": 28.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:14:30.332000Z",
+      "carData": {
+        "latitude": 48.2600967,
+        "longitude": 14.2557161,
+        "altitude": 331.20001220703125,
+        "engineLoad": 37.6,
+        "coolantTemperature": 63.0,
+        "engineRpm": 873.0,
+        "gpsSpeed": 8.0,
+        "obdSpeed": 14.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:14:33.972000Z",
+      "carData": {
+        "latitude": 48.2600815,
+        "longitude": 14.2556992,
+        "altitude": 331.20001220703125,
+        "engineLoad": 38.8,
+        "coolantTemperature": 62.0,
+        "engineRpm": 843.0,
+        "gpsSpeed": 0.0,
+        "obdSpeed": 3.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:14:37.588000Z",
+      "carData": {
+        "latitude": 48.2600822,
+        "longitude": 14.2557,
+        "altitude": 331.6000061035156,
+        "engineLoad": 38.4,
+        "coolantTemperature": 62.0,
+        "engineRpm": 803.0,
+        "gpsSpeed": 0.0,
+        "obdSpeed": 0.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:14:41.201000Z",
+      "carData": {
+        "latitude": 48.2600404,
+        "longitude": 14.2556573,
+        "altitude": 330.6000061035156,
+        "engineLoad": 67.1,
+        "coolantTemperature": 62.0,
+        "engineRpm": 802.0,
+        "gpsSpeed": 10.0,
+        "obdSpeed": 0.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:14:45.321000Z",
+      "carData": {
+        "latitude": 48.2598492,
+        "longitude": 14.2554298,
+        "altitude": 330.6000061035156,
+        "engineLoad": 63.5,
+        "coolantTemperature": 62.0,
+        "engineRpm": 1948.0,
+        "gpsSpeed": 34.0,
+        "obdSpeed": 20.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:14:48.957000Z",
+      "carData": {
+        "latitude": 48.2595982,
+        "longitude": 14.2551491,
+        "altitude": 330.6000061035156,
+        "engineLoad": 61.6,
+        "coolantTemperature": 62.0,
+        "engineRpm": 2263.0,
+        "gpsSpeed": 47.0,
+        "obdSpeed": 37.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:14:52.578000Z",
+      "carData": {
+        "latitude": 48.2591761,
+        "longitude": 14.2546447,
+        "altitude": 330.6000061035156,
+        "engineLoad": 52.5,
+        "coolantTemperature": 62.0,
+        "engineRpm": 2089.0,
+        "gpsSpeed": 56.0,
+        "obdSpeed": 53.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:14:56.200000Z",
+      "carData": {
+        "latitude": 48.2587374,
+        "longitude": 14.2541216,
+        "altitude": 330.6000061035156,
+        "engineLoad": 51.4,
+        "coolantTemperature": 63.0,
+        "engineRpm": 1606.0,
+        "gpsSpeed": 56.0,
+        "obdSpeed": 56.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:14:59.828000Z",
+      "carData": {
+        "latitude": 48.2584209,
+        "longitude": 14.253741,
+        "altitude": 330.6000061035156,
+        "engineLoad": 0.0,
+        "coolantTemperature": 63.0,
+        "engineRpm": 1563.0,
+        "gpsSpeed": 52.0,
+        "obdSpeed": 53.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:15:03.443000Z",
+      "carData": {
+        "latitude": 48.2580794,
+        "longitude": 14.2532873,
+        "altitude": 330.6000061035156,
+        "engineLoad": 0.0,
+        "coolantTemperature": 63.0,
+        "engineRpm": 1401.0,
+        "gpsSpeed": 42.0,
+        "obdSpeed": 47.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:15:07.061000Z",
+      "carData": {
+        "latitude": 48.2578563,
+        "longitude": 14.2529642,
+        "altitude": 330.6000061035156,
+        "engineLoad": 64.7,
+        "coolantTemperature": 63.0,
+        "engineRpm": 1670.0,
+        "gpsSpeed": 41.0,
+        "obdSpeed": 39.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:15:10.691000Z",
+      "carData": {
+        "latitude": 48.2575425,
+        "longitude": 14.2524896,
+        "altitude": 330.6000061035156,
+        "engineLoad": 53.7,
+        "coolantTemperature": 63.0,
+        "engineRpm": 1766.0,
+        "gpsSpeed": 44.0,
+        "obdSpeed": 43.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:15:14.305000Z",
+      "carData": {
+        "latitude": 48.2572081,
+        "longitude": 14.2519837,
+        "altitude": 330.6000061035156,
+        "engineLoad": 64.7,
+        "coolantTemperature": 63.0,
+        "engineRpm": 1863.0,
+        "gpsSpeed": 49.0,
+        "obdSpeed": 45.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:15:17.926000Z",
+      "carData": {
+        "latitude": 48.2569277,
+        "longitude": 14.2515503,
+        "altitude": 330.6000061035156,
+        "engineLoad": 53.7,
+        "coolantTemperature": 63.0,
+        "engineRpm": 2045.0,
+        "gpsSpeed": 57.0,
+        "obdSpeed": 50.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:15:21.551000Z",
+      "carData": {
+        "latitude": 48.2565058,
+        "longitude": 14.2509899,
+        "altitude": 330.6000061035156,
+        "engineLoad": 34.1,
+        "coolantTemperature": 63.0,
+        "engineRpm": 1563.0,
+        "gpsSpeed": 58.0,
+        "obdSpeed": 53.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:15:25.170000Z",
+      "carData": {
+        "latitude": 48.256105,
+        "longitude": 14.2504559,
+        "altitude": 330.6000061035156,
+        "engineLoad": 64.3,
+        "coolantTemperature": 64.0,
+        "engineRpm": 1586.0,
+        "gpsSpeed": 55.0,
+        "obdSpeed": 54.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:15:28.802000Z",
+      "carData": {
+        "latitude": 48.2557905,
+        "longitude": 14.2500404,
+        "altitude": 330.6000061035156,
+        "engineLoad": 63.1,
+        "coolantTemperature": 64.0,
+        "engineRpm": 1584.0,
+        "gpsSpeed": 57.0,
+        "obdSpeed": 54.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:15:32.419000Z",
+      "carData": {
+        "latitude": 48.2553448,
+        "longitude": 14.2494862,
+        "altitude": 330.6000061035156,
+        "engineLoad": 0.0,
+        "coolantTemperature": 64.0,
+        "engineRpm": 1679.0,
+        "gpsSpeed": 58.0,
+        "obdSpeed": 58.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:15:36.052000Z",
+      "carData": {
+        "latitude": 48.2550066,
+        "longitude": 14.2490711,
+        "altitude": 330.6000061035156,
+        "engineLoad": 51.0,
+        "coolantTemperature": 64.0,
+        "engineRpm": 1691.0,
+        "gpsSpeed": 54.0,
+        "obdSpeed": 57.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:15:39.666000Z",
+      "carData": {
+        "latitude": 48.2545843,
+        "longitude": 14.2485477,
+        "altitude": 330.6000061035156,
+        "engineLoad": 63.5,
+        "coolantTemperature": 64.0,
+        "engineRpm": 1561.0,
+        "gpsSpeed": 53.0,
+        "obdSpeed": 53.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:15:43.279000Z",
+      "carData": {
+        "latitude": 48.2541658,
+        "longitude": 14.2480372,
+        "altitude": 330.6000061035156,
+        "engineLoad": 65.5,
+        "coolantTemperature": 65.0,
+        "engineRpm": 1528.0,
+        "gpsSpeed": 53.0,
+        "obdSpeed": 52.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:15:46.898000Z",
+      "carData": {
+        "latitude": 48.2538382,
+        "longitude": 14.2476754,
+        "altitude": 331.5,
+        "engineLoad": 64.7,
+        "coolantTemperature": 65.0,
+        "engineRpm": 1539.0,
+        "gpsSpeed": 54.0,
+        "obdSpeed": 53.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:15:50.525000Z",
+      "carData": {
+        "latitude": 48.2533732,
+        "longitude": 14.2472283,
+        "altitude": 333.6248673818103,
+        "engineLoad": 66.7,
+        "coolantTemperature": 65.0,
+        "engineRpm": 1552.0,
+        "gpsSpeed": 55.0,
+        "obdSpeed": 53.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:15:54.131000Z",
+      "carData": {
+        "latitude": 48.2529063,
+        "longitude": 14.246758,
+        "altitude": 334.5625898631383,
+        "engineLoad": 50.2,
+        "coolantTemperature": 65.0,
+        "engineRpm": 1582.0,
+        "gpsSpeed": 56.0,
+        "obdSpeed": 54.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:15:57.757000Z",
+      "carData": {
+        "latitude": 48.2525868,
+        "longitude": 14.246344,
+        "altitude": 333.9460710905695,
+        "engineLoad": 64.3,
+        "coolantTemperature": 65.0,
+        "engineRpm": 1607.0,
+        "gpsSpeed": 56.0,
+        "obdSpeed": 55.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:16:01.381000Z",
+      "carData": {
+        "latitude": 48.2521546,
+        "longitude": 14.245717,
+        "altitude": 331.6000061035156,
+        "engineLoad": 47.1,
+        "coolantTemperature": 65.0,
+        "engineRpm": 1682.0,
+        "gpsSpeed": 61.0,
+        "obdSpeed": 58.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:16:04.995000Z",
+      "carData": {
+        "latitude": 48.2518748,
+        "longitude": 14.2451379,
+        "altitude": 330.6000061035156,
+        "engineLoad": 53.3,
+        "coolantTemperature": 65.0,
+        "engineRpm": 1785.0,
+        "gpsSpeed": 65.0,
+        "obdSpeed": 62.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:16:08.611000Z",
+      "carData": {
+        "latitude": 48.2516462,
+        "longitude": 14.2441418,
+        "altitude": 327.7357110545712,
+        "engineLoad": 62.0,
+        "coolantTemperature": 65.0,
+        "engineRpm": 1922.0,
+        "gpsSpeed": 75.0,
+        "obdSpeed": 67.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:16:12.229000Z",
+      "carData": {
+        "latitude": 48.2514166,
+        "longitude": 14.2430726,
+        "altitude": 328.57958335265187,
+        "engineLoad": 60.0,
+        "coolantTemperature": 65.0,
+        "engineRpm": 1548.0,
+        "gpsSpeed": 75.0,
+        "obdSpeed": 72.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:16:15.842000Z",
+      "carData": {
+        "latitude": 48.2510682,
+        "longitude": 14.2424753,
+        "altitude": 330.6000061035156,
+        "engineLoad": 63.1,
+        "coolantTemperature": 65.0,
+        "engineRpm": 1583.0,
+        "gpsSpeed": 69.0,
+        "obdSpeed": 69.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:16:19.457000Z",
+      "carData": {
+        "latitude": 48.2506026,
+        "longitude": 14.2417437,
+        "altitude": 330.6000061035156,
+        "engineLoad": 30.2,
+        "coolantTemperature": 66.0,
+        "engineRpm": 1520.0,
+        "gpsSpeed": 65.0,
+        "obdSpeed": 66.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:16:23.140000Z",
+      "carData": {
+        "latitude": 48.2504429,
+        "longitude": 14.2413457,
+        "altitude": 330.6000061035156,
+        "engineLoad": 60.4,
+        "coolantTemperature": 66.0,
+        "engineRpm": 1423.0,
+        "gpsSpeed": 61.0,
+        "obdSpeed": 62.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:16:26.942000Z",
+      "carData": {
+        "latitude": 48.2504429,
+        "longitude": 14.2413457,
+        "altitude": 330.6000061035156,
+        "engineLoad": 67.1,
+        "coolantTemperature": 66.0,
+        "engineRpm": 1415.0,
+        "gpsSpeed": 61.0,
+        "obdSpeed": 63.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:16:30.742000Z",
+      "carData": {
+        "latitude": 48.2504429,
+        "longitude": 14.2413457,
+        "altitude": 330.6000061035156,
+        "engineLoad": 81.2,
+        "coolantTemperature": 66.0,
+        "engineRpm": 1441.0,
+        "gpsSpeed": 61.0,
+        "obdSpeed": 64.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:16:34.549000Z",
+      "carData": {
+        "latitude": 48.2504429,
+        "longitude": 14.2413457,
+        "altitude": 330.6000061035156,
+        "engineLoad": 72.5,
+        "coolantTemperature": 66.0,
+        "engineRpm": 1538.0,
+        "gpsSpeed": 61.0,
+        "obdSpeed": 68.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:16:38.379000Z",
+      "carData": {
+        "latitude": 48.2504429,
+        "longitude": 14.2413457,
+        "altitude": 330.6000061035156,
+        "engineLoad": 65.1,
+        "coolantTemperature": 66.0,
+        "engineRpm": 1607.0,
+        "gpsSpeed": 61.0,
+        "obdSpeed": 72.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:16:42.162000Z",
+      "carData": {
+        "latitude": 48.2504429,
+        "longitude": 14.2413457,
+        "altitude": 330.6000061035156,
+        "engineLoad": 51.4,
+        "coolantTemperature": 66.0,
+        "engineRpm": 1714.0,
+        "gpsSpeed": 61.0,
+        "obdSpeed": 77.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:16:45.964000Z",
+      "carData": {
+        "latitude": 48.2504429,
+        "longitude": 14.2413457,
+        "altitude": 330.6000061035156,
+        "engineLoad": 67.1,
+        "coolantTemperature": 67.0,
+        "engineRpm": 1778.0,
+        "gpsSpeed": 61.0,
+        "obdSpeed": 78.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:16:49.786000Z",
+      "carData": {
+        "latitude": 48.2504429,
+        "longitude": 14.2413457,
+        "altitude": 330.6000061035156,
+        "engineLoad": 63.5,
+        "coolantTemperature": 67.0,
+        "engineRpm": 1769.0,
+        "gpsSpeed": 61.0,
+        "obdSpeed": 78.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:16:53.580000Z",
+      "carData": {
+        "latitude": 48.2504429,
+        "longitude": 14.2413457,
+        "altitude": 330.6000061035156,
+        "engineLoad": 64.3,
+        "coolantTemperature": 67.0,
+        "engineRpm": 1783.0,
+        "gpsSpeed": 61.0,
+        "obdSpeed": 79.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:16:57.368000Z",
+      "carData": {
+        "latitude": 48.2504429,
+        "longitude": 14.2413457,
+        "altitude": 330.6000061035156,
+        "engineLoad": 0.0,
+        "coolantTemperature": 67.0,
+        "engineRpm": 1767.0,
+        "gpsSpeed": 61.0,
+        "obdSpeed": 78.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:17:01.159000Z",
+      "carData": {
+        "latitude": 48.2504429,
+        "longitude": 14.2413457,
+        "altitude": 330.6000061035156,
+        "engineLoad": 0.0,
+        "coolantTemperature": 67.0,
+        "engineRpm": 1681.0,
+        "gpsSpeed": 61.0,
+        "obdSpeed": 73.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:17:04.944000Z",
+      "carData": {
+        "latitude": 48.2504429,
+        "longitude": 14.2413457,
+        "altitude": 330.6000061035156,
+        "engineLoad": 29.0,
+        "coolantTemperature": 67.0,
+        "engineRpm": 1592.0,
+        "gpsSpeed": 61.0,
+        "obdSpeed": 70.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:17:08.721000Z",
+      "carData": {
+        "latitude": 48.2504429,
+        "longitude": 14.2413457,
+        "altitude": 330.6000061035156,
+        "engineLoad": 67.1,
+        "coolantTemperature": 67.0,
+        "engineRpm": 1847.0,
+        "gpsSpeed": 61.0,
+        "obdSpeed": 61.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:17:12.514000Z",
+      "carData": {
+        "latitude": 48.2504429,
+        "longitude": 14.2413457,
+        "altitude": 330.6000061035156,
+        "engineLoad": 63.5,
+        "coolantTemperature": 67.0,
+        "engineRpm": 1633.0,
+        "gpsSpeed": 61.0,
+        "obdSpeed": 55.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:17:16.317000Z",
+      "carData": {
+        "latitude": 48.2504429,
+        "longitude": 14.2413457,
+        "altitude": 330.6000061035156,
+        "engineLoad": 60.8,
+        "coolantTemperature": 67.0,
+        "engineRpm": 1531.0,
+        "gpsSpeed": 61.0,
+        "obdSpeed": 53.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:17:20.128000Z",
+      "carData": {
+        "latitude": 48.2504429,
+        "longitude": 14.2413457,
+        "altitude": 330.6000061035156,
+        "engineLoad": 28.2,
+        "coolantTemperature": 67.0,
+        "engineRpm": 1710.0,
+        "gpsSpeed": 61.0,
+        "obdSpeed": 60.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:17:23.942000Z",
+      "carData": {
+        "latitude": 48.2504429,
+        "longitude": 14.2413457,
+        "altitude": 330.6000061035156,
+        "engineLoad": 51.8,
+        "coolantTemperature": 67.0,
+        "engineRpm": 1782.0,
+        "gpsSpeed": 61.0,
+        "obdSpeed": 61.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:17:27.798000Z",
+      "carData": {
+        "latitude": 48.2504429,
+        "longitude": 14.2413457,
+        "altitude": 330.6000061035156,
+        "engineLoad": 19.6,
+        "coolantTemperature": 67.0,
+        "engineRpm": 1782.0,
+        "gpsSpeed": 61.0,
+        "obdSpeed": 61.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:17:31.604000Z",
+      "carData": {
+        "latitude": 48.2504429,
+        "longitude": 14.2413457,
+        "altitude": 330.6000061035156,
+        "engineLoad": 0.0,
+        "coolantTemperature": 67.0,
+        "engineRpm": 1779.0,
+        "gpsSpeed": 61.0,
+        "obdSpeed": 61.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:17:35.388000Z",
+      "carData": {
+        "latitude": 48.2504429,
+        "longitude": 14.2413457,
+        "altitude": 330.6000061035156,
+        "engineLoad": 0.0,
+        "coolantTemperature": 67.0,
+        "engineRpm": 1798.0,
+        "gpsSpeed": 61.0,
+        "obdSpeed": 61.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:17:39.182000Z",
+      "carData": {
+        "latitude": 48.2504429,
+        "longitude": 14.2413457,
+        "altitude": 330.6000061035156,
+        "engineLoad": 62.7,
+        "coolantTemperature": 66.0,
+        "engineRpm": 1543.0,
+        "gpsSpeed": 61.0,
+        "obdSpeed": 52.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:17:42.994000Z",
+      "carData": {
+        "latitude": 48.2504429,
+        "longitude": 14.2413457,
+        "altitude": 330.6000061035156,
+        "engineLoad": 46.7,
+        "coolantTemperature": 66.0,
+        "engineRpm": 1599.0,
+        "gpsSpeed": 61.0,
+        "obdSpeed": 56.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:17:46.799000Z",
+      "carData": {
+        "latitude": 48.2504429,
+        "longitude": 14.2413457,
+        "altitude": 330.6000061035156,
+        "engineLoad": 64.7,
+        "coolantTemperature": 66.0,
+        "engineRpm": 1563.0,
+        "gpsSpeed": 61.0,
+        "obdSpeed": 52.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:17:50.600000Z",
+      "carData": {
+        "latitude": 48.2504429,
+        "longitude": 14.2413457,
+        "altitude": 330.6000061035156,
+        "engineLoad": 30.6,
+        "coolantTemperature": 66.0,
+        "engineRpm": 1507.0,
+        "gpsSpeed": 61.0,
+        "obdSpeed": 51.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:17:54.400000Z",
+      "carData": {
+        "latitude": 48.2504429,
+        "longitude": 14.2413457,
+        "altitude": 330.6000061035156,
+        "engineLoad": 0.0,
+        "coolantTemperature": 66.0,
+        "engineRpm": 1252.0,
+        "gpsSpeed": 61.0,
+        "obdSpeed": 47.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:17:58.189000Z",
+      "carData": {
+        "latitude": 48.2504429,
+        "longitude": 14.2413457,
+        "altitude": 330.6000061035156,
+        "engineLoad": 0.0,
+        "coolantTemperature": 66.0,
+        "engineRpm": 1947.0,
+        "gpsSpeed": 61.0,
+        "obdSpeed": 47.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:18:01.993000Z",
+      "carData": {
+        "latitude": 48.2504429,
+        "longitude": 14.2413457,
+        "altitude": 330.6000061035156,
+        "engineLoad": 38.0,
+        "coolantTemperature": 66.0,
+        "engineRpm": 953.0,
+        "gpsSpeed": 61.0,
+        "obdSpeed": 33.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:18:05.801000Z",
+      "carData": {
+        "latitude": 48.2504429,
+        "longitude": 14.2413457,
+        "altitude": 330.6000061035156,
+        "engineLoad": 44.3,
+        "coolantTemperature": 66.0,
+        "engineRpm": 892.0,
+        "gpsSpeed": 61.0,
+        "obdSpeed": 15.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:18:09.612000Z",
+      "carData": {
+        "latitude": 48.2504429,
+        "longitude": 14.2413457,
+        "altitude": 330.6000061035156,
+        "engineLoad": 11.8,
+        "coolantTemperature": 66.0,
+        "engineRpm": 1924.0,
+        "gpsSpeed": 61.0,
+        "obdSpeed": 17.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:18:13.401000Z",
+      "carData": {
+        "latitude": 48.2504429,
+        "longitude": 14.2413457,
+        "altitude": 330.6000061035156,
+        "engineLoad": 0.0,
+        "coolantTemperature": 66.0,
+        "engineRpm": 1354.0,
+        "gpsSpeed": 61.0,
+        "obdSpeed": 22.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:18:17.193000Z",
+      "carData": {
+        "latitude": 48.2504429,
+        "longitude": 14.2413457,
+        "altitude": 330.6000061035156,
+        "engineLoad": 46.3,
+        "coolantTemperature": 66.0,
+        "engineRpm": 1377.0,
+        "gpsSpeed": 61.0,
+        "obdSpeed": 21.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:18:21.015000Z",
+      "carData": {
+        "latitude": 48.2504429,
+        "longitude": 14.2413457,
+        "altitude": 330.6000061035156,
+        "engineLoad": 1.6,
+        "coolantTemperature": 66.0,
+        "engineRpm": 1376.0,
+        "gpsSpeed": 61.0,
+        "obdSpeed": 21.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:18:24.824000Z",
+      "carData": {
+        "latitude": 48.2504429,
+        "longitude": 14.2413457,
+        "altitude": 330.6000061035156,
+        "engineLoad": 52.9,
+        "coolantTemperature": 66.0,
+        "engineRpm": 1052.0,
+        "gpsSpeed": 61.0,
+        "obdSpeed": 16.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:18:28.638000Z",
+      "carData": {
+        "latitude": 48.2504429,
+        "longitude": 14.2413457,
+        "altitude": 330.6000061035156,
+        "engineLoad": 52.9,
+        "coolantTemperature": 66.0,
+        "engineRpm": 1302.0,
+        "gpsSpeed": 61.0,
+        "obdSpeed": 21.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:18:32.424000Z",
+      "carData": {
+        "latitude": 48.2504429,
+        "longitude": 14.2413457,
+        "altitude": 330.6000061035156,
+        "engineLoad": 62.7,
+        "coolantTemperature": 66.0,
+        "engineRpm": 1215.0,
+        "gpsSpeed": 61.0,
+        "obdSpeed": 19.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:18:36.240000Z",
+      "carData": {
+        "latitude": 48.2504429,
+        "longitude": 14.2413457,
+        "altitude": 330.6000061035156,
+        "engineLoad": 9.8,
+        "coolantTemperature": 66.0,
+        "engineRpm": 1152.0,
+        "gpsSpeed": 61.0,
+        "obdSpeed": 18.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:18:40.054000Z",
+      "carData": {
+        "latitude": 48.2504429,
+        "longitude": 14.2413457,
+        "altitude": 330.6000061035156,
+        "engineLoad": 53.7,
+        "coolantTemperature": 67.0,
+        "engineRpm": 827.0,
+        "gpsSpeed": 61.0,
+        "obdSpeed": 11.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:18:43.848000Z",
+      "carData": {
+        "latitude": 48.2436288,
+        "longitude": 14.2336325,
+        "altitude": 319.2846142523871,
+        "engineLoad": 39.6,
+        "coolantTemperature": 67.0,
+        "engineRpm": 1293.0,
+        "gpsSpeed": 0.0,
+        "obdSpeed": 11.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:18:47.450000Z",
+      "carData": {
+        "latitude": 48.2436288,
+        "longitude": 14.2336325,
+        "altitude": 319.2846142523871,
+        "engineLoad": 39.6,
+        "coolantTemperature": 67.0,
+        "engineRpm": 1095.0,
+        "gpsSpeed": 0.0,
+        "obdSpeed": 8.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:18:51.082000Z",
+      "carData": {
+        "latitude": 48.2436288,
+        "longitude": 14.2336325,
+        "altitude": 325.5896961041386,
+        "engineLoad": 37.6,
+        "coolantTemperature": 67.0,
+        "engineRpm": 814.0,
+        "gpsSpeed": 0.0,
+        "obdSpeed": 3.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:18:54.690000Z",
+      "carData": {
+        "latitude": 48.2439568,
+        "longitude": 14.2348875,
+        "altitude": 325.5761446281553,
+        "engineLoad": 68.2,
+        "coolantTemperature": 68.0,
+        "engineRpm": 797.0,
+        "gpsSpeed": 7.0,
+        "obdSpeed": 0.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:18:58.306000Z",
+      "carData": {
+        "latitude": 48.2439568,
+        "longitude": 14.2348875,
+        "altitude": 325.5761446281553,
+        "engineLoad": 48.2,
+        "coolantTemperature": 68.0,
+        "engineRpm": 1440.0,
+        "gpsSpeed": 7.0,
+        "obdSpeed": 9.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:19:01.923000Z",
+      "carData": {
+        "latitude": 48.243978,
+        "longitude": 14.2349687,
+        "altitude": 325.58596810670366,
+        "engineLoad": 41.6,
+        "coolantTemperature": 68.0,
+        "engineRpm": 1763.0,
+        "gpsSpeed": 7.0,
+        "obdSpeed": 15.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:19:05.531000Z",
+      "carData": {
+        "latitude": 48.2439914,
+        "longitude": 14.2350199,
+        "altitude": 325.61076423560223,
+        "engineLoad": 0.0,
+        "coolantTemperature": 67.0,
+        "engineRpm": 2213.0,
+        "gpsSpeed": 4.0,
+        "obdSpeed": 19.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:19:09.146000Z",
+      "carData": {
+        "latitude": 48.2439914,
+        "longitude": 14.2350199,
+        "altitude": 325.61076423560223,
+        "engineLoad": 39.6,
+        "coolantTemperature": 67.0,
+        "engineRpm": 1119.0,
+        "gpsSpeed": 4.0,
+        "obdSpeed": 15.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:19:12.752000Z",
+      "carData": {
+        "latitude": 48.2426858,
+        "longitude": 14.2349932,
+        "altitude": 325.9000244140625,
+        "engineLoad": 43.9,
+        "coolantTemperature": 67.0,
+        "engineRpm": 1011.0,
+        "gpsSpeed": 44.0,
+        "obdSpeed": 8.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:19:16.367000Z",
+      "carData": {
+        "latitude": 48.2424275,
+        "longitude": 14.2349953,
+        "altitude": 325.9000244140625,
+        "engineLoad": 60.4,
+        "coolantTemperature": 67.0,
+        "engineRpm": 1361.0,
+        "gpsSpeed": 36.0,
+        "obdSpeed": 11.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:19:19.986000Z",
+      "carData": {
+        "latitude": 48.2422476,
+        "longitude": 14.2349955,
+        "altitude": 325.9000244140625,
+        "engineLoad": 58.8,
+        "coolantTemperature": 67.0,
+        "engineRpm": 1254.0,
+        "gpsSpeed": 23.0,
+        "obdSpeed": 11.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:19:23.599000Z",
+      "carData": {
+        "latitude": 48.2422476,
+        "longitude": 14.2349955,
+        "altitude": 325.9000244140625,
+        "engineLoad": 48.6,
+        "coolantTemperature": 67.0,
+        "engineRpm": 849.0,
+        "gpsSpeed": 23.0,
+        "obdSpeed": 4.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:19:27.218000Z",
+      "carData": {
+        "latitude": 48.2422215,
+        "longitude": 14.2349924,
+        "altitude": 325.9000244140625,
+        "engineLoad": 46.3,
+        "coolantTemperature": 67.0,
+        "engineRpm": 1160.0,
+        "gpsSpeed": 13.0,
+        "obdSpeed": 3.0
+      }
+    },
+    {
+      "timestamp": "2025-01-29T10:19:30.829000Z",
+      "carData": {
+        "latitude": 48.2422658,
+        "longitude": 14.2349887,
+        "altitude": 325.9000244140625,
+        "engineLoad": 49.8,
+        "coolantTemperature": 67.0,
+        "engineRpm": 789.0,
+        "gpsSpeed": 6.0,
+        "obdSpeed": 0.0
+      }
+    }
+  ]
+}

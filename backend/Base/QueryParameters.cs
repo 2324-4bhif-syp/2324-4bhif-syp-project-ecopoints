@@ -8,7 +8,7 @@ public class QueryParameters
 
     public DateTime? StartDate 
     { 
-        get => _startDate ?? DateTime.Now.AddMonths(-1).ToUniversalTime(); 
+        get => _startDate ?? DateTime.Now.AddMonths(-12).ToUniversalTime(); 
         set => _startDate = value?.ToUniversalTime(); 
     }
         

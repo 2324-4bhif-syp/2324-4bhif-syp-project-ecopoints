@@ -21,15 +21,21 @@ namespace DataService.Controller
         }
 
         public async Task<IResult> LogData(Trip trip)
-        {   
+        {
+            Console.WriteLine($"📥 Empfange Trip ID: {trip.TripId} mit {trip.Data.Count} Datenpunkten.");
+
             if (trip?.Data == null || trip.Data.Count == 0)
             {
+                Console.WriteLine("⚠ Ungültige Trip-Daten erhalten.");
                 return Results.BadRequest("Invalid trip data");
             }
 
             await _dbService.WriteTripDataAsync(trip);
+            Console.WriteLine($"✅ Trip gespeichert: {trip.TripId}");
+
             return Results.Ok("Data logged successfully");
         }
+
 
         public async Task<IResult> LogDataToken(Trip trip, string token)
         {

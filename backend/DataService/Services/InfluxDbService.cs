@@ -29,13 +29,10 @@ namespace DataService.Services
         public async Task WriteTripDataAsync(Trip trip)
         {
             await EnsureBucketExistsAsync();
-
             var writeApi = m_influxDbClient.GetWriteApiAsync();
 
             foreach (var dataPoint in trip.Data)
             {
-                Console.WriteLine($"Writing data point: Trip ID: {trip.TripId}, Timestamp: {dataPoint.Timestamp}, Altitude: {dataPoint.CarData.Altitude}, Longitude: {dataPoint.CarData.Longitude}, Latitude: {dataPoint.CarData.Latitude}");
-
                 var point = PointData
                     .Measurement("car_sensors_data")
                     .Tag("trip-id", trip.TripId.ToString())
@@ -49,10 +46,10 @@ namespace DataService.Services
                     .Field("ObdSpeed", dataPoint.CarData.ObdSpeed)
                     .Timestamp(dataPoint.Timestamp, WritePrecision.Ms);
 
-                Console.WriteLine(point);
-
                 await writeApi.WritePointAsync(point, m_bucket, m_org);
             }
+
+            Console.WriteLine($"✅ Trip {trip.TripId} mit {trip.Data.Count} Datenpunkten erfolgreich in InfluxDB gespeichert!");
         }
 
         public async Task WriteTripDataAsyncWithToken(Trip trip, string token)
@@ -102,9 +99,13 @@ namespace DataService.Services
 
         public async Task<List<Guid>> GetAllTripsAsync()
         {
-            var query = $"import \"influxdata/influxdb/schema\"\n" +
-                        $"schema.tagValues(bucket: \"{m_bucket}\", tag: \"trip-id\")";
-
+            var query = $"from(bucket: \"{m_bucket}\")" +
+                        $"|> range(start: -1y) " +
+                        $"|> filter(fn: (r) => r._measurement == \"car_sensors_data\") " +
+                        $"|> filter(fn: (r) => exists r[\"trip-id\"])" +
+                        $"|> group(columns: [\"trip-id\"])" +
+                        $"|> distinct(column: \"trip-id\")";
+            
             var queryApi = m_influxDbClient.GetQueryApi();
             var tables = await queryApi.QueryAsync(query, m_org);
 
@@ -114,12 +115,15 @@ namespace DataService.Services
             {
                 foreach (var record in table.Records)
                 {
-                    if (Guid.TryParse(record.GetValue().ToString(), out var tripId))
+                    var value = record.GetValue()?.ToString();
+                    if (!string.IsNullOrEmpty(value) && Guid.TryParse(value, out var tripId))
                     {
                         tripIds.Add(tripId);
                     }
                 }
             }
+
+            Console.WriteLine($"📌 {tripIds.Count} Trips gefunden: {string.Join(", ", tripIds)}");
 
             return tripIds;
         }
@@ -135,11 +139,13 @@ namespace DataService.Services
         public async Task<List<CarSensorData>> GetTripDataAsync(Guid tripId)
         {
             var query = $"from(bucket: \"{m_bucket}\") " +
-                        $"|> range(start: -30d) " + //DATUM MUSS VOR 30 TAGEN LIEGEN SONST GIBT ES KEINE DATEN!! (und ich frag mich seit 1h warum ich keine Daten bekomme...)
+                        $"|> range(start: -1y) " + //DATUM MUSS VOR 30 TAGEN LIEGEN SONST GIBT ES KEINE DATEN!! (und ich frag mich seit 1h warum ich keine Daten bekomme...)
                         $"|> filter(fn: (r) => r[\"trip-id\"] == \"{tripId}\") " +
                         $"|> filter(fn: (r) => r._measurement == \"car_sensors_data\") " +
                         $"|> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")";
 
+            Console.WriteLine($"Executing InfluxDB Query for tripId {tripId}:\n{query}");
+            
             var queryApi = m_influxDbClient.GetQueryApi();
             var tables = await queryApi.QueryAsync(query, m_org);
 
@@ -164,12 +170,14 @@ namespace DataService.Services
                             ObdSpeed = record.GetValueByKey("ObdSpeed") as double? ?? 0,
                         }
                     };
+                    
+                    Console.WriteLine($"🔍 Found data for trip {tripId}: Timestamp={carSensorData.Timestamp}, ObdSpeed={carSensorData.CarData.ObdSpeed}");
 
                     results.Add(carSensorData);
                 }
             }
 
-            Console.WriteLine($"Fetched {results.Count} records for trip ID {tripId}");
+            Console.WriteLine($"📌 Total records found for tripId {tripId}: {results.Count}");
             return results;
         }
 

@@ -89,6 +89,8 @@ import java.io.InputStream
 import java.io.InputStreamReader
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
+import java.time.Duration
+import java.time.LocalDateTime
 import java.util.Date
 import java.util.Locale
 import java.util.UUID
@@ -530,13 +532,13 @@ class HomeView {
             ) {
                 Row {
                     Text(
-                        text = "${trip.startDate} Uhr",
+                        text = "${LocalDateTime.parse(trip.startDate)} Uhr",
                         style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
                     )
                 }
                 Spacer(modifier = Modifier.height(4.dp))
                 Row {
-                    Text(text = "${trip.duration} min")
+                    Text(text = "${Duration.parse(trip.duration)} min")
                     Image(
                         painter = painterResource(id = R.drawable.ranking_category_ecopoints),
                         contentDescription = "Eco-Points",

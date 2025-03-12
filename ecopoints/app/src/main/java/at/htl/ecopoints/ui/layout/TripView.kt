@@ -170,38 +170,38 @@ class TripView {
 //                                            )
 //                                        }
 
-                                        Button(onClick = {
-                                            val map: ConcurrentHashMap<String, String> =
-                                                ConcurrentHashMap<String, String>()
-                                            for (command in relevantObdCommands) {
-                                                map[command.name] =
-                                                    Random.nextDouble(0.0, 10000.0).toString();
-                                                Log.d(TAG, "Command: ${command.name} : Value: ${map[command.name]}")
-                                            }
-                                            map["Latitude"] = "34.34"
-                                            map["Longitude"] = "43.3"
-                                            map["Altitude"] = "2000"
-
-                                            var mapper = ObjectMapper();
-                                            try {
-                                                var jsonData = mapper.writeValueAsString(map.toCarSensorData());
-                                                Log.d(TAG, "c213411a-a205-42f6-bd1e-226a63a2bacb" + "Trip data: " + jsonData);
-                                            } catch (e : Exception) {
-                                                Log.e(TAG, "Failed to serialize trip data", e);
-                                            }
-
-                                            tripService.addDataToTrip(
-                                                UUID.fromString("c213411a-a205-42f6-bd1e-226a63a2bacb"),
-                                                listOf(map.toCarSensorData())
-                                            )
-                                                .thenAccept { response ->
-                                                    println(response)
-                                                }
-                                        }) {
-                                            Text(
-                                                text = "Test API"
-                                            )
-                                        }
+//                                        Button(onClick = {
+//                                            val map: ConcurrentHashMap<String, String> =
+//                                                ConcurrentHashMap<String, String>()
+//                                            for (command in relevantObdCommands) {
+//                                                map[command.name] =
+//                                                    Random.nextDouble(0.0, 10000.0).toString();
+//                                                Log.d(TAG, "Command: ${command.name} : Value: ${map[command.name]}")
+//                                            }
+//                                            map["Latitude"] = "34.34"
+//                                            map["Longitude"] = "43.3"
+//                                            map["Altitude"] = "2000"
+//
+//                                            var mapper = ObjectMapper();
+//                                            try {
+//                                                var jsonData = mapper.writeValueAsString(map.toCarSensorData());
+//                                                Log.d(TAG, "c213411a-a205-42f6-bd1e-226a63a2bacb" + "Trip data: " + jsonData);
+//                                            } catch (e : Exception) {
+//                                                Log.e(TAG, "Failed to serialize trip data", e);
+//                                            }
+//
+//                                            tripService.addDataToTrip(
+//                                                UUID.fromString("c213411a-a205-42f6-bd1e-226a63a2bacb"),
+//                                                listOf(map.toCarSensorData())
+//                                            )
+//                                                .thenAccept { response ->
+//                                                    println(response)
+//                                                }
+//                                        }) {
+//                                            Text(
+//                                                text = "Test API"
+//                                            )
+//                                        }
 
                                         IconButton(
                                             onClick = {

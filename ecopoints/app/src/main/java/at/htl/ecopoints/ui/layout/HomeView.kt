@@ -1,10 +1,10 @@
 package at.htl.ecopoints.ui.layout
 
+import android.R.attr.duration
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
@@ -27,9 +27,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material.icons.rounded.ClearAll
 import androidx.compose.material.icons.rounded.Person
-import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material.icons.rounded.ViewList
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -52,13 +50,9 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
-import androidx.compose.ui.graphics.Color.Companion.DarkGray
-import androidx.compose.ui.graphics.Color.Companion.Gray
-import androidx.compose.ui.graphics.Color.Companion.Green
 import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
@@ -80,6 +74,7 @@ import at.htl.ecopoints.model.dto.TripMetaData
 import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.ui.component.ShowMap
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
+import at.htl.ecopoints.util.DurationParser
 import com.google.android.gms.maps.model.LatLng
 import com.opencsv.CSVParserBuilder
 import com.opencsv.CSVReaderBuilder
@@ -89,8 +84,9 @@ import java.io.InputStream
 import java.io.InputStreamReader
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
-import java.time.Duration
-import java.time.LocalDateTime
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
 import java.util.UUID
@@ -530,32 +526,48 @@ class HomeView {
                     .padding(vertical = 8.dp, horizontal = 16.dp)
                     .fillMaxWidth()
             ) {
+                val formattedStartDate = Instant.parse(trip.startDate).atZone(ZoneId.of("UTC")).format(
+                    DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))
+                val duration = DurationParser.parse(trip.duration)
+                val formattedDuration = java.lang.String.format(
+                    "%02d:%02d",
+                    duration.toHoursPart(),
+                    duration.toMinutesPart()
+                )
+
+
                 Row {
-                    Text(
-                        text = "${LocalDateTime.parse(trip.startDate)} Uhr",
-                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
-                    )
+                    Column(
+                        modifier = Modifier
+                            .weight(1f)
+                    ) {
+                        Text(
+                            text = "${formattedStartDate} Uhr",
+                            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
+                        )
+                    }
+                    Column {
+                        Text(
+                            text = "${String.format("%.2f", trip.distance)} km"
+                        )
+                    }
+
                 }
                 Spacer(modifier = Modifier.height(4.dp))
                 Row {
-                    Text(text = "${Duration.parse(trip.duration)} min")
+                    Text(text = "${trip.ecoPointsMetaData.ecoPoints}")
                     Image(
                         painter = painterResource(id = R.drawable.ranking_category_ecopoints),
                         contentDescription = "Eco-Points",
                         modifier = Modifier
-                            .size(25.dp)
+                            .size(27.dp)
                             .clip(RoundedCornerShape(10.dp))
                             .align(Alignment.CenterVertically)
                     )
-                    Spacer(modifier = Modifier.weight(1f))
-                    Text(text = "${trip.distance} km")
-                    Text(text = "${trip.averageSpeedObd} km/h")
                 }
             }
         }
     }
-
-
 
     @Composable
     fun LastTrips(context: Context) {
@@ -574,7 +586,12 @@ class HomeView {
                     .weight(1f)
             ) {
                 items(state.value.trips) { trip ->
-                    LastTripsButton(trip = trip, {})
+                    LastTripsButton(trip = trip) {
+                        store.next {
+                            it.homeInfo.showDialog = true
+                            it.homeInfo.selectedTrip = trip
+                        }
+                    }
                 }
             }
 
@@ -690,31 +707,29 @@ class HomeView {
         onCloseDialog: () -> Unit
     ) {
         if (showDialog) {
+            val formattedStartDate = Instant.parse(selectedTrip.startDate).atZone(ZoneId.of("UTC")).format(
+                DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))
+            val formattedEndDate = Instant.parse(selectedTrip.endDate).atZone(ZoneId.of("UTC")).format(
+                DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))
+
             AlertDialog(
                 onDismissRequest = {
                     onCloseDialog()
                 },
                 title = {
                     Text(
-                        "Trip: " + (selectedTrip.startDate?.let {
-                            SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(it)
-                        } ?: "Unknown Date")
+                        "Trip: " + formattedStartDate
                     )
                 },
                 text = {
                     Column {
                         if (selectedTrip != null) {
                             Text(
-                                "End Date: ${
-                                    SimpleDateFormat(
-                                        "dd.MM.yyyy, HH:mm",
-                                        Locale.getDefault()
-                                    ).format(selectedTrip.endDate)
-                                }"
+                                "End Date: ${formattedEndDate}"
                             )
-                            Text("Distance: ${selectedTrip.distance} km")
-                            Text("Average Speed: ${selectedTrip.averageSpeedObd} km/h")
-                            Text("Average RPM: ${selectedTrip.averageRpm} rpm")
+                            Text("Distance: ${String.format("%.2f", selectedTrip.distance)} km")
+                            Text("Average Speed: ${String.format("%.2f", selectedTrip.averageSpeedObd)} km/h")
+                            Text("Average RPM: ${String.format("%.2f", selectedTrip.averageRpm)} rpm")
                         } else {
                             Text("Trip details not available.")
                         }

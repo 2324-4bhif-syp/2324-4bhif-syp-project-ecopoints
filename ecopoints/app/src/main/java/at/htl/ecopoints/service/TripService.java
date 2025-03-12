@@ -4,6 +4,8 @@ import android.util.Log;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -47,7 +49,7 @@ public class TripService {
         return CompletableFuture.supplyAsync(tripClient::getAllTripIds);
     }
 
-    public CompletableFuture<List<TripMetaData>> getAllTrips() {
+    public CompletableFuture<TripMetaData[]> getAllTrips() {
         return CompletableFuture.supplyAsync(tripClient::getAllTrips);
     }
 
@@ -60,4 +62,29 @@ public class TripService {
                 .thenApply(response -> "Data added successfully")
                 .exceptionally(e -> "Failed to add data: " + e.getMessage());
     }
+
+//    public void TestTripCreationAndDataSending() {
+//        createTrip().thenCompose(tripIdDTO -> {
+//            UUID tripId = tripIdDTO.getTripId();
+//
+//            Trip trip = new Trip(
+//                    tripId,
+//                    123L, // Example Car ID
+//                    456L, // Example User ID
+//                    100.5, // Distance
+//                    80.0, // Avg Speed
+//                    3000.0, // Avg Engine RPM
+//                    new Date(),
+//                    new Date(),
+//                    50.0 // Rewarded EcoPoints
+//            );
+//
+//            return logTripData(trip);
+//        }).thenAccept(result -> {
+//            Log.i(TAG, result);
+//        }).exceptionally(e -> {
+//            Log.e(TAG, "Error in TestTripCreationAndDataSending: " + e.getMessage());
+//            return null;
+//        });
+//    }
 }

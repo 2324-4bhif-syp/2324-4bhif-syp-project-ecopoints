@@ -65,13 +65,6 @@ public class HomeActivity extends ComponentActivity {
             carSensorDataList.add(sensorData);
         }
 
-        tripService.createTrip().thenAccept(tripIdDTO -> {
-            Log.i(TAG, "Created trip with ID: " + tripIdDTO.getTripId());
-            tripService.addDataToTrip(tripIdDTO.getTripId(), carSensorDataList).thenAccept(response -> {
-                Log.i(TAG, "Added data to trip: " + response);
-            });
-        });
-
         tripService.getAllTrips().thenAccept(trips -> {
             store.next(model -> model.homeInfo.trips = Arrays.stream(trips).toList());
             Log.i(TAG, "Got trips: " + trips);

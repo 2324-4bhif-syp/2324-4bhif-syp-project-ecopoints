@@ -16,9 +16,31 @@ public class TripMetaData {
     private double maxSpeedGps;
     private double maxSpeedObd;
     private double averageRpm;
+    private double averageEngineLoad;
+    private EcoPointsMetaData ecoPointsMetaData;
     private List<LatLng> latLngList;
 
+    public TripMetaData() {
+    }
+
     // Getters and Setters
+
+
+    public double getAverageEngineLoad() {
+        return averageEngineLoad;
+    }
+
+    public void setAverageEngineLoad(double averageEngineLoad) {
+        this.averageEngineLoad = averageEngineLoad;
+    }
+
+    public EcoPointsMetaData getEcoPointsMetaData() {
+        return ecoPointsMetaData;
+    }
+
+    public void setEcoPointsMetaData(EcoPointsMetaData ecoPointsMetaData) {
+        this.ecoPointsMetaData = ecoPointsMetaData;
+    }
 
     public String getStartDate() {
         return startDate;

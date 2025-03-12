@@ -11,12 +11,13 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import javax.inject.Inject;
 
 import at.htl.ecopoints.model.CarDataBackend;
 import at.htl.ecopoints.model.CarSensorData;
+import at.htl.ecopoints.model.Store;
+import at.htl.ecopoints.model.dto.TripMetaData;
 import at.htl.ecopoints.service.TripService;
 import at.htl.ecopoints.ui.layout.HomeView;
 import dagger.hilt.android.AndroidEntryPoint;
@@ -31,6 +32,9 @@ public class HomeActivity extends ComponentActivity {
 
     @Inject
     TripService tripService;
+
+    @Inject
+    Store store;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,14 +71,13 @@ public class HomeActivity extends ComponentActivity {
             });
         });
 
-
-        List<String>  tripIds = new ArrayList<>();
-
         tripService.getAllTrips().thenAccept(trips -> {
-            tripIds.addAll(trips);
-            Log.i(TAG, "All trips: " + trips);
+            store.next(model -> model.homeInfo.trips = trips);
+        }).exceptionally(e -> {
+            Log.e(TAG, "Failed to get trips: " + e.getMessage());
+            return null;
         });
 
-        homeView.compose(this, tripIds);
+        homeView.compose(this);
     }
 }

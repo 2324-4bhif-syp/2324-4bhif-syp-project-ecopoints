@@ -13,6 +13,7 @@ import at.htl.ecopoints.model.CarData;
 import at.htl.ecopoints.model.CarSensorData;
 import at.htl.ecopoints.model.Trip;
 import at.htl.ecopoints.model.dto.TripIdDTO;
+import at.htl.ecopoints.model.dto.TripMetaData;
 import at.htl.ecopoints.util.ConfigLoader;
 import at.htl.ecopoints.util.resteasy.RestApiClientBuilder;
 
@@ -42,7 +43,11 @@ public class TripService {
 
     }
 
-    public CompletableFuture<List<String>> getAllTrips() {
+    public CompletableFuture<List<String>> getAllTripIds() {
+        return CompletableFuture.supplyAsync(tripClient::getAllTripIds);
+    }
+
+    public CompletableFuture<List<TripMetaData>> getAllTrips() {
         return CompletableFuture.supplyAsync(tripClient::getAllTrips);
     }
 

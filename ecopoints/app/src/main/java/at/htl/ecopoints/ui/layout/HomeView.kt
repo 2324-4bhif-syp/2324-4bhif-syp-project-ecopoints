@@ -76,6 +76,7 @@ import at.htl.ecopoints.model.GasData
 import at.htl.ecopoints.model.HomeInfo
 import at.htl.ecopoints.model.Store
 import at.htl.ecopoints.model.Trip
+import at.htl.ecopoints.model.dto.TripMetaData
 import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.ui.component.ShowMap
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
@@ -108,7 +109,7 @@ class HomeView {
     constructor() {
     }
 
-    fun compose(activity: ComponentActivity, tripIds: List<String>) {
+    fun compose(activity: ComponentActivity) {
         activity.setContent {
             val isDarkMode = store.subject.map { it.isDarkMode }.subscribeAsState(false)
 
@@ -134,7 +135,7 @@ class HomeView {
 
                     ShowText()
 
-                    LastTrips(activity, tripIds.take(3))
+                    LastTrips(activity)
 
 //                    Box(
 //                        modifier = Modifier
@@ -507,7 +508,7 @@ class HomeView {
 
     @Composable
     fun LastTripsButton(
-        trip: String,
+        trip: TripMetaData,
         onClickAction: () -> Unit
     ) {
         androidx.compose.material.Button(
@@ -528,7 +529,25 @@ class HomeView {
                     .fillMaxWidth()
             ) {
                 Row {
-                    Text(text = "${trip}")
+                    Text(
+                        text = "${trip.startDate} Uhr",
+                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
+                    )
+                }
+                Spacer(modifier = Modifier.height(4.dp))
+                Row {
+                    Text(text = "${trip.duration} min")
+                    Image(
+                        painter = painterResource(id = R.drawable.ranking_category_ecopoints),
+                        contentDescription = "Eco-Points",
+                        modifier = Modifier
+                            .size(25.dp)
+                            .clip(RoundedCornerShape(10.dp))
+                            .align(Alignment.CenterVertically)
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+                    Text(text = "${trip.distance} km")
+                    Text(text = "${trip.averageSpeedObd} km/h")
                 }
             }
         }
@@ -537,11 +556,8 @@ class HomeView {
 
 
     @Composable
-    fun LastTrips(context: Context, tripIds: List<String>) {
+    fun LastTrips(context: Context) {
         val state = store.subject.map { it.homeInfo }.subscribeAsState(HomeInfo())
-        addFakeDataToDB(context)
-
-        val trips = getTopThreeTripDataFromDB(context)
 
         Column(
             modifier = Modifier
@@ -555,7 +571,7 @@ class HomeView {
                 modifier = Modifier
                     .weight(1f)
             ) {
-                items(tripIds) { trip ->
+                items(state.value.trips) { trip ->
                     LastTripsButton(trip = trip, {})
                 }
             }
@@ -648,13 +664,13 @@ class HomeView {
             if (state.value.showDialog) {
                 ShowTripPopupDialog(
                     showDialog = state.value.showDialog,
-                    selectedTripDate = state.value.selectedTripDate,
-                    trips = trips,
+                    selectedTrip = state.value.selectedTrip,
+                    trips = state.value.trips,
                     context = context,
                     onCloseDialog = {
                         store.next {
                             it.homeInfo.showDialog = false
-                            it.homeInfo.selectedTripDate = null
+                            it.homeInfo.selectedTrip = null
                             it.homeInfo.showDetailedLastRidesPopup = false
                         }
                     }
@@ -666,8 +682,8 @@ class HomeView {
     @Composable
     fun ShowTripPopupDialog(
         showDialog: Boolean,
-        selectedTripDate: Date?,
-        trips: List<Trip>,
+        selectedTrip: TripMetaData,
+        trips: List<TripMetaData>,
         context: Context,
         onCloseDialog: () -> Unit
     ) {
@@ -678,27 +694,25 @@ class HomeView {
                 },
                 title = {
                     Text(
-                        "Trip: " + (selectedTripDate?.let {
+                        "Trip: " + (selectedTrip.startDate?.let {
                             SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(it)
                         } ?: "Unknown Date")
                     )
                 },
                 text = {
                     Column {
-                        val selectedTrip = trips.find { it.start == selectedTripDate }
                         if (selectedTrip != null) {
                             Text(
                                 "End Date: ${
                                     SimpleDateFormat(
                                         "dd.MM.yyyy, HH:mm",
                                         Locale.getDefault()
-                                    ).format(selectedTrip.end)
+                                    ).format(selectedTrip.endDate)
                                 }"
                             )
                             Text("Distance: ${selectedTrip.distance} km")
-                            Text("Average Speed: ${selectedTrip.avgSpeed} km/h")
-                            Text("Average Engine Rotation: ${selectedTrip.avgEngineRotation} rpm")
-                            Text("Eco Points: ${selectedTrip.rewardedEcoPoints}")
+                            Text("Average Speed: ${selectedTrip.averageSpeedObd} km/h")
+                            Text("Average RPM: ${selectedTrip.averageRpm} rpm")
                         } else {
                             Text("Trip details not available.")
                         }

@@ -7,8 +7,6 @@ import org.junit.Test;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-import javax.inject.Inject;
-
 import at.htl.ecopoints.service.TripService;
 import at.htl.ecopoints.util.resteasy.RestApiClientBuilder;
 
@@ -25,7 +23,7 @@ public class TripServiceTest {
     public void testGetAllTrips() throws ExecutionException, InterruptedException {
         CompletableFuture<Boolean> future = new CompletableFuture<>();
 
-        tripService.getAllTrips().thenAccept(trips -> {
+        tripService.getAllTripIds().thenAccept(trips -> {
             System.out.println("Trips: " + trips);
             future.complete(true); // Ensure trips are fetched
         }).exceptionally(ex -> {

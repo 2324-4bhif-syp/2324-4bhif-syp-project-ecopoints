@@ -4,6 +4,7 @@ import at.htl.ecopoints.model.CarData;
 import at.htl.ecopoints.model.CarSensorData;
 import at.htl.ecopoints.model.Trip;
 import at.htl.ecopoints.model.dto.TripIdDTO;
+import at.htl.ecopoints.model.dto.TripMetaData;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -25,8 +26,12 @@ public interface TripClient {
     TripIdDTO createTrip();
 
     @GET
+    @Path("/tripIds")
+    List<String> getAllTripIds();
+
+    @GET
     @Path("/trips")
-    List<String> getAllTrips();
+    List<TripMetaData> getAllTrips();
 
     @GET
     @Path("/trip/{tripId}")

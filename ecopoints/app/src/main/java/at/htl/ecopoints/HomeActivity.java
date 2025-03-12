@@ -67,6 +67,14 @@ public class HomeActivity extends ComponentActivity {
             });
         });
 
-        homeView.compose(this);
+
+        List<String>  tripIds = new ArrayList<>();
+
+        tripService.getAllTrips().thenAccept(trips -> {
+            tripIds.addAll(trips);
+            Log.i(TAG, "All trips: " + trips);
+        });
+
+        homeView.compose(this, tripIds);
     }
 }

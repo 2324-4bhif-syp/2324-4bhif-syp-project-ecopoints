@@ -14,7 +14,11 @@ public class PolylineNode {
     public PolylineNode(Double latitude, Double longitude, Double fuelCons) {
         this.latitude = latitude;
         this.longitude = longitude;
-        this.fuelCons = fuelCons;
+        if(fuelCons == null) {
+            this.fuelCons = 0.0;
+        } else {
+            this.fuelCons = fuelCons;
+        }
     }
 
     public Double getLatitude() {

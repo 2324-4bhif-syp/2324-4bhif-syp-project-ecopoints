@@ -1,37 +1,20 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Abstractions.Entities;
 using Abstractions.Model;
-using Newtonsoft.Json;
 
 namespace DataService
 {
     internal static class EcoPointsCalculator
     {
-        // Thresholds for driving behavior
-        private const double HARSH_ACCELERATION_THRESHOLD = 3.0;  // m/s²
-        private const double HARSH_BRAKING_THRESHOLD = -4.0;      // m/s²
-        private const double HIGH_SPEED_THRESHOLD = 120.0;        // km/h
-        private const int HIGH_RPM_THRESHOLD = 4000;             // RPM
-        private const double HIGH_ENGINE_LOAD_THRESHOLD = 75.0;   // %
-
-        // Penalty values
-        private const int HARSH_ACCELERATION_PENALTY = 2;
-        private const int HARSH_BRAKING_PENALTY = 3;
-        private const int HIGH_SPEED_PENALTY = 5;
-        private const int HIGH_RPM_PENALTY = 2;
-        private const int HIGH_ENGINE_LOAD_PENALTY = 10;
-
         public static EcoPointsMetaData CalculateEcoPoints(IEnumerable<CarSensorData> data)
         {
-            if (data == null || !data.Any())
+            var carSensorDatas = data.ToList();
+            if (!carSensorDatas.Any())
                 return new EcoPointsMetaData { EcoPoints = 0 }; // No data means no score.
 
             var metadata = new EcoPointsMetaData();
             int ecoScore = 100; // Start with a perfect score
 
-            var sortedData = data.OrderBy(d => d.Timestamp).ToList();
+            var sortedData = carSensorDatas.OrderBy(d => d.Timestamp).ToList();
 
             double totalEngineLoad = 0;
             int validLoadCount = 0;
@@ -49,37 +32,42 @@ namespace DataService
                 double acceleration = speedDiff / timeDiff;
 
                 // Detect harsh acceleration/braking
-                if (acceleration > HARSH_ACCELERATION_THRESHOLD) metadata.HarshAccelerationCount++;
-                if (acceleration < HARSH_BRAKING_THRESHOLD) metadata.HarshBrakingCount++;
+                if (acceleration > GlobalConstants.HarshAccelerationThreshold) metadata.HarshAccelerationCount++; 
+                if (acceleration < GlobalConstants.HarshBrakingThreshold) metadata.HarshBrakingCount++;
 
                 // Check for high-speed driving
-                if (current.CarData.GpsSpeed > HIGH_SPEED_THRESHOLD) metadata.HighSpeedCount++;
+                if (current.CarData.GpsSpeed > GlobalConstants.HighSpeedThreshold) metadata.HighSpeedCount++;
 
                 // Check for high RPM
-                if (current.CarData.EngineRpm > HIGH_RPM_THRESHOLD) metadata.HighRpmCount++;
+                if (current.CarData.EngineRpm > GlobalConstants.HighRpmThreshold) metadata.HighRpmCount++;
 
-                // Engine Load tracking
-                // if (current.CarData.EngineLoad > 0)
-                // {
+                // Engine Load tracking (apply threshold filtering)
+                if (current.CarData.EngineLoad is >= GlobalConstants.MinEngineLoad and <= GlobalConstants.MaxEngineLoad)
+                {
                     totalEngineLoad += current.CarData.EngineLoad;
                     validLoadCount++;
-                // }
+                }
             }
 
             // Apply penalties
-            ecoScore -= (metadata.HarshAccelerationCount * HARSH_ACCELERATION_PENALTY);
-            ecoScore -= (metadata.HarshBrakingCount * HARSH_BRAKING_PENALTY);
-            ecoScore -= (metadata.HighSpeedCount * HIGH_SPEED_PENALTY);
-            ecoScore -= (metadata.HighRpmCount * HIGH_RPM_PENALTY);
+            ecoScore -= (metadata.HarshAccelerationCount * GlobalConstants.HarshAccelerationPenalty);
+            ecoScore -= (metadata.HarshBrakingCount * GlobalConstants.HarshBrakingPenalty);
+            ecoScore -= (metadata.HighSpeedCount * GlobalConstants.HighSpeedPenalty);
+            ecoScore -= (metadata.HighRpmCount * GlobalConstants.HighRpmPenalty);
 
             // Penalize inefficient engine load
             if (validLoadCount > 0)
             {
                 metadata.AverageEngineLoad = totalEngineLoad / validLoadCount;
-                if (metadata.AverageEngineLoad > HIGH_ENGINE_LOAD_THRESHOLD) ecoScore -= HIGH_ENGINE_LOAD_PENALTY;
+                if (metadata.AverageEngineLoad > GlobalConstants.HighEngineLoadThreshold) 
+                    ecoScore -= GlobalConstants.HighEngineLoadPenalty;
+            }
+            else
+            {
+                metadata.AverageEngineLoad = 0; // No valid engine load readings
             }
 
-            metadata.EcoPoints = Math.Max(ecoScore, 0);
+            metadata.EcoPoints = Math.Max(ecoScore, 0); // Ensure score is not negative
             return metadata;
         }
     }

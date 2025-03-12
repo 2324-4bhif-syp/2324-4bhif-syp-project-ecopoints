@@ -19,13 +19,42 @@ public static class TripMetaDataFactory
         var latLngList = sortedData
             .Select(d => new Tuple<double, double>(d.CarData.Latitude, d.CarData.Longitude))
             .ToList();
+        
+        var avgSpeedGps = sortedData
+            .Where(d => d.CarData.GpsSpeed >= GlobalConstants.MinSpeed && d.CarData.GpsSpeed <= GlobalConstants.MaxSpeed)
+            .Select(d => d.CarData.GpsSpeed)
+            .DefaultIfEmpty(0)
+            .Average(); 
+        var avgSpeedObd = sortedData
+            .Where(d => d.CarData.ObdSpeed >= GlobalConstants.MinSpeed && d.CarData.ObdSpeed <= GlobalConstants.MaxSpeed)
+            .Select(d => d.CarData.ObdSpeed)
+            .DefaultIfEmpty(0)
+            .Average();
 
-        var avgSpeedGps = sortedData.Average(d => d.CarData.GpsSpeed);
-        var maxSpeedGps = sortedData.Max(d => d.CarData.GpsSpeed);
-        var avgSpeedObd = sortedData.Average(d => d.CarData.ObdSpeed);
-        var maxSpeedObd = sortedData.Max(d => d.CarData.ObdSpeed);
-        var avgRpm = sortedData.Average(d => d.CarData.EngineRpm);
-        var avgEngineLoad = sortedData.Average(d => d.CarData.EngineLoad);
+        var maxSpeedGps = sortedData
+            .Where(d => d.CarData.GpsSpeed >= GlobalConstants.MinSpeed && d.CarData.GpsSpeed <= GlobalConstants.MaxSpeed)
+            .Select(d => d.CarData.GpsSpeed)
+            .DefaultIfEmpty(0)
+            .Max();
+        
+        var maxSpeedObd = sortedData
+            .Where(d => d.CarData.ObdSpeed >= GlobalConstants.MinSpeed && d.CarData.ObdSpeed <= GlobalConstants.MaxSpeed)
+            .Select(d => d.CarData.ObdSpeed)
+            .DefaultIfEmpty(0)
+            .Max();
+
+        var avgRpm = sortedData
+            .Where(d => d.CarData.EngineRpm >= GlobalConstants.MinRpm && d.CarData.EngineRpm <= GlobalConstants.MaxRpm)
+            .Select(d => d.CarData.EngineRpm)
+            .DefaultIfEmpty(0)
+            .Average();
+        
+        var avgEngineLoad = sortedData
+            .Where(d => d.CarData.EngineLoad >= 0 && d.CarData.EngineLoad <= 100) //Percent 0-100
+            .Select(d => d.CarData.EngineLoad)
+            .DefaultIfEmpty(0)
+            .Average();
+        
         var distance = CalculateTotalDistance(sortedData);
 
         var ecoPoints = EcoPointsCalculator.CalculateEcoPoints(sortedData);

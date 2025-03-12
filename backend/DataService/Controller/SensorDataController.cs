@@ -48,7 +48,7 @@ namespace DataService.Controller
             return Results.Ok(new { TripId = tripId });
         }
 
-        public async Task<IResult> GetAllTrips()
+        public async Task<IResult> GetAllTripIds()
         {
             var tripIds = await _dbService.GetAllTripsAsync();
             return tripIds.Count == 0 ? Results.NotFound("No trips found in the database") : Results.Ok(tripIds);
@@ -69,6 +69,15 @@ namespace DataService.Controller
 
             await _dbService.AddDataToSpecificTrip(tripId, sensorData);
             return Results.Ok("Data logged successfully");
+        }
+
+        public async Task<IResult> GetTripsData()
+        {
+            var tripIds = await _dbService.GetAllTripsAsync();
+            var dataTasks = tripIds.Select(async i => await _dbService.GetTripDataAsync(i));
+            var data = await Task.WhenAll(dataTasks);
+            
+            return Results.Ok(data.Select(TripMetaDataFactory.CreateFromSensorData));
         }
     }
 }

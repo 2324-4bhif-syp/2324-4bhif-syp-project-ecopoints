@@ -14,7 +14,8 @@ namespace DataService.Services
         private readonly InfluxDBClient m_influxDbClient;
         private readonly string? m_bucket;
         private readonly string? m_org;
-        private  string? m_url;
+        private string? m_url;
+
         public InfluxDbService(IConfiguration configuration)
         {
             var url = configuration["InfluxDB:Url"];
@@ -34,7 +35,8 @@ namespace DataService.Services
 
             foreach (var dataPoint in trip.Data)
             {
-                Console.WriteLine($"Writing data point: Trip ID: {trip.TripId}, Timestamp: {dataPoint.Timestamp}, Altitude: {dataPoint.CarData.Altitude}, Longitude: {dataPoint.CarData.Longitude}, Latitude: {dataPoint.CarData.Latitude}");
+                Console.WriteLine(
+                    $"Writing data point: Trip ID: {trip.TripId}, Timestamp: {dataPoint.Timestamp}, Altitude: {dataPoint.CarData.Altitude}, Longitude: {dataPoint.CarData.Longitude}, Latitude: {dataPoint.CarData.Latitude}");
 
                 var point = PointData
                     .Measurement("car_sensors_data")
@@ -61,12 +63,12 @@ namespace DataService.Services
             await EnsureBucketExistsAsyncToken(influxDbClient);
 
 
-
             var writeApi = influxDbClient.GetWriteApiAsync();
 
             foreach (var dataPoint in trip.Data)
             {
-                Console.WriteLine($"Writing data point: Trip ID: {trip.TripId}, Timestamp: {dataPoint.Timestamp}, Altitude: {dataPoint.CarData.Altitude}, Longitude: {dataPoint.CarData.Longitude}, Latitude: {dataPoint.CarData.Latitude}");
+                Console.WriteLine(
+                    $"Writing data point: Trip ID: {trip.TripId}, Timestamp: {dataPoint.Timestamp}, Altitude: {dataPoint.CarData.Altitude}, Longitude: {dataPoint.CarData.Longitude}, Latitude: {dataPoint.CarData.Latitude}");
 
                 var point = PointData
                     .Measurement("car_sensors_data")
@@ -102,11 +104,15 @@ namespace DataService.Services
 
         public async Task<List<Guid>> GetAllTripsAsync()
         {
-            var query = $"import \"influxdata/influxdb/schema\"\n" +
-                        $"schema.tagValues(bucket: \"{m_bucket}\", tag: \"trip-id\")";
+            var query = $@"
+    from(bucket: ""{m_bucket}"")
+        |> range(start: {DateTime.UtcNow.Year - 10}-01-01T00:00:00Z)
+        |> group(columns: [""trip-id""], mode: ""by"")
+        |> distinct(column: ""trip-id"")";
 
             var queryApi = m_influxDbClient.GetQueryApi();
             var tables = await queryApi.QueryAsync(query, m_org);
+
 
             var tripIds = new List<Guid>();
 
@@ -135,7 +141,7 @@ namespace DataService.Services
         public async Task<List<CarSensorData>> GetTripDataAsync(Guid tripId)
         {
             var query = $"from(bucket: \"{m_bucket}\") " +
-                        $"|> range(start: -30d) " + //DATUM MUSS VOR 30 TAGEN LIEGEN SONST GIBT ES KEINE DATEN!! (und ich frag mich seit 1h warum ich keine Daten bekomme...)
+                        $"|> range(start: {DateTime.UtcNow.Year - 10}-01-01T00:00:00Z)\n" +
                         $"|> filter(fn: (r) => r[\"trip-id\"] == \"{tripId}\") " +
                         $"|> filter(fn: (r) => r._measurement == \"car_sensors_data\") " +
                         $"|> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")";
@@ -195,7 +201,8 @@ namespace DataService.Services
 
                 await writeApi.WritePointAsync(point, m_bucket, m_org);
 
-                Console.WriteLine($"Added point for trip {tripId}: Timestamp={dataPoint.Timestamp}, ObdSpeed={dataPoint.CarData.ObdSpeed}");
+                Console.WriteLine(
+                    $"Added point for trip {tripId}: Timestamp={dataPoint.Timestamp}, ObdSpeed={dataPoint.CarData.ObdSpeed}");
             }
         }
 
@@ -227,7 +234,8 @@ namespace DataService.Services
             Console.WriteLine($"Creating bucket '{m_bucket}'...");
 
             var retentionRule = new BucketRetentionRules(BucketRetentionRules.TypeEnum.Expire, everySeconds: 0);
-            var bucket = new Bucket(name: m_bucket, retentionRules: new List<BucketRetentionRules> { retentionRule }, orgID: await GetOrganizationIdAsync(m_org));
+            var bucket = new Bucket(name: m_bucket, retentionRules: new List<BucketRetentionRules> { retentionRule },
+                orgID: await GetOrganizationIdAsync(m_org));
 
             await bucketsApi.CreateBucketAsync(bucket);
             Console.WriteLine($"Bucket '{m_bucket}' created successfully.");
@@ -248,7 +256,8 @@ namespace DataService.Services
             Console.WriteLine($"Creating bucket '{m_bucket}'...");
 
             var retentionRule = new BucketRetentionRules(BucketRetentionRules.TypeEnum.Expire, everySeconds: 0);
-            var bucket = new Bucket(name: m_bucket, retentionRules: new List<BucketRetentionRules> { retentionRule }, orgID: await GetOrganizationIdAsync(m_org));
+            var bucket = new Bucket(name: m_bucket, retentionRules: new List<BucketRetentionRules> { retentionRule },
+                orgID: await GetOrganizationIdAsync(m_org));
 
             await bucketsApi.CreateBucketAsync(bucket);
             Console.WriteLine($"Bucket '{m_bucket}' created successfully.");

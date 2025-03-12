@@ -8,7 +8,7 @@ public class CarSensorData {
     @JsonProperty("timestamp")
     private String timestamp;
 
-    @JsonProperty("CarData")
+    @JsonProperty("carData")
     private CarDataBackend carData;
 
     public CarSensorData() {

@@ -128,12 +128,6 @@ class TripView {
 
             val isDarkMode = store.subject.map { it.isDarkMode }.subscribeAsState(false)
 
-            val tripId = remember { mutableStateOf("") }
-            tripService.createTrip().thenAccept { id ->
-                if (id != null)
-                    tripId.value = id.tripId.toString();
-            }
-
             EcoPointsTheme(darkTheme = isDarkMode.value) {
                 Box(modifier = Modifier.fillMaxSize()) {
                     // Main content
@@ -176,38 +170,38 @@ class TripView {
 //                                            )
 //                                        }
 
-//                                        Button(onClick = {
-//                                            val map: ConcurrentHashMap<String, String> =
-//                                                ConcurrentHashMap<String, String>()
-//                                            for (command in relevantObdCommands) {
-//                                                map[command.name] =
-//                                                    Random.nextDouble(0.0, 10000.0).toString();
-//                                                Log.d(TAG, "Command: ${command.name} : Value: ${map[command.name]}")
-//                                            }
-//                                            map["Latitude"] = "34.34"
-//                                            map["Longitude"] = "43.3"
-//                                            map["Altitude"] = "2000"
-//
-//                                            var mapper = ObjectMapper();
-//                                            try {
-//                                                var jsonData = mapper.writeValueAsString(map.toCarSensorData());
-//                                                Log.d(TAG, tripId.value + "Trip data: " + jsonData);
-//                                            } catch (e : Exception) {
-//                                                Log.e(TAG, "Failed to serialize trip data", e);
-//                                            }
-//
-//                                            tripService.addDataToTrip(
-//                                                UUID.fromString(tripId.value),
-//                                                listOf(map.toCarSensorData())
-//                                            )
-//                                                .thenAccept { response ->
-//                                                    println(response)
-//                                                }
-//                                        }) {
-//                                            Text(
-//                                                text = "Test API"
-//                                            )
-//                                        }
+                                        Button(onClick = {
+                                            val map: ConcurrentHashMap<String, String> =
+                                                ConcurrentHashMap<String, String>()
+                                            for (command in relevantObdCommands) {
+                                                map[command.name] =
+                                                    Random.nextDouble(0.0, 10000.0).toString();
+                                                Log.d(TAG, "Command: ${command.name} : Value: ${map[command.name]}")
+                                            }
+                                            map["Latitude"] = "34.34"
+                                            map["Longitude"] = "43.3"
+                                            map["Altitude"] = "2000"
+
+                                            var mapper = ObjectMapper();
+                                            try {
+                                                var jsonData = mapper.writeValueAsString(map.toCarSensorData());
+                                                Log.d(TAG, "c213411a-a205-42f6-bd1e-226a63a2bacb" + "Trip data: " + jsonData);
+                                            } catch (e : Exception) {
+                                                Log.e(TAG, "Failed to serialize trip data", e);
+                                            }
+
+                                            tripService.addDataToTrip(
+                                                UUID.fromString("c213411a-a205-42f6-bd1e-226a63a2bacb"),
+                                                listOf(map.toCarSensorData())
+                                            )
+                                                .thenAccept { response ->
+                                                    println(response)
+                                                }
+                                        }) {
+                                            Text(
+                                                text = "Test API"
+                                            )
+                                        }
 
                                         IconButton(
                                             onClick = {
@@ -369,7 +363,10 @@ class TripView {
     private fun stopTrip() {
         if (tripActive) {
             Log.i(TAG, "Trip stopped")
-            obdReaderKt.stopReading()
+            store.next() {
+                it.tripViewModel.tripActive = false
+            }
+//            obdReaderKt.stopReading()
             tripActive = false
         } else {
             Log.w(TAG, "Tried to stop a trip without starting one")
@@ -380,6 +377,17 @@ class TripView {
         //View Testing
 //        store.next{it.tripViewModel.isConnected = true}
 
+        tripService.createTrip().thenAccept { id ->
+            if (id != null)
+                store.next() {
+                    it.tripViewModel.tripActive = true;
+                    it.tripViewModel.tripId = id.tripId
+                    Log.i(
+                        TAG,
+                        "New Trip started, TripId: " +id.tripId
+                    );
+                }
+        }
         if (store.subject.value?.tripViewModel?.isConnected == true) {
             Log.i(TAG, "Trip started")
 

@@ -5,28 +5,28 @@ import java.sql.Timestamp;
 
 public class CarDataBackend {
 
-    @JsonProperty("Latitude")
+    @JsonProperty("latitude")
     private double latitude;
 
-    @JsonProperty("Longitude")
+    @JsonProperty("longitude")
     private double longitude;
 
-    @JsonProperty("Altitude")
+    @JsonProperty("altitude")
     private double altitude;
 
-    @JsonProperty("Engine Load")
+    @JsonProperty("engineLoad")
     private double engineLoad;
 
-    @JsonProperty("Engine Coolant Temperature")
+    @JsonProperty("coolantTemperature")
     private double coolantTemperature;
 
-    @JsonProperty("Engine RPM")
+    @JsonProperty("engineRPM")
     private double engineRpm;
 
-    @JsonProperty("Gps-Speed")
+    @JsonProperty("gpsSpeed")
     private double gpsSpeed;
 
-    @JsonProperty("Vehicle Speed")
+    @JsonProperty("obdSpeed")
     private double obdSpeed;
 
     public CarDataBackend() {

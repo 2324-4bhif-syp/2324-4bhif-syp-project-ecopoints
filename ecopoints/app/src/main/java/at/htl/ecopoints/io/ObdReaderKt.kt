@@ -39,9 +39,6 @@ class ObdReaderKt {
     lateinit var store: Store
 
     @Inject
-    lateinit var writer: JsonFileWriter
-
-    @Inject
     lateinit var tripService: TripService
 
     @Inject
@@ -137,11 +134,10 @@ class ObdReaderKt {
             store.next { it.tripViewModel.elmSetupCurrentStep = setupSteps[2] }
             sleep(1000)
             store.next { it.tripViewModel.elmSetupCurrentStep = setupSteps[3] }
-            while (inputStream.available() > 0)
-            {
+            while (inputStream.available() > 0) {
                 inputStream.read()
             }
-            setupELM(inputStream,outputStream)
+            setupELM(inputStream, outputStream)
             store.next { it.tripViewModel.isSetupFinished = true }
             sleep(1000)
 
@@ -191,14 +187,14 @@ class ObdReaderKt {
         scope.cancel()
         scope = CoroutineScope(Dispatchers.IO)
         sleep(1000)
-        writer.endJsonFile()
+//        writer.endJsonFile()
     }
 
     fun Map<String, String>.toCarSensorData(): CarSensorData {
         var carSensorData = CarSensorData()
-        var timestamp : Timestamp = Timestamp(System.currentTimeMillis());
+        var timestamp: Timestamp = Timestamp(System.currentTimeMillis());
 
-        var instant : Instant = timestamp.toInstant();
+        var instant: Instant = timestamp.toInstant();
         var formattedTimestamp = instant.atOffset(ZoneOffset.UTC)
             .format(DateTimeFormatter.ISO_INSTANT);
 
@@ -221,12 +217,6 @@ class ObdReaderKt {
         inputStream: InputStream?,
         outputStream: OutputStream?,
     ) {
-        writer.clearFile()
-        writer.startJsonFile()
-
-        tripService.createTrip().thenAccept { tripId ->
-            store.next { it.tripViewModel.tripId = tripId.tripId }
-        }
 
 //        if (currentlySupportedCommands.isEmpty()) {
 //            Log.e(TAG, "No OBD commands available")
@@ -248,9 +238,8 @@ class ObdReaderKt {
                     }
                 }
 
-                while (inputStream.available() > 0)
-                {
-                   inputStream.read()
+                while (inputStream.available() > 0) {
+                    inputStream.read()
                 }
 
                 while (isActive) {
@@ -272,14 +261,11 @@ class ObdReaderKt {
 
                                 val result = obdConnection.run(command, false, 5)
 
-                                if(result.rawResponse.value == "7F0112"){
+                                if (result.rawResponse.value == "7F0112") {
                                     throw Exception("Error running OBD2 command ${command.name}")
                                 }
 
                                 Log.d(TAG, buildObdResultLog(result))
-
-
-
                                 store.next { it ->
                                     it.tripViewModel.carData[command.name] =
                                         result.value
@@ -293,37 +279,24 @@ class ObdReaderKt {
                         // Reset the counter after running the command
                         commandCounterMap[command.name] = 0
                     }
-                    while (inputStream.available() > 0)
-                    {
+                    while (inputStream.available() > 0) {
                         inputStream.read()
                     }
-                    // Take a snapshot and convert to JSON
-                    val snapshot =
-                        store.subject.value!!.tripViewModel.carData.map { (key, value) ->
-                            "\"$key\": \"$value\""
-                        }.joinToString(", ", "{", "}")
 
-                    var tripId = store.subject.value!!.tripViewModel.tripId
-                    var carSensorData = store.subject.value!!.tripViewModel.carData.toCarSensorData()
-                    tripService.addDataToTrip(tripId, listOf(carSensorData)).thenAccept { response ->
-                        println(response)
+                    if (store.subject.value?.tripViewModel?.tripActive == true) {
+                        var tripId = store.subject.value!!.tripViewModel.tripId
+                        var carSensorData =
+                            store.subject.value!!.tripViewModel.carData.toCarSensorData()
+                        tripService.addDataToTrip(tripId, listOf(carSensorData))
+                            .thenAccept { response ->
+                                println(response)
+                            }
                     }
-
-                    val timestamp = System.currentTimeMillis()
-                    val jsonSnapshot = "{\n\"timestamp\": $timestamp,\n\"data\": $snapshot\n},"
-
-//                    if (scope.isActive) writeDataSnapshotToFile(jsonSnapshot)
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Error while setting up OBD connection", e)
             }
         }
-    }
-
-
-    fun writeDataSnapshotToFile(data: String) {
-        Log.d(TAG, "Writing data snapshot to file: $data")
-        writer.appendJson(data)
     }
 
     fun buildObdResultLog(result: ObdResponse): String {

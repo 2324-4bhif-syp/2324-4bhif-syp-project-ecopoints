@@ -58,6 +58,7 @@ public class TripService {
     }
 
     public CompletableFuture<String> addDataToTrip(UUID tripId, List<CarSensorData> sensorData) {
+        Log.i(TAG, "Adding data to trip with ID: " + tripId + " and data: " + sensorData.stream().findFirst().get().getCarData().getEngineRpm());
         return CompletableFuture.supplyAsync(() -> tripClient.addDataToTrip(tripId, sensorData))
                 .thenApply(response -> "Data added successfully")
                 .exceptionally(e -> "Failed to add data: " + e.getMessage());

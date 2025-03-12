@@ -21,6 +21,7 @@ public class TripViewModel {
     public ConcurrentHashMap<String,String> availableCommands = new ConcurrentHashMap<>();
     public ConcurrentHashMap<String,String> carData = new ConcurrentHashMap<>();
     public boolean showCannotStartTripDialog = false;
+    public boolean tripActive = false;
 
     // Refers to connecting to the device and setting up obd
     public boolean isSetupFinished = true;

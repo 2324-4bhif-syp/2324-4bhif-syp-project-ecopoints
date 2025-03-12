@@ -17,7 +17,7 @@ public static class TripMetaDataFactory
         var duration = endDate - startDate;
 
         var latLngList = sortedData
-            .Select(d => new KeyValuePair<double, double>(d.CarData.Latitude, d.CarData.Longitude))
+            .Select(d => new Tuple<double, double>(d.CarData.Latitude, d.CarData.Longitude))
             .ToList();
 
         var avgSpeedGps = sortedData.Average(d => d.CarData.GpsSpeed);

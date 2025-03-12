@@ -12,5 +12,5 @@ public class TripMetaData
     public Double MaxSpeedGps { get; set; }
     public Double MaxSpeedObd { get; set; }
     public Double AverageRpm { get; set; }
-    public List<KeyValuePair<Double, Double>> LatLngList { get; set; }
+    public List<Tuple<Double,Double>> LatLngList { get; set; }
 }

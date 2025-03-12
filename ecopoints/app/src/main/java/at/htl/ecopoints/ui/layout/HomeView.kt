@@ -108,7 +108,7 @@ class HomeView {
     constructor() {
     }
 
-    fun compose(activity: ComponentActivity) {
+    fun compose(activity: ComponentActivity, tripIds: List<String>) {
         activity.setContent {
             val isDarkMode = store.subject.map { it.isDarkMode }.subscribeAsState(false)
 
@@ -134,114 +134,114 @@ class HomeView {
 
                     ShowText()
 
-                    LastTrips(activity)
+                    LastTrips(activity, tripIds.take(3))
 
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(bottom = 60.dp),
-                        contentAlignment = Alignment.BottomCenter
-                    ) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp),
-                            horizontalArrangement = Arrangement.SpaceEvenly,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Column {
-                                androidx.compose.material.Button(
-                                    onClick = { shareJsonFile(activity) },
-                                    colors = androidx.compose.material.ButtonDefaults.outlinedButtonColors(
-                                        backgroundColor = MaterialTheme.colorScheme.background
-                                    ),
-                                    shape = RoundedCornerShape(30),
-                                    border = BorderStroke(1.dp, Color.LightGray)
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Rounded.Share,
-                                        contentDescription = "Share JSON",
-                                        tint = MaterialTheme.colorScheme.primary
-                                    )
-
-                                    Text(
-                                        text = "JSON",
-                                        fontWeight = FontWeight.Bold,
-                                        fontSize = TextUnit(15f, TextUnitType.Sp),
-                                        color = MaterialTheme.colorScheme.primary,
-                                        modifier = Modifier.padding(
-                                            start = 8.dp,
-                                            bottom = 4.dp,
-                                            top = 4.dp
-                                        )
-                                    )
-                                }
-                            }
-
-                            Column {
-                                androidx.compose.material.Button(
-                                    onClick = { shareLogFile(activity) },
-                                    colors = androidx.compose.material.ButtonDefaults.outlinedButtonColors(
-                                        backgroundColor = MaterialTheme.colorScheme.background
-                                    ),
-                                    shape = RoundedCornerShape(30),
-                                    border = BorderStroke(1.dp, Color.LightGray)
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Rounded.Share,
-                                        contentDescription = "Share Log",
-                                        tint = MaterialTheme.colorScheme.primary
-                                    )
-
-                                    Text(
-                                        text = "Log",
-                                        fontWeight = FontWeight.Bold,
-                                        fontSize = TextUnit(15f, TextUnitType.Sp),
-                                        color = MaterialTheme.colorScheme.primary,
-                                        modifier = Modifier.padding(
-                                            start = 8.dp,
-                                            bottom = 4.dp,
-                                            top = 4.dp
-                                        )
-                                    )
-                                }
-                            }
-
-                            Column {
-                                androidx.compose.material.Button(
-                                    onClick = {
-                                        jsonFileWriter.clearFile()
-                                        jsonFileWriter.clearLog()
-                                        Toast
-                                            .makeText(activity, "File cleared", Toast.LENGTH_SHORT)
-                                            .show() },
-                                    colors = androidx.compose.material.ButtonDefaults.outlinedButtonColors(
-                                        backgroundColor = MaterialTheme.colorScheme.background
-                                    ),
-                                    shape = RoundedCornerShape(30),
-                                    border = BorderStroke(1.dp, Color.LightGray)
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Rounded.ClearAll,
-                                        contentDescription = "Clear File",
-                                        tint = MaterialTheme.colorScheme.primary
-                                    )
-
-                                    Text(
-                                        text = "Clear",
-                                        fontWeight = FontWeight.Bold,
-                                        fontSize = TextUnit(15f, TextUnitType.Sp),
-                                        color = MaterialTheme.colorScheme.primary,
-                                        modifier = Modifier.padding(
-                                            start = 8.dp,
-                                            bottom = 4.dp,
-                                            top = 4.dp
-                                        )
-                                    )
-                                }
-                            }
-                        }
-                    }
+//                    Box(
+//                        modifier = Modifier
+//                            .fillMaxSize()
+//                            .padding(bottom = 60.dp),
+//                        contentAlignment = Alignment.BottomCenter
+//                    ) {
+//                        Row(
+//                            modifier = Modifier
+//                                .fillMaxWidth()
+//                                .padding(horizontal = 16.dp),
+//                            horizontalArrangement = Arrangement.SpaceEvenly,
+//                            verticalAlignment = Alignment.CenterVertically
+//                        ) {
+//                            Column {
+//                                androidx.compose.material.Button(
+//                                    onClick = { shareJsonFile(activity) },
+//                                    colors = androidx.compose.material.ButtonDefaults.outlinedButtonColors(
+//                                        backgroundColor = MaterialTheme.colorScheme.background
+//                                    ),
+//                                    shape = RoundedCornerShape(30),
+//                                    border = BorderStroke(1.dp, Color.LightGray)
+//                                ) {
+//                                    Icon(
+//                                        imageVector = Icons.Rounded.Share,
+//                                        contentDescription = "Share JSON",
+//                                        tint = MaterialTheme.colorScheme.primary
+//                                    )
+//
+//                                    Text(
+//                                        text = "JSON",
+//                                        fontWeight = FontWeight.Bold,
+//                                        fontSize = TextUnit(15f, TextUnitType.Sp),
+//                                        color = MaterialTheme.colorScheme.primary,
+//                                        modifier = Modifier.padding(
+//                                            start = 8.dp,
+//                                            bottom = 4.dp,
+//                                            top = 4.dp
+//                                        )
+//                                    )
+//                                }
+//                            }
+//
+//                            Column {
+//                                androidx.compose.material.Button(
+//                                    onClick = { shareLogFile(activity) },
+//                                    colors = androidx.compose.material.ButtonDefaults.outlinedButtonColors(
+//                                        backgroundColor = MaterialTheme.colorScheme.background
+//                                    ),
+//                                    shape = RoundedCornerShape(30),
+//                                    border = BorderStroke(1.dp, Color.LightGray)
+//                                ) {
+//                                    Icon(
+//                                        imageVector = Icons.Rounded.Share,
+//                                        contentDescription = "Share Log",
+//                                        tint = MaterialTheme.colorScheme.primary
+//                                    )
+//
+//                                    Text(
+//                                        text = "Log",
+//                                        fontWeight = FontWeight.Bold,
+//                                        fontSize = TextUnit(15f, TextUnitType.Sp),
+//                                        color = MaterialTheme.colorScheme.primary,
+//                                        modifier = Modifier.padding(
+//                                            start = 8.dp,
+//                                            bottom = 4.dp,
+//                                            top = 4.dp
+//                                        )
+//                                    )
+//                                }
+//                            }
+//
+//                            Column {
+//                                androidx.compose.material.Button(
+//                                    onClick = {
+//                                        jsonFileWriter.clearFile()
+//                                        jsonFileWriter.clearLog()
+//                                        Toast
+//                                            .makeText(activity, "File cleared", Toast.LENGTH_SHORT)
+//                                            .show() },
+//                                    colors = androidx.compose.material.ButtonDefaults.outlinedButtonColors(
+//                                        backgroundColor = MaterialTheme.colorScheme.background
+//                                    ),
+//                                    shape = RoundedCornerShape(30),
+//                                    border = BorderStroke(1.dp, Color.LightGray)
+//                                ) {
+//                                    Icon(
+//                                        imageVector = Icons.Rounded.ClearAll,
+//                                        contentDescription = "Clear File",
+//                                        tint = MaterialTheme.colorScheme.primary
+//                                    )
+//
+//                                    Text(
+//                                        text = "Clear",
+//                                        fontWeight = FontWeight.Bold,
+//                                        fontSize = TextUnit(15f, TextUnitType.Sp),
+//                                        color = MaterialTheme.colorScheme.primary,
+//                                        modifier = Modifier.padding(
+//                                            start = 8.dp,
+//                                            bottom = 4.dp,
+//                                            top = 4.dp
+//                                        )
+//                                    )
+//                                }
+//                            }
+//                        }
+//                    }
 
                     val (currentScreen, setCurrentScreen) = remember { mutableStateOf("Home") }
                     Box(
@@ -504,9 +504,10 @@ class HomeView {
         )
     }
 
+
     @Composable
     fun LastTripsButton(
-        trip: Trip,
+        trip: String,
         onClickAction: () -> Unit
     ) {
         androidx.compose.material.Button(
@@ -521,31 +522,13 @@ class HomeView {
             ),
             border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary)
         ) {
-            val formattedDate = SimpleDateFormat("dd.MM.yyyy, HH:mm", Locale.getDefault()).format(trip.start)
             Column(
                 modifier = Modifier
                     .padding(vertical = 8.dp, horizontal = 16.dp)
                     .fillMaxWidth()
             ) {
                 Row {
-                    Text(
-                        text = "$formattedDate Uhr",
-                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
-                    )
-                }
-                Spacer(modifier = Modifier.height(4.dp))
-                Row {
-                    Text(text = "${trip.rewardedEcoPoints}")
-                    Image(
-                        painter = painterResource(id = R.drawable.ranking_category_ecopoints),
-                        contentDescription = "Eco-Points",
-                        modifier = Modifier
-                            .size(25.dp)
-                            .clip(RoundedCornerShape(10.dp))
-                            .align(Alignment.CenterVertically)
-                    )
-                    Spacer(modifier = Modifier.weight(1f))
-                    Text(text = "${trip.distance} km")
+                    Text(text = "${trip}")
                 }
             }
         }
@@ -554,7 +537,7 @@ class HomeView {
 
 
     @Composable
-    fun LastTrips(context: Context) {
+    fun LastTrips(context: Context, tripIds: List<String>) {
         val state = store.subject.map { it.homeInfo }.subscribeAsState(HomeInfo())
         addFakeDataToDB(context)
 
@@ -572,14 +555,8 @@ class HomeView {
                 modifier = Modifier
                     .weight(1f)
             ) {
-                items(trips) { trip ->
-                    LastTripsButton(trip = trip) {
-                        store.next {
-                            it.homeInfo.showDialog = true
-                            it.homeInfo.selectedTripDate = trip.start
-                        }
-                    }
-
+                items(tripIds) { trip ->
+                    LastTripsButton(trip = trip, {})
                 }
             }
 

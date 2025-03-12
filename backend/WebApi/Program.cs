@@ -162,7 +162,7 @@ app.MapPost("/api/create-trip", (SensorDataController controller) => controller.
         return operation;
     });
 
-app.MapGet("/api/trips", (SensorDataController controller) => controller.GetAllTrips())
+app.MapGet("/api/tripIds", (SensorDataController controller) => controller.GetAllTripIds())
     .WithOpenApi(operation =>
     {
         operation.Summary = "Get all tripIds";
@@ -173,6 +173,13 @@ app.MapGet("/api/trip/{tripId:guid}", (SensorDataController controller, Guid tri
     .WithOpenApi(operation =>
     {
         operation.Summary = "Get data from a specific trip";
+        return operation;
+    });
+
+app.MapGet("/api/trips", (SensorDataController controller) => controller.GetTripsData())
+    .WithOpenApi(operation =>
+    {
+        operation.Summary = "Get calculated metadata from a specific trip";
         return operation;
     });
 

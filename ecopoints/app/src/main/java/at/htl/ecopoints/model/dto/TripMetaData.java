@@ -1,16 +1,14 @@
 package at.htl.ecopoints.model.dto;
 
-import android.util.Pair;
-
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import at.htl.ecopoints.model.LatLng;
+
 public class TripMetaData {
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
-    private Duration duration;
+    private String startDate;
+    private String endDate;
+    private String duration;
     private UUID tripId;
     private double distance;
     private double averageSpeedGps;
@@ -18,30 +16,31 @@ public class TripMetaData {
     private double maxSpeedGps;
     private double maxSpeedObd;
     private double averageRpm;
-    private List<Pair<Double, Double>> latLngList;
+    private List<LatLng> latLngList;
 
     // Getters and Setters
-    public LocalDateTime getStartDate() {
+
+    public String getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDateTime startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
-    public LocalDateTime getEndDate() {
+    public String getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDateTime endDate) {
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
 
-    public Duration getDuration() {
+    public String getDuration() {
         return duration;
     }
 
-    public void setDuration(Duration duration) {
+    public void setDuration(String duration) {
         this.duration = duration;
     }
 
@@ -101,11 +100,11 @@ public class TripMetaData {
         this.averageRpm = averageRpm;
     }
 
-    public List<Pair<Double, Double>> getLatLngList() {
+    public List<LatLng> getLatLngList() {
         return latLngList;
     }
 
-    public void setLatLngList(List<Pair<Double, Double>> latLngList) {
+    public void setLatLngList(List<LatLng> latLngList) {
         this.latLngList = latLngList;
     }
 }

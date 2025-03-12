@@ -31,7 +31,7 @@ public interface TripClient {
 
     @GET
     @Path("/trips")
-    List<TripMetaData> getAllTrips();
+    TripMetaData[] getAllTrips();
 
     @GET
     @Path("/trip/{tripId}")

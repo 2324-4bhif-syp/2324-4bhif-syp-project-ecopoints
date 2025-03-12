@@ -176,38 +176,38 @@ class TripView {
 //                                            )
 //                                        }
 
-                                        Button(onClick = {
-                                            val map: ConcurrentHashMap<String, String> =
-                                                ConcurrentHashMap<String, String>()
-                                            for (command in relevantObdCommands) {
-                                                map[command.name] =
-                                                    Random.nextDouble(0.0, 10000.0).toString();
-                                                Log.d(TAG, "Command: ${command.name} : Value: ${map[command.name]}")
-                                            }
-                                            map["Latitude"] = "34.34"
-                                            map["Longitude"] = "43.3"
-                                            map["Altitude"] = "2000"
-
-                                            var mapper = ObjectMapper();
-                                            try {
-                                                var jsonData = mapper.writeValueAsString(map.toCarSensorData());
-                                                Log.d(TAG, tripId.value + "Trip data: " + jsonData);
-                                            } catch (e : Exception) {
-                                                Log.e(TAG, "Failed to serialize trip data", e);
-                                            }
-
-                                            tripService.addDataToTrip(
-                                                UUID.fromString(tripId.value),
-                                                listOf(map.toCarSensorData())
-                                            )
-                                                .thenAccept { response ->
-                                                    println(response)
-                                                }
-                                        }) {
-                                            Text(
-                                                text = "Test API"
-                                            )
-                                        }
+//                                        Button(onClick = {
+//                                            val map: ConcurrentHashMap<String, String> =
+//                                                ConcurrentHashMap<String, String>()
+//                                            for (command in relevantObdCommands) {
+//                                                map[command.name] =
+//                                                    Random.nextDouble(0.0, 10000.0).toString();
+//                                                Log.d(TAG, "Command: ${command.name} : Value: ${map[command.name]}")
+//                                            }
+//                                            map["Latitude"] = "34.34"
+//                                            map["Longitude"] = "43.3"
+//                                            map["Altitude"] = "2000"
+//
+//                                            var mapper = ObjectMapper();
+//                                            try {
+//                                                var jsonData = mapper.writeValueAsString(map.toCarSensorData());
+//                                                Log.d(TAG, tripId.value + "Trip data: " + jsonData);
+//                                            } catch (e : Exception) {
+//                                                Log.e(TAG, "Failed to serialize trip data", e);
+//                                            }
+//
+//                                            tripService.addDataToTrip(
+//                                                UUID.fromString(tripId.value),
+//                                                listOf(map.toCarSensorData())
+//                                            )
+//                                                .thenAccept { response ->
+//                                                    println(response)
+//                                                }
+//                                        }) {
+//                                            Text(
+//                                                text = "Test API"
+//                                            )
+//                                        }
 
                                         IconButton(
                                             onClick = {
@@ -1018,14 +1018,16 @@ class TripView {
                 Button(
                     onClick = {
 
-                        if (!state.value.isConnected) {
-                            btConnectionHandler.createConnection(state.value.selectedDevice)
-                            store.next { it.tripViewModel.isSetupFinished = false }
-                        } else {
+                        if (state.value.selectedDevice != null) {
+                            if (!state.value.isConnected) {
+                                btConnectionHandler.createConnection(state.value.selectedDevice)
+                                store.next { it.tripViewModel.isSetupFinished = false }
+                            } else {
 
-                            btConnectionHandler.disconnect()
-                            tripActive = false
-                            obdReaderKt.stopReading()
+                                btConnectionHandler.disconnect()
+                                tripActive = false
+                                obdReaderKt.stopReading()
+                            }
                         }
                     },
                     modifier = Modifier
@@ -1364,16 +1366,16 @@ class TripView {
     //endregion
     fun Map<String, String>.toCarSensorData(): CarSensorData {
         var carSensorData = CarSensorData()
-        var timestamp : Timestamp = Timestamp(System.currentTimeMillis());
+        var timestamp: Timestamp = Timestamp(System.currentTimeMillis());
 
-        var instant : Instant = timestamp.toInstant();
+        var instant: Instant = timestamp.toInstant();
         var formattedTimestamp = instant.atOffset(ZoneOffset.UTC)
             .format(DateTimeFormatter.ISO_INSTANT);
 
         carSensorData.timestamp = formattedTimestamp
         var carData = CarDataBackend()
         carData.latitude = this["Latitude"]?.toDoubleOrNull() ?: 0.0
-        Log.d(TAG,"Latitude: ${carData.latitude}")
+        Log.d(TAG, "Latitude: ${carData.latitude}")
         carData.longitude = this["Longitude"]?.toDoubleOrNull() ?: 0.0
         carData.altitude = this["Altitude"]?.toDoubleOrNull() ?: 0.0
         carData.engineLoad = this["Engine Load"]?.toDoubleOrNull() ?: 0.0

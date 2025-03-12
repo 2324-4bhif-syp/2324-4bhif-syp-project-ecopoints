@@ -10,6 +10,7 @@ import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -72,7 +73,8 @@ public class HomeActivity extends ComponentActivity {
         });
 
         tripService.getAllTrips().thenAccept(trips -> {
-            store.next(model -> model.homeInfo.trips = trips);
+            store.next(model -> model.homeInfo.trips = Arrays.stream(trips).toList());
+            Log.i(TAG, "Got trips: " + trips);
         }).exceptionally(e -> {
             Log.e(TAG, "Failed to get trips: " + e.getMessage());
             return null;

@@ -74,10 +74,13 @@ namespace DataService.Controller
         public async Task<IResult> GetTripsData()
         {
             var tripIds = await _dbService.GetAllTripsAsync();
-            var dataTasks = tripIds.Select(async i => await _dbService.GetTripDataAsync(i));
-            var data = await Task.WhenAll(dataTasks);
+            //var dataTasks = tripIds.Select(async i => await _dbService.GetTripDataAsync(i));
+
+            var dataTasks = await Task.WhenAll(tripIds.Select(async i =>
+                new KeyValuePair<Guid, IEnumerable<CarSensorData>>(i, await _dbService.GetTripDataAsync(i))));
+
             
-            return Results.Ok(data.Select(TripMetaDataFactory.CreateFromSensorData));
+            return Results.Ok(dataTasks.Select((d) => TripMetaDataFactory.CreateFromSensorData(d.Key,d.Value)));
         }
     }
 }

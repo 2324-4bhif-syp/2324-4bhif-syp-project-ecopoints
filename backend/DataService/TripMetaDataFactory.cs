@@ -5,9 +5,9 @@ namespace DataService;
 
 public static class TripMetaDataFactory
 {
-    public static TripMetaData CreateFromSensorData(List<CarSensorData> sensorData)
+    public static TripMetaData CreateFromSensorData(Guid tripId, IEnumerable<CarSensorData> sensorData)
     {
-        if (sensorData == null || sensorData.Count == 0)
+        if (sensorData == null || !sensorData.Any())
             throw new ArgumentException("Sensor data list cannot be empty.");
 
         var sortedData = sensorData.OrderBy(d => d.Timestamp).ToList();
@@ -25,15 +25,19 @@ public static class TripMetaDataFactory
         var avgSpeedObd = sortedData.Average(d => d.CarData.ObdSpeed);
         var maxSpeedObd = sortedData.Max(d => d.CarData.ObdSpeed);
         var avgRpm = sortedData.Average(d => d.CarData.EngineRpm);
-
+        var avgEngineLoad = sortedData.Average(d => d.CarData.EngineLoad);
         var distance = CalculateTotalDistance(sortedData);
+
+        var ecoPoints = EcoPointsCalculator.CalculateEcoPoints(sortedData);
 
         return new TripMetaData
         {
+            AverageEngineLoad = avgEngineLoad,
+            EcoPointsMetaData = ecoPoints,
             StartDate = startDate,
             EndDate = endDate,
             Duration = duration,
-            TripId = Guid.NewGuid(),
+            TripId = tripId,
             Distance = distance,
             AverageSpeedGps = avgSpeedGps,
             MaxSpeedGps = maxSpeedGps,

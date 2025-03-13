@@ -81,7 +81,7 @@ namespace DataService.Controller
                 new KeyValuePair<Guid, IEnumerable<CarSensorData>>(i, await _dbService.GetTripDataAsync(i))));
 
             
-            return Results.Ok(dataTasks.Select((d) => TripMetaDataFactory.CreateFromSensorData(d.Key,d.Value)));
+            return Results.Ok(dataTasks.Select((d) => TripMetaDataFactory.CreateFromSensorData(d.Key,d.Value)).OrderByDescending(t => t.StartDate));
         }
     }
 }

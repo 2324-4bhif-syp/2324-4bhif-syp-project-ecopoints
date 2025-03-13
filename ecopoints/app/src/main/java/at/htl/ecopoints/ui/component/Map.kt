@@ -23,12 +23,12 @@ fun ShowMap(modifier: Modifier = Modifier
                 .height(200.dp),
             properties: MapProperties = MapProperties(mapType = MapType.HYBRID, isMyLocationEnabled = true),
             latLngList: List<PolylineNode> = listOf(),
+            cameraPositionState: CameraPositionState = CameraPositionState(CameraPosition(LatLng(0.0, 0.0), 12f, 0f, 0f)),
             draw: Boolean = false){
     GoogleMap(
         modifier = modifier,
         properties = properties,
-        cameraPositionState = CameraPositionState(CameraPosition(LatLng(latLngList.last().latitude,
-            latLngList.last().longitude), 12f, 0f, 0f)),
+        cameraPositionState = cameraPositionState
     ) {
         if(latLngList.isNotEmpty())
             DrawPolyLine(latLngList, draw);

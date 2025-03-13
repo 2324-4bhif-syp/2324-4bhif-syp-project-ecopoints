@@ -6,15 +6,19 @@ import android.net.Uri
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -23,6 +27,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
@@ -37,10 +42,13 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rxjava3.subscribeAsState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -49,6 +57,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.Color.Companion.Transparent
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -56,6 +65,8 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.core.content.FileProvider
 import at.htl.ecopoints.MainActivity
 import at.htl.ecopoints.R
@@ -71,7 +82,9 @@ import at.htl.ecopoints.navigation.BottomNavBar
 import at.htl.ecopoints.ui.component.ShowMap
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
 import at.htl.ecopoints.util.DurationParser
+import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.CameraPositionState
 import com.opencsv.CSVParserBuilder
 import com.opencsv.CSVReaderBuilder
 import java.io.File
@@ -644,21 +657,35 @@ class HomeView {
             val formattedEndDate = Instant.parse(selectedTrip.endDate).atZone(ZoneId.of("UTC")).format(
                 DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))
 
+            val smallMapCameraPosition = remember {
+                mutableStateOf(
+                    CameraPositionState(
+                        CameraPosition(
+                            LatLng(
+                                selectedTrip.latLngList.last().item1,
+                                selectedTrip.latLngList.last().item2
+                            ),
+                            12f,
+                            0f,
+                            0f
+                        )
+                    )
+                )
+            }
+
+            var isFullScreen by remember { mutableStateOf(false) }
+
             AlertDialog(
                 onDismissRequest = {
                     onCloseDialog()
                 },
                 title = {
-                    Text(
-                        "Trip: " + formattedStartDate
-                    )
+                    Text("Trip: $formattedStartDate")
                 },
                 text = {
                     Column {
                         if (selectedTrip != null) {
-                            Text(
-                                "End Date: ${formattedEndDate}"
-                            )
+                            Text("End Date: $formattedEndDate")
                             Text("Distance: ${String.format("%.2f", selectedTrip.distance)} km")
                             Text("Average Speed: ${String.format("%.2f", selectedTrip.averageSpeedObd)} km/h")
                             Text("Average RPM: ${String.format("%.2f", selectedTrip.averageRpm)} rpm")
@@ -666,22 +693,83 @@ class HomeView {
                             Text("Trip details not available.")
                         }
                         Spacer(modifier = Modifier.height(16.dp))
-                        ShowMap(
-                            latLngList = selectedTrip.latLngList.map { PolylineNode(it.item1, it.item2, 0.0) }
-                        )
+
+                        Box {
+                            ShowMap(
+                                modifier = Modifier
+                                    .height(200.dp)
+                                    .fillMaxWidth(),
+                                latLngList = selectedTrip.latLngList.map { PolylineNode(it.item1, it.item2, 0.0) },
+                                cameraPositionState = smallMapCameraPosition.value
+                            )
+                            Box(
+                                modifier = Modifier
+                                    .align(Alignment.TopStart)
+                                    .padding(8.dp)
+                                    .background(Color.White, shape = RoundedCornerShape(8.dp))
+                                    .clickable { isFullScreen = true }
+                                    .padding(8.dp)
+                            ) {
+                                Text("Fullscreen", color = Color.Black)
+                            }
+                        }
                     }
                 },
                 confirmButton = {
-                    TextButton(onClick = {
-                        onCloseDialog()
-                    }) {
+                    TextButton(onClick = { onCloseDialog() }) {
                         Text("OK")
                     }
                 }
             )
+
+            if (isFullScreen) {
+                Dialog(
+                    onDismissRequest = { isFullScreen = false },
+                    properties = DialogProperties(usePlatformDefaultWidth = false) // Wichtig für echtes Fullscreen!
+                ) {
+                    val fullScreenCameraPosition = remember {
+                        mutableStateOf(
+                            CameraPositionState(
+                                CameraPosition(
+                                    smallMapCameraPosition.value.position.target,
+                                    smallMapCameraPosition.value.position.zoom,
+                                    smallMapCameraPosition.value.position.tilt,
+                                    smallMapCameraPosition.value.position.bearing
+                                )
+                            )
+                        )
+                    }
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(Color.Black) // Fix für richtige Bildschirmfüllung
+                    ) {
+                        ShowMap(
+                            modifier = Modifier.fillMaxSize(),
+                            latLngList = selectedTrip.latLngList.map { PolylineNode(it.item1, it.item2, 0.0) },
+                            cameraPositionState = fullScreenCameraPosition.value
+                        )
+
+                        Column(
+                            modifier = Modifier
+                                .align(Alignment.TopStart)
+                                .padding(16.dp)
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .background(Color.White, shape = RoundedCornerShape(8.dp))
+                                    .clickable { isFullScreen = false }
+                                    .padding(8.dp)
+                            ) {
+                                Text("Close", color = Color.Black)
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
-
 
     private fun readTripData2FromCsvAndAddToDB(fileName: String, context: Context) {
         val dbHelper = DBHelper(context, null)

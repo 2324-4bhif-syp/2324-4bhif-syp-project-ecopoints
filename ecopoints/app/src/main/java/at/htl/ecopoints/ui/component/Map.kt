@@ -8,7 +8,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import at.htl.ecopoints.model.PolylineNode
+import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.CameraPositionState
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapType
@@ -24,7 +26,9 @@ fun ShowMap(modifier: Modifier = Modifier
             draw: Boolean = false){
     GoogleMap(
         modifier = modifier,
-        properties = properties
+        properties = properties,
+        cameraPositionState = CameraPositionState(CameraPosition(LatLng(latLngList.last().latitude,
+            latLngList.last().longitude), 12f, 0f, 0f)),
     ) {
         if(latLngList.isNotEmpty())
             DrawPolyLine(latLngList, draw);

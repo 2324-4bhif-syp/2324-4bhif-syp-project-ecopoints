@@ -68,6 +68,7 @@ import at.htl.ecopoints.io.JsonFileWriter
 import at.htl.ecopoints.model.CarData
 import at.htl.ecopoints.model.GasData
 import at.htl.ecopoints.model.HomeInfo
+import at.htl.ecopoints.model.PolylineNode
 import at.htl.ecopoints.model.Store
 import at.htl.ecopoints.model.Trip
 import at.htl.ecopoints.model.dto.TripMetaData
@@ -735,14 +736,7 @@ class HomeView {
                         }
                         Spacer(modifier = Modifier.height(16.dp))
                         ShowMap(
-//                            cameraPositionState = rememberCameraPositionState {
-//                                position = CameraPosition.fromLatLngZoom(
-//                                    LatLng(getLatLngsFromTripDB(context, selectedTrip!!.id)
-//                                        .first().second.first.latitude,
-//                                        getLatLngsFromTripDB(context, selectedTrip!!.id)
-//                                            .first().second.first.longitude), 10f)
-//                            },
-                            //latLngList = getLatLngsFromTripDB(context, selectedTrip!!.id)
+                            latLngList = selectedTrip.latLngList.map { PolylineNode(it.item1, it.item2, 0.0) }
                         )
                     }
                 },

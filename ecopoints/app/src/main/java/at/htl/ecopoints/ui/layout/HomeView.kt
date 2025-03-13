@@ -352,14 +352,6 @@ class HomeView {
         ) {
 
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Image(
-                    painter = painterResource(id = R.drawable.ranking_category_ecopoints),
-                    contentDescription = "Eco-Points",
-                    modifier = Modifier
-                        .size(35.dp)
-                        .clip(RoundedCornerShape(10.dp))
-                )
-
                 Text(
                     text = ecopoints.toString(),
                     style = TextStyle(
@@ -367,6 +359,14 @@ class HomeView {
                         fontWeight = FontWeight.Bold
                     ),
                     modifier = Modifier.padding(start = 5.dp)
+                )
+
+                Image(
+                    painter = painterResource(id = R.drawable.ranking_category_ecopoints),
+                    contentDescription = "Eco-Points",
+                    modifier = Modifier
+                        .size(35.dp)
+                        .clip(RoundedCornerShape(10.dp))
                 )
             }
         }

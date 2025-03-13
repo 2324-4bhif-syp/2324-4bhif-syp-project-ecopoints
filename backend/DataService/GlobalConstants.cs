@@ -11,8 +11,8 @@ public static class GlobalConstants
     public const double MaxRpm = 12000;    // Maximum acceptable RPM
 
     // Acceleration/Braking thresholds
-    public const double HarshAccelerationThreshold = 3.0;  // m/s²
-    public const double HarshBrakingThreshold = -4.0;      // m/s²
+    public const double HarshAccelerationThreshold = 5.0;  // m/s²
+    public const double HarshBrakingThreshold = -5.0;      // m/s²
 
     // High-Speed & Engine Load thresholds
     public const double HighSpeedThreshold = 120.0;        // km/h

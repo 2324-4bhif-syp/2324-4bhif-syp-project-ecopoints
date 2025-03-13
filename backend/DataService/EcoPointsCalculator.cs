@@ -9,7 +9,7 @@ namespace DataService
         {
             var carSensorDatas = data.ToList();
             if (!carSensorDatas.Any())
-                return new EcoPointsMetaData { EcoPoints = 0 }; // No data means no score.
+                return new EcoPointsMetaData { EcoPoints = 0 }; 
 
             var metadata = new EcoPointsMetaData();
             int ecoScore = 100; // Start with a perfect score

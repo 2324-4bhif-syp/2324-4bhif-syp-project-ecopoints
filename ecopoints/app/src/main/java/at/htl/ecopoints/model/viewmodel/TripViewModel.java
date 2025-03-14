@@ -1,5 +1,6 @@
 package at.htl.ecopoints.model.viewmodel;
 
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import at.htl.ecopoints.model.Map;
@@ -8,6 +9,7 @@ import at.htl.ecopoints.model.BtDevice;
 public class TripViewModel {
 
     public Map map = new Map();
+    public UUID tripId = null;
 //    public Trip trip = new Trip();
 //    public CarData carData = new CarData();
     public BtDevice selectedDevice = null;
@@ -19,6 +21,7 @@ public class TripViewModel {
     public ConcurrentHashMap<String,String> availableCommands = new ConcurrentHashMap<>();
     public ConcurrentHashMap<String,String> carData = new ConcurrentHashMap<>();
     public boolean showCannotStartTripDialog = false;
+    public boolean tripActive = false;
 
     // Refers to connecting to the device and setting up obd
     public boolean isSetupFinished = true;

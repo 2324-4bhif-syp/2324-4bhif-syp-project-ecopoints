@@ -164,21 +164,17 @@ class LastRidesView {
 
         val state = store.subject.map { it.homeInfo }.subscribeAsState(HomeInfo())
 
-
         val cardWidth = 175.dp
         val cardHeight = 80.dp
         val cardBorderWidth = 1.dp
         val cardBorderColor = MaterialTheme.colorScheme.primary
         val cardCornerShapeSize = 20.dp
 
-        val dbHelper = DBHelper(context, null)
-        val trips = dbHelper.getAllTrips()
-        dbHelper.close()
 
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-            trips.forEach { trip ->
+            state.value.trips.forEach { trip ->
                 val formattedDate =
-                    SimpleDateFormat("dd.MM.yyyy, HH:mm", Locale.getDefault()).format(trip.start)
+                    SimpleDateFormat("dd.MM.yyyy, HH:mm", Locale.getDefault()).format(trip.startDate)
 
                 Column(modifier = Modifier.padding(vertical = 16.dp, horizontal = 16.dp)) {
 
@@ -190,55 +186,14 @@ class LastRidesView {
                         modifier = Modifier
                             .clickable {
                                 store.next {
-                                    it.homeInfo.selectedTripDate2 = trip.start
+                                    it.homeInfo.selectedTrip = trip
                                     it.homeInfo.showDialog2 = true
                                 }
                             }
                             .padding(bottom = 10.dp)
                     )
 
-                    trip.detailTripCardContentList.forEach { row ->
-                        Row(
-                            modifier = Modifier.padding(bottom = 8.dp),
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            row.forEach { col ->
-                                Card(
-                                    border = BorderStroke(cardBorderWidth, cardBorderColor),
-                                    shape = RoundedCornerShape(cardCornerShapeSize),
-                                    modifier = Modifier
-                                        .size(width = cardWidth, height = cardHeight)
-                                        .padding(horizontal = 8.dp)
-                                ) {
-                                    Row(
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        modifier = Modifier.padding(horizontal = 10.dp)
-                                    ) {
-                                        Image(
-                                            painter = painterResource(id = col.icon),
-                                            contentDescription = col.description,
-                                            modifier = Modifier.size(30.dp)
-                                        )
-
-                                        Column(
-                                            modifier = Modifier.padding(start = 10.dp)
-                                        ) {
-                                            Text(
-                                                text = col.value,
-                                                fontWeight = FontWeight.Bold,
-                                                fontSize = TextUnit(20f, TextUnitType.Sp)
-                                            )
-                                            Text(
-                                                text = col.description
-                                            )
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    if(trip != trips.last())
+                    if(trip != state.value.trips.last())
                     {
                         androidx.compose.material3.Divider(thickness = 1.dp, color = Color.LightGray)
                     }
@@ -252,13 +207,13 @@ class LastRidesView {
 
             homeView.ShowTripPopupDialog(
                 showDialog = state.value.showDialog2,
-                selectedTripDate = state.value.selectedTripDate2,
-                trips = trips,
+                selectedTrip = state.value.selectedTrip,
+                trips = state.value.trips,
                 context = context,
                 onCloseDialog = {
                     store.next {
                         it.homeInfo.showDialog2 = false
-                        it.homeInfo.selectedTripDate2 = null
+                        it.homeInfo.selectedTrip = null
                         it.homeInfo.showDetailedLastRidesPopup2 = false
                     }
                 }

@@ -55,13 +55,21 @@ import at.htl.ecopoints.io.LocationManager
 import at.htl.ecopoints.model.*
 import at.htl.ecopoints.model.viewmodel.TripViewModel
 import at.htl.ecopoints.navigation.BottomNavBar
+import at.htl.ecopoints.service.TripService
 import at.htl.ecopoints.ui.component.ShowMap
 import at.htl.ecopoints.ui.theme.EcoPointsTheme
+import com.fasterxml.jackson.databind.ObjectMapper
+import java.sql.Timestamp
+import java.time.Instant
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
 import java.util.Date
+import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.math.roundToInt
+import kotlin.random.Random
 
 private val TAG = TripView::class.java.simpleName
 
@@ -82,6 +90,9 @@ class TripView {
 
     @Inject
     lateinit var writer: JsonFileWriter
+
+    @Inject
+    lateinit var tripService: TripService
 
     private var tripActive = false
 
@@ -156,6 +167,39 @@ class TripView {
 //                                            Text(
 //                                                text = "Available Commands",
 //                                                style = MaterialTheme.typography.bodyLarge
+//                                            )
+//                                        }
+
+//                                        Button(onClick = {
+//                                            val map: ConcurrentHashMap<String, String> =
+//                                                ConcurrentHashMap<String, String>()
+//                                            for (command in relevantObdCommands) {
+//                                                map[command.name] =
+//                                                    Random.nextDouble(0.0, 10000.0).toString();
+//                                                Log.d(TAG, "Command: ${command.name} : Value: ${map[command.name]}")
+//                                            }
+//                                            map["Latitude"] = "34.34"
+//                                            map["Longitude"] = "43.3"
+//                                            map["Altitude"] = "2000"
+//
+//                                            var mapper = ObjectMapper();
+//                                            try {
+//                                                var jsonData = mapper.writeValueAsString(map.toCarSensorData());
+//                                                Log.d(TAG, "c213411a-a205-42f6-bd1e-226a63a2bacb" + "Trip data: " + jsonData);
+//                                            } catch (e : Exception) {
+//                                                Log.e(TAG, "Failed to serialize trip data", e);
+//                                            }
+//
+//                                            tripService.addDataToTrip(
+//                                                UUID.fromString("c213411a-a205-42f6-bd1e-226a63a2bacb"),
+//                                                listOf(map.toCarSensorData())
+//                                            )
+//                                                .thenAccept { response ->
+//                                                    println(response)
+//                                                }
+//                                        }) {
+//                                            Text(
+//                                                text = "Test API"
 //                                            )
 //                                        }
 
@@ -293,19 +337,19 @@ class TripView {
                                 }
 
 
-                                    //ELM Setup and getting Available Commands
-                                    Text(
-                                        text = "Setting up ELM327 Adapter:",
-                                        style = MaterialTheme.typography.bodyLarge,
-                                        color = Color.White,
-                                        textAlign = TextAlign.Center
-                                    )
-                                    Text(
-                                        text = "${elmSetupCurrentStepState.value}",
-                                        style = MaterialTheme.typography.bodySmall,
-                                        color = Color.White,
-                                        textAlign = TextAlign.Center
-                                    )
+                                //ELM Setup and getting Available Commands
+                                Text(
+                                    text = "Setting up ELM327 Adapter:",
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    color = Color.White,
+                                    textAlign = TextAlign.Center
+                                )
+                                Text(
+                                    text = "${elmSetupCurrentStepState.value}",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = Color.White,
+                                    textAlign = TextAlign.Center
+                                )
                             }
                         }
                     }
@@ -319,7 +363,10 @@ class TripView {
     private fun stopTrip() {
         if (tripActive) {
             Log.i(TAG, "Trip stopped")
-            obdReaderKt.stopReading()
+            store.next() {
+                it.tripViewModel.tripActive = false
+            }
+//            obdReaderKt.stopReading()
             tripActive = false
         } else {
             Log.w(TAG, "Tried to stop a trip without starting one")
@@ -330,6 +377,17 @@ class TripView {
         //View Testing
 //        store.next{it.tripViewModel.isConnected = true}
 
+        tripService.createTrip().thenAccept { id ->
+            if (id != null)
+                store.next() {
+                    it.tripViewModel.tripActive = true;
+                    it.tripViewModel.tripId = id.tripId
+                    Log.i(
+                        TAG,
+                        "New Trip started, TripId: " +id.tripId
+                    );
+                }
+        }
         if (store.subject.value?.tripViewModel?.isConnected == true) {
             Log.i(TAG, "Trip started")
 
@@ -968,14 +1026,16 @@ class TripView {
                 Button(
                     onClick = {
 
-                        if (!state.value.isConnected) {
-                            btConnectionHandler.createConnection(state.value.selectedDevice)
-                            store.next { it.tripViewModel.isSetupFinished = false }
-                        } else {
+                        if (state.value.selectedDevice != null) {
+                            if (!state.value.isConnected) {
+                                btConnectionHandler.createConnection(state.value.selectedDevice)
+                                store.next { it.tripViewModel.isSetupFinished = false }
+                            } else {
 
-                            btConnectionHandler.disconnect()
-                            tripActive = false
-                            obdReaderKt.stopReading()
+                                btConnectionHandler.disconnect()
+                                tripActive = false
+                                obdReaderKt.stopReading()
+                            }
                         }
                     },
                     modifier = Modifier
@@ -1311,8 +1371,30 @@ class TripView {
         }
     }
 
-//endregion
+    //endregion
+    fun Map<String, String>.toCarSensorData(): CarSensorData {
+        var carSensorData = CarSensorData()
+        var timestamp: Timestamp = Timestamp(System.currentTimeMillis());
 
+        var instant: Instant = timestamp.toInstant();
+        var formattedTimestamp = instant.atOffset(ZoneOffset.UTC)
+            .format(DateTimeFormatter.ISO_INSTANT);
+
+        carSensorData.timestamp = formattedTimestamp
+        var carData = CarDataBackend()
+        carData.latitude = this["Latitude"]?.toDoubleOrNull() ?: 0.0
+        Log.d(TAG, "Latitude: ${carData.latitude}")
+        carData.longitude = this["Longitude"]?.toDoubleOrNull() ?: 0.0
+        carData.altitude = this["Altitude"]?.toDoubleOrNull() ?: 0.0
+        carData.engineLoad = this["Engine Load"]?.toDoubleOrNull() ?: 0.0
+        carData.coolantTemperature = this["Engine Coolant Temperature"]?.toDoubleOrNull() ?: 0.0
+        carData.engineRpm = this["Engine RPM"]?.toDoubleOrNull() ?: 0.0
+        carData.gpsSpeed = this["Gps-Speed"]?.toDoubleOrNull() ?: 0.0
+        carData.obdSpeed = this["Vehicle Speed"]?.toDoubleOrNull() ?: 0.0
+        carSensorData.carData = carData
+
+        return carSensorData
+    }
 }
 
 

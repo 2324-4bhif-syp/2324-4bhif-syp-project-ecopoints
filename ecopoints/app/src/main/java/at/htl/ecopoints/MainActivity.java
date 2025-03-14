@@ -38,12 +38,11 @@ public class MainActivity extends ComponentActivity {
         Log.i(TAG, "onCreate()");
 
         checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
+        ConfigLoader.init(getApplicationContext());
 
         super.onCreate(savedInstanceState);
         tripView.compose(this);
         checkPermissions();
-
-        ConfigLoader.init(this);
     }
 
     private void checkPermission(String permission) {

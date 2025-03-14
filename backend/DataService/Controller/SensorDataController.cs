@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 
 
 namespace DataService.Controller
@@ -54,7 +55,7 @@ namespace DataService.Controller
             return Results.Ok(new { TripId = tripId });
         }
 
-        public async Task<IResult> GetAllTrips()
+        public async Task<IResult> GetAllTripIds()
         {
             var tripIds = await _dbService.GetAllTripsAsync();
             return tripIds.Count == 0 ? Results.NotFound("No trips found in the database") : Results.Ok(tripIds);
@@ -75,6 +76,18 @@ namespace DataService.Controller
 
             await _dbService.AddDataToSpecificTrip(tripId, sensorData);
             return Results.Ok("Data logged successfully");
+        }
+
+        public async Task<IResult> GetTripsData()
+        {
+            var tripIds = await _dbService.GetAllTripsAsync();
+            //var dataTasks = tripIds.Select(async i => await _dbService.GetTripDataAsync(i));
+
+            var dataTasks = await Task.WhenAll(tripIds.Select(async i =>
+                new KeyValuePair<Guid, IEnumerable<CarSensorData>>(i, await _dbService.GetTripDataAsync(i))));
+
+            
+            return Results.Ok(dataTasks.Select((d) => TripMetaDataFactory.CreateFromSensorData(d.Key,d.Value)).OrderByDescending(t => t.StartDate));
         }
     }
 }

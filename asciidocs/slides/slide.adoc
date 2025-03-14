@@ -447,8 +447,61 @@ image::ecopoints-light-dark.png[500,200]
 
 === Aufgaben [Abdullah]
 
-* Dashboard mit Grafana visualisieren
 * Backend
+** Anbindung an eine PostgresDB
+** Plugin-System für die Daten
+
+* Dynamisches Frontend mit Angular
+** Integration mit Grafana
+* Deployment
+
+=== Plugin-System
+
+Jedes
+Plugin repräsentiert eine Datenabfrage (Query), und durch die Definition von Attribut-
+namen können diese Abfragen dynamisch ausgeführt und in Grafiken dargestellt werden.
+
+
+=== Plugin Bsp.
+
+image:24-sprint-3/PluginBsp.png[]
+
+=== GET-Abfrage für Plugins
+
+image:24-sprint-3/pluginAbfrage.png[]
+
+=== Plugins Files
+
+|===
+^|1. ^| 2.
+^|image:24-sprint-3/pluginsBackendFiles.png[]
+^|image:24-sprint-3/PluginsFiles.png[]
+|===
+
+
+=== Frontend
+
+* Integration mit Grafana
+** Zeitraum & IDs werden dynamisch ersetzt.
+** Die Datenquellen werden automatisch aktualisiert.
+** Man können neue Graphen hinzufügen oder bestehende bearbeiten.
+
+=== Frontend
+
+* Dynamisches Frontend mit Angular +
+✅Dynamische Anzeige von Plugins als Grafen +
+✅ Hinzufügen, Löschen und Aktualisieren von Graphen +
+✅ Integration mit Grafana für Visualisierung +
+✅ Rohe Daten & berechnete Graphen separat anzeigen (Sidebar) +
+✅ Dropdown für die Auswahl von Trips
+
+=== Live Demo
+
+=== Deployment
+
+Bruch...
+
+image:24-sprint-3/bruch.png[]
 
 === Aufgaben [Armin]
 

@@ -6,24 +6,24 @@ import java.sql.Timestamp;
 public class CarSensorData {
 
     @JsonProperty("timestamp")
-    private Timestamp timestamp;
+    private String timestamp;
 
-    @JsonProperty("CarData")
+    @JsonProperty("carData")
     private CarDataBackend carData;
 
     public CarSensorData() {
     }
 
-    public CarSensorData(Timestamp timestamp, CarDataBackend carData) {
+    public CarSensorData(String timestamp, CarDataBackend carData) {
         this.timestamp = timestamp;
         this.carData = carData;
     }
 
-    public Timestamp getTimestamp() {
+    public String getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(Timestamp timestamp) {
+    public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
 

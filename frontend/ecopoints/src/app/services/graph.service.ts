@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Graph } from '../model/Graph';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -15,9 +15,13 @@ export class GraphService {
     return this.http.get<Graph[]>(`${this.apiUrl}/graphs`);
   }
 
+
   getTripIds(): Observable<string[]> {
-    return this.http.get<string[]>(`${this.apiUrl}/trips`);
+    return this.http.get<any[]>(`${this.apiUrl}/trips`).pipe(
+      map(data => data.map(trip => trip.tripId)) // Extrahiere nur tripId als Array von Strings
+    );
   }
+  
 
   getTripData(tripId: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/trip/${tripId}`);

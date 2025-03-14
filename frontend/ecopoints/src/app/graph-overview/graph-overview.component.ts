@@ -52,10 +52,15 @@ export class GraphOverviewComponent implements OnInit {
       const tripIds = await this.graphService.getTripIds().toPromise();
   
       if (!tripIds || tripIds.length === 0) {
+        console.log("🚨 Keine Trip-IDs erhalten.");
         return;
       }
   
-      const tripRequests = tripIds.map(async (tripId) => {
+      console.log("📌 Empfangene Trip-IDs als Strings:", tripIds);
+  
+      const tripRequests = tripIds.map(async (tripId: string) => {
+        console.log("🔎 tripId vor API-Aufruf:", tripId, "Type:", typeof tripId);
+  
         const tripData = await this.graphService.getTripData(tripId).toPromise();
   
         if (!Array.isArray(tripData) || tripData.length === 0) {
@@ -70,7 +75,7 @@ export class GraphOverviewComponent implements OnInit {
   
       this.tripList = await Promise.all(tripRequests);
     } catch (error) {
-      console.error("Fehler beim Laden der Trips:", error);
+      console.error("❌ Fehler beim Laden der Trips:", error);
     }
   }
   

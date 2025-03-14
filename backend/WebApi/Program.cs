@@ -72,7 +72,7 @@ if (app.Environment.IsDevelopment())
 }
 
 // Default route to avoid redirect loops or errors
-app.MapFallback(() => Results.Redirect("/swagger"));
+//app.MapFallback(() => Results.Redirect("/swagger"));
 
 // Add middleware for request logging
 app.Use(async (context, next) =>
